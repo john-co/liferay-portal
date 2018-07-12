@@ -55,7 +55,7 @@
 			<var name="userEmailAddress" value="userea2@liferay.com" />
 			<var name="userFirstName" value="userfn2" />
 			<var name="userLastName" value="userln2" />
-			<var name="userScreenName" value="usersn2" />
+			<var name="userScreenfName" value="usersn2" />
 		</execute>
 
 		<execute macro="ProductMenu#gotoPortlet">
@@ -212,6 +212,7 @@
 	</command>
 
 	<command name="UserGroupSiteOwnerPermissions" priority="4">
+		<property name="portal.acceptance" value="john-co" />
 		<property name="test.name.skip.portal.instance" value="UsergroupsUsecase#UserGroupSiteOwnerPermissions" />
 
 		<execute macro="ProductMenu#gotoPortlet">
@@ -371,7 +372,7 @@
 		</execute>
 
 		<execute macro="LexiconEntry#changeDisplayStyle">
-			<var name="displayStyle" value="list" />
+			<var name="displayStyle" value="table" />
 		</execute>
 
 		<var name="key_userScreenName" value="usersn3" />
