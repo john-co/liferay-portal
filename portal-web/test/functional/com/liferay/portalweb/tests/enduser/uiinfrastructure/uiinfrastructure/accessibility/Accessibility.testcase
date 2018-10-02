@@ -22,7 +22,7 @@
 	</tear-down>
 
 	<command name="Smoke" priority="5">
-		<property name="portal.acceptance" value="true" />
+		<property name="portal.acceptance" value="john-co" />
 
 		<execute function="AssertAccessible" />
 
