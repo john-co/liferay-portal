@@ -2341,6 +2341,7 @@
 	</command>
 
 	<command name="ViewBlogsEntryWithImageEditedViaItemSelector" priority="4">
+		<property name="portal.acceptance" value="john-co" />
 		<execute macro="Navigator#openURL" />
 
 		<execute macro="ProductMenu#gotoPortlet">

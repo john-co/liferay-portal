@@ -47,6 +47,7 @@
 	</command>
 
 	<command name="ViewTagsPagination" priority="4">
+		<property name="portal.acceptance" value="john-co" />
 		<var name="index" value="1" />
 
 		<while>

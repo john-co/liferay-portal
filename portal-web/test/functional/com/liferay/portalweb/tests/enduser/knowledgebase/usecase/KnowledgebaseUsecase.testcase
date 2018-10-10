@@ -303,7 +303,7 @@
 	</command>
 
 	<command name="DeleteImportedArticles" priority="5">
-		<property name="portal.acceptance" value="false" />
+		<property name="portal.acceptance" value="john-co" />
 		<property name="testray.component.names" value="Training" />
 
 		<execute macro="ProductMenu#gotoPortlet">
@@ -1146,6 +1146,7 @@
 	</command>
 
 	<command name="ViewImportedKBArticlesInHierarchyWithMarkdownFormat" priority="4">
+		<property name="portal.acceptance" value="john-co" />
 		<execute macro="ProductMenu#gotoPortlet">
 			<var name="category" value="Build" />
 			<var name="panel" value="Site Administration" />
@@ -1229,6 +1230,7 @@
 	</command>
 
 	<command name="ViewImportedKBArticlesWithMultiplePeerHierarchies" priority="4">
+		<property name="portal.acceptance" value="john-co" />
 		<execute macro="ProductMenu#gotoPortlet">
 			<var name="category" value="Build" />
 			<var name="panel" value="Site Administration" />
