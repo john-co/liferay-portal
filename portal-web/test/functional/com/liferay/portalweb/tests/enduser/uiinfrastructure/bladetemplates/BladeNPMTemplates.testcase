@@ -1,6 +1,7 @@
 <definition component-name="portal-blade-template">
 	<property name="portal.release" value="true" />
 	<property name="portal.upstream" value="true" />
+	<property name="portal.acceptance" value="john-co" />
 	<property name="testray.main.component.name" value="Blade Template" />
 
 	<set-up>
