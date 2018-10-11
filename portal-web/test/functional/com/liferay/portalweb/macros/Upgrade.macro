@@ -1191,7 +1191,7 @@
 				<execute function="Click" locator1="MenuItem#ANY_MENU_ITEM" />
 			</then>
 			<else>
-				<execute function="Click"locator1="Icon#CURRENT_DISPLAY_STYLE"/>
+				<execute function="Click"locator1="Icon#CURRENT_DISPLAY_STYLE" />
 				<if>
 					<condition function="IsElementPresent" locator1="MenuItem#ANY_MENU_ITEM" />
 					<then>
