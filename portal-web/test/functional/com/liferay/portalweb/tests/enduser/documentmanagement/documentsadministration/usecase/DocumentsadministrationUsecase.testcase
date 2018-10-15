@@ -2102,6 +2102,7 @@
 	</command>
 
 	<command name="ViewFolderAsOrganizationUser" priority="5">
+		<property name="portal.acceptance" value="john-co" />
 		<property name="testray.component.names" value="Training" />
 
 		<execute macro="JSONUser#addUser">
