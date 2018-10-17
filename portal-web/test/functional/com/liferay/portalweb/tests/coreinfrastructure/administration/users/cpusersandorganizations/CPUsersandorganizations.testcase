@@ -30,7 +30,7 @@
 	</tear-down>
 
 	<command name="AddMember" priority="5">
-		<property name="portal.acceptance" value="true" />
+		<property name="portal.acceptance" value="john-co" />
 		<property name="testray.component.names" value="Training" />
 
 		<execute macro="ProductMenu#gotoPortlet">
@@ -1651,6 +1651,8 @@
 	</command>
 
 	<command name="RemoveMember" priority="4">
+		<property name="portal.acceptance" value="john-co" />
+
 		<execute macro="ProductMenu#gotoPortlet">
 			<var name="category" value="Users" />
 			<var name="panel" value="Control Panel" />
