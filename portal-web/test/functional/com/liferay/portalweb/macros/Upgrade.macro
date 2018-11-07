@@ -1180,7 +1180,7 @@
 
 		<execute function="Click" locator1="Icon#CURRENT_DISPLAY_STYLE" />
 
-		<execute argument1="5000" selenium="pause" />
+		<execute function="Pause" locator1="5000" />
 
 		<if>
 			<condition function="IsElementPresent" locator1="MenuItem#ANY_MENU_ITEM" />
