@@ -484,6 +484,7 @@ message.
 		<if>
 			<equals arg1="${jsp.precompile.modules}" arg2="on" />
 			<then>
+				<echo message="JSP TURNED ON!!!!" />
 				<if>
 					<equals arg1="${jsp.precompile.parallel}" arg2="on" />
 					<then>
