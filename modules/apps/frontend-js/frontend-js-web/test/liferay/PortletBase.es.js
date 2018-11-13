@@ -1,6 +1,50 @@
 'use strict';
 
 import PortletBase from '../../src/main/resources/META-INF/resources/liferay/PortletBase.es';
+import TestSum from '../../src/main/resources/META-INF/resources/liferay/TestSum.es';
+
+describe(
+	'TestSum',
+	() => {
+		let testSum;
+
+		beforeEach(
+			() => {
+				testSum = new TestSum()
+			}
+		);
+
+		describe(
+			'testSum.add',
+			() => {
+				let test;
+
+				it(
+					'should add the two numbers',
+					() => {
+						test = testSum.add(1,4);
+						expect(test).toBe(3);
+					}
+				);
+			}
+		);
+
+		describe(
+			'testSum.add',
+			() => {
+				let test;
+
+				it(
+					'should add the two numbers',
+					() => {
+						test = testSum.add(1,3);
+						expect(test).toBe(3);
+					}
+				);
+			}
+		);
+	}
+);
 
 describe(
 	'PortletBase',
