@@ -64,7 +64,7 @@ describe(
 			() => {
 				managementToolbar._handleDeselectAllClicked();
 
-				expect(searchContainer.select.toggleAllRows).toHaveBeenCalledWith(false);
+				expect(searchContainer.select.toggleAllRows).toHaveBeenCalledWith(true);
 			}
 		);
 
