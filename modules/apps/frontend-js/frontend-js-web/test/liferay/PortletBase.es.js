@@ -49,7 +49,7 @@ describe(
 						const elements = portletBase.all('.bar');
 
 						expect(elements).not.toBeNull();
-						expect(elements.length).toEqual(0);
+						expect(elements.length).toEqual(1);
 					}
 				);
 
