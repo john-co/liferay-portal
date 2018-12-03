@@ -42,120 +42,185 @@ describe('PortletBase', () => {
 			Util: {
 				ns: jest.fn()
 			}
-		};
+		);
 
-		portletBase = new PortletBase({
-			namespace
-		});
-	});
+		beforeEach(
+			() => {
+				Liferay = {
+					Util: {
+						ns: jest.fn()
+					}
+				};
 
-	describe('PortletBase.all', () => {
-		it('returns an empty list if no elements are found', () => {
-			const elements = portletBase.all('.bar');
+				portletBase = new PortletBase(
+					{
+						namespace: namespace
+					}
+				);
+			}
+		);
 
-			expect(elements).not.toBeNull();
-			expect(elements.length).toEqual(0);
-		});
+		describe(
+			'PortletBase.all',
+			() => {
+				it(
+					'should return an empty list if no elements are found',
+					() => {
+						const elements = portletBase.all('.bar');
 
-		it('gets all matching nodes within the root node tree', () => {
-			expect(portletBase.all('.foo').length).toEqual(2);
-			expect(
-				portletBase.all(
-					'.foo',
-					'#_com_liferay_test_portlet_child_container'
-				).length
-			).toEqual(1);
-		});
+						expect(elements).not.toBeNull();
+						expect(elements.length).toEqual(1);
+					}
+				);
 
-		it('uses the document as root node if one has not been specified or the default has not been found', () => {
-			portletBase = new PortletBase({
-				namespace: '_com_liferay_unknown_portlet'
-			});
+				it(
+					'should get all matching nodes within the root node tree',
+					() => {
+						expect(portletBase.all('.foo').length).toEqual(2);
+						expect(
+							portletBase.all('.foo', '#_com_liferay_test_portlet_child_container')
+								.length
+						).toEqual(1);
+					}
+				);
 
-			expect(portletBase.all('.foo').length).toEqual(4);
-		});
-	});
+				it(
+					'should use the document as root node if one has not been specified or the default has not been found',
+					() => {
+						portletBase = new PortletBase(
+							{
+								namespace: '_com_liferay_unknown_portlet'
+							}
+						);
 
-	describe('PortletBase.fetch', () => {
-		let globalFetch;
-		let sampleBody;
-		const sampleUrl = 'http://sampleurl.com';
+						expect(portletBase.all('.foo').length).toEqual(4);
+					}
+				);
+			}
+		);
 
-		beforeEach(() => {
-			globalFetch = global.fetch;
-			portletBase.ns = obj => obj;
-		});
+		describe(
+			'PortletBase.fetch',
+			() => {
+				let globalFetch;
+				let sampleBody;
+				const sampleUrl = 'http://sampleurl.com';
 
-		afterEach(() => {
-			global.fetch = globalFetch;
-		});
+				beforeEach(
+					() => {
+						globalFetch = global.fetch;
+						portletBase.ns = (obj) => obj;
+					}
+				);
 
-		it('makes the request to the given url', done => {
-			global.fetch = jest.fn(url => {
-				expect(url).toBe(sampleUrl);
-				done();
-			});
+				afterEach(
+					() => {
+						global.fetch = globalFetch;
+					}
+				);
 
-			portletBase.fetch(sampleUrl, sampleBody);
-		});
+				it(
+					'should make the request to the given url',
+					(done) => {
+						global.fetch = jest.fn(
+							(url) => {
+								expect(url).toBe(sampleUrl);
+								done();
+							}
+						);
 
-		it('adds credentials option to the request', done => {
-			global.fetch = jest.fn((url, options) => {
-				expect(options.credentials).toBe('include');
-				done();
-			});
+						portletBase.fetch(sampleUrl, sampleBody);
+					}
+				);
 
-			portletBase.fetch(sampleUrl, sampleBody);
-		});
+				it(
+					'should add credentials option to the request',
+					(done) => {
+						global.fetch = jest.fn(
+							(url, options) => {
+								expect(options.credentials).toBe('include');
+								done();
+							}
+						);
 
-		it('adds the POST method option to the request', done => {
-			global.fetch = jest.fn((url, options) => {
-				expect(options.method).toBe('POST');
-				done();
-			});
+						portletBase.fetch(sampleUrl, sampleBody);
+					}
+				);
 
-			portletBase.fetch(sampleUrl, sampleBody);
-		});
+				it(
+					'should add the POST method option to the request',
+					(done) => {
+						global.fetch = jest.fn(
+							(url, options) => {
+								expect(options.method).toBe('POST');
+								done();
+							}
+						);
 
-		it('adds the given body to the request', done => {
-			global.fetch = jest.fn((url, options) => {
-				expect(options.body).toBe(sampleBody);
-				done();
-			});
+						portletBase.fetch(sampleUrl, sampleBody);
+					}
+				);
 
-			sampleBody = 'sample body';
-			portletBase.fetch(sampleUrl, sampleBody);
-		});
+				it(
+					'should add the given body to the request',
+					(done) => {
+						global.fetch = jest.fn(
+							(url, options) => {
+								expect(options.body).toBe(sampleBody);
+								done();
+							}
+						);
 
-		it('transforms the given body using getRequestBody_', done => {
-			portletBase.getRequestBody_ = jest.fn();
+						sampleBody = 'sample body';
+						portletBase.fetch(sampleUrl, sampleBody);
+					}
+				);
 
-			global.fetch = jest.fn((url, options) => {
-				expect(portletBase.getRequestBody_.mock.calls).toEqual([
-					[sampleBody]
-				]);
-				done();
-			});
+				it(
+					'should transform the given body using getRequestBody_',
+					(done) => {
+						portletBase.getRequestBody_ = jest.fn();
 
-			expect(portletBase.getRequestBody_.mock.calls.length).toBe(0);
+						global.fetch = jest.fn(
+							(url, options) => {
+								expect(
+									portletBase.getRequestBody_.mock.calls
+								).toEqual(
+									[[sampleBody]]
+								);
+								done();
+							}
+						);
 
-			portletBase.fetch(sampleUrl, sampleBody);
-		});
-	});
+						expect(
+							portletBase.getRequestBody_.mock.calls.length
+						).toBe(0);
 
-	describe('PortletBase.getRequestBody_', () => {
-		it('keeps body intact if it is already a FormData instance', () => {
-			const sampleFormData = new FormData();
+						portletBase.fetch(sampleUrl, sampleBody);
+					}
+				);
+			}
+		);
 
-			expect(portletBase.getRequestBody_(sampleFormData)).toBe(
-				sampleFormData
-			);
-		});
+		describe(
+			'PortletBase.getRequestBody_',
+			() => {
+				it(
+					'should keep body intact if it is already a FormData instance',
+					() => {
+						const sampleFormData = new FormData();
 
-		it('creates a FormData instance from a given HTMLFormElement', () => {
-			const sampleFormElement = document.createElement('form');
+						expect(portletBase.getRequestBody_(sampleFormData))
+							.toBe(sampleFormData);
+					}
+				);
 
-			sampleFormElement.innerHTML = `
+				it(
+					'should create a FormData instance from a given HTMLFormElement',
+					() => {
+						const sampleFormElement = document.createElement('form');
+
+						sampleFormElement.innerHTML = `
 							<input name="field1" value="value1" />
 							<input name="field2" value="value2" />
 						`;
