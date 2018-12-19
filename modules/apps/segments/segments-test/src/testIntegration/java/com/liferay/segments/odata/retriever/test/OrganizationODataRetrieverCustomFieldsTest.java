@@ -133,7 +133,7 @@ public class OrganizationODataRetrieverCustomFieldsTest {
 			TestPropsValues.getCompanyId(), filterString,
 			LocaleUtil.getDefault());
 
-		Assert.assertEquals(1, count);
+		Assert.assertEquals(3, count);
 
 		List<Organization> organizations = _getODataRetriever().getResults(
 			TestPropsValues.getCompanyId(), filterString,
@@ -207,7 +207,7 @@ public class OrganizationODataRetrieverCustomFieldsTest {
 			TestPropsValues.getCompanyId(), filterString,
 			LocaleUtil.getDefault());
 
-		Assert.assertEquals(1, count);
+		Assert.assertEquals(3, count);
 
 		List<Organization> organizations = _getODataRetriever().getResults(
 			TestPropsValues.getCompanyId(), filterString,
