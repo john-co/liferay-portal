@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite hostname="" id="0" errors="0" failures="4" name="Jest" package="frontend-taglib.frontend-taglib-clay.test.management-toolbar" skipped="0" tests="4" time="0" timestamp="1545258656167">
+  <testcase classname="ManagementToolbarTest" name="should listen to the rowToggled event from the registered search container" time="0.046">
+    <failure message="Jest:    Expected mock function to have been called.">TEST OUTPUT</failure>
+  </testcase>
+  <testcase classname="ManagementToolbarTest" name="should deselect all searchContainer rows" time="0.013">
+    <failure message="Jest:    Expected mock function to have been called with:&lt; br/ &gt;
+      true as argument 1, but it was called with false.">TEST OUTPUT</failure>
+  </testcase>
+  <testcase classname="ManagementToolbarTest" name="should select all searchContainer rows" time="0.008">
+    <failure message="Jest:    Expected mock function to have been called with:&#xA;
+      false as argument 1, but it was called with true.">TEST OUTPUT</failure>
+  </testcase>
+  <testcase classname="ManagementToolbarTest" name="should toggle the searchContainer selected rows" time="0.009">
+    <failure message="Jest:    Expected mock function to have been called with:&#xA;&#xD;
+      false as argument 1, but it was called with true.">TEST OUTPUT</failure>
+  </testcase>
+</testsuite>
