@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite hostname="" id="0" errors="0" failures="0" name="Jest" package="" skipped="0" tests="4" time="0" timestamp="1545241536984">
+  <testcase classname="Jest.ManagementToolbar" name="should listen to the rowToggled event from the registered search container" time="0.049">
+  </testcase>
+  <testcase classname="Jest.ManagementToolbar" name="should deselect all searchContainer rows" time="0.012">
+  </testcase>
+  <testcase classname="Jest.ManagementToolbar" name="should select all searchContainer rows" time="0.007">
+  </testcase>
+  <testcase classname="Jest.ManagementToolbar" name="should toggle the searchContainer selected rows" time="0.009">
+  </testcase>
+</testsuite>
