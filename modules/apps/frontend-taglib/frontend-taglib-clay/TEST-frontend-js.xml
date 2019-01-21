@@ -1,9 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite hostname="" id="0" errors="0" failures="4" name="Jest" package="frontend-taglib.frontend-taglib-clay" skipped="0" tests="4" time="0" timestamp="1545258656167">
   <testcase classname="Field Date" name="Field Date should have a value" time="0.007">
   </testcase>
   <testcase classname="KeyValue" name="KeyValue should be not edidable" time="0.046">
   </testcase>
   <testcase classname="KeyValue" name="KeyValue should have a helptext" time="0.024">
-    <failure message="Error: [2mexpect([22m[31mvalue[39m[2m).toMatchSnapshot([22m[2m)[22m
+    <failure message="Error: [2mexpect([22m[31mvalue[39m[2m).toMatchSnapshot([22m[2m)[22m" >
 
 [31mReceived value[39m does not match [32mstored snapshot &quot;KeyValue should have a helptext 1&quot;[39m.
 
@@ -28,3 +30,4 @@
     at process._tickCallback (internal/process/next_tick.js:182:7)">
     </failure>
   </testcase>
+</testsuite>
