@@ -1,33 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuite hostname="" id="0" errors="0" failures="4" name="Jest" package="frontend-taglib.frontend-taglib-clay" skipped="0" tests="4" time="0" timestamp="1545258656167">
-  <testcase classname="Field Date" name="Field Date should have a value" time="0.007">
+  <testcase classname="frontend-taglib.frontend-taglib-clay.test.management_toolbar.ManagementToolbar" name="ManagementToolbar should listen to the rowToggled event from the registered search container" time="0.046">
+    <failure message="Jest:  Expected mock function to have been called.">      56 | 				// searchContainer.fire('rowToggled');
+      57 |
+    > 58 | 				expect(searchContainerCallbacks.rowToggled).toHaveBeenCalled();
+      59 | 			}
+      60 | 		);
+      61 |
+
+      at Object.toHaveBeenCalled (test/management_toolbar/ManagementToolbar.es.js:58:49)
+</failure>
   </testcase>
-  <testcase classname="KeyValue" name="KeyValue should be not edidable" time="0.046">
+  <testcase classname="frontend-taglib.frontend-taglib-clay.test.management_toolbar.ManagementToolbar" name="ManagementToolbar should deselect all searchContainer rows" time="0.013">
+    <failure message="Jest:  Expected mock function to have been called with:&#xA;
+      true as argument 1, but it was called with false.">      65 | 				managementToolbar._handleDeselectAllClicked();
+      66 |
+    > 67 | 				expect(searchContainer.select.toggleAllRows).toHaveBeenCalledWith(true);
+      68 | 			}
+      69 | 		);
+      70 |
+
+      at Object.toHaveBeenCalledWith (test/management_toolbar/ManagementToolbar.es.js:67:50)
+</failure>
   </testcase>
-  <testcase classname="KeyValue" name="KeyValue should have a helptext" time="0.024">
-    <failure message="Error: [2mexpect([22m[31mvalue[39m[2m).toMatchSnapshot([22m[2m)[22m" >
+  <testcase classname="frontend-taglib.frontend-taglib-clay.test.management_toolbar.ManagementToolbar" name="ManagementToolbar should select all searchContainer rows" time="0.008">
+    <failure message="Jest:  Expected mock function to have been called with:&#xA;
+      false as argument 1, but it was called with true.">      65 | 				managementToolbar._handleDeselectAllClicked();
+      66 |
+    > 67 | 				expect(searchContainer.select.toggleAllRows).toHaveBeenCalledWith(true);
+      68 | 			}
+      69 | 		);
+      70 |
 
-[31mReceived value[39m does not match [32mstored snapshot &quot;KeyValue should have a helptext 1&quot;[39m.
+      at Object.toHaveBeenCalledWith (test/management_toolbar/ManagementToolbar.es.js:67:50)
+</failure>
+  </testcase>
+  <testcase classname="frontend-taglib.frontend-taglib-clay.test.management_toolbar.ManagementToolbar" name="ManagementToolbar should toggle the searchContainer selected rows" time="0.009">
+    <failure message="Jest:  Expected mock function to have been called with:&#xA;
+      false as argument 1, but it was called with true.">      89 | 				);
+      90 |
+    > 91 | 				expect(searchContainer.select.toggleAllRows).toHaveBeenCalledWith(false);
+      92 |
+      93 | 				managementToolbar._handleSelectPageCheckboxChanged(
+      94 | 					{
 
-[32m- Snapshot[39m
-[31m+ Received[39m
-
-[33m@@ -2,7 +2,6 @@[39m
-[2m    &lt;input class=&quot;form-control&quot; type=&quot;text&quot; disabled=&quot;disabled&quot;&gt;[22m
-[2m    &lt;div class=&quot;form-text key-value-editor&quot;&gt;[22m
-[2m      &lt;label class=&quot;control-label key-value-label&quot;&gt;Field Name:&lt;/label&gt;[22m
-[2m      &lt;input class=&quot;key-value-input&quot; type=&quot;text&quot;&gt;[22m
-[2m    &lt;/div&gt;[22m
-[32m-   &lt;span class=&quot;form-text&quot;&gt;Type something&lt;/span&gt;[39m
-[2m  &lt;/div&gt;[22m
-    at Object.&lt;anonymous&gt; (/Users/bryceosterhaus/liferay/repos/liferay-portal/modules/apps/dynamic-data-mapping/dynamic-data-mapping-form-field-type/test/metal/js/KeyValue/KeyValue.es.js:41:23)
-    at Object.asyncFn (/Users/bryceosterhaus/liferay/repos/liferay-portal/modules/apps/dynamic-data-mapping/dynamic-data-mapping-form-field-type/node_modules/jest-jasmine2/build/jasmine_async.js:108:37)
-    at resolve (/Users/bryceosterhaus/liferay/repos/liferay-portal/modules/apps/dynamic-data-mapping/dynamic-data-mapping-form-field-type/node_modules/jest-jasmine2/build/queue_runner.js:56:12)
-    at new Promise (&lt;anonymous&gt;)
-    at mapper (/Users/bryceosterhaus/liferay/repos/liferay-portal/modules/apps/dynamic-data-mapping/dynamic-data-mapping-form-field-type/node_modules/jest-jasmine2/build/queue_runner.js:43:19)
-    at promise.then (/Users/bryceosterhaus/liferay/repos/liferay-portal/modules/apps/dynamic-data-mapping/dynamic-data-mapping-form-field-type/node_modules/jest-jasmine2/build/queue_runner.js:87:41)
-    at &lt;anonymous&gt;
-    at process._tickCallback (internal/process/next_tick.js:182:7)">
-    </failure>
+      at Object.toHaveBeenCalledWith (test/management_toolbar/ManagementToolbar.es.js:91:50)
+</failure>
   </testcase>
 </testsuite>
