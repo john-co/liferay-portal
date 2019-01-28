@@ -64,7 +64,7 @@ describe(
 			() => {
 				managementToolbar._handleDeselectAllClicked();
 
-				expect(searchContainer.select.toggleAllRows).toHaveBeenCalledWith(false);
+				expect(searchContainer.select.toggleAllRows).toHaveBeenCalledWith(true);
 			}
 		);
 
@@ -73,7 +73,7 @@ describe(
 			() => {
 				managementToolbar._handleSelectAllClicked();
 
-				expect(searchContainer.select.toggleAllRows).toHaveBeenCalledWith(true);
+				expect(searchContainer.select.toggleAllRows).toHaveBeenCalledWith(false);
 			}
 		);
 
@@ -88,7 +88,7 @@ describe(
 					}
 				);
 
-				expect(searchContainer.select.toggleAllRows).toHaveBeenCalledWith(true);
+				expect(searchContainer.select.toggleAllRows).toHaveBeenCalledWith(false);
 
 				managementToolbar._handleSelectPageCheckboxChanged(
 					{
@@ -98,7 +98,7 @@ describe(
 					}
 				);
 
-				expect(searchContainer.select.toggleAllRows).toHaveBeenCalledWith(false);
+				expect(searchContainer.select.toggleAllRows).toHaveBeenCalledWith(true);
 			}
 		);
 	}
