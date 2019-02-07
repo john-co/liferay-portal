@@ -30,7 +30,6 @@ definition {
 		AssertAccessible();
 	}
 
-	@ignore = "true"
 	@priority = "4"
 	test ViewCollaborationPortlets {
 		ProductMenu.gotoPortlet(
