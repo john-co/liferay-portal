@@ -63,6 +63,7 @@ definition {
 	@priority = "5"
 	test SmokeWithSPADisabled {
 		property custom.properties = "javascript.single.page.application.enabled=false";
+		property portal.acceptance = "john-co";
 		property portal.smoke = "false";
 
 		Smoke.viewWelcomePage();
