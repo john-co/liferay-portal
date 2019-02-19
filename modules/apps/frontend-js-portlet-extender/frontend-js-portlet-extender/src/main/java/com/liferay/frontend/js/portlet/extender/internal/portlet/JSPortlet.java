@@ -38,6 +38,7 @@ import javax.portlet.PortletPreferences;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
 
 /**
@@ -71,17 +72,16 @@ public class JSPortlet extends MVCPortlet implements ManagedService {
 				StringUtil.replace(
 					_TPL_JAVA_SCRIPT,
 					new String[] {
-						"[$CONTEXT_PATH$]", "[$PORTLET_ELEMENT_ID$]",
-						"[$PORTLET_NAMESPACE$]", "[$PACKAGE_NAME$]",
-						"[$PACKAGE_VERSION$]", "[$PORTLET_PREFERENCES$]",
-						"[$SETTINGS$]"
+						"[$CONFIGURATION]", "[$CONTEXT_PATH$]",
+						"[$PORTLET_ELEMENT_ID$]", "[$PORTLET_NAMESPACE$]",
+						"[$PACKAGE_NAME$]", "[$PACKAGE_VERSION$]",
+						"[$PORTLET_PREFERENCES$]"
 					},
 					new String[] {
-						renderRequest.getContextPath(), portletElementId,
-						renderResponse.getNamespace(), _packageName,
-						_packageVersion,
-						_toJSON(renderRequest.getPreferences()),
-						_getSettings()
+						_getConfiguration(), renderRequest.getContextPath(),
+						portletElementId, renderResponse.getNamespace(),
+						_packageName, _packageVersion,
+						_toJSON(renderRequest.getPreferences())
 					}));
 
 			printWriter.flush();
@@ -92,14 +92,16 @@ public class JSPortlet extends MVCPortlet implements ManagedService {
 	}
 
 	@Override
-	public void updated(Dictionary<String, ?> properties) {
+	public void updated(Dictionary<String, ?> properties)
+		throws ConfigurationException {
+
 		if (properties == null) {
-			_settings.set(Collections.emptyMap());
+			_configuration.set(Collections.emptyMap());
 
 			return;
 		}
 
-		Map<String, String> settings = new HashMap<>();
+		Map<String, String> configuration = new HashMap<>();
 
 		Enumeration<String> keys = properties.keys();
 
@@ -110,10 +112,10 @@ public class JSPortlet extends MVCPortlet implements ManagedService {
 				continue;
 			}
 
-			settings.put(key, String.valueOf(properties.get(key)));
+			configuration.put(key, String.valueOf(properties.get(key)));
 		}
 
-		_settings.set(settings);
+		_configuration.set(configuration);
 	}
 
 	private static String _loadTemplate(String name) {
@@ -133,8 +135,8 @@ public class JSPortlet extends MVCPortlet implements ManagedService {
 		return value.replaceAll("'", "\\'");
 	}
 
-	private String _getSettings() {
-		Map<String, String> settings = _settings.get();
+	private String _getConfiguration() {
+		Map<String, String> configuration = _configuration.get();
 
 		StringBundler sb = new StringBundler();
 
@@ -142,7 +144,7 @@ public class JSPortlet extends MVCPortlet implements ManagedService {
 
 		String delimiter = "";
 
-		for (Map.Entry<String, String> entry : settings.entrySet()) {
+		for (Map.Entry<String, String> entry : configuration.entrySet()) {
 			sb.append(delimiter);
 			sb.append("'");
 			sb.append(_escapeQuotes(entry.getKey()));
@@ -193,9 +195,9 @@ public class JSPortlet extends MVCPortlet implements ManagedService {
 		_TPL_JAVA_SCRIPT = _loadTemplate("bootstrap.js.tpl");
 	}
 
+	private final AtomicReference<Map<String, String>> _configuration =
+		new AtomicReference<>();
 	private final String _packageName;
 	private final String _packageVersion;
-	private final AtomicReference<Map<String, String>> _settings =
-		new AtomicReference<>();
 
 }
