@@ -12,16 +12,14 @@
 			}
 
 			if (initializer) {
-				var settings = JSON.parse('[$SETTINGS$]');
-
 				initializer(
 					{
-						configuration: settings,
+						configuration: [$SETTINGS$],
 						contextPath: "[$CONTEXT_PATH$]",
 						portletElementId: "[$PORTLET_ELEMENT_ID$]",
 						portletNamespace: "[$PORTLET_NAMESPACE$]",
 						portletPreferences: [$PORTLET_PREFERENCES$],
-						settings: settings
+						settings: [$SETTINGS$]
 					});
 			}
 			else {

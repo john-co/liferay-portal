@@ -218,8 +218,7 @@ public class JSPortletExtender {
 			new String[] {
 				ManagedService.class.getName(), Portlet.class.getName()
 			},
-			new JSPortlet(_jsonFactory, packageName, packageVersion),
-			properties);
+			new JSPortlet(packageName, packageVersion), properties);
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
