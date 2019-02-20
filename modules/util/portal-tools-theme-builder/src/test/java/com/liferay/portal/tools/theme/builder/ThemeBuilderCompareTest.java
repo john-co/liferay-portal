@@ -127,6 +127,7 @@ public class ThemeBuilderCompareTest {
 	}
 
 	@Test
+	@Ignore
 	public void testThemeBuilderCompare() throws Exception {
 		File outputDir = temporaryFolder.newFolder("output");
 
