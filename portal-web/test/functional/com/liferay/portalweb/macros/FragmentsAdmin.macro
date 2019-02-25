@@ -152,7 +152,7 @@ definition {
 	macro viewEntryWorkflowStatus {
 		LexiconCard.viewCardLabel(
 			card = "${entry}",
-			cardLabel = "${workflowStatus}"
+			cardLabel = StringUtil.upperCase("${workflowStatus}")
 		);
 	}
 }

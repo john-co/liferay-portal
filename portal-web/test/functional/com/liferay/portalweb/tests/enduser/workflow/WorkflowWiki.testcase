@@ -174,7 +174,7 @@ definition {
 			workflowAssetTitle = "FrontPage",
 			workflowAssetType = "Wiki Page",
 			workflowDefinition = "Single Approver",
-			workflowTask = "Approved"
+			workflowTask = "APPROVED"
 		);
 
 		User.logoutAndLoginPG(

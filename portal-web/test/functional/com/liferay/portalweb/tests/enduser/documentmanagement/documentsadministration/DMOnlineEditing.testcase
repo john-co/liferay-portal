@@ -377,7 +377,7 @@ definition {
 
 		Navigator.gotoPage(pageName = "Documents and Media Page");
 
-		DMDocument.viewCheckedoutPG(dmDocumentTitle = "Untitled", status = "Draft");
+		DMDocument.viewCheckedoutPG(dmDocumentTitle = "Untitled", status = "DRAFT");
 	}
 
 	@description = "This test ensures that a document is checked out when the Google Sheet editor is being used"
@@ -399,7 +399,7 @@ definition {
 
 		Navigator.gotoPage(pageName = "Documents and Media Page");
 
-		DMDocument.viewCheckedoutPG(dmDocumentTitle = "Untitled", status = "Draft");
+		DMDocument.viewCheckedoutPG(dmDocumentTitle = "Untitled", status = "DRAFT");
 	}
 
 	@description = "This test ensures that a document is checked out when the Google Slide editor is being used"
@@ -421,7 +421,7 @@ definition {
 
 		Navigator.gotoPage(pageName = "Documents and Media Page");
 
-		DMDocument.viewCheckedoutPG(dmDocumentTitle = "Untitled", status = "Draft");
+		DMDocument.viewCheckedoutPG(dmDocumentTitle = "Untitled", status = "DRAFT");
 	}
 
 	tearDown {

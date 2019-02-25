@@ -702,11 +702,11 @@ definition {
 		if (isSet(workflowStatus)) {
 			AssertTextEquals(
 				locator1 = "DDLRecord#WORKFLOW_STATUS",
-				value1 = "Pending (${workflowStatus})"
+				value1 = "PENDING (${workflowStatus})"
 			);
 		}
 		else {
-			AssertTextEquals(locator1 = "DDLRecord#WORKFLOW_STATUS", value1 = "Approved");
+			AssertTextEquals(locator1 = "DDLRecord#WORKFLOW_STATUS", value1 = "APPROVED");
 		}
 
 		if ("${field}" == "Boolean") {
@@ -915,11 +915,11 @@ definition {
 
 	macro viewStatusViaDDLDisplayTable {
 		var key_fieldFieldLabel = "${fieldFieldLabel}";
-		var key_workflowStatus = "${workflowStatus}";
+		var key_workflowStatus = StringUtil.upperCase("${workflowStatus}");
 
 		AssertTextEquals(
 			locator1 = "DDL#RECORD_TABLE_WORKFLOW_STATUS",
-			value1 = "${workflowStatus}"
+			value1 = StringUtil.upperCase("${workflowStatus}")
 		);
 	}
 

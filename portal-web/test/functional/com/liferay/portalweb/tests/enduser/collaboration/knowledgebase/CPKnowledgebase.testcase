@@ -100,7 +100,7 @@ definition {
 		KBArticle.viewCP(
 			kbArticleContent = "Knowledge Base Article Content",
 			kbArticleTitle = "Knowledge Base Article Title",
-			kbStatus = "Draft"
+			kbStatus = "DRAFT"
 		);
 	}
 
@@ -920,7 +920,7 @@ definition {
 		KBArticle.viewCP(
 			kbArticleContent = "Knowledge Base Article Content Edit",
 			kbArticleTitle = "Knowledge Base Article Title Edit",
-			kbStatus = "Draft"
+			kbStatus = "DRAFT"
 		);
 	}
 

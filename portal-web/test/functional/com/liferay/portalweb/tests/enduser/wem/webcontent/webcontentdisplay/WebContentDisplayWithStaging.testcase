@@ -97,7 +97,7 @@ definition {
 
 		WebContent.viewStatus(
 			webContentContent = "WC WebContent Content",
-			webContentStatus = "Expired",
+			webContentStatus = "EXPIRED",
 			webContentTitle = "WC WebContent Title"
 		);
 	}

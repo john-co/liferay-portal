@@ -837,7 +837,7 @@ definition {
 
 		Navigator.gotoPage(pageName = "Message Boards Page");
 
-		var key_threadStatus = "Draft";
+		var key_threadStatus = "DRAFT";
 		var key_threadSubject = "Message Boards Thread Draft";
 
 		AssertTextEquals(
@@ -847,7 +847,7 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "MessageBoards#THREAD_LIST_STATUS",
-			value1 = "Draft"
+			value1 = "DRAFT"
 		);
 
 		AssertClick(locator1 = "MessageBoards#NAVIGATION_MY_POSTS", value1 = "My Posts");
@@ -859,7 +859,7 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "MessageBoards#THREAD_LIST_STATUS",
-			value1 = "Draft"
+			value1 = "DRAFT"
 		);
 	}
 

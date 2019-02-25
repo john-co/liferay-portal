@@ -109,7 +109,7 @@ definition {
 
 	macro viewStatus {
 		var key_appName = "${appName}";
-		var key_appStatus = "${appStatus}";
+		var key_appStatus = StringUtil.upperCase("${appStatus}");
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "AppManager#APP_STATUS",

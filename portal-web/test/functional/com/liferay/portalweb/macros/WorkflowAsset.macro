@@ -50,7 +50,7 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "AssetWorkflow#DETAILS_WORKFLOW_STATUS",
-			value1 = "${workflowStatus}"
+			value1 = StringUtil.upperCase("${workflowStatus}")
 		);
 
 		AssertTextEquals.assertPartialText(
@@ -67,11 +67,11 @@ definition {
 
 		var key_fieldLabel = "${fieldLabel}";
 		var key_fieldValue = "${fieldValue}";
-		var key_workflowStatus = "${workflowStatus}";
+		var key_workflowStatus = StringUtil.upperCase("${workflowStatus}");
 
 		AssertTextEquals(
 			locator1 = "FormsAdmin#FORM_ENTRY_WORKFLOW_STATUS",
-			value1 = "${workflowStatus}"
+			value1 = StringUtil.upperCase("${workflowStatus}")
 		);
 	}
 

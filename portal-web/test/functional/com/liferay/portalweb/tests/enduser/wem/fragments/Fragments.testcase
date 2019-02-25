@@ -269,7 +269,7 @@ definition {
 		task ("Assert the second section fragment is in draft status") {
 			FragmentsAdmin.viewEntryWorkflowStatus(
 				entry = "Fragment Name 2",
-				workflowStatus = "Draft"
+				workflowStatus = "DRAFT"
 			);
 		}
 

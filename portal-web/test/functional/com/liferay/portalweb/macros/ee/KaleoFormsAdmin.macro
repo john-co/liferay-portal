@@ -852,7 +852,7 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "KaleoFormsAdminViewProcessRecords#RECORD_TABLE_STATUS",
-			value1 = "${kfStatus}"
+			value1 =  "${kfStatus}"
 		);
 	}
 

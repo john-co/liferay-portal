@@ -404,7 +404,7 @@ definition {
 	macro viewSaveNotification {
 		AssertTextEquals.assertPartialText(
 			locator1 = "Form#SAVE_NOTIFICATION",
-			value1 = "Draft"
+			value1 = "DRAFT"
 		);
 	}
 }

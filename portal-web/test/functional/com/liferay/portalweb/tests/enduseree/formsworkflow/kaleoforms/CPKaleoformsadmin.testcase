@@ -1019,7 +1019,7 @@ definition {
 		KaleoFormsAdmin.viewProcessRecordTable(
 			kfAuthor = "Test Test",
 			kfProcessFieldData = "One",
-			kfStatus = "Approved"
+			kfStatus = "APPROVED"
 		);
 
 		KaleoFormsAdmin.viewProcessRecordTable(
@@ -2891,7 +2891,7 @@ definition {
 		KaleoFormsAdmin.viewProcessRecordTable(
 			kfAuthor = "Test Test",
 			kfProcessFieldData = "One",
-			kfStatus = "Approved"
+			kfStatus = "APPROVED"
 		);
 
 		KaleoFormsAdmin.viewProcessRecordTable(
@@ -2905,7 +2905,7 @@ definition {
 		KaleoFormsAdmin.viewProcessRecordTable(
 			kfAuthor = "Test Test",
 			kfProcessFieldData = "One",
-			kfStatus = "Approved"
+			kfStatus = "APPROVED"
 		);
 
 		KaleoFormsAdmin.viewProcessRecordTableRecordNotPresent(
@@ -3272,7 +3272,7 @@ definition {
 
 		KaleoFormsAdmin.viewProcessRecordDetails(
 			kfProcessFieldData = "One",
-			kfStatus = "Approved"
+			kfStatus = "APPROVED"
 		);
 
 		KaleoFormsAdmin.viewProcessRecordDetailsField(
@@ -3285,7 +3285,7 @@ definition {
 		KaleoFormsAdmin.viewProcessRecordTable(
 			kfAuthor = "Test Test",
 			kfProcessFieldData = "One",
-			kfStatus = "Approved"
+			kfStatus = "APPROVED"
 		);
 
 		KaleoFormsAdmin.viewProcessRecordTable(

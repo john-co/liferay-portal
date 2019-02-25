@@ -1627,7 +1627,7 @@ definition {
 
 		DMDocument.viewCheckedoutPG(
 			dmDocumentTitle = "DM Document Title",
-			status = "Draft"
+			status = "DRAFT"
 		);
 
 		Navigator.gotoPage(pageName = "Documents and Media Page");

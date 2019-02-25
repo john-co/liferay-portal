@@ -47,7 +47,7 @@ definition {
 	macro viewCardLabel {
 		AssertTextEquals(
 			locator1 = "LexiconCard#CARD_LABEL",
-			value1 = "${cardLabel}",
+			value1 = StringUtil.upperCase("${cardLabel}"),
 			key_card = "${card}"
 		);
 	}

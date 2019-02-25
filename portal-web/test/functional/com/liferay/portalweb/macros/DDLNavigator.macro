@@ -29,7 +29,7 @@ definition {
 
 		WorkflowAsset.viewDetails(
 			userName = "${userName}",
-			workflowStatus = "${workflowStatus}"
+			workflowStatus = StringUtil.upperCase("${workflowStatus}")
 		);
 	}
 

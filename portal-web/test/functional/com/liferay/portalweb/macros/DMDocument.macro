@@ -1460,10 +1460,10 @@ definition {
 	macro viewCPStatus {
 		var key_dmDocumentTitle = "${dmDocumentTitle}";
 
-		if ("${dmDocumentStatus}" == "Approved") {
+		if ("${dmDocumentStatus}" == "APPROVED") {
 			AssertTextEquals(
 				locator1 = "DocumentsAndMedia#ICON_DOCUMENT_WORKFLOW_STATUS",
-				value1 = "Approved"
+				value1 = "APPROVED"
 			);
 		}
 		else {

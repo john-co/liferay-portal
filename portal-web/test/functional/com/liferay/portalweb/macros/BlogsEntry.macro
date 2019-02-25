@@ -401,7 +401,7 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "Blogs#DESCRIPTIVE_VIEW_ENTRY_STATUS",
-			value1 = "Draft"
+			value1 = "DRAFT"
 		);
 
 		Click(

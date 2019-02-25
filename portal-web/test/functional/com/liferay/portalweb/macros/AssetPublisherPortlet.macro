@@ -924,7 +924,7 @@ definition {
 	}
 
 	macro viewAssetMetadataPG {
-		var key_categoryName = "${categoryName}";
+		var key_categoryName = StringUtil.upperCase("${categoryName}");
 		var key_vocabularyName = "${vocabularyName}";
 
 		AssertTextEquals.assertPartialText(

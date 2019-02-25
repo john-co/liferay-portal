@@ -70,7 +70,7 @@ definition {
 	macro viewEntryWorkflowStatus {
 		LexiconList.viewListEntryLabel(
 			listEntry = "${entry}",
-			listEntryLabel = "${workflowStatus}"
+			listEntryLabel = StringUtil.upperCase("${workflowStatus}")
 		);
 	}
 }

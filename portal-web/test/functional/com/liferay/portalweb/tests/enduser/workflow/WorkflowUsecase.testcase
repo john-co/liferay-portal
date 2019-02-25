@@ -1567,7 +1567,7 @@ definition {
 			workflowAssetTitle = "User 1 Blog Title Approved",
 			workflowAssetType = "Blogs Entry",
 			workflowDefinition = "Single Approver",
-			workflowStatus = "Approved"
+			workflowStatus = "APPROVED"
 		);
 
 		Workflow.viewSubmissionNotPresent(
@@ -1602,7 +1602,7 @@ definition {
 			workflowAssetTitle = "User 2 Blog Title Approved",
 			workflowAssetType = "Blogs Entry",
 			workflowDefinition = "Single Approver",
-			workflowStatus = "Approved"
+			workflowStatus = "APPROVED"
 		);
 
 		Workflow.viewSubmissionNotPresent(

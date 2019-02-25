@@ -1069,7 +1069,7 @@ definition {
 		);
 
 		BlogsNavigator.gotoEntryCP(
-			entryStatus = "Draft",
+			entryStatus = "DRAFT",
 			entryTitle = "Blogs Entry Title"
 		);
 
@@ -1099,7 +1099,7 @@ definition {
 		);
 
 		BlogsNavigator.gotoEntryCP(
-			entryStatus = "Draft",
+			entryStatus = "DRAFT",
 			entryTitle = "Blogs Entry Title"
 		);
 

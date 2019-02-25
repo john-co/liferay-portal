@@ -335,7 +335,7 @@ definition {
 
 			AssertTextEquals(
 				locator1 = "MessageBoardsThread#MESSAGE_WORKFLOW_STATUS_1",
-				value1 = "Draft"
+				value1 = "DRAFT"
 			);
 
 			AssertTextEquals(
@@ -1190,7 +1190,7 @@ definition {
 		if (isSet(workflowTask)) {
 			AssertTextEquals(
 				locator1 = "MessageBoardsThread#MESSAGE_WORKFLOW_STATUS_1",
-				value1 = "Pending (${workflowTask})"
+				value1 = StringUtil.upperCase("PENDING (${workflowTask})")
 			);
 		}
 	}
@@ -1592,11 +1592,11 @@ definition {
 			value1 = "${threadSubject}"
 		);
 
-		var key_threadStatus = "Pending (${workflowTask})";
+		var key_threadStatus = StringUtil.upperCase("PENDING (${workflowTask})");
 
 		AssertTextEquals(
 			locator1 = "MessageBoards#THREAD_LIST_STATUS",
-			value1 = "Pending (${workflowTask})"
+			value1 = StringUtil.upperCase("PENDING (${workflowTask})")
 		);
 
 		AssertClick(locator1 = "MessageBoards#NAVIGATION_MY_POSTS", value1 = "My Posts");
@@ -1608,7 +1608,7 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "MessageBoardsThread#MESSAGE_WORKFLOW_STATUS_1",
-			value1 = "Pending (${workflowTask})"
+			value1 = StringUtil.upperCase("PENDING (${workflowTask})")
 		);
 
 		AssertClick(

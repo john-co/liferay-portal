@@ -90,7 +90,7 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "ExportImport#CURRENT_AND_PREVIOUS_STATUS",
-			value1 = "Successful"
+			value1 = "SUCCESSFUL"
 		);
 
 		Click(locator1 = "ExportImport#CURRENT_AND_PREVIOUS_DOWNLOAD");
@@ -186,7 +186,7 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "SitePagesImport#CURRENT_AND_PREVIOUS_STATUS_1",
-			value1 = "Successful"
+			value1 = "SUCCESSFUL"
 		);
 	}
 
@@ -292,7 +292,7 @@ definition {
 			else {
 				AssertTextEquals(
 					locator1 = "ExportImport#CURRENT_AND_PREVIOUS_STATUS_1",
-					value1 = "Successful"
+					value1 = "SUCCESSFUL"
 				);
 			}
 
@@ -514,7 +514,7 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "SitePagesExport#CURRENT_AND_PREVIOUS_STATUS",
-			value1 = "Successful"
+			value1 = "SUCCESSFUL"
 		);
 	}
 

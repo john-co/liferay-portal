@@ -607,7 +607,7 @@ definition {
 
 		WebContent.viewStatus(
 			webContentContent = "WC WebContent Content",
-			webContentStatus = "Draft",
+			webContentStatus = "DRAFT",
 			webContentTitle = "WC Webcontent Title"
 		);
 	}

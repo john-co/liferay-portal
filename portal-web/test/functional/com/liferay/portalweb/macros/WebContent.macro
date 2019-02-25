@@ -660,7 +660,7 @@ definition {
 		if ("${saveAsDraft}" == "true") {
 			PortletEntry.saveAsDraft();
 
-			AssertTextEquals(locator1 = "AssetWorkflow#WORKFLOW_STATUS", value1 = "Draft");
+			AssertTextEquals(locator1 = "AssetWorkflow#WORKFLOW_STATUS", value1 = "DRAFT");
 		}
 	}
 
@@ -820,7 +820,7 @@ definition {
 
 			AssertTextEquals.assertPartialText(
 				locator1 = "Message#WEB_CONTENT_STATUS",
-				value1 = "Draft"
+				value1 = "DRAFT"
 			);
 		}
 		else {
@@ -1969,7 +1969,7 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "AssetWorkflow#WORKFLOW_STATUS",
-			value1 = "Pending (${workflowTask})"
+			value1 = StringUtil.upperCase("PENDING (${workflowTask})")
 		);
 
 		AssertTextEquals(locator1 = "TextInput#TITLE", value1 = "${webContentTitle}");
@@ -2131,7 +2131,7 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "AssetWorkflow#WORKFLOW_STATUS",
-			value1 = "Pending (${workflowTask})"
+			value1 = StringUtil.upperCase("PENDING (${workflowTask})")
 		);
 
 		AssertTextEquals(locator1 = "TextInput#TITLE", value1 = "${webContentTitle}");
@@ -2162,7 +2162,7 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "AssetWorkflow#WORKFLOW_STATUS",
-			value1 = "Pending (${workflowTask})"
+			value1 = StringUtil.upperCase("PENDING (${workflowTask})")
 		);
 
 		AssertTextEquals(locator1 = "TextInput#TITLE", value1 = "${webContentTitle}");

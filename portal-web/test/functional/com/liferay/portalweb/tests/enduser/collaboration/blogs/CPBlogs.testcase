@@ -600,7 +600,7 @@ definition {
 		);
 
 		BlogsNavigator.gotoEntryCP(
-			entryStatus = "Draft",
+			entryStatus = "DRAFT",
 			entryTitle = "Blogs Entry Title"
 		);
 
@@ -636,7 +636,7 @@ definition {
 		);
 
 		BlogsNavigator.gotoEntryCP(
-			entryStatus = "Draft",
+			entryStatus = "DRAFT",
 			entryTitle = "Blogs Entry Title"
 		);
 
@@ -869,7 +869,7 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "Blogs#DESCRIPTIVE_VIEW_ENTRY_STATUS",
-			value1 = "Draft"
+			value1 = "DRAFT"
 		);
 
 		BlogsNavigator.gotoEntryCP(entryTitle = "Blogs Entry Title");

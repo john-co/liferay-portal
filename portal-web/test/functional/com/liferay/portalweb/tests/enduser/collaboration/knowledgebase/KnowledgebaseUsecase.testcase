@@ -179,7 +179,7 @@ definition {
 		KBArticle.viewCP(
 			kbArticleContent = "Knowledge Base Child Article Content",
 			kbArticleTitle = "Knowledge Base Child Article Title",
-			kbStatus = "Draft"
+			kbStatus = "DRAFT"
 		);
 	}
 
@@ -649,7 +649,7 @@ definition {
 		KBArticle.viewCP(
 			kbArticleContent = "Knowledge Base Child Article Content Edited",
 			kbArticleTitle = "Knowledge Base Child Article Title Edited",
-			kbStatus = "Draft"
+			kbStatus = "DRAFT"
 		);
 	}
 

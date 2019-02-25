@@ -153,7 +153,7 @@ definition {
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "SitePagesExport#CURRENT_AND_PREVIOUS_STATUS",
-			value1 = "Successful"
+			value1 = "SUCCESSFUL"
 		);
 
 		LAR.downloadLar();
@@ -654,7 +654,7 @@ definition {
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "SitePagesExport#CURRENT_AND_PREVIOUS_STATUS",
-			value1 = "Successful"
+			value1 = "SUCCESSFUL"
 		);
 
 		var valueName = selenium.getText("//ul/li/div/h5");
@@ -699,7 +699,7 @@ definition {
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "SitePagesExport#CURRENT_AND_PREVIOUS_STATUS",
-			value1 = "Successful"
+			value1 = "SUCCESSFUL"
 		);
 
 		var valueName = selenium.getText("//ul/li/div/h5");
@@ -751,7 +751,7 @@ definition {
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "SitePagesExport#CURRENT_AND_PREVIOUS_STATUS",
-			value1 = "Successful"
+			value1 = "SUCCESSFUL"
 		);
 
 		var valueName = selenium.getText("//ul/li/div/h5");

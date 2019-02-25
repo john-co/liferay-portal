@@ -45,7 +45,7 @@ definition {
 
 		WebContent.viewStatus(
 			webContentContent = "WC WebContent Content",
-			webContentStatus = "Draft",
+			webContentStatus = "DRAFT",
 			webContentTitle = "WC WebContent Title"
 		);
 	}
@@ -136,7 +136,7 @@ definition {
 
 		WebContent.viewStatus(
 			webContentContent = "WC WebContent Content",
-			webContentStatus = "Expired",
+			webContentStatus = "EXPIRED",
 			webContentTitle = "WC WebContent Title"
 		);
 
@@ -452,7 +452,7 @@ definition {
 
 		WebContent.viewStatus(
 			webContentContent = "WC WebContent Content Edit",
-			webContentStatus = "Expired",
+			webContentStatus = "EXPIRED",
 			webContentTitle = "WC WebContent Title Edit"
 		);
 	}
@@ -535,7 +535,7 @@ definition {
 
 			WebContent.viewStatus(
 				webContentContent = "WC WebContent Content",
-				webContentStatus = "Expired",
+				webContentStatus = "EXPIRED",
 				webContentTitle = "WC WebContent Title ${i}"
 			);
 		}
@@ -568,7 +568,7 @@ definition {
 
 		WebContent.viewStatus(
 			webContentContent = "WC WebContent Content",
-			webContentStatus = "Expired",
+			webContentStatus = "EXPIRED",
 			webContentTitle = "WC WebContent Title"
 		);
 	}
@@ -868,7 +868,7 @@ definition {
 
 		WebContent.viewStatus(
 			webContentContent = "WC WebContent Content",
-			webContentStatus = "Draft",
+			webContentStatus = "DRAFT",
 			webContentTitle = "WC WebContent Title"
 		);
 

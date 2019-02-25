@@ -913,7 +913,7 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "MyWorkflowTasks#ASSIGNED_TO_ME_TABLE_TASK",
-			value1 = "${workflowStatus}"
+			value1 = StringUtil.upperCase("${workflowStatus}")
 		);
 
 		AssertTextEquals(

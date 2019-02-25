@@ -100,7 +100,7 @@ definition {
 
 		WebContent.viewStatus(
 			webContentContent = "WC WebContent Content",
-			webContentStatus = "Draft",
+			webContentStatus = "DRAFT",
 			webContentTitle = "WC WebContent Title"
 		);
 	}
@@ -171,7 +171,7 @@ definition {
 
 		WebContent.viewStatus(
 			webContentContent = "WC WebContent Content",
-			webContentStatus = "Draft",
+			webContentStatus = "DRAFT",
 			webContentTitle = "WC WebContent Title"
 		);
 	}
@@ -226,7 +226,7 @@ definition {
 
 		WebContent.viewStatus(
 			webContentContent = "WC WebContent Content",
-			webContentStatus = "Draft",
+			webContentStatus = "DRAFT",
 			webContentTitle = "WC WebContent Title"
 		);
 	}
@@ -282,7 +282,7 @@ definition {
 
 		WebContent.viewStatus(
 			webContentContent = "WC WebContent Content",
-			webContentStatus = "Draft",
+			webContentStatus = "DRAFT",
 			webContentTitle = "WC WebContent Title"
 		);
 	}
@@ -347,7 +347,7 @@ definition {
 			workflowAssetTitle = "WC WebContent Title",
 			workflowAssetType = "Web Content Article",
 			workflowDefinition = "Single Approver",
-			workflowTask = "Approved"
+			workflowTask = "APPROVED"
 		);
 	}
 
@@ -414,7 +414,7 @@ definition {
 			workflowAssetTitle = "WC WebContent Title",
 			workflowAssetType = "Web Content Article",
 			workflowDefinition = "Single Approver",
-			workflowTask = "Approved"
+			workflowTask = "APPROVED"
 		);
 	}
 }

@@ -168,7 +168,7 @@ definition {
 	macro viewWorkflowStatus {
 		AssertTextEquals(
 			locator1 = "Card#GENERIC_SMALL_TEXT",
-			value1 = "${workflowStatus}",
+			value1 = StringUtil.upperCase("${workflowStatus}"),
 			key_rowEntry = "${rowEntry}"
 		);
 	}

@@ -1329,10 +1329,10 @@ definition {
 			);
 		}
 
-		if ("${kbStatus}" == "Draft") {
+		if ("${kbStatus}" == "DRAFT") {
 			AssertTextEquals(
 				locator1 = "KnowledgeBase#ARTICLE_TABLE_ARTICLE_STATUS",
-				value1 = "Draft"
+				value1 = "DRAFT"
 			);
 		}
 
@@ -1518,7 +1518,7 @@ definition {
 		if ("${sourceURL}" == "true") {
 			AssertClick(
 				locator1 = "KnowledgeBaseArticle#EDIT_ON_GITHUB",
-				value1 = "Edit On GitHub"
+				value1 = "EDIT ON GITHUB"
 			);
 
 			SelectWindow(locator1 = "Google#PAGE_TITLE", key_pageTitle = "Google");

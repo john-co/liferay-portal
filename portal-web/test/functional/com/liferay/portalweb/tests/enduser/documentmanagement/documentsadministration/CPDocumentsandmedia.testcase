@@ -45,7 +45,7 @@ definition {
 			dmContractTitle = "DM Contract Title",
 			effectiveDate = "06/01/2017",
 			expirationDate = "06/15/2017",
-			status = "Draft"
+			status = "DRAFT"
 		);
 
 		DMNavigator.gotoDocumentCP(dmDocumentTitle = "DM Contract Title");
@@ -59,7 +59,7 @@ definition {
 
 		DMDocument.viewDocumentTypePG(
 			dateValue = "6/15/17",
-			selectOption = "Draft",
+			selectOption = "DRAFT",
 			textContent = "DM Contract Signing Authority"
 		);
 

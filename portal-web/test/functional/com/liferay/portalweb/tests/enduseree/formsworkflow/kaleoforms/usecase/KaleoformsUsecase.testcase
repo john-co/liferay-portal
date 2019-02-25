@@ -435,13 +435,13 @@ definition {
 		KaleoFormsAdmin.viewProcessRecordTable(
 			kfAuthor = "Test Test",
 			kfProcessFieldData = "Test 1 EDIT",
-			kfStatus = "Approved"
+			kfStatus = "APPROVED"
 		);
 
 		KaleoFormsAdmin.viewProcessRecordTable(
 			kfAuthor = "Test Test",
 			kfProcessFieldData = "Test Hidden from Review",
-			kfStatus = "Approved"
+			kfStatus = "APPROVED"
 		);
 	}
 
@@ -2555,7 +2555,7 @@ definition {
 		KaleoFormsAdmin.viewProcessRecordTable(
 			kfAuthor = "Test Test",
 			kfProcessFieldData = "Text Data",
-			kfStatus = "Approved"
+			kfStatus = "APPROVED"
 		);
 	}
 
@@ -5509,7 +5509,7 @@ definition {
 		KaleoFormsAdmin.viewProcessRecordTable(
 			kfAuthor = "Test Test",
 			kfProcessFieldData = "Test Data",
-			kfStatus = "Approved"
+			kfStatus = "APPROVED"
 		);
 	}
 
@@ -5684,7 +5684,7 @@ definition {
 		KaleoFormsAdmin.viewProcessRecordTable(
 			kfAuthor = "userfn userln",
 			kfProcessFieldData = "Test Data",
-			kfStatus = "Approved"
+			kfStatus = "APPROVED"
 		);
 	}
 
@@ -6143,7 +6143,7 @@ definition {
 		KaleoFormsAdmin.viewProcessRecordTable(
 			kfAuthor = "Test Test",
 			kfProcessFieldData = "Test Data",
-			kfStatus = "Approved"
+			kfStatus = "APPROVED"
 		);
 	}
 

@@ -480,7 +480,7 @@ definition {
 
 		WebContent.viewStatus(
 			webContentContent = "WC Workflow Content",
-			webContentStatus = "Approved",
+			webContentStatus = "APPROVED",
 			webContentTitle = "WC Workflow Title"
 		);
 
@@ -616,7 +616,7 @@ definition {
 			entryTitle = "Blogs Workflow Title"
 		);
 
-		BlogsEntry.viewStatus(entryStatus = "Approved");
+		BlogsEntry.viewStatus(entryStatus = "APPROVED");
 	}
 
 	macro publishStagedSite {
@@ -659,7 +659,7 @@ definition {
 
 		WebContent.viewStatus(
 			webContentContent = "Web Content Draft Content",
-			webContentStatus = "Draft",
+			webContentStatus = "DRAFT",
 			webContentTitle = "Web Content Draft Title"
 		);
 
@@ -676,7 +676,7 @@ definition {
 
 		WebContent.viewStatus(
 			webContentContent = "Web Content Content",
-			webContentStatus = "Approved",
+			webContentStatus = "APPROVED",
 			webContentTitle = "Web Content Title"
 		);
 	}
@@ -919,7 +919,7 @@ definition {
 
 		FormsAdminNavigator.gotoViewEntries();
 
-		FormsAdmin.viewFormTableEntry(fieldLabel = "Status", fieldValue = "Approved");
+		FormsAdmin.viewFormTableEntry(fieldLabel = "Status", fieldValue = "APPROVED");
 
 		FormsAdmin.viewFormTableEntry(fieldLabel = "Checkbox", fieldValue = "Yes");
 
