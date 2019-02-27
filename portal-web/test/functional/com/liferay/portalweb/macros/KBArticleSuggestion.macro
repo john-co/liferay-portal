@@ -78,7 +78,7 @@ definition {
 			value1 = "${kbSuggestionBody}"
 		);
 
-		AssertTextEquals(
+		AssertTextEquals.assertTextCaseInsensitive(
 			locator1 = "KnowledgeBaseSuggestions#STATUS",
 			value1 = "${status}"
 		);

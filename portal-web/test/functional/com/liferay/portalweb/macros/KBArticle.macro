@@ -1316,21 +1316,23 @@ definition {
 
 	macro viewCP {
 		var key_kbArticleTitle = "${kbArticleTitle}";
+		var kbStatusUpper = "${kbStatus}";
+		var kbWorkflowStatusUpper = "${kbWorkflowStatus}";
 
 		AssertTextEquals(
 			locator1 = "KnowledgeBase#DESCRIPTIVE_VIEW_ARTICLE_TITLE",
 			value1 = "${kbArticleTitle}"
 		);
 
-		if ("${kbWorkflowStatus}" == "Pending") {
-			AssertTextEquals(
+		if ("${kbWorkflowStatusUpper}" == "PENDING") {
+			AssertTextEquals.assertTextCaseInsensitive(
 				locator1 = "KnowledgeBase#ARTICLE_TABLE_ARTICLE_STATUS",
 				value1 = "Pending"
 			);
 		}
 
-		if ("${kbStatus}" == "Draft") {
-			AssertTextEquals(
+		if ("${kbStatusUpper}" == "DRAFT") {
+			AssertTextEquals.assertTextCaseInsensitive(
 				locator1 = "KnowledgeBase#ARTICLE_TABLE_ARTICLE_STATUS",
 				value1 = "Draft"
 			);

@@ -911,7 +911,7 @@ definition {
 			value1 = "${workflowAssetType}"
 		);
 
-		AssertTextEquals(
+		AssertTextEquals.assertTextCaseInsensitive(
 			locator1 = "MyWorkflowTasks#ASSIGNED_TO_ME_TABLE_TASK",
 			value1 = "${workflowStatus}"
 		);
@@ -1034,7 +1034,7 @@ definition {
 	}
 
 	macro viewDefinitionPublicationStatus {
-		AssertTextEquals(
+		AssertTextEquals.assertTextCaseInsensitive(
 			locator1 = "WorkflowDefinition#PUBLICATION_STATUS",
 			value1 = "${status}"
 		);

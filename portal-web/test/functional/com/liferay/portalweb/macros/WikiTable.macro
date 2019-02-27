@@ -31,7 +31,7 @@ definition {
 			value1 = "${wikiPageTitle}"
 		);
 
-		AssertTextEquals(
+		AssertTextEquals.assertTextCaseInsensitive(
 			locator1 = "WikiTable#ALL_PAGES_STATUS",
 			value1 = "${draftStatus}"
 		);

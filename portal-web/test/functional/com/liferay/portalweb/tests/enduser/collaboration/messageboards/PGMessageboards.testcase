@@ -845,7 +845,7 @@ definition {
 			value1 = "Message Boards Thread Draft"
 		);
 
-		AssertTextEquals(
+		AssertTextEquals.assertTextCaseInsensitive(
 			locator1 = "MessageBoards#THREAD_LIST_STATUS",
 			value1 = "Draft"
 		);
@@ -857,7 +857,7 @@ definition {
 			value1 = "Message Boards Thread Draft"
 		);
 
-		AssertTextEquals(
+		AssertTextEquals.assertTextCaseInsensitive(
 			locator1 = "MessageBoards#THREAD_LIST_STATUS",
 			value1 = "Draft"
 		);

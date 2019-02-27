@@ -1416,7 +1416,7 @@ definition {
 
 		AssertElementPresent(locator1 = "DocumentsAndMedia#ICON_DOCUMENT_ICON_LOCKED");
 
-		AssertTextEquals(
+		AssertTextEquals.assertTextCaseInsensitive(
 			locator1 = "DocumentsAndMedia#ICON_DOCUMENT_WORKFLOW_STATUS",
 			value1 = "${status}"
 		);
@@ -1458,16 +1458,17 @@ definition {
 	}
 
 	macro viewCPStatus {
+		var dmDocumentStatusUpper = StringUtil.upperCase("${dmDocumentStatus}");
 		var key_dmDocumentTitle = "${dmDocumentTitle}";
 
-		if ("${dmDocumentStatus}" == "Approved") {
-			AssertTextEquals(
+		if ("${dmDocumentStatusUpper}" == "APPROVED") {
+			AssertTextEquals.assertTextCaseInsensitive(
 				locator1 = "DocumentsAndMedia#ICON_DOCUMENT_WORKFLOW_STATUS",
 				value1 = "Approved"
 			);
 		}
 		else {
-			AssertTextEquals(
+			AssertTextEquals.assertTextCaseInsensitive(
 				locator1 = "DocumentsAndMedia#ICON_DOCUMENT_WORKFLOW_STATUS",
 				value1 = "${dmDocumentStatus}"
 			);

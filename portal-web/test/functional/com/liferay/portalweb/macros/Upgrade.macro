@@ -1339,7 +1339,7 @@ definition {
 			key_dmDocumentVersionNumber = "1.0"
 		);
 
-		AssertTextEquals(
+		AssertTextEquals.assertTextCaseInsensitive(
 			locator1 = "DocumentsAndMediaDocument#DOCUMENT_INFO_WORKFLOW_STATUS",
 			value1 = "APPROVED"
 		);
@@ -1410,7 +1410,7 @@ definition {
 			key_dmDocumentVersionNumber = "1.0"
 		);
 
-		AssertTextEquals(
+		AssertTextEquals.assertTextCaseInsensitive(
 			locator1 = "DocumentsAndMediaDocument#DOCUMENT_INFO_WORKFLOW_STATUS",
 			value1 = "APPROVED"
 		);

@@ -166,7 +166,7 @@ definition {
 	}
 
 	macro viewWorkflowStatus {
-		AssertTextEquals(
+		AssertTextEquals.assertTextCaseInsensitive(
 			locator1 = "Card#GENERIC_SMALL_TEXT",
 			value1 = "${workflowStatus}",
 			key_rowEntry = "${rowEntry}"

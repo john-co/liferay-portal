@@ -48,7 +48,7 @@ definition {
 
 		AssertTextEquals(locator1 = "NavBar#DETAILS", value1 = "Details");
 
-		AssertTextEquals(
+		AssertTextEquals.assertTextCaseInsensitive(
 			locator1 = "AssetWorkflow#DETAILS_WORKFLOW_STATUS",
 			value1 = "${workflowStatus}"
 		);
@@ -69,7 +69,7 @@ definition {
 		var key_fieldValue = "${fieldValue}";
 		var key_workflowStatus = "${workflowStatus}";
 
-		AssertTextEquals(
+		AssertTextEquals.assertTextCaseInsensitive(
 			locator1 = "FormsAdmin#FORM_ENTRY_WORKFLOW_STATUS",
 			value1 = "${workflowStatus}"
 		);

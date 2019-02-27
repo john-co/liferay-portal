@@ -137,7 +137,7 @@ definition {
 			dmDocumentTitle = "DM Document in Folder 1"
 		);
 
-		AssertTextEquals(
+		AssertTextEquals.assertTextCaseInsensitive(
 			locator1 = "DocumentsAndMedia#ICON_DOCUMENT_WORKFLOW_STATUS",
 			value1 = "Pending",
 			key_dmDocumentTitle = "DM Document in Folder 1"

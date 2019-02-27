@@ -253,7 +253,7 @@ definition {
 			value1 = "${versionNumber}"
 		);
 
-		AssertTextEquals(
+		AssertTextEquals.assertTextCaseInsensitive(
 			locator1 = "ItemSelector#SIDEBAR_VERSION_STATUS",
 			value1 = "${imageStatus}"
 		);

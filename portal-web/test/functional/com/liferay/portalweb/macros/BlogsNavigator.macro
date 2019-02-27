@@ -101,7 +101,7 @@ definition {
 		var key_entryTitle = "${entryTitle}";
 
 		if (isSet(entryStatus)) {
-			AssertTextEquals(
+			AssertTextEquals.assertTextCaseInsensitive(
 				locator1 = "Blogs#DESCRIPTIVE_VIEW_ENTRY_STATUS",
 				value1 = "${entryStatus}"
 			);

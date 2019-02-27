@@ -817,7 +817,7 @@ definition {
 			rowEntry = "${kfProcessFieldData}"
 		);
 
-		AssertTextEquals(
+		AssertTextEquals.assertTextCaseInsensitive(
 			locator1 = "AssetWorkflow#WORKFLOW_STATUS",
 			value1 = "${kfStatus}"
 		);
@@ -850,7 +850,7 @@ definition {
 
 		var key_kfStatus = "${kfStatus}";
 
-		AssertTextEquals(
+		AssertTextEquals.assertTextCaseInsensitive(
 			locator1 = "KaleoFormsAdminViewProcessRecords#RECORD_TABLE_STATUS",
 			value1 = "${kfStatus}"
 		);

@@ -867,7 +867,7 @@ definition {
 			value1 = "Blogs Entry Title"
 		);
 
-		AssertTextEquals(
+		AssertTextEquals.assertTextCaseInsensitive(
 			locator1 = "Blogs#DESCRIPTIVE_VIEW_ENTRY_STATUS",
 			value1 = "Draft"
 		);

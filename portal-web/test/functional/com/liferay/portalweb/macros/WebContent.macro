@@ -660,7 +660,7 @@ definition {
 		if ("${saveAsDraft}" == "true") {
 			PortletEntry.saveAsDraft();
 
-			AssertTextEquals(locator1 = "AssetWorkflow#WORKFLOW_STATUS", value1 = "Draft");
+			AssertTextEquals.assertTextCaseInsensitive(locator1 = "AssetWorkflow#WORKFLOW_STATUS", value1 = "Draft");
 		}
 	}
 
@@ -1385,7 +1385,7 @@ definition {
 
 		LexiconEntry.changeDisplayStyle(displayStyle = "table");
 
-		AssertTextEquals(
+		AssertTextEquals.assertTextCaseInsensitive(
 			locator1 = "WC#ENTRY_TABLE_WORKFLOW_STATUS",
 			value1 = "APPROVED"
 		);
@@ -1908,14 +1908,14 @@ definition {
 			value1 = "${webContentTitle}"
 		);
 
-		AssertTextEquals(
+		AssertTextEquals.assertTextCaseInsensitive(
 			locator1 = "WCEditWebContent#VIEW_HISTORY_VERSION_STATUS",
 			value1 = "${webContentStatus}"
 		);
 	}
 
 	macro viewStatus {
-		AssertTextEquals(
+		AssertTextEquals.assertTextCaseInsensitive(
 			locator1 = "AssetWorkflow#WORKFLOW_STATUS",
 			value1 = "${webContentStatus}"
 		);
@@ -1967,7 +1967,7 @@ definition {
 			webContentTitle = "${webContentTitle}"
 		);
 
-		AssertTextEquals(
+		AssertTextEquals.assertTextCaseInsensitive(
 			locator1 = "AssetWorkflow#WORKFLOW_STATUS",
 			value1 = "Pending (${workflowTask})"
 		);
@@ -2129,7 +2129,7 @@ definition {
 			webContentTitle = "${webContentTitle}"
 		);
 
-		AssertTextEquals(
+		AssertTextEquals.assertTextCaseInsensitive(
 			locator1 = "AssetWorkflow#WORKFLOW_STATUS",
 			value1 = "Pending (${workflowTask})"
 		);
@@ -2160,7 +2160,7 @@ definition {
 			value1 = "${webContentTitle} is not approved."
 		);
 
-		AssertTextEquals(
+		AssertTextEquals.assertTextCaseInsensitive(
 			locator1 = "AssetWorkflow#WORKFLOW_STATUS",
 			value1 = "Pending (${workflowTask})"
 		);

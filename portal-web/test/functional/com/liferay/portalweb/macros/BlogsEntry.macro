@@ -399,7 +399,7 @@ definition {
 			value1 = "${entryTitle}"
 		);
 
-		AssertTextEquals(
+		AssertTextEquals.assertTextCaseInsensitive(
 			locator1 = "Blogs#DESCRIPTIVE_VIEW_ENTRY_STATUS",
 			value1 = "Draft"
 		);
@@ -797,7 +797,7 @@ definition {
 
 		AssertElementPresent(locator1 = "Blogs#ENTRY_TABLE_CREATE_DATE");
 
-		AssertTextEquals(locator1 = "Blogs#ENTRY_TABLE_STATUS", value1 = "APPROVED");
+		AssertTextEquals.assertTextCaseInsensitive(locator1 = "Blogs#ENTRY_TABLE_STATUS", value1 = "APPROVED");
 	}
 
 	macro viewEntryViaAPPG {
@@ -1002,7 +1002,7 @@ definition {
 	}
 
 	macro viewStatus {
-		AssertTextEquals(
+		AssertTextEquals.assertTextCaseInsensitive(
 			locator1 = "AssetWorkflow#WORKFLOW_STATUS",
 			value1 = "${entryStatus}"
 		);
@@ -1215,7 +1215,7 @@ definition {
 
 		AssertTextEquals(locator1 = "Blogs#ENTRY_TABLE_TITLE", value1 = "${entryTitle}");
 
-		AssertTextEquals(locator1 = "Blogs#ENTRY_TABLE_STATUS", value1 = "PENDING");
+		AssertTextEquals.assertTextCaseInsensitive(locator1 = "Blogs#ENTRY_TABLE_STATUS", value1 = "PENDING");
 	}
 
 	macro viewWithWorkflowPGViaAP {

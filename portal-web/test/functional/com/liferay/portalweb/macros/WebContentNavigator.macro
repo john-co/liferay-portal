@@ -183,7 +183,7 @@ definition {
 
 		AssertElementPresent.pauseAssertVisible(locator1 = "WC#ENTRY_LIST_THUMBNAIL");
 
-		AssertTextEquals(
+		AssertTextEquals.assertTextCaseInsensitive(
 			locator1 = "WC#ENTRY_LIST_WORKFLOW_STATUS",
 			value1 = "${webContentStatus}"
 		);
