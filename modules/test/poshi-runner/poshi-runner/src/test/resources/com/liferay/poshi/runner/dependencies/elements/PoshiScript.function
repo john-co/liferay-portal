@@ -4,7 +4,7 @@ definition {
 	function dragAndDropPortletToObject {
 		WaitForSPARefresh();
 
-		selenium.waitForText("${locator1}", "${value1}");
+		selenium.waitForTextCaseInsensitive("${locator1}", "${value1}");
 
 		selenium.mouseDown("${locator1}");
 
