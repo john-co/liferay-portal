@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.fragment.importer;
+package com.liferay.fragment.web.internal.portlet.util;
 
 import java.io.File;
 

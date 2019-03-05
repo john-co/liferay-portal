@@ -21,7 +21,6 @@ import com.liferay.fragment.exception.DuplicateFragmentCollectionKeyException;
 import com.liferay.fragment.exception.DuplicateFragmentEntryKeyException;
 import com.liferay.fragment.exception.FragmentCollectionNameException;
 import com.liferay.fragment.exception.InvalidFileException;
-import com.liferay.fragment.importer.FragmentsImporter;
 import com.liferay.fragment.model.FragmentCollection;
 import com.liferay.fragment.model.FragmentEntry;
 import com.liferay.fragment.processor.FragmentEntryProcessorRegistry;
