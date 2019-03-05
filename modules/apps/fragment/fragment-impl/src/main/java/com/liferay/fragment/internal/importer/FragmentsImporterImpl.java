@@ -118,8 +118,9 @@ public class FragmentsImporterImpl implements FragmentsImporter {
 				groupId, entry.getKey(), name, description, overwrite);
 
 			_importResources(
-				userId, groupId, fragmentCollection.getFragmentCollectionId(),
-				fragmentCollection.getResourcesFolderId(), zipFile);
+				fragmentCollection.getFragmentCollectionId(),
+				fragmentCollection.getResourcesFolderId(), zipFile, groupId,
+				userId);
 
 			_importFragmentEntries(
 				userId, groupId, zipFile,
@@ -482,8 +483,8 @@ public class FragmentsImporterImpl implements FragmentsImporter {
 	}
 
 	private void _importResources(
-			long userId, long groupId, long fragmentCollectionId, long folderId,
-			ZipFile zipFile)
+			long fragmentCollectionId, long folderId, ZipFile zipFile,
+			long groupId, long userId)
 		throws Exception {
 
 		Enumeration<? extends ZipEntry> enumeration = zipFile.entries();
