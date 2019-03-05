@@ -133,11 +133,11 @@ public class FragmentsImporterImpl implements FragmentsImporter {
 					_fragmentCollectionLocalService.fetchFragmentCollection(
 						groupId, _DEFAULT_FRAGMENT_COLLECTION_KEY);
 
+				ServiceContext serviceContext =
+					ServiceContextThreadLocal.getServiceContext();
+
 				if (fragmentCollection == null) {
 					Locale locale = _portal.getSiteDefaultLocale(groupId);
-
-					ServiceContext serviceContext =
-						ServiceContextThreadLocal.getServiceContext();
 
 					fragmentCollection =
 						_fragmentCollectionService.addFragmentCollection(
