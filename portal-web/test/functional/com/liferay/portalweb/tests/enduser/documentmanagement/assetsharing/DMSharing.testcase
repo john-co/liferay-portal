@@ -232,6 +232,7 @@ definition {
 	@description = "This test ensures that users can Order By Shared Date in the Shared with Me app."
 	@priority = "3"
 	test FilterByAssetType {
+		property portal.acceptance = "john-co";
 
 		DMDocument.addMultiplePG(
 			dmDocumentFileList = "Document_1.jpeg,Document_2.docx",
@@ -509,6 +510,8 @@ definition {
 	@description = "This test ensures that users can Order By Shared Date in the Shared with Me app."
 	@priority = "3"
 	test OrderBySharedDate {
+		property portal.acceptance = "john-co";
+
 		DMDocument.addMultiplePG(
 			dmDocumentFileList = "Document_1.jpeg,Document_2.docx",
 			viewableBy = "Owner"

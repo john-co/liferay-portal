@@ -84,6 +84,8 @@ definition {
 
 	@priority = "3"
 	test ExportWithRelaunchedProcess {
+		property portal.acceptance = "john-co";
+
 		LAR.exportSiteCP();
 
 		var key_larFileName = "${larFileName}";

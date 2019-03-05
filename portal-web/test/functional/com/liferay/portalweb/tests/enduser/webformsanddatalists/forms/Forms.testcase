@@ -3939,6 +3939,8 @@ definition {
 
 	@priority = "4"
 	test SubmitFormWithUploadField {
+		property portal.acceptance = "john-co";
+
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(

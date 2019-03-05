@@ -396,6 +396,7 @@ definition {
 
 	@priority = "5"
 	test AddBlogWithFormatting {
+		property portal.acceptance = "john-co";
 		property testray.component.names = "Training";
 
 		ProductMenu.gotoPortlet(

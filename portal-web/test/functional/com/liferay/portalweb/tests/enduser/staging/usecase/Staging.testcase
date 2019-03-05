@@ -907,7 +907,7 @@ definition {
 
 	@priority = "5"
 	test StagingMultipleDM {
-		property portal.acceptance = "true";
+		property portal.acceptance = "john-co";
 		property testray.component.names = "Training";
 
 		Navigator.gotoSitePage(pageName = "Staging Test Page", siteName = "Site Name");

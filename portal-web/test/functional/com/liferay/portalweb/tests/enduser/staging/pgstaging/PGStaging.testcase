@@ -571,6 +571,8 @@ definition {
 	@description = "This test covers LPS-72893."
 	@priority = "4"
 	test PublishLayoutIconDeletion {
+		property portal.acceptance = "john-co";
+
 		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(

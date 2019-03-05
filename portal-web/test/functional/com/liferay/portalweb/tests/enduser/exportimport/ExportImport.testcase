@@ -1,5 +1,6 @@
 @component-name = "portal-staging"
 definition {
+	property portal.acceptance = "john-co";
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Export/Import Framework";
@@ -496,7 +497,7 @@ definition {
 
 	@priority = "5"
 	test ExportImportPortlet {
-		property portal.acceptance = "true";
+		property portal.acceptance = "john-co";
 
 		ProductMenu.gotoPortlet(
 			category = "Build",
@@ -627,7 +628,7 @@ definition {
 
 	@priority = "5"
 	test ExportImportPrivatePage {
-		property portal.acceptance = "true";
+		property portal.acceptance = "john-co";
 		property testray.component.names = "Training";
 
 		ProductMenu.gotoPortlet(
@@ -678,7 +679,7 @@ definition {
 
 	@priority = "5"
 	test ExportImportSmoke {
-		property portal.acceptance = "true";
+		property portal.acceptance = "john-co";
 		property testray.component.names = "Training";
 
 		LAR.exportSiteCP();
@@ -763,7 +764,7 @@ definition {
 
 	@priority = "5"
 	test ExportImportValidation {
-		property portal.acceptance = "true";
+		property portal.acceptance = "john-co";
 		property test.name.skip.portal.instance = "ExportImport#ExportImportValidation";
 		property testray.component.names = "Training";
 
@@ -1039,7 +1040,7 @@ definition {
 
 	@priority = "5"
 	test ImportCorruptedFile {
-		property portal.acceptance = "true";
+		property portal.acceptance = "john-co";
 		property portal.release = "false";
 
 		Navigator.openURL();

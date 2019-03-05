@@ -184,6 +184,7 @@ definition {
 
 	@priority = "5"
 	test AddImageToWebContentViaItemSelector {
+		property portal.acceptance = "john-co";
 		property testray.component.names = "Training,Web Content Administration";
 
 		JSONLayout.addPublicLayout(

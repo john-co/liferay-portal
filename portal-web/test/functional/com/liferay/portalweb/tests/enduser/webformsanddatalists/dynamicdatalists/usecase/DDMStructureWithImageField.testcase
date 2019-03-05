@@ -71,6 +71,7 @@ definition {
 	@description = "This is a use case for LPS-69593."
 	@priority = "4"
 	test ViewFieldTranslations {
+		property portal.acceptance = "john-co";
 		property test.name.skip.portal.instance = "DDMStructureWithImageField#ViewFieldTranslations";
 
 		WebContentNavigator.gotoAddWithStructureCP(structureName = "WC Structure Name");

@@ -38,6 +38,7 @@ definition {
 	@description = "Change a fragment's editable image field."
 	@priority = "5"
 	test ChangeEditableImage {
+		property portal.acceptance = "john-co";
 		property testray.component.names = "Training";
 
 		task ("Add a content page template") {

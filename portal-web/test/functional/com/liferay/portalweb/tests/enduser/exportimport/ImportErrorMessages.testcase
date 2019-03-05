@@ -31,6 +31,8 @@ definition {
 
 	@priority = "4"
 	test Import6210buildNumber {
+		property portal.acceptance = "john-co";
+
 		LAR.importSiteCP(
 			cannotImport = "true",
 			import6210buildNumber = "true",

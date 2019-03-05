@@ -52,6 +52,8 @@ definition {
 
 	@priority = "4"
 	test ActivateInitialStagingWithWikiAttachment {
+		property portal.acceptance = "john-co";
+
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",

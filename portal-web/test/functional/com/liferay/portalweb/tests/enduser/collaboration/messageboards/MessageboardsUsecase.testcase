@@ -401,6 +401,8 @@ definition {
 
 	@priority = "3"
 	test ViewCategoriesAndThreadsOnTwoScopes {
+		property portal.acceptance = "john-co";
+
 		ProductMenu.gotoPortlet(
 			category = "Build",
 			panel = "Site Administration",

@@ -125,6 +125,8 @@ definition {
 	@description = "This is a use case for LPS-73992."
 	@priority = "5"
 	test RemoveStagedWikiAttachment {
+		property portal.acceptance = "john-co";
+
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page",
 			siteName = "Site Name"
