@@ -19,14 +19,14 @@ import com.liferay.fragment.importer.FragmentsImporter;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
+import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
-import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
-import com.liferay.portal.kernel.util.WebKeys;
 
 import java.io.File;
 
@@ -67,31 +67,19 @@ public class ImportMVCActionCommand extends BaseMVCActionCommand {
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
-		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
-			WebKeys.THEME_DISPLAY);
-
-		long fragmentCollectionId = ParamUtil.getLong(
-			actionRequest, "fragmentCollectionId");
-
 		UploadPortletRequest uploadPortletRequest =
 			_portal.getUploadPortletRequest(actionRequest);
 
-		File file = uploadPortletRequest.getFile("file");
+		long fragmentCollectionId = ParamUtil.getLong(
+			uploadPortletRequest, "fragmentCollectionId");
 
 		boolean overwrite = ParamUtil.getBoolean(
 			actionRequest, "overwrite", true);
 
-		try {
-			List<String> invalidFragmentEntriesNames =
-				_fragmentsImporter.importFile(
-					themeDisplay.getUserId(), themeDisplay.getScopeGroupId(),
-					fragmentCollectionId, file, overwrite);
+		File file = uploadPortletRequest.getFile("file");
 
-			if (ListUtil.isNotEmpty(invalidFragmentEntriesNames)) {
-				SessionMessages.add(
-					actionRequest, "invalidFragmentEntriesNames",
-					invalidFragmentEntriesNames);
-			}
+		try {
+			importFile(actionRequest, file, fragmentCollectionId, overwrite);
 
 			SessionMessages.add(actionRequest, "success");
 		}
@@ -100,6 +88,28 @@ public class ImportMVCActionCommand extends BaseMVCActionCommand {
 		}
 
 		sendRedirect(actionRequest, actionResponse);
+	}
+
+	protected void importFile(
+			ActionRequest actionRequest, File file, long fragmentCollectionId,
+			boolean overwrite)
+		throws Exception {
+
+		ServiceContext serviceContext = ServiceContextFactory.getInstance(
+			actionRequest);
+
+		long userId = serviceContext.getUserId();
+
+		List<String> invalidFragmentEntriesNames =
+			_fragmentsImporter.importFile(
+				userId, serviceContext.getScopeGroupId(), fragmentCollectionId,
+				file, overwrite);
+
+		if (ListUtil.isNotEmpty(invalidFragmentEntriesNames)) {
+			SessionMessages.add(
+				actionRequest, "invalidFragmentEntriesNames",
+				invalidFragmentEntriesNames);
+		}
 	}
 
 	@Reference
