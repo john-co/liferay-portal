@@ -15,22 +15,17 @@
 package com.liferay.fragment.web.internal.portlet.action;
 
 import com.liferay.fragment.constants.FragmentPortletKeys;
-import com.liferay.fragment.web.internal.portlet.util.FragmentsImporter;
+import com.liferay.fragment.web.internal.portlet.util.ImportUtil;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
-import com.liferay.portal.kernel.service.ServiceContext;
-import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
-import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
 
 import java.io.File;
-
-import java.util.List;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -79,7 +74,8 @@ public class ImportMVCActionCommand extends BaseMVCActionCommand {
 		File file = uploadPortletRequest.getFile("file");
 
 		try {
-			importFile(actionRequest, file, fragmentCollectionId, overwrite);
+			_importUtil.importFile(
+				actionRequest, file, fragmentCollectionId, overwrite);
 
 			SessionMessages.add(actionRequest, "success");
 		}
@@ -90,30 +86,8 @@ public class ImportMVCActionCommand extends BaseMVCActionCommand {
 		sendRedirect(actionRequest, actionResponse);
 	}
 
-	protected void importFile(
-			ActionRequest actionRequest, File file, long fragmentCollectionId,
-			boolean overwrite)
-		throws Exception {
-
-		ServiceContext serviceContext = ServiceContextFactory.getInstance(
-			actionRequest);
-
-		long userId = serviceContext.getUserId();
-
-		List<String> invalidFragmentEntriesNames =
-			_fragmentsImporter.importFile(
-				userId, serviceContext.getScopeGroupId(), fragmentCollectionId,
-				file, overwrite);
-
-		if (ListUtil.isNotEmpty(invalidFragmentEntriesNames)) {
-			SessionMessages.add(
-				actionRequest, "invalidFragmentEntriesNames",
-				invalidFragmentEntriesNames);
-		}
-	}
-
 	@Reference
-	private FragmentsImporter _fragmentsImporter;
+	private ImportUtil _importUtil;
 
 	@Reference
 	private Portal _portal;
