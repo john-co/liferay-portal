@@ -292,7 +292,7 @@ definition {
 
 	@priority = "5"
 	test AddFormInGlobal {
-		property portal.acceptance = "true";
+		property portal.acceptance = "john-co";
 		property testray.component.names = "Training";
 
 		Navigator.openURL();

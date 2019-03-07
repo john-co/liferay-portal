@@ -38,7 +38,7 @@ definition {
 
 	@priority = "5"
 	test ViewBlogsEntryRegRoleInline {
-		property portal.acceptance = "true";
+		property portal.acceptance = "john-co";
 		property test.name.skip.portal.instance = "CPRolesCPBlogs#ViewBlogsEntryRegRoleInline";
 
 		Permissions.setUpRegRoleLoginUserCP(
