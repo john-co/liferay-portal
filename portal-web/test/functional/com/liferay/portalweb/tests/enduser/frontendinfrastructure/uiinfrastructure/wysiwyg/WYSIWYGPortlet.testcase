@@ -22,6 +22,8 @@ definition {
 
 	@priority = "4"
 	test AddContent {
+		property portal.acceptance = "john-co";
+
 		Navigator.gotoPage(pageName = "WYSIWYG Page");
 
 		Portlet.addPG(portletName = "WYSIWYG");
