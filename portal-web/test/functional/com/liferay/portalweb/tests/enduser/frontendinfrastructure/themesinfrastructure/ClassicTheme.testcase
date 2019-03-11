@@ -21,6 +21,8 @@ definition {
 
 	@priority = "5"
 	test ConfigureLookAndFeelSettingsSinglePage {
+		property portal.acceptance = "john-co";
+
 		ProductMenu.gotoPortlet(
 			category = "Build",
 			panel = "Site Administration",
