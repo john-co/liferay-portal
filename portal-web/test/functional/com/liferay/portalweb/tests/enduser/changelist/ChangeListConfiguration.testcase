@@ -17,8 +17,6 @@ definition {
 	@description = "Enable and Disable Change List"
 	@priority = "5"
 	test EnableDisableChangeList {
-		property portal.acceptance = "john-co";
-
 		ProductMenu.gotoPortlet(
 			category = "Change Lists",
 			panel = "Control Panel",
