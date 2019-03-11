@@ -6,8 +6,6 @@ definition {
 	property testray.main.component.name = "Theme";
 
 	setUp {
-		TestCase.setUpPortalInstance();
-
 		User.firstLoginPG();
 	}
 
