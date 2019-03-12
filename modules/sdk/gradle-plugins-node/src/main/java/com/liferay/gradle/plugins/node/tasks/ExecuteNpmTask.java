@@ -22,6 +22,7 @@ import com.liferay.gradle.util.Validator;
 import java.io.File;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.Callable;
 
 import org.gradle.api.Project;
@@ -165,6 +166,16 @@ public class ExecuteNpmTask extends ExecuteNodeScriptTask {
 	@Override
 	protected List<String> getCompleteArgs() {
 		List<String> completeArgs = super.getCompleteArgs();
+
+		File scriptFile = getScriptFile();
+
+		if (scriptFile != null) {
+			String scriptFileName = scriptFile.getName();
+
+			if (!Objects.equals(scriptFileName, "npm-cli.js")) {
+				return completeArgs;
+			}
+		}
 
 		File cacheDir = getCacheDir();
 
