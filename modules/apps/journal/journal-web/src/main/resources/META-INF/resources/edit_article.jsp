@@ -166,7 +166,6 @@ long classNameId = ParamUtil.getLong(request, "classNameId");
 				names="<%= tabNames %>"
 				param="tabs1"
 				refresh="<%= false %>"
-				type="tabs nav-tabs-default"
 			>
 				<liferay-ui:section>
 					<liferay-frontend:form-navigator
