@@ -138,6 +138,8 @@ definition {
 				pageType = "Private Page"
 			);
 		} else {
+			MetalComponent.waitForLayout();
+
 			AssertClick(
 				locator1 = "Breadcrumb#BREADCRUMB_ENTRY",
 				value1="Pages"
@@ -182,6 +184,8 @@ definition {
 			LexiconEntry.gotoAdd();
 		}
 		else {
+			MetalComponent.waitForLayout();
+
 			AssertClick(
 				locator1 = "Breadcrumb#BREADCRUMB_ENTRY",
 				value1="Pages"
