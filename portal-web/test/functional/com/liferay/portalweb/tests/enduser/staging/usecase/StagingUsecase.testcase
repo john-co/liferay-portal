@@ -1056,7 +1056,7 @@ definition {
 
 	@priority = "5"
 	test TrashEntryReferencePublishing {
-		property portal.acceptance = "true";
+		property portal.acceptance = "john-co";
 		property testray.component.names = "Training";
 
 		Navigator.gotoStagedSitePage(
