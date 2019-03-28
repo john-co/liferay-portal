@@ -301,6 +301,8 @@ definition {
 
 		SelectFrame(value1 = "relative=top");
 
+		Pause(locator1 = "15000");
+
 		SelectFrame(locator1 = "IFrame#DIALOG");
 
 		var key_webContentTitle = "${webContentTitle}";
