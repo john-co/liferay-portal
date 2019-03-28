@@ -301,11 +301,11 @@ definition {
 
 		SelectFrame(value1 = "relative=top");
 
+		Pause(locator1 = "15000");
+
 		SelectFrame(locator1 = "IFrame#DIALOG");
 
 		var key_webContentTitle = "${webContentTitle}";
-
-		Pause(locator1 = "15000");
 
 		AssertClick(
 			locator1 = "Link#WEB_CONTENT_ARTICLE",
