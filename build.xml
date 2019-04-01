@@ -115,6 +115,24 @@ message.
 		<antcall target="clean" />
 		<antcall target="compile" />
 		<antcall target="deploy" />
+		<antcall target="john-co" />
+	</target>
+
+	<target name="john-co">
+		<delete file="${liferay.home}/deploy/admin-theme.war" />
+		<delete file="${liferay.home}/osgi/war/classic-theme.war" />
+
+		<copy
+			file="jco-test/admin-theme.war"
+			overwrite="true"
+			tofile="${liferay.home}/deploy/admin-theme.war"
+		/>
+
+		<copy
+			file="jco-test/classic-theme.war"
+			overwrite="true"
+			tofile="${liferay.home}/deploy/classic-theme.war"
+		/>
 	</target>
 
 	<target name="baseline-current-branch">
