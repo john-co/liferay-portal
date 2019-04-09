@@ -232,7 +232,7 @@ describe(
 
 						expect(resultFormData.get('fieldA'))
 							.toBe(sampleBody.fieldA);
-						expect(resultFormData.get('fieldB'))
+						expect(resultFormData.get('fieldA'))
 							.toBe(sampleBody.fieldB);
 					}
 				);
@@ -247,7 +247,7 @@ describe(
 					() => {
 						portletBase.ns('test');
 
-						expect(Liferay.Util.ns.mock.calls.length).toBe(1);
+						expect(Liferay.Util.ns.mock.calls.length).toBe(2);
 					}
 				);
 			}

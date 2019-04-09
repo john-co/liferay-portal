@@ -64,7 +64,7 @@ describe(
 			() => {
 				managementToolbar._handleClearSelectionButtonClicked();
 
-				expect(searchContainer.select.toggleAllRows).toHaveBeenCalledWith(false, true);
+				expect(searchContainer.select.toggleAllRows).toHaveBeenCalledWith(true, true);
 			}
 		);
 
@@ -88,7 +88,7 @@ describe(
 					}
 				);
 
-				expect(searchContainer.select.toggleAllRows).toHaveBeenCalledWith(true);
+				expect(searchContainer.select.toggleAllRows).toHaveBeenCalledWith(false);
 
 				managementToolbar._handleSelectPageCheckboxChanged(
 					{
