@@ -21,7 +21,7 @@
 		<div id="wrapper">
 			<#if show_header>
 				<header class="navbar navbar-dark navbar-expand-md navbar-porygon">
-					<div class="container-fluid" id="banner" role="banner">
+					<div class="container-fluid" id="banner" role="banner" style="background-color:${user_color}">
 						<div class="navbar-header" id="heading">
 							<a class="${logo_css_class}" href="${site_default_url}" title="<@liferay.language_format arguments="${site_name}" key="go-to-x" />">
 								<img alt="${logo_description}" height="56" src="${site_logo}" />

@@ -15,6 +15,14 @@
 			<setting configurable="true" key="show-maximize-minimize-application-links" type="checkbox" value="false" />
 			<setting configurable="false" key="show-site-name-default" value="false" />
 			<setting configurable="false" key="show-site-name-supported" value="true" />
+			<setting configurable="true" key="user-color" type="text" value="#993300" >
+				<![CDATA[
+					AUI().ready('node',function(A) {
+							A.one("#[@NAMESPACE@]user-color").setAttribute("type", "color");
+							A.one("#[@NAMESPACE@]user-color").setAttribute("style", "height: 35px; width: 200px");
+						});
+				]]>
+</setting>
 		</settings>
 		<layout-templates>
 			<custom>
