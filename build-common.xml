@@ -1732,7 +1732,7 @@ artifact.url=${remote.repository.url}/com/liferay/portal/com.liferay.${processed
 					</and>
 				</not>
 				<then>
-					<gradle-execute dir="${project.dir}/modules" task="setUpYarn">
+					<gradle-execute dir="${project.dir}/modules" setupbinariescache="false" task="setUpYarn">
 						<arg value="--build-file=${project.dir}/modules/util.gradle" />
 					</gradle-execute>
 				</then>
