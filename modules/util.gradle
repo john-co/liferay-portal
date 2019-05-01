@@ -104,7 +104,7 @@ setUpYarn {
 
 			File yarnCacheDir = new File(projectDir, cacheFolder)
 
-			if (yarnCacheDir.exists()) {
+			if (yarnCacheDir.parentFile.exists()) {
 				logger.lifecycle "Using cache {}", yarnCacheDir
 
 				args "--cache-folder"
