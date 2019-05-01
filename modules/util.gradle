@@ -97,6 +97,13 @@ setUpYarn {
 	scriptFile = new File(projectDir, "yarn-1.13.0.js")
 
 	doFirst {
+		File cacheDir = new File(System.getProperty("user.home"), ".yarn")
+
+		logger.lifecycle "Using cache {}", cacheDir
+
+		args "--cache-folder"
+		args cacheDir
+
 		String registry = project.findProperty("nodejs.npm.ci.registry")
 
 		if (registry) {
