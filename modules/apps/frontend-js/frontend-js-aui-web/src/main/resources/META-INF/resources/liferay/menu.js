@@ -134,9 +134,9 @@ AUI.add(
 
 					var alignPoints = DEFAULT_ALIGN_POINTS;
 
-					var defaultOverlayHorizontalAlign = STR_RIGHT;
+					var defaultOverlayHorizontalAlign = STR_LEFT;
 
-					var defaultTriggerHorizontalAlign = STR_LEFT;
+					var defaultTriggerHorizontalAlign = STR_RIGHT;
 
 					var mapAlignHorizontalOverlay = MAP_ALIGN_HORIZONTAL_OVERLAY;
 
@@ -145,8 +145,8 @@ AUI.add(
 					var langDir = Liferay.Language.direction[themeDisplay.getLanguageId()] || STR_LTR;
 
 					if (langDir === STR_RTL) {
-						defaultOverlayHorizontalAlign = STR_LEFT;
-						defaultTriggerHorizontalAlign = STR_RIGHT;
+						defaultOverlayHorizontalAlign = STR_RIGHT;
+						defaultTriggerHorizontalAlign = STR_LEFT;
 
 						mapAlignHorizontalOverlay = MAP_ALIGN_HORIZONTAL_OVERLAY_RTL;
 						mapAlignHorizontalTrigger = MAP_ALIGN_HORIZONTAL_TRIGGER_RTL;
@@ -162,10 +162,6 @@ AUI.add(
 
 						var triggerHorizontal = mapAlignHorizontalTrigger[direction] || defaultTriggerHorizontalAlign;
 						var triggerVertical = MAP_ALIGN_VERTICAL_TRIGGER[direction] || STR_TOP;
-
-						if (direction === 'down') {
-							overlayHorizontal = STR_LEFT;
-						}
 
 						alignPoints = [overlayVertical + overlayHorizontal, triggerVertical + triggerHorizontal];
 					}
