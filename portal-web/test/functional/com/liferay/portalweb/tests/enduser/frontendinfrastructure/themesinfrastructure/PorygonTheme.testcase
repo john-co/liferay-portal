@@ -42,6 +42,10 @@ definition {
 			locator1 = "Home#PAGE",
 			value1 = "HOME");
 
+		WaitForSPARefresh();
+
+		takeScreenshot();
+
 		AssertTextEquals(
 			key_title = "Astronomy compels the soul to look upward",
 			locator1 = "Header#H2_TITLE",
