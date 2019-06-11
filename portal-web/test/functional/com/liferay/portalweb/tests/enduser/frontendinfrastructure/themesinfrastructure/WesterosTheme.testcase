@@ -44,6 +44,10 @@ definition {
 			locator1 = "Home#PAGE",
 			value1 = "For You");
 
+		WaitForSPARefresh();
+
+		takeScreenshot();
+
 		AssertTextEquals(
 			key_title = "Always thinking of you",
 			locator1 = "Header#H2_TITLE",

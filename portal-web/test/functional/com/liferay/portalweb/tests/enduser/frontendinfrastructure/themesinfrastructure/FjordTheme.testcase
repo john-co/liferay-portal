@@ -42,6 +42,10 @@ definition {
 			locator1 = "Home#PAGE",
 			value1 = "Home");
 
+		WaitForSPARefresh();
+
+		takeScreenshot();
+
 		AssertTextEquals(
 			key_title = "Dynamic and Customizable for a Healthier You",
 			locator1 = "Header#H1_TITLE",
