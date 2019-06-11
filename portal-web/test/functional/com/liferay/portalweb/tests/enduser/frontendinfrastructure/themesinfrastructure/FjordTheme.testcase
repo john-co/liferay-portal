@@ -23,7 +23,7 @@ definition {
 	@priority = "5"
 	test AddThemeSite {
 		property osgi.app.includes = "frontend-theme-fjord";
-		property portal.acceptance = "true";
+		property portal.acceptance = "john-co";
 		property test.name.skip.portal.instance = "FjordTheme#AddThemeSite";
 
 		ProductMenu.gotoPortlet(
@@ -41,6 +41,10 @@ definition {
 			key_pageName = "Home",
 			locator1 = "Home#PAGE",
 			value1 = "Home");
+
+		WaitForSPARefresh();
+
+		takeScreenshot();
 
 		AssertTextEquals(
 			key_title = "Dynamic and Customizable for a Healthier You",

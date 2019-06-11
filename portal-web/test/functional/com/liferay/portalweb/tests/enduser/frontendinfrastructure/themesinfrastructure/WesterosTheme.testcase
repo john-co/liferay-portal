@@ -23,7 +23,7 @@ definition {
 	@priority = "5"
 	test AddThemeSite {
 		property osgi.app.includes = "frontend-theme-westeros-bank";
-		property portal.acceptance = "true";
+		property portal.acceptance = "john-co";
 		property test.name.skip.portal.instance = "WesterosTheme#AddThemeSite";
 
 		ProductMenu.gotoPortlet(
@@ -43,6 +43,10 @@ definition {
 			key_pageName = "For You",
 			locator1 = "Home#PAGE",
 			value1 = "For You");
+
+		WaitForSPARefresh();
+
+		takeScreenshot();
 
 		AssertTextEquals(
 			key_title = "Always thinking of you",
