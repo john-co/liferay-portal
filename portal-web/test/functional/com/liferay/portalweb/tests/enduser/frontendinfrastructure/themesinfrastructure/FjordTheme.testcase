@@ -22,6 +22,9 @@ definition {
 
 	@priority = "5"
 	test AddThemeSite {
+		property app.server.types = "jboss,resin,tcserver,tomcat,weblogic,websphere,wildfly";
+		property database.types = "db2,hypersonic,mariadb,mysql,oracle,postgresql,sqlserver,sybase";
+		property environment.acceptance = "john-co";
 		property osgi.app.includes = "frontend-theme-fjord";
 		property portal.acceptance = "true";
 		property test.name.skip.portal.instance = "FjordTheme#AddThemeSite";
