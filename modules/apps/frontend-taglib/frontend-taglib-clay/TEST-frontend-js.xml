@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuite hostname="" id="0" errors="0" failures="3" name="Jest" package="frontend-taglib.frontend-taglib-clay" skipped="0" tests="4" time="0" timestamp="1560539952541">
-  <testcase classname="frontend-taglib.frontend-taglib-clay.test.management_toolbar.ManagementToolbar" name="ManagementToolbar should listen to the rowToggled event from the registered search container" time="0.035">
+  <testcase classname="frontend-taglib.frontend-taglib-clay.test.management_toolbar.frontend-taglib.ManagementToolbar" name="ManagementToolbar should listen to the rowToggled event from the registered search container" time="0.035">
   </testcase>
-  <testcase classname="frontend-taglib.frontend-taglib-clay.test.management_toolbar.ManagementToolbar" name="ManagementToolbar should deselect all searchContainer rows" time="0.009">
+  <testcase classname="frontend-taglib.frontend-taglib-clay.test.management_toolbar.frontend-taglib.ManagementToolbar" name="ManagementToolbar should deselect all searchContainer rows" time="0.009">
     <failure message="Error: expect(jest.fn()).toHaveBeenCalledWith(expected)">Error: expect(jest.fn()).toHaveBeenCalledWith(expected)
 
 Expected mock function to have been called with:
@@ -17,7 +17,7 @@ as argument 1, but it was called with
     at promise.then (/home/john-co/Liferay/public/master/modules/node_modules/jest-jasmine2/build/queueRunner.js:73:41)
     at process._tickCallback (internal/process/next_tick.js:68:7)</failure>
   </testcase>
-  <testcase classname="frontend-taglib.frontend-taglib-clay.test.management_toolbar.ManagementToolbar" name="ManagementToolbar should select all searchContainer rows" time="0.008">
+  <testcase classname="frontend-taglib.frontend-taglib-clay.test.management_toolbar.frontend-taglib.ManagementToolbar" name="ManagementToolbar should select all searchContainer rows" time="0.008">
     <failure message="Error: expect(jest.fn()).toHaveBeenCalledWith(expected)">Error: expect(jest.fn()).toHaveBeenCalledWith(expected)
 
 Expected mock function to have been called with:
@@ -32,7 +32,7 @@ as argument 1, but it was called with
     at promise.then (/home/john-co/Liferay/public/master/modules/node_modules/jest-jasmine2/build/queueRunner.js:73:41)
     at process._tickCallback (internal/process/next_tick.js:68:7)</failure>
   </testcase>
-  <testcase classname="frontend-taglib.frontend-taglib-clay.test.management_toolbar.ManagementToolbar" name="ManagementToolbar should toggle the searchContainer selected rows" time="0.006">
+  <testcase classname="frontend-taglib.frontend-taglib-clay.test.management_toolbar.frontend-taglib.ManagementToolbar" name="ManagementToolbar should toggle the searchContainer selected rows" time="0.006">
     <failure message="Error: expect(jest.fn()).toHaveBeenCalledWith(expected)">Error: expect(jest.fn()).toHaveBeenCalledWith(expected)
 
 Expected mock function to have been called with:
