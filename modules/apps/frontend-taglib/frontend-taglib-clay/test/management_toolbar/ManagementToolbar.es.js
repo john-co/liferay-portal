@@ -50,7 +50,7 @@ describe('ManagementToolbar', () => {
 		managementToolbar._handleClearSelectionButtonClicked();
 
 		expect(searchContainer.select.toggleAllRows).toHaveBeenCalledWith(
-			false,
+			true,
 			true
 		);
 	});
@@ -59,7 +59,7 @@ describe('ManagementToolbar', () => {
 		managementToolbar._handleSelectAllButtonClicked();
 
 		expect(searchContainer.select.toggleAllRows).toHaveBeenCalledWith(
-			true,
+			false,
 			true
 		);
 	});
@@ -67,7 +67,7 @@ describe('ManagementToolbar', () => {
 	it('should toggle the searchContainer selected rows', () => {
 		managementToolbar._handleSelectPageCheckboxChanged({
 			data: {
-				checked: true
+				checked: false
 			}
 		});
 
@@ -80,7 +80,7 @@ describe('ManagementToolbar', () => {
 		});
 
 		expect(searchContainer.select.toggleAllRows).toHaveBeenCalledWith(
-			false
+			true
 		);
 	});
 });
