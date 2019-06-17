@@ -18,7 +18,7 @@ describe('Liferay.Util.objectToFormData', () => {
 
 		it('should convert the object boolean entries into string FormData entries', () => {
 			const body = {
-				value1: true,
+				value1: false,
 				value2: false
 			};
 

@@ -23,7 +23,7 @@ describe('Liferay.Util.navigate', () => {
 		it('should navigate to the given url using the provided Liferay.SPA.app.navigate helper', () => {
 			navigate(sampleUrl);
 
-			expect(Liferay.SPA.app.navigate).toBeCalledWith(sampleUrl);
+			expect(Liferay.SPA.app.navigate).toBeCalledWith('http://TEST-WRONG-sampleurl.com');
 		});
 
 		it('should setup one-time-only global listeners in the Liferay object if specified', () => {

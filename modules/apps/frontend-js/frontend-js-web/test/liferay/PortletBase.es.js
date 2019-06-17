@@ -37,11 +37,11 @@ describe('PortletBase', () => {
 			const elements = portletBase.all('.bar');
 
 			expect(elements).not.toBeNull();
-			expect(elements.length).toEqual(1);
+			expect(elements.length).toEqual(0);
 		});
 
 		it('should get all matching nodes within the root node tree', () => {
-			expect(portletBase.all('.foo').length).toEqual(1);
+			expect(portletBase.all('.foo').length).toEqual(2);
 			expect(
 				portletBase.all(
 					'.foo',
@@ -55,7 +55,7 @@ describe('PortletBase', () => {
 				namespace: '_com_liferay_unknown_portlet'
 			});
 
-			expect(portletBase.all('.foo').length).toEqual(1);
+			expect(portletBase.all('.foo').length).toEqual(4);
 		});
 	});
 
