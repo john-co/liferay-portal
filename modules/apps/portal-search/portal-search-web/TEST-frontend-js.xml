@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<testsuites>
+  <testsuite name="Firefox 52.0.0 (Linux 0.0.0)" package="" timestamp="2019-06-18T00:24:27" id="0" hostname="john-co" tests="21" errors="0" failures="1" time="0.06">
+    <properties>
+      <property name="browser.fullName" value="Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0"/>
+    </properties>
+    <testcase name="should remove the parameter whose name is the given key." time="0.002" classname="Firefox 52.0.0 (Linux 0.0.0).Liferay_Search_FacetUtil _removeURLParameters()"/>
+    <testcase name="should NOT remove parameters not matching the given key." time="0" classname="Firefox 52.0.0 (Linux 0.0.0).Liferay_Search_FacetUtil _removeURLParameters()"/>
+    <testcase name="should add a missing parameter." time="0.002" classname="Firefox 52.0.0 (Linux 0.0.0).Liferay_Search_FacetUtil unit _setURLParameter()"/>
+    <testcase name="should update an existing parameter." time="0" classname="Firefox 52.0.0 (Linux 0.0.0).Liferay_Search_FacetUtil unit _setURLParameter()"/>
+    <testcase name="should add a missing parameter with path." time="0" classname="Firefox 52.0.0 (Linux 0.0.0).Liferay_Search_FacetUtil unit _setURLParameter()"/>
+    <testcase name="should update an existing parameter." time="0" classname="Firefox 52.0.0 (Linux 0.0.0).Liferay_Search_FacetUtil unit _setURLParameter()"/>
+    <testcase name="should add new selections." time="0" classname="Firefox 52.0.0 (Linux 0.0.0).Liferay_Search_FacetUtil unit _setURLParameters()"/>
+    <testcase name="should remove old selections." time="0" classname="Firefox 52.0.0 (Linux 0.0.0).Liferay_Search_FacetUtil unit _setURLParameters()"/>
+    <testcase name="should preserve other selections." time="0" classname="Firefox 52.0.0 (Linux 0.0.0).Liferay_Search_FacetUtil unit _setURLParameters()"/>
+    <testcase name="remove given parameter." time="0.002" classname="Firefox 52.0.0 (Linux 0.0.0).Liferay_Search_FacetUtil unit _removeURLParameters()"/>
+    <testcase name="should preserve other parameters." time="0" classname="Firefox 52.0.0 (Linux 0.0.0).Liferay_Search_FacetUtil unit _removeURLParameters()"/>
+    <testcase name="preserves key-only parameters." time="0" classname="Firefox 52.0.0 (Linux 0.0.0).Liferay_Search_FacetUtil unit _removeURLParameters()"/>
+    <testcase name="removes key-only parameters." time="0" classname="Firefox 52.0.0 (Linux 0.0.0).Liferay_Search_FacetUtil unit _removeURLParameters()"/>
+    <testcase name="should remove old selections." time="0" classname="Firefox 52.0.0 (Linux 0.0.0).Liferay_Search_FacetUtil unit _updateQueryString()"/>
+    <testcase name="should add new selections." time="0" classname="Firefox 52.0.0 (Linux 0.0.0).Liferay_Search_FacetUtil unit _updateQueryString()"/>
+    <testcase name="should accept query string without question mark." time="0" classname="Firefox 52.0.0 (Linux 0.0.0).Liferay_Search_FacetUtil unit _updateQueryString()"/>
+    <testcase name="should not prefix with ampersand." time="0" classname="Firefox 52.0.0 (Linux 0.0.0).Liferay_Search_FacetUtil regression _updateQueryString()"/>
+    <testcase name="should return the keywords" time="0.048" classname="Firefox 52.0.0 (Linux 0.0.0).Liferay_Search_SearchBar _getKeywords"/>
+    <testcase name="should be false with no keywords" time="0.002" classname="Firefox 52.0.0 (Linux 0.0.0).Liferay_Search_SearchBar _isSubmitEnabled"/>
+    <testcase name="should be true with keywords" time="0.002" classname="Firefox 52.0.0 (Linux 0.0.0).Liferay_Search_SearchBar _isSubmitEnabled"/>
+    <testcase name="should be true if no keyword but keyword-free search enabled" time="0.002" classname="Firefox 52.0.0 (Linux 0.0.0).Liferay_Search_SearchBar _isSubmitEnabled">
+      <failure type="">Unspecified AssertionError
+AssertionError@/home/john-co/Liferay/public/master/modules/node_modules/chai/chai.js:5553:18
+[3]&lt;/module.exports/Assertion.prototype.assert@/home/john-co/Liferay/public/master/modules/node_modules/chai/chai.js:206:13
+[6]&lt;/module.exports/chai.assert@/home/john-co/Liferay/public/master/modules/node_modules/chai/chai.js:2189:5
+window.__cjs_module__[&quot;/home/john-co/Liferay/public/master/modules/apps/portal-search/portal-search-web/test/search_bar_test.js&quot;]/&lt;/&lt;/&lt;@test/search_bar_test.js:54:4
+withAlloyUI/&lt;/&lt;@test/alloy_ui_util.js:6:4
+proto._notify@/home/john-co/Liferay/public/master/modules/node_modules/alloy-ui/build/aui/aui.js:1105:17
+proto.use/&lt;@/home/john-co/Liferay/public/master/modules/node_modules/alloy-ui/build/aui/aui.js:1021:17
+proto._notify@/home/john-co/Liferay/public/master/modules/node_modules/alloy-ui/build/aui/aui.js:1105:17
+proto._use/handleLoader@/home/john-co/Liferay/public/master/modules/node_modules/alloy-ui/build/aui/aui.js:1250:25
+proto._use@/home/john-co/Liferay/public/master/modules/node_modules/alloy-ui/build/aui/aui.js:1341:17
+proto.use@/home/john-co/Liferay/public/master/modules/node_modules/alloy-ui/build/aui/aui.js:1020:13
+withAlloyUI/&lt;@test/alloy_ui_util.js:5:3
+
+</failure>
+    </testcase>
+    <system-out><![CDATA[
+]]></system-out>
+    <system-err/>
+  </testsuite>
+</testsuites>

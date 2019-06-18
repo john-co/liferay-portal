@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite hostname="" id="0" errors="0" failures="1" name="Jest" package="segments.segments-web" skipped="0" tests="90" time="0" timestamp="1560816101528">
+  <testcase classname="segments.segments-web.test.js.components.inputs.[segments]" name="CollectionInput should render collection type" time="0.03">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.inputs.[segments]" name="CollectionInput should render a key input with the right-side value of the equal character" time="0.011">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.inputs.[segments]" name="CollectionInput should render a value input with the left-side value of the equal character" time="0.002">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.inputs.[segments]" name="CollectionInput should have a changeable key input" time="0.008">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.inputs.[segments]" name="CollectionInput should have a changeable value input" time="0.005">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.criteria_sidebar.[segments]" name="CriteriaSidebarSearchBar should render" time="0.049">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.criteria_sidebar.[segments]" name="CriteriaSidebarSearchBar should render with a blank search input with no search value" time="0.017">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.criteria_sidebar.[segments]" name="CriteriaSidebarSearchBar should render with the value in the search input" time="0.005">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.criteria_sidebar.[segments]" name="CriteriaSidebarSearchBar should render a button with a times icon when an input is entered" time="0.005">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.criteria_sidebar.[segments]" name="CriteriaSidebarSearchBar should clear the input when the times icon is clicked" time="0.015">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.title_editor.[segments]" name="LocalizedInput with minimal configuration should render" time="0.053">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.title_editor.[segments]" name="LocalizedInput with minimal configuration should have main input with empty value" time="0.014">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.title_editor.[segments]" name="LocalizedInput should render with pre-existing value should render" time="0.01">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.title_editor.[segments]" name="LocalizedInput should render with pre-existing value should have main input with value" time="0.005">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.title_editor.[segments]" name="LocalizedInput should render with pre-existing value should have dropdown with options" time="0.046">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.title_editor.[segments]" name="LocalizedInput should render with pre-existing value should switch main input value on language selection" time="0.022">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.utils.[segments]" name="odata-util buildQueryString should build a query string from a flat criteria map" time="0.005">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.utils.[segments]" name="odata-util buildQueryString should build a query string from a criteria map with nested items" time="0.001">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.utils.[segments]" name="odata-util translateQueryToCriteria should translate a query string into a criteria map" time="0.009">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.utils.[segments]" name="odata-util translateQueryToCriteria should handle a query string with empty groups" time="0.002">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.utils.[segments]" name="odata-util translateQueryToCriteria should handle a query string with &quot;not&quot; operator" time="0.002">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.utils.[segments]" name="odata-util translateQueryToCriteria should handle a query string with &quot;contains&quot; operator" time="0.001">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.utils.[segments]" name="odata-util translateQueryToCriteria should return null if the query is empty or invalid" time="0.003">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.utils.[segments]" name="odata-util conversion to and from should be able to translate a query string to map and back to string" time="0.001">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.utils.[segments]" name="odata-util conversion to and from should be able to translate a complex query string to map and back to string" time="0.012">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.utils.[segments]" name="odata-util conversion to and from should be able to translate a query string with &quot;not&quot; to map and back to string" time="0.002">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.utils.[segments]" name="odata-util conversion to and from should be able to translate a complex query string with &quot;not&quot; to map and back to string" time="0.003">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.utils.[segments]" name="odata-util conversion to and from should be able to translate a query string with &quot;contains&quot; to map and back to string" time="0.001">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.utils.[segments]" name="odata-util conversion to and from should be able to translate a query string with &quot;contains&quot; to map and back to string" time="0.002">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.utils.[segments]" name="odata-util conversion to and from should be able to translate a query string with &quot;not contains&quot; to map and back to string" time="0.002">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.utils.[segments]" name="odata-util conversion to and from should be able to translate a collection type query string with &quot;contains&quot; to map and back to string" time="0.002">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.utils.[segments]" name="odata-util conversion to and from should be able to translate a collection type query string with &quot;not contains&quot; to map and back to string" time="0.002">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.utils.[segments]" name="odata-util conversion to and from should be able to translate a collection type query string with &quot;eq&quot; to map and back to string" time="0.001">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.utils.[segments]" name="odata-util conversion to and from should be able to translate a collection type query string with &quot;not&quot; to map and back to string" time="0.002">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.utils.[segments]" name="odata-util conversion to and from should be able to translate a nested and complex collection type query string to map and back to string" time="0.007">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.inputs.[segments]" name="StringInput should render with type string" time="0.007">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.inputs.[segments]" name="StringInput should render type string with value" time="0.009">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.inputs.[segments]" name="StringInput should render type string with options" time="0.014">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.inputs.[segments]" name="DateTimeInput should render type date" time="0.016">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.inputs.[segments]" name="DateTimeInput should render now with wrong date" time="0.008">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.criteria_builder.[segments]" name="CriteriaRow should render" time="0.03">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.criteria_builder.[segments]" name="CriteriaRow should render and inform there is an unknown property" time="0.014">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.utils.[segments]" name="utils createNewGroup should return a new group object with the passed in items" time="0.005">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.utils.[segments]" name="utils getChildGroupIds should return an empty array if there are no child groups" time="0.001">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.utils.[segments]" name="utils getChildGroupIds should return the child group ids" time="0.001">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.utils.[segments]" name="utils getSupportedOperatorsFromType should return an array of supported operators" time="0">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.utils.[segments]" name="utils insertAtIndex should insert an item at the beginning" time="0.006">
+    <failure message="Error: expect(received).toEqual(expected)">Error: expect(received).toEqual(expected)
+
+Difference:
+
+- Expected
++ Received
+
+  Array [
+-   &quot;c&quot;,
+    &quot;a&quot;,
+    &quot;b&quot;,
++   &quot;c&quot;,
+  ]
+    at Object.toEqual (segments/segments-web/test/js/utils/utils.es.js:79:52)
+    at Object.asyncJestTest (/home/john-co/Liferay/public/master/modules/node_modules/jest-jasmine2/build/jasmineAsyncInstall.js:102:37)
+    at resolve (/home/john-co/Liferay/public/master/modules/node_modules/jest-jasmine2/build/queueRunner.js:43:12)
+    at new Promise (&lt;anonymous&gt;)
+    at mapper (/home/john-co/Liferay/public/master/modules/node_modules/jest-jasmine2/build/queueRunner.js:26:19)
+    at promise.then (/home/john-co/Liferay/public/master/modules/node_modules/jest-jasmine2/build/queueRunner.js:73:41)
+    at process._tickCallback (internal/process/next_tick.js:68:7)</failure>
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.utils.[segments]" name="utils insertAtIndex should insert an item at the middle" time="0">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.utils.[segments]" name="utils insertAtIndex should insert an item at the end" time="0.001">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.utils.[segments]" name="utils objectToFormData should take an object of key value pairs and return a form data object with the same values" time="0.002">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.utils.[segments]" name="utils removeAtIndex should remove the item at the beginning" time="0">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.utils.[segments]" name="utils removeAtIndex should remove the item at the middle" time="0.001">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.utils.[segments]" name="utils removeAtIndex should remove the item at the end" time="0">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.utils.[segments]" name="utils replaceAtIndex should replace the item at the beginning" time="0.001">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.utils.[segments]" name="utils replaceAtIndex should replace the item at the middle" time="0">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.utils.[segments]" name="utils replaceAtIndex should replace the item at the end" time="0.001">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.utils.[segments]" name="utils sub should return an array" time="0">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.utils.[segments]" name="utils sub should return a string" time="0.001">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.utils.[segments]" name="utils sub should return with a subbed value for {0}" time="0">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.utils.[segments]" name="utils sub should return with multiple subbed values" time="0">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.inputs.[segments]" name="DateInput should render type date" time="0.065">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.inputs.[segments]" name="DateInput should render now with wrong date" time="0.009">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.criteria_builder.[segments]" name="ContributorsBuilder should render builder with sidebar" time="0.19">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.criteria_builder.[segments]" name="ContributorsBuilder should render builder without sidebar" time="0.126">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.criteria_builder.[segments]" name="DropZone should render" time="0.007">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.segment_edit.[segments]" name="SegmentEdit should render" time="0.066">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.segment_edit.[segments]" name="SegmentEdit should render with an analytics cloud icon" time="0.02">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.segment_edit.[segments]" name="SegmentEdit should render with a dxp icon" time="0.011">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.segment_edit.[segments]" name="SegmentEdit should render with edit buttons if the user has update permissions" time="0.035">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.segment_edit.[segments]" name="SegmentEdit should render without edit buttons if the user does not have update permissions" time="0.031">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.segment_edit.[segments]" name="SegmentEdit should render with given values" time="0.1">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.inputs.[segments]" name="IntegerInput should render type integer number" time="0.01">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.criteria_builder.[segments]" name="EmptyDropZone should render" time="0.007">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.inputs.[segments]" name="DecimalInput should render type decimal number" time="0.023">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.inputs.[segments]" name="DecimalInput should format the value after blur" time="0.005">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.criteria_builder.[segments]" name="CriteriaBuilder should render" time="0.01">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.inputs.[segments]" name="BooleanInput should render type boolean" time="0.017">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.criteria_sidebar.[segments]" name="CriteriaSidebar should render" time="0.016">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.criteria_sidebar.[segments]" name="CriteriaSidebarItem should render" time="0.049">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.shared.[segments]" name="ClaySpinner should render" time="0.006">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.shared.[segments]" name="ClaySpinner should render a small spinner" time="0.006">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.shared.[segments]" name="ClaySpinner should not render if the spinner is not loading" time="0.001">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.criteria_builder.[segments]" name="CriteriaGroup should render" time="0.009">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.inputs.[segments]" name="SelectEntityInput should render type id" time="0.007">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.shared.[segments]" name="ClaySelect should render" time="0.008">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.shared.[segments]" name="ClaySelect should render with an item selected" time="0.006">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.shared.[segments]" name="ClayIcon should render" time="0.005">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.shared.[segments]" name="ClayButton should render" time="0.004">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.shared.[segments]" name="ClayButton should render with a label" time="0.005">
+  </testcase>
+  <testcase classname="segments.segments-web.test.js.components.shared.[segments]" name="ClayToggle should render" time="0.006">
+  </testcase>
+</testsuite>
