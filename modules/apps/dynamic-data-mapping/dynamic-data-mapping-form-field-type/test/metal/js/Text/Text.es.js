@@ -18,7 +18,7 @@ describe('Field Text', () => {
 	it('should not be readOnly', () => {
 		component = new Text({
 			...defaultTextConfig,
-			readOnly: false
+			readOnly: true
 		});
 
 		expect(component).toMatchSnapshot();

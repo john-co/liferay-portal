@@ -76,7 +76,7 @@ describe('utils', () => {
 
 	describe('insertAtIndex', () => {
 		it('should insert an item at the beginning', () => {
-			expect(Utils.insertAtIndex('c', ['a', 'b'], 0)).toEqual([
+			expect(Utils.insertAtIndex('c', ['a', 'b'], 2)).toEqual([
 				'c',
 				'a',
 				'b'
