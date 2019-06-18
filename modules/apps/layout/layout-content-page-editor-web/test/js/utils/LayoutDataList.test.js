@@ -59,7 +59,7 @@ describe('confirmFragmnetEntryLinkIdLayoutDataList ', () => {
 				'37214',
 				'segmentsExperienceId1'
 			)
-		).toBe(true);
+		).toBe(false);
 
 		expect(
 			containsFragmentEntryLinkId(

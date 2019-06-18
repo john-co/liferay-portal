@@ -75,7 +75,7 @@ describe('Liferay.Search.SearchBar', function() {
 			'should be true if no keyword but keyword-free search enabled',
 			withAlloyUI(
 				function(done, A) {
-					var form = A.Node.create(getFormTemplate('', true));
+					var form = A.Node.create(getFormTemplate('', false));
 
 					var searchBar = new Liferay.Search.SearchBar(form);
 
