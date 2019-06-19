@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <testsuites>
-  <testsuite name="Firefox 52.0.0 (Linux 0.0.0)" package="" timestamp="2019-06-18T00:24:27" id="0" hostname="john-co" tests="21" errors="0" failures="1" time="0.06">
+  <testsuite name="Firefox 52.0.0 (Linux 0.0.0)" package="" timestamp="2019-06-18T22:43:22" id="0" hostname="john-co" tests="21" errors="0" failures="1" time="0.054">
     <properties>
       <property name="browser.fullName" value="Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0"/>
     </properties>
-    <testcase name="should remove the parameter whose name is the given key." time="0.002" classname="Firefox 52.0.0 (Linux 0.0.0).Liferay_Search_FacetUtil _removeURLParameters()"/>
+    <testcase name="should remove the parameter whose name is the given key." time="0" classname="Firefox 52.0.0 (Linux 0.0.0).Liferay_Search_FacetUtil _removeURLParameters()"/>
     <testcase name="should NOT remove parameters not matching the given key." time="0" classname="Firefox 52.0.0 (Linux 0.0.0).Liferay_Search_FacetUtil _removeURLParameters()"/>
-    <testcase name="should add a missing parameter." time="0.002" classname="Firefox 52.0.0 (Linux 0.0.0).Liferay_Search_FacetUtil unit _setURLParameter()"/>
+    <testcase name="should add a missing parameter." time="0" classname="Firefox 52.0.0 (Linux 0.0.0).Liferay_Search_FacetUtil unit _setURLParameter()"/>
     <testcase name="should update an existing parameter." time="0" classname="Firefox 52.0.0 (Linux 0.0.0).Liferay_Search_FacetUtil unit _setURLParameter()"/>
     <testcase name="should add a missing parameter with path." time="0" classname="Firefox 52.0.0 (Linux 0.0.0).Liferay_Search_FacetUtil unit _setURLParameter()"/>
     <testcase name="should update an existing parameter." time="0" classname="Firefox 52.0.0 (Linux 0.0.0).Liferay_Search_FacetUtil unit _setURLParameter()"/>
@@ -21,10 +21,10 @@
     <testcase name="should add new selections." time="0" classname="Firefox 52.0.0 (Linux 0.0.0).Liferay_Search_FacetUtil unit _updateQueryString()"/>
     <testcase name="should accept query string without question mark." time="0" classname="Firefox 52.0.0 (Linux 0.0.0).Liferay_Search_FacetUtil unit _updateQueryString()"/>
     <testcase name="should not prefix with ampersand." time="0" classname="Firefox 52.0.0 (Linux 0.0.0).Liferay_Search_FacetUtil regression _updateQueryString()"/>
-    <testcase name="should return the keywords" time="0.048" classname="Firefox 52.0.0 (Linux 0.0.0).Liferay_Search_SearchBar _getKeywords"/>
+    <testcase name="should return the keywords" time="0.044" classname="Firefox 52.0.0 (Linux 0.0.0).Liferay_Search_SearchBar _getKeywords"/>
     <testcase name="should be false with no keywords" time="0.002" classname="Firefox 52.0.0 (Linux 0.0.0).Liferay_Search_SearchBar _isSubmitEnabled"/>
-    <testcase name="should be true with keywords" time="0.002" classname="Firefox 52.0.0 (Linux 0.0.0).Liferay_Search_SearchBar _isSubmitEnabled"/>
-    <testcase name="should be true if no keyword but keyword-free search enabled" time="0.002" classname="Firefox 52.0.0 (Linux 0.0.0).Liferay_Search_SearchBar _isSubmitEnabled">
+    <testcase name="should be true with keywords" time="0.004" classname="Firefox 52.0.0 (Linux 0.0.0).Liferay_Search_SearchBar _isSubmitEnabled"/>
+    <testcase name="should be true if no keyword but keyword-free search enabled" time="0.002" classname="Firefox 52.0.0 (Linux 0.0.0).Liferay_Search_SearchBar _isSubmitEnabled.[portal-search]">
       <failure type="">Unspecified AssertionError
 AssertionError@/home/john-co/Liferay/public/master/modules/node_modules/chai/chai.js:5553:18
 [3]&lt;/module.exports/Assertion.prototype.assert@/home/john-co/Liferay/public/master/modules/node_modules/chai/chai.js:206:13
