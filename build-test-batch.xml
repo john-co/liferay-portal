@@ -3991,6 +3991,8 @@ log.sanitizer.enabled=false</echo>
 	<target name="js-unit-jdk8">
 		<run-batch-test>
 			<test-action>
+				<gradle-execute dir="modules" task="npmRunTest" />
+
 				<replace
 					dir="modules"
 					includes="**/TEST-frontend-js.xml"
