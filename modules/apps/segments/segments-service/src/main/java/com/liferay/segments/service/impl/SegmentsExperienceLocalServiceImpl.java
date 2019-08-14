@@ -215,6 +215,14 @@ public class SegmentsExperienceLocalServiceImpl
 	}
 
 	@Override
+	public SegmentsExperience fetchSegmentsExperience(
+		long groupId, String segmentsExperienceKey) {
+
+		return segmentsExperiencePersistence.fetchByG_S(
+			groupId, segmentsExperienceKey);
+	}
+
+	@Override
 	public SegmentsExperience getSegmentsExperience(long segmentsExperienceId)
 		throws PortalException {
 
@@ -239,6 +247,16 @@ public class SegmentsExperienceLocalServiceImpl
 		return segmentsExperiencePersistence.findByG_C_C_A(
 			groupId, classNameId, _getPublishedLayoutClassPK(classPK), active,
 			start, end, orderByComparator);
+	}
+
+	@Override
+	public List<SegmentsExperience> getSegmentsExperiences(
+		long groupId, long[] segmentsEntryIds, long classNameId, long classPK,
+		boolean active) {
+
+		return segmentsExperiencePersistence.findByG_S_C_C_A(
+			groupId, segmentsEntryIds, classNameId,
+			_getPublishedLayoutClassPK(classPK), active);
 	}
 
 	@Override

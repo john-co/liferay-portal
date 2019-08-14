@@ -264,17 +264,11 @@
 			<finder-column name="classNameId" />
 			<finder-column name="classPK" />
 		</finder>
-		<finder name="G_S_C_C" return-type="Collection">
-			<finder-column name="groupId" />
+		<finder name="S_C_C_S" return-type="Collection">
 			<finder-column arrayable-operator="OR" name="segmentsExperienceId" />
 			<finder-column name="classNameId" />
 			<finder-column name="classPK" />
-		</finder>
-		<finder name="S_C_C_S" return-type="Collection">
-			<finder-column name="segmentsExperienceId" />
-			<finder-column name="classNameId" />
-			<finder-column name="classPK" />
-			<finder-column name="status" />
+			<finder-column arrayable-operator="OR" name="status" />
 		</finder>
 
 		<!-- References -->
@@ -324,6 +318,7 @@
 		<exception>SegmentsExperiencePriority</exception>
 		<exception>SegmentsExperimentGoal</exception>
 		<exception>SegmentsExperimentName</exception>
+		<exception>SegmentsExperimentRelName</exception>
 		<exception>SegmentsExperimentStatus</exception>
 	</exceptions>
 </service-builder>

@@ -51,4 +51,7 @@
 
 		<reference entity="User" package-path="com.liferay.portal" />
 	</entity>
+	<exceptions>
+		<exception>AppBuilderAppStatus</exception>
+	</exceptions>
 </service-builder>

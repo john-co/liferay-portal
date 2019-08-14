@@ -46,8 +46,8 @@ public class FragmentEntryValidatorImplTest {
 
 		_fragmentEntryValidatorImpl.validateConfiguration(
 			_read(
-				"configuration-invalid-field-colorPalette-defaultValue-" +
-					"cssClass-missing.json"));
+				"configuration-invalid-field-colorpalette-defaultvalue-" +
+					"cssclass-missing.json"));
 	}
 
 	@Test
@@ -61,8 +61,8 @@ public class FragmentEntryValidatorImplTest {
 
 		_fragmentEntryValidatorImpl.validateConfiguration(
 			_read(
-				"configuration-invalid-field-colorPalette-defaultValue-" +
-					"rgbValue-missing.json"));
+				"configuration-invalid-field-colorpalette-defaultvalue-" +
+					"rgbvalue-missing.json"));
 	}
 
 	@Test
@@ -76,7 +76,7 @@ public class FragmentEntryValidatorImplTest {
 
 		_fragmentEntryValidatorImpl.validateConfiguration(
 			_read(
-				"configuration-invalid-field-checkbox-defaultValue-" +
+				"configuration-invalid-field-checkbox-defaultvalue-" +
 					"unsupported.json"));
 	}
 
@@ -105,7 +105,7 @@ public class FragmentEntryValidatorImplTest {
 
 		_fragmentEntryValidatorImpl.validateConfiguration(
 			_read(
-				"configuration-invalid-field-colorPalette-defaultValue-extra-" +
+				"configuration-invalid-field-colorpalette-defaultvalue-extra-" +
 					"properties.json"));
 	}
 
@@ -120,8 +120,83 @@ public class FragmentEntryValidatorImplTest {
 
 		_fragmentEntryValidatorImpl.validateConfiguration(
 			_read(
-				"configuration-invalid-field-colorPalette-extra-properties." +
+				"configuration-invalid-field-colorpalette-extra-properties." +
 					"json"));
+	}
+
+	@Test
+	public void testValidateConfigurationInvalidFieldItemSelectorDefaultValueClassNameMissing()
+		throws Exception {
+
+		expectedException.expect(FragmentEntryConfigurationException.class);
+		expectedException.expectMessage(
+			"#: only 1 subschema matches out of 2\n#/fieldSets/0/fields/0" +
+				"/defaultValue: required key [className] not found");
+
+		_fragmentEntryValidatorImpl.validateConfiguration(
+			_read(
+				"configuration-invalid-field-itemselector-defaultvalue-" +
+					"classname-missing.json"));
+	}
+
+	@Test
+	public void testValidateConfigurationInvalidFieldItemSelectorDefaultValueClassPKMissing()
+		throws Exception {
+
+		expectedException.expect(FragmentEntryConfigurationException.class);
+		expectedException.expectMessage(
+			"#: only 1 subschema matches out of 2\n#/fieldSets/0/fields/0" +
+				"/defaultValue: required key [classPK] not found");
+
+		_fragmentEntryValidatorImpl.validateConfiguration(
+			_read(
+				"configuration-invalid-field-itemselector-defaultvalue-" +
+					"classpk-missing.json"));
+	}
+
+	@Test
+	public void testValidateConfigurationInvalidFieldItemSelectorDefaultValueExtraProperties()
+		throws Exception {
+
+		expectedException.expect(FragmentEntryConfigurationException.class);
+		expectedException.expectMessage(
+			"#: only 1 subschema matches out of 2\n#/fieldSets/0/fields/0" +
+				"/defaultValue: extraneous key [extra] is not permitted");
+
+		_fragmentEntryValidatorImpl.validateConfiguration(
+			_read(
+				"configuration-invalid-field-itemselector-defaultvalue-extra-" +
+					"properties.json"));
+	}
+
+	@Test
+	public void testValidateConfigurationInvalidFieldItemSelectorExtraProperties()
+		throws Exception {
+
+		expectedException.expect(FragmentEntryConfigurationException.class);
+		expectedException.expectMessage(
+			"#: only 1 subschema matches out of 2\n#/fieldSets/0/fields/0: " +
+				"extraneous key [extra] is not permitted");
+
+		_fragmentEntryValidatorImpl.validateConfiguration(
+			_read(
+				"configuration-invalid-field-itemselector-extra-properties." +
+					"json"));
+	}
+
+	@Test
+	public void testValidateConfigurationInvalidFieldItemSelectorTypeOptionsExtraProperties()
+		throws Exception {
+
+		expectedException.expect(FragmentEntryConfigurationException.class);
+		expectedException.expectMessage(
+			"#: only 1 subschema matches out of 2\n#/fieldSets/0/fields/0" +
+				"/typeOptions: extraneous key [extra] is not permitted");
+
+		_fragmentEntryValidatorImpl.validateConfiguration(
+			_read(
+				"configuration-invalid-field-itemselector-typeoptions-extra-" +
+					"properties.json"));
 	}
 
 	@Test
@@ -177,6 +252,124 @@ public class FragmentEntryValidatorImplTest {
 	}
 
 	@Test
+	public void testValidateConfigurationInvalidFieldSelectDataTypeUnsupported()
+		throws Exception {
+
+		expectedException.expect(FragmentEntryConfigurationException.class);
+		expectedException.expectMessage(
+			"#: only 1 subschema matches out of 2\n#/fieldSets/0/fields/0" +
+				"/dataType: unsupported is not a valid enum value");
+
+		_fragmentEntryValidatorImpl.validateConfiguration(
+			_read(
+				"configuration-invalid-field-select-datatype-unsupported." +
+					"json"));
+	}
+
+	@Test
+	public void testValidateConfigurationInvalidFieldSelectDefaultValueMissing()
+		throws Exception {
+
+		expectedException.expect(FragmentEntryConfigurationException.class);
+		expectedException.expectMessage(
+			"#: only 1 subschema matches out of 2\n#/fieldSets/0/fields/0: " +
+				"required key [defaultValue] not found");
+
+		_fragmentEntryValidatorImpl.validateConfiguration(
+			_read(
+				"configuration-invalid-field-select-defaultvalue-missing." +
+					"json"));
+	}
+
+	@Test
+	public void testValidateConfigurationInvalidFieldSelectExtraProperties()
+		throws Exception {
+
+		expectedException.expect(FragmentEntryConfigurationException.class);
+		expectedException.expectMessage(
+			"#: only 1 subschema matches out of 2\n#/fieldSets/0/fields/0: " +
+				"extraneous key [extra] is not permitted");
+
+		_fragmentEntryValidatorImpl.validateConfiguration(
+			_read("configuration-invalid-field-select-extra-properties.json"));
+	}
+
+	@Test
+	public void testValidateConfigurationInvalidFieldSelectTypeOptionsExtraProperties()
+		throws Exception {
+
+		expectedException.expect(FragmentEntryConfigurationException.class);
+		expectedException.expectMessage(
+			"#: only 1 subschema matches out of 2\n#/fieldSets/0/fields/0" +
+				"/typeOptions: extraneous key [extra] is not permitted");
+
+		_fragmentEntryValidatorImpl.validateConfiguration(
+			_read(
+				"configuration-invalid-field-select-typeoptions-extra-" +
+					"properties.json"));
+	}
+
+	@Test
+	public void testValidateConfigurationInvalidFieldSelectTypeOptionsMissing()
+		throws Exception {
+
+		expectedException.expect(FragmentEntryConfigurationException.class);
+		expectedException.expectMessage(
+			"#: only 1 subschema matches out of 2\n#/fieldSets/0/fields/0: " +
+				"required key [typeOptions] not found");
+
+		_fragmentEntryValidatorImpl.validateConfiguration(
+			_read(
+				"configuration-invalid-field-select-typeoptions-missing.json"));
+	}
+
+	@Test
+	public void testValidateConfigurationInvalidFieldSelectTypeOptionsValidValuesExtraProperties()
+		throws Exception {
+
+		expectedException.expect(FragmentEntryConfigurationException.class);
+		expectedException.expectMessage(
+			"#: only 1 subschema matches out of 2\n#/fieldSets/0/fields/0" +
+				"/typeOptions/validValues/0: extraneous key [extra] is not " +
+					"permitted");
+
+		_fragmentEntryValidatorImpl.validateConfiguration(
+			_read(
+				"configuration-invalid-field-select-typeoptions-validvalues-" +
+					"extra-properties.json"));
+	}
+
+	@Test
+	public void testValidateConfigurationInvalidFieldSelectTypeOptionsValidValuesMissing()
+		throws Exception {
+
+		expectedException.expect(FragmentEntryConfigurationException.class);
+		expectedException.expectMessage(
+			"#: only 1 subschema matches out of 2\n#/fieldSets/0/fields/0" +
+				"/typeOptions: required key [validValues] not found");
+
+		_fragmentEntryValidatorImpl.validateConfiguration(
+			_read(
+				"configuration-invalid-field-select-typeoptions-validvalues-" +
+					"missing.json"));
+	}
+
+	@Test
+	public void testValidateConfigurationInvalidFieldSelectTypeOptionsValidValuesValueMissing()
+		throws Exception {
+
+		expectedException.expect(FragmentEntryConfigurationException.class);
+		expectedException.expectMessage(
+			"#: only 1 subschema matches out of 2\n#/fieldSets/0/fields/0" +
+				"/typeOptions/validValues/0: required key [value] not found");
+
+		_fragmentEntryValidatorImpl.validateConfiguration(
+			_read(
+				"configuration-invalid-field-select-typeoptions-validvalues-" +
+					"value-missing.json"));
+	}
+
+	@Test
 	public void testValidateConfigurationInvalidFieldSetsExtraProperties()
 		throws Exception {
 
@@ -211,7 +404,7 @@ public class FragmentEntryValidatorImplTest {
 
 		_fragmentEntryValidatorImpl.validateConfiguration(
 			_read(
-				"configuration-invalid-field-text-dataType-unsupported.json"));
+				"configuration-invalid-field-text-datatype-unsupported.json"));
 	}
 
 	@Test
@@ -225,124 +418,6 @@ public class FragmentEntryValidatorImplTest {
 
 		_fragmentEntryValidatorImpl.validateConfiguration(
 			_read("configuration-invalid-field-text-extra-properties.json"));
-	}
-
-	@Test
-	public void testValidateConfigurationInvalidSelectFieldDataTypeUnsupported()
-		throws Exception {
-
-		expectedException.expect(FragmentEntryConfigurationException.class);
-		expectedException.expectMessage(
-			"#: only 1 subschema matches out of 2\n#/fieldSets/0/fields/0" +
-				"/dataType: unsupported is not a valid enum value");
-
-		_fragmentEntryValidatorImpl.validateConfiguration(
-			_read(
-				"configuration-invalid-field-select-dataType-unsupported." +
-					"json"));
-	}
-
-	@Test
-	public void testValidateConfigurationInvalidSelectFieldDefaultValueMissing()
-		throws Exception {
-
-		expectedException.expect(FragmentEntryConfigurationException.class);
-		expectedException.expectMessage(
-			"#: only 1 subschema matches out of 2\n#/fieldSets/0/fields/0: " +
-				"required key [defaultValue] not found");
-
-		_fragmentEntryValidatorImpl.validateConfiguration(
-			_read(
-				"configuration-invalid-field-select-defaultValue-missing." +
-					"json"));
-	}
-
-	@Test
-	public void testValidateConfigurationInvalidSelectFieldExtraProperties()
-		throws Exception {
-
-		expectedException.expect(FragmentEntryConfigurationException.class);
-		expectedException.expectMessage(
-			"#: only 1 subschema matches out of 2\n#/fieldSets/0/fields/0: " +
-				"extraneous key [extra] is not permitted");
-
-		_fragmentEntryValidatorImpl.validateConfiguration(
-			_read("configuration-invalid-field-select-extra-properties.json"));
-	}
-
-	@Test
-	public void testValidateConfigurationInvalidSelectFieldTypeOptionsExtraProperties()
-		throws Exception {
-
-		expectedException.expect(FragmentEntryConfigurationException.class);
-		expectedException.expectMessage(
-			"#: only 1 subschema matches out of 2\n#/fieldSets/0/fields/0" +
-				"/typeOptions: extraneous key [extra] is not permitted");
-
-		_fragmentEntryValidatorImpl.validateConfiguration(
-			_read(
-				"configuration-invalid-field-select-typeOptions-extra-" +
-					"properties.json"));
-	}
-
-	@Test
-	public void testValidateConfigurationInvalidSelectFieldTypeOptionsMissing()
-		throws Exception {
-
-		expectedException.expect(FragmentEntryConfigurationException.class);
-		expectedException.expectMessage(
-			"#: only 1 subschema matches out of 2\n#/fieldSets/0/fields/0: " +
-				"required key [typeOptions] not found");
-
-		_fragmentEntryValidatorImpl.validateConfiguration(
-			_read(
-				"configuration-invalid-field-select-typeOptions-missing.json"));
-	}
-
-	@Test
-	public void testValidateConfigurationInvalidSelectFieldTypeOptionsValidValuesExtraProperties()
-		throws Exception {
-
-		expectedException.expect(FragmentEntryConfigurationException.class);
-		expectedException.expectMessage(
-			"#: only 1 subschema matches out of 2\n#/fieldSets/0/fields/0" +
-				"/typeOptions/validValues/0: extraneous key [extra] is not " +
-					"permitted");
-
-		_fragmentEntryValidatorImpl.validateConfiguration(
-			_read(
-				"configuration-invalid-field-select-typeOptions-validValues-" +
-					"extra-properties.json"));
-	}
-
-	@Test
-	public void testValidateConfigurationInvalidSelectFieldTypeOptionsValidValuesMissing()
-		throws Exception {
-
-		expectedException.expect(FragmentEntryConfigurationException.class);
-		expectedException.expectMessage(
-			"#: only 1 subschema matches out of 2\n#/fieldSets/0/fields/0" +
-				"/typeOptions: required key [validValues] not found");
-
-		_fragmentEntryValidatorImpl.validateConfiguration(
-			_read(
-				"configuration-invalid-field-select-typeOptions-validValues-" +
-					"missing.json"));
-	}
-
-	@Test
-	public void testValidateConfigurationInvalidSelectFieldTypeOptionsValidValuesValueMissing()
-		throws Exception {
-
-		expectedException.expect(FragmentEntryConfigurationException.class);
-		expectedException.expectMessage(
-			"#: only 1 subschema matches out of 2\n#/fieldSets/0/fields/0" +
-				"/typeOptions/validValues/0: required key [value] not found");
-
-		_fragmentEntryValidatorImpl.validateConfiguration(
-			_read(
-				"configuration-invalid-field-select-typeOptions-validValues-" +
-					"value-missing.json"));
 	}
 
 	@Test
@@ -365,7 +440,7 @@ public class FragmentEntryValidatorImplTest {
 
 		_fragmentEntryValidatorImpl.validateConfiguration(
 			_read(
-				"configuration-valid-field-checkbox-defaultValue-boolean-" +
+				"configuration-valid-field-checkbox-defaultvalue-boolean-" +
 					"false.json"));
 	}
 
@@ -375,7 +450,7 @@ public class FragmentEntryValidatorImplTest {
 
 		_fragmentEntryValidatorImpl.validateConfiguration(
 			_read(
-				"configuration-valid-field-checkbox-defaultValue-boolean-" +
+				"configuration-valid-field-checkbox-defaultvalue-boolean-" +
 					"true.json"));
 	}
 
@@ -385,7 +460,7 @@ public class FragmentEntryValidatorImplTest {
 
 		_fragmentEntryValidatorImpl.validateConfiguration(
 			_read(
-				"configuration-valid-field-checkbox-defaultValue-string-" +
+				"configuration-valid-field-checkbox-defaultvalue-string-" +
 					"false.json"));
 	}
 
@@ -395,7 +470,7 @@ public class FragmentEntryValidatorImplTest {
 
 		_fragmentEntryValidatorImpl.validateConfiguration(
 			_read(
-				"configuration-valid-field-checkbox-defaultValue-string-" +
+				"configuration-valid-field-checkbox-defaultvalue-string-" +
 					"true.json"));
 	}
 
@@ -412,7 +487,7 @@ public class FragmentEntryValidatorImplTest {
 		throws Exception {
 
 		_fragmentEntryValidatorImpl.validateConfiguration(
-			_read("configuration-valid-field-colorPalette-complete.json"));
+			_read("configuration-valid-field-colorpalette-complete.json"));
 	}
 
 	@Test
@@ -420,7 +495,53 @@ public class FragmentEntryValidatorImplTest {
 		throws Exception {
 
 		_fragmentEntryValidatorImpl.validateConfiguration(
-			_read("configuration-valid-field-colorPalette-required.json"));
+			_read("configuration-valid-field-colorpalette-required.json"));
+	}
+
+	@Test
+	public void testValidateConfigurationValidFieldItemSelectorComplete()
+		throws Exception {
+
+		_fragmentEntryValidatorImpl.validateConfiguration(
+			_read("configuration-valid-field-itemselector-complete.json"));
+	}
+
+	@Test
+	public void testValidateConfigurationValidFieldItemSelectorDefaultValueRequired()
+		throws Exception {
+
+		_fragmentEntryValidatorImpl.validateConfiguration(
+			_read(
+				"configuration-valid-field-itemselector-defaultvalue-" +
+					"required.json"));
+	}
+
+	@Test
+	public void testValidateConfigurationValidFieldItemSelectorRequired()
+		throws Exception {
+
+		_fragmentEntryValidatorImpl.validateConfiguration(
+			_read("configuration-valid-field-itemselector-required.json"));
+	}
+
+	@Test
+	public void testValidateConfigurationValidFieldItemSelectorTypeOptionsEnableSelectTemplate()
+		throws Exception {
+
+		_fragmentEntryValidatorImpl.validateConfiguration(
+			_read(
+				"configuration-valid-field-itemselector-typeoptions-" +
+					"enableselecttemplate.json"));
+	}
+
+	@Test
+	public void testValidateConfigurationValidFieldItemSelectorTypeOptionsRequired()
+		throws Exception {
+
+		_fragmentEntryValidatorImpl.validateConfiguration(
+			_read(
+				"configuration-valid-field-itemselector-typeoptions-" +
+					"required.json"));
 	}
 
 	@Test

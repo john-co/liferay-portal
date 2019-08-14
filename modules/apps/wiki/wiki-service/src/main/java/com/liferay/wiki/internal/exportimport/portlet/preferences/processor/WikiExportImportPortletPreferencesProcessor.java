@@ -78,9 +78,7 @@ public class WikiExportImportPortletPreferencesProcessor
 			PortletPreferences portletPreferences)
 		throws PortletDataException {
 
-		if (ExportImportThreadLocal.isLayoutExportInProcess() ||
-			ExportImportThreadLocal.isLayoutStagingInProcess() ||
-			!portletDataContext.getBooleanParameter(
+		if (!portletDataContext.getBooleanParameter(
 				_wikiPortletDataHandler.getNamespace(), "wiki-pages")) {
 
 			return portletPreferences;
