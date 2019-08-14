@@ -20,7 +20,6 @@ import com.liferay.portal.kernel.dao.orm.ProjectionFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.Property;
 import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.model.ResourceConstants;
 import com.liferay.portal.kernel.model.SystemEventConstants;
 import com.liferay.portal.kernel.model.User;
@@ -56,12 +55,11 @@ public class SegmentsExperimentLocalServiceImpl
 
 		long segmentsExperimentId = counterLocalService.increment();
 
-		long publishedLayoutClassPK = _getPublishedLayoutClassPK(classPK);
 		int status = SegmentsExperimentConstants.STATUS_DRAFT;
 
 		_validate(
-			segmentsExperimentId, segmentsExperienceId, classNameId,
-			publishedLayoutClassPK, name, goal, status);
+			segmentsExperimentId, segmentsExperienceId, classNameId, classPK,
+			name, goal, status);
 
 		SegmentsExperiment segmentsExperiment =
 			segmentsExperimentPersistence.create(segmentsExperimentId);
@@ -83,7 +81,7 @@ public class SegmentsExperimentLocalServiceImpl
 		segmentsExperiment.setSegmentsExperimentKey(
 			String.valueOf(counterLocalService.increment()));
 		segmentsExperiment.setClassNameId(classNameId);
-		segmentsExperiment.setClassPK(publishedLayoutClassPK);
+		segmentsExperiment.setClassPK(classPK);
 		segmentsExperiment.setName(name);
 		segmentsExperiment.setDescription(description);
 
@@ -142,13 +140,27 @@ public class SegmentsExperimentLocalServiceImpl
 
 		List<SegmentsExperiment> segmentsExperiments =
 			segmentsExperimentPersistence.findByS_C_C(
-				segmentsExperienceId, classNameId,
-				_getPublishedLayoutClassPK(classPK));
+				segmentsExperienceId, classNameId, classPK);
 
 		for (SegmentsExperiment segmentsExperiment : segmentsExperiments) {
 			segmentsExperimentLocalService.deleteSegmentsExperiment(
 				segmentsExperiment.getSegmentsExperimentId());
 		}
+	}
+
+	@Override
+	public SegmentsExperiment fetchSegmentsExperiment(
+		long segmentsExperienceId, long classNameId, long classPK, int status) {
+
+		List<SegmentsExperiment> segmentsExperiments =
+			segmentsExperimentFinder.findByE_C_C_S(
+				segmentsExperienceId, classNameId, classPK, status, 0, 1);
+
+		if (segmentsExperiments.isEmpty()) {
+			return null;
+		}
+
+		return segmentsExperiments.get(0);
 	}
 
 	@Override
@@ -175,16 +187,16 @@ public class SegmentsExperimentLocalServiceImpl
 		long segmentsExperienceId, long classNameId, long classPK) {
 
 		return segmentsExperimentPersistence.findByS_C_C(
-			segmentsExperienceId, classNameId,
-			_getPublishedLayoutClassPK(classPK));
+			segmentsExperienceId, classNameId, classPK);
 	}
 
 	@Override
 	public List<SegmentsExperiment> getSegmentsExperienceSegmentsExperiments(
-		long segmentsExperienceId, long classNameId, long classPK, int status) {
+		long[] segmentsExperienceIds, long classNameId, long classPK,
+		int[] statuses, int start, int end) {
 
 		return segmentsExperimentPersistence.findByS_C_C_S(
-			segmentsExperienceId, classNameId, classPK, status);
+			segmentsExperienceIds, classNameId, classPK, statuses, start, end);
 	}
 
 	@Override
@@ -201,7 +213,21 @@ public class SegmentsExperimentLocalServiceImpl
 		long groupId, long classNameId, long classPK) {
 
 		return segmentsExperimentPersistence.findByG_C_C(
-			groupId, classNameId, _getPublishedLayoutClassPK(classPK));
+			groupId, classNameId, classPK);
+	}
+
+	@Override
+	public boolean hasSegmentsExperiment(
+		long segmentsExperienceId, long classNameId, long classPK, int status) {
+
+		int count = segmentsExperimentFinder.countByE_C_C_S(
+			segmentsExperienceId, classNameId, classPK, status);
+
+		if (count > 0) {
+			return true;
+		}
+
+		return false;
 	}
 
 	@Override
@@ -251,20 +277,6 @@ public class SegmentsExperimentLocalServiceImpl
 		segmentsExperiment.setStatus(status);
 
 		return segmentsExperimentPersistence.update(segmentsExperiment);
-	}
-
-	private long _getPublishedLayoutClassPK(long classPK) {
-		Layout layout = layoutLocalService.fetchLayout(classPK);
-
-		if ((layout != null) &&
-			(layout.getClassNameId() == classNameLocalService.getClassNameId(
-				Layout.class)) &&
-			(layout.getClassPK() != 0)) {
-
-			return layout.getClassPK();
-		}
-
-		return classPK;
 	}
 
 	private DynamicQuery _getSegmentsExperienceIdsDynamicQuery(

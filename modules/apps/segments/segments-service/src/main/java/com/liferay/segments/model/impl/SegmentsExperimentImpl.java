@@ -16,7 +16,11 @@ package com.liferay.segments.model.impl;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.UnicodeProperties;
+import com.liferay.segments.constants.SegmentsExperienceConstants;
+import com.liferay.segments.model.SegmentsExperience;
+import com.liferay.segments.service.SegmentsExperienceLocalServiceUtil;
 
 import java.io.IOException;
 
@@ -46,14 +50,28 @@ public class SegmentsExperimentImpl extends SegmentsExperimentBaseImpl {
 	public String getGoal() {
 		UnicodeProperties typeSettingsProperties = getTypeSettingsProperties();
 
-		return typeSettingsProperties.getProperty("goal");
+		return GetterUtil.getString(typeSettingsProperties.getProperty("goal"));
 	}
 
 	@Override
 	public String getGoalTarget() {
 		UnicodeProperties typeSettingsProperties = getTypeSettingsProperties();
 
-		return typeSettingsProperties.getProperty("goalTarget");
+		return GetterUtil.getString(
+			typeSettingsProperties.getProperty("goalTarget"));
+	}
+
+	@Override
+	public String getSegmentsExperienceKey() {
+		SegmentsExperience segmentsExperience =
+			SegmentsExperienceLocalServiceUtil.fetchSegmentsExperience(
+				getSegmentsExperienceId());
+
+		if (segmentsExperience != null) {
+			return segmentsExperience.getSegmentsExperienceKey();
+		}
+
+		return SegmentsExperienceConstants.KEY_DEFAULT;
 	}
 
 	@Override

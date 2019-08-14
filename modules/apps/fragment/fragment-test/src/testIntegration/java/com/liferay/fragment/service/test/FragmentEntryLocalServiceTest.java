@@ -274,6 +274,31 @@ public class FragmentEntryLocalServiceTest {
 	}
 
 	@Test
+	public void testAddFragmentEntryWithHtmlWithAmpersand() throws Exception {
+		String html = "<H1>A&B&amp;C</H1>";
+
+		ServiceContext serviceContext =
+			ServiceContextTestUtil.getServiceContext(
+				_group.getGroupId(), TestPropsValues.getUserId());
+
+		FragmentEntry fragmentEntry =
+			_fragmentEntryLocalService.addFragmentEntry(
+				TestPropsValues.getUserId(), _group.getGroupId(),
+				_fragmentCollection.getFragmentCollectionId(),
+				RandomTestUtil.randomString(), RandomTestUtil.randomString(),
+				RandomTestUtil.randomString(), html,
+				RandomTestUtil.randomString(), null,
+				RandomTestUtil.randomLong(), FragmentConstants.TYPE_COMPONENT,
+				WorkflowConstants.STATUS_APPROVED, serviceContext);
+
+		FragmentEntry persistedFragmentEntry =
+			_fragmentEntryPersistence.fetchByPrimaryKey(
+				fragmentEntry.getFragmentEntryId());
+
+		Assert.assertEquals(html, persistedFragmentEntry.getHtml());
+	}
+
+	@Test
 	public void testAddFragmentEntryWithNameCssHtmlJsAndStatus()
 		throws Exception {
 
@@ -900,6 +925,38 @@ public class FragmentEntryLocalServiceTest {
 		Assert.assertEquals(
 			previewFileEntryId + 1,
 			persistedFragmentEntry.getPreviewFileEntryId());
+	}
+
+	@Test
+	public void testUpdateFragmentEntryWithHtmlWithAmpersand()
+		throws Exception {
+
+		ServiceContext serviceContext =
+			ServiceContextTestUtil.getServiceContext(
+				_group.getGroupId(), TestPropsValues.getUserId());
+
+		FragmentEntry fragmentEntry =
+			_fragmentEntryLocalService.addFragmentEntry(
+				TestPropsValues.getUserId(), _group.getGroupId(),
+				_fragmentCollection.getFragmentCollectionId(),
+				RandomTestUtil.randomString(), RandomTestUtil.randomString(),
+				RandomTestUtil.randomString(), "<H1>A</H1>",
+				RandomTestUtil.randomString(), null,
+				RandomTestUtil.randomLong(), FragmentConstants.TYPE_COMPONENT,
+				WorkflowConstants.STATUS_APPROVED, serviceContext);
+
+		String html = "<H1>A&B&amp;C</H1>";
+
+		_fragmentEntryLocalService.updateFragmentEntry(
+			TestPropsValues.getUserId(), fragmentEntry.getFragmentEntryId(),
+			fragmentEntry.getName(), fragmentEntry.getCss(), html,
+			fragmentEntry.getJs(), null, WorkflowConstants.STATUS_APPROVED);
+
+		FragmentEntry persistedFragmentEntry =
+			_fragmentEntryPersistence.fetchByPrimaryKey(
+				fragmentEntry.getFragmentEntryId());
+
+		Assert.assertEquals(html, persistedFragmentEntry.getHtml());
 	}
 
 	private void _assertCopyFragmentEntry(

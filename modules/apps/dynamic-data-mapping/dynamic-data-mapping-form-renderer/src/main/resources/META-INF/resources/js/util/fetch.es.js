@@ -12,6 +12,8 @@
  * details.
  */
 
+import {fetch} from 'frontend-js-web';
+
 const defaultHeaders = {
 	Accept: 'application/json'
 };
@@ -23,7 +25,6 @@ export const makeFetch = ({
 	method = 'POST'
 }) => {
 	const fetchData = {
-		credentials: 'include',
 		headers,
 		method
 	};

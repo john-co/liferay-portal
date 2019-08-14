@@ -14,6 +14,8 @@
 
 package com.liferay.app.builder.rest.internal.resource.v1_0;
 
+import com.liferay.app.builder.constants.AppBuilderAppConstants;
+import com.liferay.app.builder.exception.AppBuilderAppStatusException;
 import com.liferay.app.builder.model.AppBuilderApp;
 import com.liferay.app.builder.rest.dto.v1_0.App;
 import com.liferay.app.builder.rest.internal.jaxrs.exception.NoSuchDataListViewException;
@@ -40,6 +42,7 @@ import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.CookieKeys;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.Portal;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.odata.entity.EntityModel;
 import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.portal.vulcan.pagination.Pagination;
@@ -172,10 +175,13 @@ public class AppResourceImpl
 	public App postDataDefinitionApp(Long dataDefinitionId, App app)
 		throws Exception {
 
-		_validate(app.getDataLayoutId(), app.getDataListViewId());
+		_validate(
+			app.getDataLayoutId(), app.getDataListViewId(), app.getStatus());
 
 		DDMStructure ddmStructure = _ddmStructureLocalService.getStructure(
 			dataDefinitionId);
+		AppBuilderAppConstants.Status appBuilderAppConstantsStatus =
+			AppBuilderAppConstants.Status.parse(app.getStatus());
 
 		return _toApp(
 			_appBuilderAppLocalService.addAppBuilderApp(
@@ -183,15 +189,19 @@ public class AppResourceImpl
 				PrincipalThreadLocal.getUserId(), dataDefinitionId,
 				app.getDataLayoutId(), app.getDataListViewId(),
 				LocalizedValueUtil.toLocaleStringMap(app.getName()),
-				_toJSON(app.getSettings())));
+				_toJSON(app.getSettings()),
+				appBuilderAppConstantsStatus.getValue()));
 	}
 
 	@Override
 	public App putApp(Long appId, App app) throws Exception {
-		_validate(app.getDataLayoutId(), app.getDataListViewId());
+		_validate(
+			app.getDataLayoutId(), app.getDataListViewId(), app.getStatus());
 
 		DDMStructure ddmStructure = _ddmStructureLocalService.getStructure(
 			app.getDataDefinitionId());
+		AppBuilderAppConstants.Status appBuilderAppConstantsStatus =
+			AppBuilderAppConstants.Status.parse(app.getStatus());
 
 		return _toApp(
 			_appBuilderAppLocalService.updateAppBuilderApp(
@@ -199,10 +209,14 @@ public class AppResourceImpl
 				ddmStructure.getStructureId(), app.getDataLayoutId(),
 				app.getDataListViewId(),
 				LocalizedValueUtil.toLocaleStringMap(app.getName()),
-				_toJSON(app.getSettings())));
+				_toJSON(app.getSettings()),
+				appBuilderAppConstantsStatus.getValue()));
 	}
 
 	private App _toApp(AppBuilderApp appBuilderApp) throws Exception {
+		AppBuilderAppConstants.Status appBuilderAppConstantsStatus =
+			AppBuilderAppConstants.Status.parse(appBuilderApp.getStatus());
+
 		return new App() {
 			{
 				dataDefinitionId = appBuilderApp.getDdmStructureId();
@@ -215,7 +229,7 @@ public class AppResourceImpl
 					appBuilderApp.getNameMap());
 				settings = _toSettings(appBuilderApp.getSettings());
 				siteId = appBuilderApp.getGroupId();
-				status = appBuilderApp.getStatus();
+				status = appBuilderAppConstantsStatus.getLabel();
 				userId = appBuilderApp.getUserId();
 			}
 		};
@@ -240,7 +254,8 @@ public class AppResourceImpl
 		};
 	}
 
-	private void _validate(long ddmStructureLayoutId, long deDataListViewId)
+	private void _validate(
+			long ddmStructureLayoutId, long deDataListViewId, String status)
 		throws Exception {
 
 		DDMStructureLayout ddmStructureLayout =
@@ -276,6 +291,10 @@ public class AppResourceImpl
 				"Data engine data list view " + deDataListViewId +
 					" does not exist",
 				e);
+		}
+
+		if (Validator.isNull(AppBuilderAppConstants.Status.parse(status))) {
+			throw new AppBuilderAppStatusException("Invalid status " + status);
 		}
 	}
 

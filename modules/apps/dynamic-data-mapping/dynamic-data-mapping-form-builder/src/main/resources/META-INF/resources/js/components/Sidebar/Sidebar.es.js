@@ -176,10 +176,11 @@ class Sidebar extends Component {
 	isFieldReadOnly({localizable, type}) {
 		const {defaultLanguageId, editingLanguageId} = this.props;
 
-		return (
-			defaultLanguageId !== editingLanguageId &&
-			(!localizable || type === 'validation')
-		);
+		if (type === 'validation') {
+			return false;
+		}
+
+		return defaultLanguageId !== editingLanguageId && !localizable;
 	}
 
 	open() {

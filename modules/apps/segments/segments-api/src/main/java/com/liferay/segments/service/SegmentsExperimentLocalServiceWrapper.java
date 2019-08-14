@@ -230,6 +230,16 @@ public class SegmentsExperimentLocalServiceWrapper
 			segmentsExperimentId);
 	}
 
+	@Override
+	public com.liferay.segments.model.SegmentsExperiment
+		fetchSegmentsExperiment(
+			long segmentsExperienceId, long classNameId, long classPK,
+			int status) {
+
+		return _segmentsExperimentLocalService.fetchSegmentsExperiment(
+			segmentsExperienceId, classNameId, classPK, status);
+	}
+
 	/**
 	 * Returns the segments experiment matching the UUID and group.
 	 *
@@ -309,12 +319,13 @@ public class SegmentsExperimentLocalServiceWrapper
 	@Override
 	public java.util.List<com.liferay.segments.model.SegmentsExperiment>
 		getSegmentsExperienceSegmentsExperiments(
-			long segmentsExperienceId, long classNameId, long classPK,
-			int status) {
+			long[] segmentsExperienceIds, long classNameId, long classPK,
+			int[] statuses, int start, int end) {
 
 		return _segmentsExperimentLocalService.
 			getSegmentsExperienceSegmentsExperiments(
-				segmentsExperienceId, classNameId, classPK, status);
+				segmentsExperienceIds, classNameId, classPK, statuses, start,
+				end);
 	}
 
 	/**
@@ -432,6 +443,14 @@ public class SegmentsExperimentLocalServiceWrapper
 	@Override
 	public int getSegmentsExperimentsCount() {
 		return _segmentsExperimentLocalService.getSegmentsExperimentsCount();
+	}
+
+	@Override
+	public boolean hasSegmentsExperiment(
+		long segmentsExperienceId, long classNameId, long classPK, int status) {
+
+		return _segmentsExperimentLocalService.hasSegmentsExperiment(
+			segmentsExperienceId, classNameId, classPK, status);
 	}
 
 	@Override

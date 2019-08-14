@@ -31,9 +31,12 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.segments.asah.connector.internal.client.model.Experiment;
 import com.liferay.segments.asah.connector.internal.client.model.ExperimentStatus;
+import com.liferay.segments.asah.connector.internal.client.model.Goal;
+import com.liferay.segments.asah.connector.internal.client.model.GoalMetric;
 import com.liferay.segments.constants.SegmentsEntryConstants;
 import com.liferay.segments.constants.SegmentsExperienceConstants;
 import com.liferay.segments.constants.SegmentsExperimentConstants;
+import com.liferay.segments.exception.SegmentsExperimentGoalException;
 import com.liferay.segments.model.SegmentsEntry;
 import com.liferay.segments.model.SegmentsExperience;
 import com.liferay.segments.model.SegmentsExperiment;
@@ -81,11 +84,24 @@ public class ExperimentUtil {
 		Experiment experiment = new Experiment();
 
 		experiment.setCreateDate(segmentsExperiment.getCreateDate());
-		experiment.setModifiedDate(segmentsExperiment.getModifiedDate());
-		experiment.setName(segmentsExperiment.getName());
 		experiment.setDataSourceId(dataSourceId);
 		experiment.setDescription(segmentsExperiment.getDescription());
+
+		Layout layout = layoutLocalService.getLayout(
+			segmentsExperiment.getClassPK());
+
+		experiment.setDXPLayoutId(layout.getUuid());
+
+		experiment.setExperimentStatus(
+			_toExperimentStatus(segmentsExperiment.getStatus()));
+		experiment.setGoal(_toExperimentGoal(segmentsExperiment));
 		experiment.setId(segmentsExperiment.getSegmentsExperimentKey());
+		experiment.setModifiedDate(segmentsExperiment.getModifiedDate());
+		experiment.setName(segmentsExperiment.getName());
+		experiment.setPageRelativePath(
+			layout.getFriendlyURL(LocaleUtil.getDefault()));
+		experiment.setPageTitle(layout.getTitle(LocaleUtil.getDefault()));
+		experiment.setPageURL(pageURL);
 
 		if (segmentsExperiment.getSegmentsExperienceId() ==
 				SegmentsExperienceConstants.ID_DEFAULT) {
@@ -114,19 +130,6 @@ public class ExperimentUtil {
 			experiment.setDXPSegmentName(
 				segmentsEntry.getName(LocaleUtil.getDefault()));
 		}
-
-		experiment.setExperimentStatus(
-			_toExperimentStatus(segmentsExperiment.getStatus()));
-
-		Layout layout = layoutLocalService.getLayout(
-			segmentsExperiment.getClassPK());
-
-		experiment.setDxpLayoutId(layout.getUuid());
-		experiment.setPageRelativePath(
-			layout.getFriendlyURL(LocaleUtil.getDefault()));
-		experiment.setPageTitle(layout.getTitle(LocaleUtil.getDefault()));
-
-		experiment.setPageURL(pageURL);
 
 		return experiment;
 	}
@@ -176,6 +179,28 @@ public class ExperimentUtil {
 		sb.append(layout.getFriendlyURL());
 
 		return sb.toString();
+	}
+
+	private static Goal _toExperimentGoal(SegmentsExperiment segmentsExperiment)
+		throws SegmentsExperimentGoalException {
+
+		SegmentsExperimentConstants.Goal goal =
+			SegmentsExperimentConstants.Goal.parse(
+				segmentsExperiment.getGoal());
+
+		if (goal != null) {
+			String goalName = goal.name();
+
+			for (GoalMetric goalMetric : GoalMetric.values()) {
+				if (goalName.equals(goalMetric.name())) {
+					return new Goal(
+						GoalMetric.valueOf(goalName),
+						segmentsExperiment.getGoalTarget());
+				}
+			}
+		}
+
+		throw new SegmentsExperimentGoalException();
 	}
 
 	private static ExperimentStatus _toExperimentStatus(int status) {
