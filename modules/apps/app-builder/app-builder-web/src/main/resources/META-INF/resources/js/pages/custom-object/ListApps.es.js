@@ -95,12 +95,12 @@ const FORMATTER = items =>
 		status: (
 			<ClayLabel
 				displayType={
-					item.status.toLowerCase() === 'deployed'
+					item.settings.deploymentStatus.toLowerCase() === 'deployed'
 						? 'success'
 						: 'secondary'
 				}
 			>
-				{DEPLOYMENT_STATUS[item.status.toLowerCase()]}
+				{DEPLOYMENT_STATUS[item.settings.deploymentStatus]}
 			</ClayLabel>
 		),
 		type: concatTypes(item.settings.deploymentTypes)
