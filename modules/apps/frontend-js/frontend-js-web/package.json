@@ -20,6 +20,10 @@
 		"uuid": "^3.3.2"
 	},
 	"jest": {
+		"coverageReporters": [
+			  "text",
+			  "text-summary"
+		],
 		"globals": {
 			"Liferay": {}
 		},
@@ -46,7 +50,7 @@
 		"build": "liferay-npm-scripts build",
 		"checkFormat": "liferay-npm-scripts check",
 		"format": "liferay-npm-scripts fix",
-		"test": "liferay-npm-scripts test",
+		"test": "liferay-npm-scripts test --coverage",
 		"watch": "liferay-npm-scripts webpack --watch"
 	},
 	"version": "4.0.0"

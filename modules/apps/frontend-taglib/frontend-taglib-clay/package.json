@@ -65,6 +65,10 @@
 		"metal-state": "2.16.8"
 	},
 	"jest": {
+		"coverageReporters": [
+			  "text",
+			  "text-summary"
+		],
 		"moduleNameMapper": {
 			"(.*)\\.soy": "$1.soy.js"
 		},
@@ -78,7 +82,7 @@
 		"build": "liferay-npm-scripts build",
 		"checkFormat": "liferay-npm-scripts check",
 		"format": "liferay-npm-scripts fix",
-		"test": "liferay-npm-scripts test"
+		"test": "liferay-npm-scripts test --coverage"
 	},
 	"version": "3.0.0"
 }
