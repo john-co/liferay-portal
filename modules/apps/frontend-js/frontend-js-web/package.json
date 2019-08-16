@@ -21,9 +21,9 @@
 	},
 	"jest": {
 		"coverageReporters": [
-			  "text",
-			  "text-summary",
-			  "lcov"
+			"text",
+			"text-summary",
+			"lcov"
 		],
 		"globals": {
 			"Liferay": {}
