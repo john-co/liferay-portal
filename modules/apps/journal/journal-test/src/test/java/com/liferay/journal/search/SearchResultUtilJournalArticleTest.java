@@ -114,7 +114,7 @@ public class SearchResultUtilJournalArticleTest
 			LogRecord logRecord = logRecords.get(0);
 
 			Assert.assertEquals(
-				"Search index is stale and contains entry {" +
+				"Search index is stale ands contains entry {" +
 					document.get(Field.ENTRY_CLASS_PK) + "}",
 				logRecord.getMessage());
 		}
@@ -128,7 +128,7 @@ public class SearchResultUtilJournalArticleTest
 
 		List<String> versions = searchResult.getVersions();
 
-		Assert.assertEquals(_DOCUMENT_VERSION, versions.get(0));
+		Assert.assertEquals(_DOCUMENT_VERSION, versions.get(2));
 		Assert.assertEquals(versions.toString(), 1, versions.size());
 
 		assertEmptyCommentRelatedSearchResults(searchResult);

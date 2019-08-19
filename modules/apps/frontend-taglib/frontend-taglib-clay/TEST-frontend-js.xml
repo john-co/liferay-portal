@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite errors="0" failures="1" hostname="" id="0" name="Jest" package="frontend-taglib.frontend-taglib-clay" skipped="0" tests="4" time="0" timestamp="1566240964500">
+  <testcase classname="frontend-taglib.frontend-taglib-clay.test.management_toolbar.[frontend-taglib]" name="ManagementToolbar listens to the rowToggled event from the registered search container" time="0.048">
+  </testcase>
+  <testcase classname="frontend-taglib.frontend-taglib-clay.test.management_toolbar.[frontend-taglib]" name="ManagementToolbar deselects all searchContainer rows" time="0.014">
+    <failure message="Error: expect(jest.fn()).toHaveBeenCalledWith(expected)">Error: expect(jest.fn()).toHaveBeenCalledWith(expected)
+
+Expected mock function to have been called with:
+  false
+as argument 2, but it was called with
+  true.
+    at Object.toHaveBeenCalledWith (frontend-taglib/frontend-taglib-clay/test/management_toolbar/ManagementToolbar.es.js:66:48)
+    at Object.asyncJestTest (/home/john-co/Liferay/public/master/modules/node_modules/jest-jasmine2/build/jasmineAsyncInstall.js:102:37)
+    at resolve (/home/john-co/Liferay/public/master/modules/node_modules/jest-jasmine2/build/queueRunner.js:43:12)
+    at new Promise (&lt;anonymous&gt;)
+    at mapper (/home/john-co/Liferay/public/master/modules/node_modules/jest-jasmine2/build/queueRunner.js:26:19)
+    at promise.then (/home/john-co/Liferay/public/master/modules/node_modules/jest-jasmine2/build/queueRunner.js:73:41)
+    at process._tickCallback (internal/process/next_tick.js:68:7)</failure>
+  </testcase>
+  <testcase classname="frontend-taglib.frontend-taglib-clay.test.management_toolbar.[frontend-taglib]" name="ManagementToolbar selects all searchContainer rows" time="0.007">
+  </testcase>
+  <testcase classname="frontend-taglib.frontend-taglib-clay.test.management_toolbar.[frontend-taglib]" name="ManagementToolbar toggles the searchContainer selected rows" time="0.007">
+  </testcase>
+</testsuite>
