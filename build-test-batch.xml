@@ -4018,24 +4018,29 @@ log.sanitizer.enabled=false</echo>
 	<target name="js-unit-jdk8">
 		<run-batch-test>
 			<test-action>
-				<gradle-execute dir="modules" task="packageRunTest">
-					<arg value="--continue" />
-					<arg value="--parallel" />
-				</gradle-execute>
-
-				<replace
-					dir="modules"
-					includes="**/TEST-frontend-js.xml"
-				>
-					<replacefilter>
-						<replacetoken><![CDATA[<testsuites>]]></replacetoken>
-						<replacevalue><![CDATA[]]></replacevalue>
-					</replacefilter>
-					<replacefilter>
-						<replacetoken><![CDATA[</testsuites>]]></replacetoken>
-						<replacevalue><![CDATA[]]></replacevalue>
-					</replacefilter>
-				</replace>
+				<trycatch>
+					<try>
+						<gradle-execute dir="modules" task="packageRunTest">
+							<arg value="--continue" />
+							<arg value="--parallel" />
+						</gradle-execute>
+					</try>
+					<finally>
+						<replace
+							dir="modules"
+							includes="**/TEST-frontend-js.xml"
+						>
+							<replacefilter>
+								<replacetoken><![CDATA[<testsuites>]]></replacetoken>
+								<replacevalue><![CDATA[]]></replacevalue>
+							</replacefilter>
+							<replacefilter>
+								<replacetoken><![CDATA[</testsuites>]]></replacetoken>
+								<replacevalue><![CDATA[]]></replacevalue>
+							</replacefilter>
+						</replace>
+					</finally>
+				</trycatch>
 			</test-action>
 
 			<test-set-up>
