@@ -4018,11 +4018,6 @@ log.sanitizer.enabled=false</echo>
 	<target name="js-unit-jdk8">
 		<run-batch-test>
 			<test-action>
-				<gradle-execute dir="modules" task="npmRunTest">
-					<arg value="--continue" />
-					<arg value="--parallel" />
-				</gradle-execute>
-
 				<replace
 					dir="modules"
 					includes="**/TEST-frontend-js.xml"
