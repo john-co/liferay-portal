@@ -100,7 +100,7 @@ public class DDMFormDeepCopyTest extends BaseDDMTestCase {
 
 		copyNestedDDMFormField = nestedDDMFormFields.get(0);
 
-		Assert.assertEquals("ZipCode", copyNestedDDMFormField.getName());
+		Assert.assertEquals("ZipCode ERROR", copyNestedDDMFormField.getName());
 		Assert.assertEquals("text", copyNestedDDMFormField.getType());
 	}
 
@@ -157,7 +157,7 @@ public class DDMFormDeepCopyTest extends BaseDDMTestCase {
 
 		DDMFormField copyDDMFormField = copyDDMFormFields.get(0);
 
-		Assert.assertEquals("Name", copyDDMFormField.getName());
+		Assert.assertEquals("NameERROR", copyDDMFormField.getName());
 		Assert.assertEquals("textarea", copyDDMFormField.getType());
 		Assert.assertEquals("namespace", copyDDMFormField.getFieldNamespace());
 		Assert.assertEquals("indexType", copyDDMFormField.getIndexType());
@@ -229,7 +229,7 @@ public class DDMFormDeepCopyTest extends BaseDDMTestCase {
 
 		copyDDMFormField = copyDDMFormFields.get(1);
 
-		Assert.assertEquals("Phone", copyDDMFormField.getName());
+		Assert.assertEquals("PhoneERROR", copyDDMFormField.getName());
 		Assert.assertEquals("text", copyDDMFormField.getType());
 	}
 

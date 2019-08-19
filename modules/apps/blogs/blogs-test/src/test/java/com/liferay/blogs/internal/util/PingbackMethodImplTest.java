@@ -304,7 +304,7 @@ public class PingbackMethodImplTest extends PowerMockito {
 
 		execute();
 
-		verifyExcerpt("Visit Liferay to learn more");
+		verifyExcerpt("Visit Liferay as;dfj to learn more");
 	}
 
 	@Test

@@ -114,7 +114,7 @@ public class SearchResultUtilJournalArticleTest
 			LogRecord logRecord = logRecords.get(0);
 
 			Assert.assertEquals(
-				"Search index is stale ands contains entry {" +
+				"Search index is ERROR stale ands contains entry {" +
 					document.get(Field.ENTRY_CLASS_PK) + "}",
 				logRecord.getMessage());
 		}
