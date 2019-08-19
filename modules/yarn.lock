@@ -11504,10 +11504,10 @@ liferay-frontend-common-css@1.0.4, liferay-frontend-common-css@^1.0.4:
   resolved "https://registry.yarnpkg.com/liferay-frontend-common-css/-/liferay-frontend-common-css-1.0.4.tgz#e4d73e406020d907c909bcacb2700a52fa1c7f16"
   integrity sha1-5Nc+QGAg2QfJCbyssnAKUvocfxY=
 
-liferay-jest-junit-reporter@1.1.0-beta.1:
-  version "1.1.0-beta.1"
-  resolved "https://registry.yarnpkg.com/liferay-jest-junit-reporter/-/liferay-jest-junit-reporter-1.1.0-beta.1.tgz#2411db38f3d2d25d40ced963571e4398b9ca8446"
-  integrity sha512-RmAdGJGqay7tXicdDgjyuUk29MR2jLkD20dptCEQu8Gn71UJD0os4KsvoDK2oDCL7oPEAIcNQ+Xx5jRxIZHAqA==
+liferay-jest-junit-reporter@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/liferay-jest-junit-reporter/-/liferay-jest-junit-reporter-1.0.1.tgz#20e9c8a690017c6e3659a0bf15e7c6534d31c9e7"
+  integrity sha512-qR0mhDu7Qn5QfnTTlPWz1AtkSIHcPgN752anhARQY1olXEH+3/97W3SeCAzP3KPR1tLnhVezwxk6XHZiXk3q/w==
   dependencies:
     strip-ansi "^5.0.0"
     xml "^1.0.1"
@@ -11703,10 +11703,10 @@ liferay-npm-bundler@2.12.0:
     semver "^5.5.0"
     xml-js "^1.6.8"
 
-liferay-npm-scripts@7.2.0-beta.1:
-  version "7.2.0-beta.1"
-  resolved "https://registry.yarnpkg.com/liferay-npm-scripts/-/liferay-npm-scripts-7.2.0-beta.1.tgz#2a37361a5a54e11f4b475362abb277be3bbe1e19"
-  integrity sha512-7eOviXDQ+bq+Mfy0VmVjus62XU4ORzl1X4I+C10A6u3EKBUobzE7izmp0mkMhPG40fGkOvqE2sIpVQfqYLU29w==
+liferay-npm-scripts@7.1.0:
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/liferay-npm-scripts/-/liferay-npm-scripts-7.1.0.tgz#d449bd093fa840d858e5a4067796f9ed00e15997"
+  integrity sha512-1HwD9zZ4Uf0qpeIy9Ew+F50z5RuLOVMTC4swC/yRKa8dOxlp7T0LHjKSjQjrtHeYiZ5ShYwWkw3q+eMl+AN7Iw==
   dependencies:
     "@babel/cli" "^7.2.3"
     "@babel/plugin-proposal-class-properties" "7.4.4"
@@ -11734,7 +11734,7 @@ liferay-npm-scripts@7.2.0-beta.1:
     glob "^7.1.3"
     http-proxy-middleware "^0.19.1"
     jest "^24.5.0"
-    liferay-jest-junit-reporter "1.1.0-beta.1"
+    liferay-jest-junit-reporter "1.0.1"
     liferay-lang-key-dev-loader "^1.0.3"
     liferay-npm-bridge-generator "2.12.0"
     liferay-npm-bundler "2.12.0"
