@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite hostname="" id="0" errors="0" failures="0" name="Jest" package="frontend-taglib.frontend-taglib-clay" skipped="0" tests="4" time="0" timestamp="1566328139989">
+  <testcase classname="frontend-taglib.frontend-taglib-clay.test.management_toolbar" name="ManagementToolbar listens to the rowToggled event from the registered search container" time="0.023">
+  </testcase>
+  <testcase classname="frontend-taglib.frontend-taglib-clay.test.management_toolbar" name="ManagementToolbar deselects all searchContainer rows" time="0.006">
+  </testcase>
+  <testcase classname="frontend-taglib.frontend-taglib-clay.test.management_toolbar" name="ManagementToolbar selects all searchContainer rows" time="0.009">
+  </testcase>
+  <testcase classname="frontend-taglib.frontend-taglib-clay.test.management_toolbar" name="ManagementToolbar toggles the searchContainer selected rows" time="0.008">
+  </testcase>
+</testsuite>

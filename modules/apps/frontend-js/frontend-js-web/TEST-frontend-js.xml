@@ -1,0 +1,619 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite hostname="" id="0" errors="0" failures="0" name="Jest" package="frontend-js.frontend-js-web" skipped="0" tests="308" time="0" timestamp="1566328103713">
+  <testcase classname="frontend-js.frontend-js-web.test.liferay" name="CompatibilityEventProxy does not emit any event when no targets have been added" time="0.009">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay" name="CompatibilityEventProxy does not crash if target has no method fire" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay" name="CompatibilityEventProxy emits adapted event with event name and event params to given targets when no namespace is specified" time="0.003">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay" name="CompatibilityEventProxy emits adapted event with event name and event params to given targets when namespace is specified" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay" name="CompatibilityEventProxy emits adapted event to given targets when target is not listening" time="0">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay" name="CompatibilityEventProxy emits adapted event to given targets when target is listening" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay" name="CompatibilityEventProxy maintains target original state of emitFacade after emiting events" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay" name="CompatibilityEventProxy maintains target original state of emitFacade after emiting events when component emitFacade is true" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay" name="CompatibilityEventProxy adapts the events according to specified RegExp" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay" name="CompatibilityEventProxy emits events even if the event does not have a key property" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub allows the portlet client test for a blocking operation initializes a portlet hub instance for portlet A" time="0.01">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub allows the portlet client test for a blocking operation initializes a portlet hub instance for portlet B" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub allows the portlet client test for a blocking operation initializes a portlet hub instance for portlet C" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub allows the portlet client test for a blocking operation initializes a portlet hub instance for portlet D" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub allows the portlet client test for a blocking operation is present in the register return object and is a function" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub allows the portlet client test for a blocking operation returns a boolean value" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub allows the portlet client test for a blocking operation returns false if a blocking operation is not in progress" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub allows the portlet client test for a blocking operation returns false through a different hub if a blocking operation is not in progress" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub allows the portlet client test for a blocking operation returns true when a partial action has been started but setPageState has not been called" time="0.014">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub allows the portlet client test for a blocking operation returns true through a different hub when a partial action has been started but setPageState has not been called" time="0.003">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub allows the portlet client test for a blocking operation returns true when setPageState has been called but the updates have not been dispatched" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub allows the portlet client test for a blocking operation returns false after setPageState updates have been dispatched" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub allows the portlet client test for a blocking operation returns false through a different hub after setPageState updates have been dispatched" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub allows the portlet client test for a blocking operation returns true when action has been called but the updates have not been dispatched" time="0.006">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub allows the portlet client test for a blocking operation returns true through a different hub when action has been called but the updates have not been dispatched" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub allows the portlet client test for a blocking operation returns false after action updates have been dispatched" time="0.007">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub allows the portlet client test for a blocking operation returns true when setRenderState has been called but the updates have not been dispatched" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub allows the portlet client test for a blocking operation returns true through a different hub when setRenderState has been called but the updates have not been dispatched" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub allows the portlet client test for a blocking operation returns false after setRenderState updates have been dispatched" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub action is present in the register return object and is a function" time="0.01">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub action throws a TypeError if too many (&gt;2) arguments are provided" time="0.048">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub action throws a TypeError if a single argument is null" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub action throws a TypeError if the element argument is null" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub action throws a TypeError if action parameters is null" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub action throws a TypeError if action parameters is invalid" time="0.032">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub action throws a TypeError if the element argument is invalid" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub action throws a TypeError if there are 2 element arguments" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub action throws a TypeError if there are 2 action parameters arguments" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub action does not throw if both arguments are valid" time="0.016">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub action throws an AccessDeniedException if action is called twice" time="0.003">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub action throws an NotInitializedException if no onStateChange listener is registered." time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub action causes the onStateChange listener to be called and state is as expected" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub actions affect multiple portlets throws an AccessDeniedException if called before previous action completes" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub actions affect multiple portlets allows actions that update the state of 2 portlets. other portlets are not updated" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay" name="PortletBase PortletBase.all returns an empty list if no elements are found" time="0.023">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay" name="PortletBase PortletBase.all gets all matching nodes within the root node tree" time="0.003">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay" name="PortletBase PortletBase.all uses the document as root node if one has not been specified or the default has not been found" time="0.003">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay" name="PortletBase PortletBase.fetch makes the request to the given url" time="0.003">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay" name="PortletBase PortletBase.fetch adds credentials option to the request" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay" name="PortletBase PortletBase.fetch adds the POST method option to the request" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay" name="PortletBase PortletBase.fetch adds the given body to the request" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay" name="PortletBase PortletBase.fetch transforms the given body using getRequestBody_" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay" name="PortletBase PortletBase.getRequestBody_ keeps body intact if it is already a FormData instance" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay" name="PortletBase PortletBase.getRequestBody_ creates a FormData instance from a given HTMLFormElement" time="0.006">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay" name="PortletBase PortletBase.getRequestBody_ appends all object keys inside a new FormData element" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay" name="PortletBase PortletBase.ns namespaces objects with the portlet namespace using the provided Liferay.Util.ns helper" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay" name="PortletBase PortletBase.one returns null if no element is found" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay" name="PortletBase PortletBase.one gets the first matching node within the root node tree" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay" name="PortletBase PortletBase.one uses the document as root node if one has not been specified or the default has not been found" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay" name="PortletBase PortletBase.rootNode sets the root node by default" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay" name="PortletBase PortletBase.rootNode uses a specified root node" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay" name="PortletBase PortletBase.rootNode overrides the default root node if specified" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay" name="Liferay Liferay.component stores function inputs and invoke them lazily on component retrieval" time="0.003">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay" name="Liferay Liferay.component warns through console when a component is registered twice" time="0">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay" name="Liferay Liferay.componentReady returns a single component if called before it is registered" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay" name="Liferay Liferay.componentReady returns a single component if called after it is registered" time="0.005">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay" name="Liferay Liferay.componentReady returns an array of components if called before they are registered" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay" name="Liferay Liferay.componentReady returns an array of components if called after they are registered" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay" name="Liferay Liferay.destroyComponent destroys a registered component" time="0">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay" name="Liferay Liferay.destroyComponent ignores non registered components" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay" name="Liferay Liferay.destroyComponent invokes a component&apos;s lifecyle destroy method if present when destroying it" time="0">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay" name="Liferay Liferay.destroyComponent invokes a component&apos;s lifecyle dispose method if present when destroying it" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay" name="Liferay Liferay.destroyComponents destroys all registered components if no filter function is provided" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay" name="Liferay Liferay.destroyComponents invokes the provided filter function for every component with the registered component and destroy config as params" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay" name="Liferay Liferay.destroyComponents only destroys the components matched by the provided filter function" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay" name="Liferay Liferay.destroyUnfulfilledPromises cleans up all pending invocations of componentReady" time="0">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util" name="Liferay.Util.fetch applies default settings if none are given" time="0.003">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util" name="Liferay.Util.fetch overrides default settings with given settings" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util" name="Liferay.Util.fetch merges default settings with given different settings" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util" name="Liferay.Util.fetch sets given headers to lower-case before merging with defaults" time="0">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util" name="Liferay.Util.fetch merges given multiple headers, setting name to lower-case" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util" name="Liferay.Util.fetch allows given headers to be an array of arrays" time="0">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util" name="Liferay.Util.fetch allows given headers to be a Headers object" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub newState returns a new RenderState object" time="0.008">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub newParameters returns new parameters according to the data passed" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub RenderState constructor creates a RenderState object according to the data passed to the constructor" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub RenderState clone returns a new RenderState instance with the same properties" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub RenderState getValue throws an error if specified parameter is not a string" time="0.015">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub RenderState getValue returns a value if specified parameter is undefined and default value is specified" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub RenderState getValue returns a parameter value if it is defined" time="0">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub RenderState getValues throws an error if the specified parameter is not a string" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub RenderState getValues returns a value if the specified parameter is undefined and a default value is provided" time="0.014">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub RenderState getValues returns a parameter&apos;s value if it is defined" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub RenderState remove throws an error if the speficied parameter is not a string" time="0">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub RenderState remove does not remove a existing parameter" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub RenderState setValue throws an error if `name` is not a string" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub RenderState setValue throws an error if `value` is not a string" time="0">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub RenderState setValue throws an error if `value` is not a array" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub RenderState setValue throws an error if `value` is not null" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub RenderState setValue sets a parameter if `value` is a string" time="0.005">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub RenderState setValue sets a parameter if `value` is null" time="0">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub RenderState setValue sets a parameter if `value` is an array" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub RenderState setValues throws an error if `value` is not a string" time="0">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub RenderState setValues throws an error if `value` is not null" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub RenderState setValues throws an error if `value` is not an array" time="0">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub RenderState setValues sets a parameter value if `value` is a string" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub RenderState setValues sets a parameter value if `value` is null" time="0">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub RenderState setValues sets a parameter value if `value` is an array" time="0">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub createResourceUrl is present in the register return object and is a function" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub createResourceUrl throws a TypeError if too many (&gt;3) arguments are provided" time="0.026">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub createResourceUrl throws a TypeError if resource parameters is invalid" time="0.026">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub createResourceUrl throws a TypeError if the cacheability argument is invalid" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub createResourceUrl throws a TypeError if there are 2 cacheability arguments" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub createResourceUrl throws a TypeError if there are 2 res parameters arguments" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub createResourceUrl does not throw if both arguments are valid" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub createResourceUrl returns a string if both arguments are valid" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub createResourceUrl Throws an exception if cacheability is specified first" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub createResourceUrl returns a string if only cacheability present" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub createResourceUrl returns a string if only resource parameters present" time="0">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub createResourceUrl returns a string if no parameters present" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub createResourceUrl returns a URL indicating the initiating portlet A" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub createResourceUrl returns a resource URL" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub createResourceUrl returns a URL with cacheability set to &quot;cacheLevelPage&quot;" time="0">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util.portlet_url" name="Liferay.Util.PortletURL.createURL throws an error if basePortletURL is not a string" time="0.009">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util.portlet_url" name="Liferay.Util.PortletURL.createURL throws an error if parameters is not an object" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util.portlet_url" name="Liferay.Util.PortletURL.createURL throws an error if parameters are provided but portlet ID is null" time="0.003">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util.portlet_url" name="Liferay.Util.PortletURL.createURL returns a URL object with a href parameter containing base url and parameters, where reserved parameters are not namespaced" time="0.003">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util.portlet_url" name="Liferay.Util.PortletURL.createURL returns a URL object when the base url is a mailto url" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util.portlet_url" name="Liferay.Util.PortletURL.createURL returns a URL object consisting of a portal url followd by the base url when the base url  starts with a backslash" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util.portlet_url" name="Liferay.Util.PortletURL.createURL returns a URL object consisting of a portal url plus a slash followed by the base url when the base url is a basic string" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util.portlet_url" name="Liferay.Util.PortletURL.createURL overwrites a parameter in base url if the same parameter is set in the parameters argument" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util.portlet_url" name="Liferay.Util.PortletURL.createURL prepends portal url if the provided base url does not have a proper beginning" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util.form" name="Liferay.Util.objectToFormData for plain objects converts the object string entries into string FormData entries" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util.form" name="Liferay.Util.objectToFormData for plain objects converts the object boolean entries into string FormData entries" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util.form" name="Liferay.Util.objectToFormData for plain objects converts the object number entries into string FormData entries" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util.form" name="Liferay.Util.objectToFormData for plain objects converts the object File entries into File FormData entries" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util.form" name="Liferay.Util.objectToFormData for objects with array values generates a grouped field matching the key of the array" time="0">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util.form" name="Liferay.Util.objectToFormData for objects with object values transforms an object with complex values into a FormData element" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.aop" name="Ajax calls listener before original method" time="0.005">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.aop" name="Ajax calls listener after original method" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.aop" name="Ajax calls multiple listeners in correct order" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.aop" name="Ajax does not call listener if returned handle is removed" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.aop" name="Ajax only removes listeners that are detached" time="0.008">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.aop" name="Ajax prevents wrapped function from firing when AOP.prevent is returned by listener" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.aop" name="Ajax prevents wrapped function and all further before subscribers from firing when AOP.halt is returned by listener" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.aop" name="Ajax prevents all further after subscribers from firing when AOP.halt is returned by listener" time="0">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.aop" name="Ajax modifies return value when AOP.alterReturn is returned by `after` listener" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.aop" name="Ajax tracks changes made to return value with subsequent changes made by AOP.alterReturn" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.aop" name="Ajax tracks original return value when changes are made by AOP.alterReturn" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util" name="Liferay.Util.navigate when SPA is enabled navigates to the given url using the provided Liferay.SPA.app.navigate helper" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util" name="Liferay.Util.navigate when SPA is enabled setups one-time-only global listeners in the Liferay object if specified" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util" name="Liferay.Util.navigate when SPA is disabled navigates to the given url using window.location.assign" time="0.01">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util" name="Liferay.Util.getCropRegion returns an object with original image height and width if region is an empty object" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util" name="Liferay.Util.getCropRegion throws an error if image parameter is not an image element" time="0.007">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util" name="Liferay.Util.getCropRegion throws an error if region parameter is not an object" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util" name="Liferay.Util.getCropRegion returns an object with coordinates set to 0 if region coordinates are negative values" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util" name="Liferay.Util.getCropRegion returns an object if imagePreview parameter is an image and region parameter is an object" time="0">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util.form" name="Liferay.Util.postForm does nothing if the form parameter is not a form node" time="0.006">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util.form" name="Liferay.Util.postForm submits form even if options parameter is not set" time="0.003">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util.form" name="Liferay.Util.postForm does nothing if the url optional parameter is not a string" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util.form" name="Liferay.Util.postForm does nothing if the data optional parameter is not an object" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util.form" name="Liferay.Util.postForm sets given element values in data parameter, and submit form to a given url" time="0.009">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util.form" name="Liferay.Util.getFormElement returns null if the form parameter is not a form node" time="0.007">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util.form" name="Liferay.Util.getFormElement returns null if the elementName parameter is not a string" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util.form" name="Liferay.Util.getFormElement returns null if the element does not exist withing the form" time="0.006">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util.form" name="Liferay.Util.getFormElement returns element value if the element does exist withing the form" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util" name="Liferay.Util.formatXML throws error if content parameter is not a string" time="0.009">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util" name="Liferay.Util.formatXML returns an XML string if content parameter is an XML string and options parameter is not provided" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util" name="Liferay.Util.formatXML returns an XML string if content parameter is an XML string and options parameter is provided with custom values" time="0">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.debounce" name="debounce only calls received function with the last called args after a delay" time="0.003">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.debounce" name="debounce calls original function with its original context" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.debounce" name="debounce cancels the debounced function call" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub adds client event listener" time="0.009">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub returns number of listeners" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub throws error if addEventListener is called with invalid args" time="0.055">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub does not call listener if it is removed" time="0">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub throws error if dispatchClientEvent is called with invalid args" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub throws error when attempting to dispatch event with protected name" time="0">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub throws error if removeEventListener is called with invalid args" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub calls listener with matching wildcard event types" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub addEventListener is present in the register return object and is a function" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub addEventListener throws a TypeError if no argument is provided" time="0.003">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub addEventListener throws a TypeError if 1 argument is provided" time="0">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub addEventListener throws a TypeError if too many (&gt;2) arguments are provided" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub addEventListener throws a TypeError if the type argument is not a string" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub addEventListener throws a TypeError if the function argument is not a function" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub addEventListener throws a TypeError if the type is null" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub addEventListener throws a TypeError if the function is null" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub addEventListener throws a TypeError if the type begins with &quot;portlet.&quot; but is neither &quot;portlet.onStateChange&quot; or &quot;portlet.onError&quot;" time="0.03">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub addEventListener does not throw an exception if both parameters are valid" time="0">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub addEventListener returns a handle to the event handler (an object) when the parameters are valid" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub addEventListener allows a listener for event type &quot;portlet.onStateChange&quot; to be added" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub addEventListener allows a listener for event type &quot;portlet.onError&quot; to be added" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub removeEventListener is present in the register return object and is a function" time="0">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub removeEventListener throws a TypeError if too many (&gt;1) arguments are provided" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub removeEventListener throws a TypeError if the handle is null" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub removeEventListener throws a TypeError if the handle is undefined" time="0">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub removeEventListener throws a TypeError if the handle has an invalid value" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub removeEventListener allows a previously added user event listener to be removed" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub removeEventListener allows a previously added portlet.onStateChange event listener to be removed" time="0">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub removeEventListener allows a previously added portlet.onError event listener to be removed" time="0">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub removeEventListener throws a TypeError if the user event handler is removed twice" time="0.006">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub removeEventListener throws a TypeError if the onStateChange event handler is removed twice" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub removeEventListener throws a TypeError if the onError event handler is removed twice" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub onStateChange without render data does not call the portlet.onStateChange listener during the addEventListener call" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub onStateChange without render data is passed a type parameter with value &quot;portlet.onStateChange&quot;" time="0.201">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub onStateChange without render data is not passed a RenderData object" time="0.201">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub onStateChange without render data is passed a RenderState parameter that has 3 properties" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub onStateChange without render data is passed a RenderState object with a &quot;parameters&quot; property" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub onStateChange without render data is passed a RenderState object with a &quot;portletMode&quot; property" time="0.004">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub onStateChange without render data is passed a RenderState object with a &quot;windowState&quot; property" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub onStateChange without render data its RenderState &quot;parameters&quot; property is an object" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub onStateChange without render data its RenderState has 3 parameters" time="0.006">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub onStateChange without render data its RenderState &quot;windowState&quot; property is a string" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub onStateChange without render data its RenderState &quot;portletMode&quot; property is a string" time="0.003">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub onStateChange without render data its RenderState has windowState=normal" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub onStateChange without render data its RenderState has portletMode=view" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub onStateChange without render data its RenderState parameter is not identical to the test state object&quot;" time="0.01">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub onStateChange without render data its RenderState parameter equals the test state object&quot;" time="0.005">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub onStateChange with render data does not call the portlet.onStateChange listener during the addEventListener call" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub onStateChange with render data is called asynchronously after an onStateChange handler is registered" time="0.101">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub onStateChange with render data is passed a type parameter with value &quot;portlet.onStateChange&quot;" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub onStateChange with render data is passed a RenderState parameter that is an object" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub onStateChange with render data is passed a RenderState parameter that has 3 properties" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub onStateChange with render data is passed a RenderState object with a &quot;parameters&quot; property" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub onStateChange with render data is passed a RenderState object with a &quot;portletMode&quot; property" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub onStateChange with render data is passed a RenderState object with a &quot;windowState&quot; property" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub onStateChange with render data its RenderState parameter is not identical to the test state object&quot;" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub onStateChange with render data its RenderState parameter equals the test state object&quot;" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub onStateChange with render data is passed a RenderData object" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub onStateChange with render data is passed a RenderData parameter that has 2 properties" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub onStateChange with render data is passed a RenderData object with a &quot;content&quot; property" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub onStateChange with render data is passed a RenderData object with a &quot;mimeType&quot; property" time="0.013">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub onStateChange with render data is passed a RenderData object with a &quot;content&quot; property of type string" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub onStateChange with render data is passed a RenderData object with a &quot;mimeType&quot; property of type string" time="0.01">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub onStateChange with render data its RenderData parameter equals the test render data object&quot;" time="0.015">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub Allows the portlet client to dispatch events The portlet hub is initialized for the tests initializes a portlet hub instance for portlet A" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub Allows the portlet client to dispatch events The portlet hub is initialized for the tests initializes a portlet hub instance for portlet B" time="0">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub Allows the portlet client to dispatch events The portlet hub is initialized for the tests initializes a portlet hub instance for portlet C" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub Allows the portlet client to dispatch events The portlet hub is initialized for the tests initializes a portlet hub instance for portlet D" time="0">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub Allows the portlet client to dispatch events The portlet hub dispatchClientEvent function is present in the register return object and is a function" time="0">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub Allows the portlet client to dispatch events The portlet hub dispatchClientEvent function throws a TypeError if no argument is provided" time="0.029">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub Allows the portlet client to dispatch events The portlet hub dispatchClientEvent function throws a TypeError if too many (&gt;2) arguments are provided" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub Allows the portlet client to dispatch events The portlet hub dispatchClientEvent function throws a TypeError if the type argument is not a string" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub Allows the portlet client to dispatch events The portlet hub dispatchClientEvent function throws a TypeError if the type is null" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub Allows the portlet client to dispatch events The portlet hub dispatchClientEvent function does not throw an Exception if the payload is null" time="0">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub Allows the portlet client to dispatch events The portlet hub dispatchClientEvent function throws a TypeError if the type begins with &quot;portlet.&quot;" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub Allows the portlet client to dispatch events The portlet hub dispatchClientEvent function throws a TypeError if the type matches a system event type" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub Allows the portlet client to dispatch events The portlet hub dispatchClientEvent function does not throw an exception if both parameters are valid" time="0">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub Allows the portlet client to dispatch events The portlet hub dispatchClientEvent function returns count of 0 when no listener for event is registered" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub Allows the portlet client to dispatch events The portlet hub dispatchClientEvent function listener is called &amp; count=1 when 1 listener for event is registered" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub Allows the portlet client to dispatch events The portlet hub dispatchClientEvent function causes listener to be called with expected type &amp; string payload when event is dispatched" time="0">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub Allows the portlet client to dispatch events The portlet hub dispatchClientEvent function when type does not match, no event is fired" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub Allows the portlet client to dispatch events The portlet hub dispatchClientEvent function payload=null is transported correctly" time="0">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub Allows the portlet client to dispatch events The portlet hub dispatchClientEvent function payload of type object is transported correctly" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub Allows the portlet client to dispatch events The portlet hub dispatchClientEvent function listener of different portlet is correctly called when event is dispatched" time="0">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub Allows the portlet client to dispatch events The portlet hub dispatchClientEvent function matches event types by regex" time="0">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub Allows the portlet client to dispatch events The portlet hub dispatchClientEvent function when regex does not match, no event is fired" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub Allows the portlet client to dispatch events The portlet hub dispatchClientEvent function 2 listeners of different portlet are correctly called when event is dispatched" time="0">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util.form" name="Liferay.Util.setFormValues sets the given values of form elements" time="0.004">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util" name="Liferay.Util.objectToURLSearchParams throws error if obj parameter is not an object" time="0.004">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util" name="Liferay.Util.objectToURLSearchParams converts given object into URLSearchParams" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util" name="Liferay.Util.objectToURLSearchParams converts given object parameter with array value into multiple request parameters with the same key" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util.portlet_url" name="Liferay.Util.PortletURL.createRenderURL returns a URL object with a href parameter containing the p_p_lifecycle parameter set to 0" time="0.004">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util.portlet_url" name="Liferay.Util.PortletURL.createActionURL returns a URL object with a href parameter containing the p_p_lifecycle parameter set to 1" time="0.003">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util" name="Liferay.Util.formatStorage throws error if size parameter is not a number" time="0.005">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util" name="Liferay.Util.formatStorage formats size under 1048575 bytes to kilobytes, with the default KB suffix" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util" name="Liferay.Util.formatStorage formats size 0 bytes to kilobytes, with the default KB suffix" time="0">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util" name="Liferay.Util.formatStorage formats size over 1048575 bytes to megabytes, with the default MB suffix" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util" name="Liferay.Util.formatStorage formats size over 1048575 bytes to megabytes with custom space, decimal separator, and suffix type parameters" time="0">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util" name="Liferay.Util.getPortletNamespace throws an error if portletId is not a string" time="0.003">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util" name="Liferay.Util.getPortletNamespace returns a portlet namespace surrounded by underscores" time="0">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util.portlet_url" name="Liferay.Util.PortletURL.createResourceURL returns a url with the p_p_lifecycle parameter set to 2" time="0.005">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util.address" name="Liferay.Address.getRegions throws an error if the callback parameter is not a function" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util.address" name="Liferay.Address.getRegions throws an error if the selectKey parameter is not a string" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util.address" name="Liferay.Address.getCountries throws an error if the callback parameter is not a function" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub register throws error if called without portletId" time="0.058">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.portlet" name="PortletHub register returns an instance of PortletInit" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util" name="Liferay.Util.ns returns an object" time="0.003">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.util" name="Liferay.Util.toCharCode returns string" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.keyboard-focus" name="KeyboardFocusManager focus previous element when the left arrow key is pressed" time="0.022">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.keyboard-focus" name="KeyboardFocusManager focus previous element when the up arrow key is pressed" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.keyboard-focus" name="KeyboardFocusManager does not change focus when the left/up arrow keys are pressed on first element" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.keyboard-focus" name="KeyboardFocusManager focus next element when the right arrow key is pressed" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.keyboard-focus" name="KeyboardFocusManager focus next element when the down arrow key is pressed" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.keyboard-focus" name="KeyboardFocusManager does not change focus when the right/down arrow keys are pressed on last element" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.keyboard-focus" name="KeyboardFocusManager does not change focus when any non arrow keys are pressed" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.keyboard-focus" name="KeyboardFocusManager does not change focus when key is pressed on element without ref" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.keyboard-focus" name="KeyboardFocusManager does not change focus when key is pressed on element with ref outside expected format" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.keyboard-focus" name="KeyboardFocusManager does not change focus when key is pressed on element that doesn&apos;t match the selector" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.keyboard-focus" name="KeyboardFocusManager change focus accordingly when key is pressed on any element when no selector is given" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.keyboard-focus" name="KeyboardFocusManager skip elements with &quot;data-unfocusable&quot; set to true when focusing" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.keyboard-focus" name="KeyboardFocusManager does not change focus when key is pressed before starting the manager" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.keyboard-focus" name="KeyboardFocusManager does not change focus when key is pressed after stopping the manager" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.keyboard-focus" name="KeyboardFocusManager focus next elements correctly even if &quot;start&quot; is called more than once" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.keyboard-focus" name="KeyboardFocusManager emit event when element is focused" time="0.003">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.keyboard-focus" name="KeyboardFocusManager setCircularLength focus last element when the left arrow key is pressed on first element" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.keyboard-focus" name="KeyboardFocusManager setCircularLength focus last element when the up arrow key is pressed on first element" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.keyboard-focus" name="KeyboardFocusManager setCircularLength focus first element when the right arrow key is pressed on last element" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.keyboard-focus" name="KeyboardFocusManager setCircularLength focus first element when the down arrow key is pressed on last element" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.keyboard-focus" name="KeyboardFocusManager setCircularLength focus next element when right/down arrow key is pressed on non last element" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.keyboard-focus" name="KeyboardFocusManager setCircularLength focus previous element when left/up arrow key is pressed on non first element" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.keyboard-focus" name="KeyboardFocusManager setFocusHandler focus the element returned by the custom focus handler" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.keyboard-focus" name="KeyboardFocusManager setFocusHandler emit event for element focused due to the custom focus handler" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.keyboard-focus" name="KeyboardFocusManager setFocusHandler focus the element with the ref returned by the custom focus handler" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.keyboard-focus" name="KeyboardFocusManager setFocusHandler emit event for element focused due to the custom focus handler via ref" time="0.001">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.keyboard-focus" name="KeyboardFocusManager setFocusHandler does not focus on any element if the custom focus handler returns nothing" time="0.002">
+  </testcase>
+  <testcase classname="frontend-js.frontend-js-web.test.liferay.keyboard-focus" name="KeyboardFocusManager setFocusHandler run default behavior if custom focus handler returns &quot;true&quot;" time="0.001">
+  </testcase>
+</testsuite>
