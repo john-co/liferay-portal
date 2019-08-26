@@ -15,15 +15,17 @@
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import ClayButton from '@clayui/button';
-import ClayIcon from '@clayui/icon';
-import ClaySelect from '@clayui/select';
 import ClayDropDown from '@clayui/drop-down';
+import ClayIcon from '@clayui/icon';
+import ClayLabel from '@clayui/label';
+import ClaySelect from '@clayui/select';
 import Variants from './Variants/Variants.es';
 import {
 	InitialSegmentsVariantType,
 	SegmentsExperienceType,
 	SegmentsExperimentType
 } from '../types.es';
+import SegmentsExperimentsDetails from './SegmentsExperimentsDetails.es';
 
 function SegmentsExperiments({
 	onCreateSegmentsExperiment,
@@ -101,6 +103,18 @@ function SegmentsExperiments({
 						</ClayDropDown>
 					</div>
 
+					<ClayLabel
+						displayType={_statusToType(
+							segmentsExperiment.status.value
+						)}
+					>
+						{segmentsExperiment.status.label}
+					</ClayLabel>
+
+					<SegmentsExperimentsDetails
+						segmentsExperiment={segmentsExperiment}
+					/>
+
 					<Variants
 						onVariantCreation={onVariantCreation}
 						onVariantDeletion={onVariantDeletion}
@@ -111,22 +125,23 @@ function SegmentsExperiments({
 						variants={variants}
 					/>
 
-					<ClayButton className="w-100 mt-2" disabled>
+					<ClayButton className="w-100" disabled>
 						{Liferay.Language.get('review-and-run-test')}
 					</ClayButton>
 				</>
 			)}
 			{!segmentsExperiment && (
-				<>
+				<div className="text-center">
 					<h4 className="text-dark">
 						{Liferay.Language.get(
 							'no-active-tests-were-found-for-the-selected-experience'
 						)}
 					</h4>
-					<p>{Liferay.Language.get('create-test-help-message')}</p>
+					<p className="small">
+						{Liferay.Language.get('create-test-help-message')}
+					</p>
 					<ClayButton
-						className="w-100"
-						displayType="primary"
+						displayType="secondary"
 						onClick={() =>
 							onCreateSegmentsExperiment(
 								selectedSegmentsExperienceId
@@ -135,7 +150,7 @@ function SegmentsExperiments({
 					>
 						{Liferay.Language.get('create-test')}
 					</ClayButton>
-				</>
+				</div>
 			)}
 		</>
 	);
@@ -150,6 +165,19 @@ function SegmentsExperiments({
 		onEditSegmentsExperiment();
 	}
 }
+
+const _statusToType = status => STATUS_TO_TYPE[status];
+
+const STATUS_TO_TYPE = {
+	0: 'secondary',
+	1: 'primary',
+	2: 'success',
+	3: 'success',
+	4: 'danger',
+	5: 'danger',
+	6: 'danger',
+	7: 'warning'
+};
 
 SegmentsExperiments.propTypes = {
 	onCreateSegmentsExperiment: PropTypes.func.isRequired,

@@ -444,6 +444,7 @@ AUI.add(
 
 					if (instance.get('repeatable')) {
 						instance.renderRepeatableUI();
+						instance.syncLabel(instance.get('displayLocale'));
 						instance.syncRepeatablelUI();
 					}
 
@@ -3155,6 +3156,7 @@ AUI.add(
 						titleNode.val('');
 					}
 
+					instance._validateField(altNode);
 					instance._validateField(titleNode);
 
 					var clearButtonNode = A.one(

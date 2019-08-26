@@ -19,50 +19,47 @@ import Soy, {Config} from 'metal-soy';
 import '../../common/AssetSelector.es';
 import '../common/FloatingToolbarDropdown.es';
 import './FloatingToolbarMappingPanelDelegateTemplate.soy';
-import {ADD_MAPPED_ASSET_ENTRY} from '../../../actions/actions.es';
+import {
+	ADD_MAPPED_ASSET_ENTRY,
+	CLEAR_FRAGMENT_EDITOR
+} from '../../../actions/actions.es';
 import {
 	BACKGROUND_IMAGE_FRAGMENT_ENTRY_PROCESSOR,
 	COMPATIBLE_TYPES,
 	EDITABLE_FRAGMENT_ENTRY_PROCESSOR,
-	FRAGMENTS_EDITOR_ITEM_TYPES
+	FRAGMENTS_EDITOR_ITEM_TYPES,
+	MAPPING_SOURCE_TYPE_IDS,
+	DEFAULT_LANGUAGE_ID_KEY
 } from '../../../utils/constants';
 import {encodeAssetId} from '../../../utils/FragmentsEditorIdUtils.es';
 import getConnectedComponent from '../../../store/ConnectedComponent.es';
+import {getMappingSourceTypes} from '../../../utils/FragmentsEditorGetUtils.es';
 import {openAssetBrowser} from '../../../utils/FragmentsEditorDialogUtils';
+import {prefixSegmentsExperienceId} from '../../../utils/prefixSegmentsExperienceId.es';
 import {setIn} from '../../../utils/FragmentsEditorUpdateUtils.es';
-import {updateEditableValuesMappingAction} from '../../../actions/updateEditableValue.es';
+import {
+	updateEditableValueAction,
+	updateEditableValuesMappingAction
+} from '../../../actions/updateEditableValue.es';
 import templates from './FloatingToolbarMappingPanel.soy';
-
-const SOURCE_TYPE_IDS = {
-	content: 'specific_content',
-	structure: 'structure'
-};
 
 /**
  * FloatingToolbarMappingPanel
  */
 class FloatingToolbarMappingPanel extends PortletBase {
 	/**
-	 * @param {string} subtypeLabel
-	 * @return {Array<{id: string, label: string}>} Source types
+	 * @return {boolean} Mapping values are empty
 	 * @private
 	 * @static
 	 * @review
 	 */
-	static getSourceTypes(subtypeLabel) {
-		return [
-			{
-				id: SOURCE_TYPE_IDS.structure,
-				label: Liferay.Util.sub(
-					Liferay.Language.get('x-default'),
-					subtypeLabel
-				)
-			},
-			{
-				id: SOURCE_TYPE_IDS.content,
-				label: Liferay.Language.get('specific-content')
-			}
-		];
+	static emptyEditableValues(editableValues) {
+		return (
+			!editableValues.classNameId &&
+			!editableValues.classPK &&
+			!editableValues.fieldId &&
+			!editableValues.mappedField
+		);
 	}
 
 	/**
@@ -80,7 +77,11 @@ class FloatingToolbarMappingPanel extends PortletBase {
 			nextState.mappedAssetEntries.map(encodeAssetId)
 		);
 
-		nextState = setIn(nextState, ['_sourceTypeIds'], SOURCE_TYPE_IDS);
+		nextState = setIn(
+			nextState,
+			['_sourceTypeIds'],
+			MAPPING_SOURCE_TYPE_IDS
+		);
 
 		if (
 			nextState.mappingFieldsURL &&
@@ -90,7 +91,7 @@ class FloatingToolbarMappingPanel extends PortletBase {
 			nextState = setIn(
 				nextState,
 				['_sourceTypes'],
-				FloatingToolbarMappingPanel.getSourceTypes(
+				getMappingSourceTypes(
 					nextState.selectedMappingTypes.subtype
 						? nextState.selectedMappingTypes.subtype.label
 						: nextState.selectedMappingTypes.type.label
@@ -135,14 +136,14 @@ class FloatingToolbarMappingPanel extends PortletBase {
 	 */
 	rendered(firstRender) {
 		if (firstRender) {
-			this._selectedSourceTypeId = SOURCE_TYPE_IDS.content;
+			this._selectedSourceTypeId = MAPPING_SOURCE_TYPE_IDS.content;
 
 			if (
 				this.item &&
 				this.mappingFieldsURL &&
 				!this.item.editableValues.classNameId
 			) {
-				this._selectedSourceTypeId = SOURCE_TYPE_IDS.structure;
+				this._selectedSourceTypeId = MAPPING_SOURCE_TYPE_IDS.structure;
 			}
 		}
 	}
@@ -154,7 +155,13 @@ class FloatingToolbarMappingPanel extends PortletBase {
 	 * @review
 	 */
 	syncItem(newItem, oldItem) {
-		if (!oldItem || newItem.editableValues !== oldItem.editableValues) {
+		if (
+			!oldItem ||
+			newItem.editableValues.classNameId !==
+				oldItem.editableValues.classNameId ||
+			newItem.editableValues.mappedField !==
+				oldItem.editableValues.mappedField
+		) {
 			this._loadFields();
 		}
 	}
@@ -199,6 +206,26 @@ class FloatingToolbarMappingPanel extends PortletBase {
 	 */
 	_clearFields() {
 		this._fields = [];
+	}
+
+	/**
+	 * @private
+	 * @review
+	 */
+	_clearFragmentBackgroundImage() {
+		this.store.dispatch(
+			updateEditableValueAction({
+				editableId: this.item.editableId,
+				editableValueContent: '',
+				editableValueId: this.languageId || DEFAULT_LANGUAGE_ID_KEY,
+				fragmentEntryLinkId: this.item.fragmentEntryLinkId,
+				processor: BACKGROUND_IMAGE_FRAGMENT_ENTRY_PROCESSOR,
+				segmentsExperienceId: prefixSegmentsExperienceId(
+					this.segmentsExperienceId ||
+						this.defaultSegmentsExperienceId
+				)
+			})
+		);
 	}
 
 	/**
@@ -272,7 +299,7 @@ class FloatingToolbarMappingPanel extends PortletBase {
 		const fieldId = event.delegateTarget.value;
 
 		const editableValueId =
-			this._selectedSourceTypeId === SOURCE_TYPE_IDS.content
+			this._selectedSourceTypeId === MAPPING_SOURCE_TYPE_IDS.content
 				? 'fieldId'
 				: 'mappedField';
 
@@ -289,6 +316,22 @@ class FloatingToolbarMappingPanel extends PortletBase {
 				this._getFragmentEntryProcessor()
 			)
 		);
+
+		if (
+			this.itemType ===
+			FRAGMENTS_EDITOR_ITEM_TYPES.backgroundImageEditable
+		) {
+			requestAnimationFrame(() => {
+				this._clearFragmentBackgroundImage();
+			});
+		} else if (this.itemType === FRAGMENTS_EDITOR_ITEM_TYPES.editable) {
+			requestAnimationFrame(() => {
+				this.store.dispatch({
+					type: CLEAR_FRAGMENT_EDITOR,
+					value: this.itemId
+				});
+			});
+		}
 	}
 
 	/**
@@ -300,7 +343,15 @@ class FloatingToolbarMappingPanel extends PortletBase {
 	_handleSourceTypeChange(event) {
 		this._selectedSourceTypeId = event.delegateTarget.value;
 
-		this._clearEditableValues();
+		if (
+			FloatingToolbarMappingPanel.emptyEditableValues(
+				this.item.editableValues
+			)
+		) {
+			this._loadFields();
+		} else {
+			this._clearEditableValues();
+		}
 	}
 
 	/**
@@ -313,7 +364,7 @@ class FloatingToolbarMappingPanel extends PortletBase {
 
 		this._clearFields();
 
-		if (this._selectedSourceTypeId === SOURCE_TYPE_IDS.structure) {
+		if (this._selectedSourceTypeId === MAPPING_SOURCE_TYPE_IDS.structure) {
 			const data = {
 				classNameId: this.selectedMappingTypes.type.id
 			};
@@ -324,7 +375,7 @@ class FloatingToolbarMappingPanel extends PortletBase {
 
 			promise = this.fetch(this.mappingFieldsURL, data);
 		} else if (
-			this._selectedSourceTypeId === SOURCE_TYPE_IDS.content &&
+			this._selectedSourceTypeId === MAPPING_SOURCE_TYPE_IDS.content &&
 			this.item.editableValues.classNameId &&
 			this.item.editableValues.classPK
 		) {
@@ -407,7 +458,7 @@ FloatingToolbarMappingPanel.STATE = {
 	 * @type {string}
 	 */
 	_selectedSourceTypeId: Config.oneOf(
-		Object.values(SOURCE_TYPE_IDS)
+		Object.values(MAPPING_SOURCE_TYPE_IDS)
 	).internal(),
 
 	/**
@@ -439,10 +490,13 @@ const ConnectedFloatingToolbarMappingPanel = getConnectedComponent(
 	FloatingToolbarMappingPanel,
 	[
 		'assetBrowserLinks',
+		'defaultSegmentsExperienceId',
 		'getAssetMappingFieldsURL',
+		'languageId',
 		'mappedAssetEntries',
 		'mappingFieldsURL',
 		'portletNamespace',
+		'segmentsExperienceId',
 		'selectedMappingTypes'
 	]
 );
@@ -452,6 +506,6 @@ Soy.register(ConnectedFloatingToolbarMappingPanel, templates);
 export {
 	ConnectedFloatingToolbarMappingPanel,
 	FloatingToolbarMappingPanel,
-	SOURCE_TYPE_IDS
+	MAPPING_SOURCE_TYPE_IDS
 };
 export default ConnectedFloatingToolbarMappingPanel;

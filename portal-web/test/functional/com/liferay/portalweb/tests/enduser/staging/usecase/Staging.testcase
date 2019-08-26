@@ -311,6 +311,52 @@ definition {
 		Staging.deletePublishTemplate(publishTemplateName = "Publish Template Name");
 	}
 
+	@description = "This is a use case for LPS-89546"
+	@priority = "3"
+	test EditPageCreatedBasedOnPageTemplateWithPageVersioning {
+		Navigator.openSiteURL(siteName = "Site Name");
+
+		ProductMenu.gotoPortlet(
+			category = "Publishing",
+			panel = "Site Administration",
+			portlet = "Staging");
+
+		Staging.activateStagingCP(
+			pageVersioningEnabled = "true",
+			siteName = "Site Name");
+
+		PageTemplatesAdmin.openPageTemplatesAdmin(siteURLKey = "site-name-staging");
+
+		PageTemplatesAdmin.addCollection(collectionName = "Page Template Collection");
+
+		PageTemplatesAdmin.addPageTemplate(
+			pageTemplateName = "Page Template Name",
+			pageTemplateType = "Widget Page Template");
+
+		SitePages.openPagesAdmin(siteURLKey = "site-name-staging");
+
+		SitePages.addPublicPage(
+			collectionName = "Page Template Collection",
+			pageName = "Test Page Name",
+			pageTemplateName = "Page Template Name");
+
+		SitePages.openPagesAdmin(siteURLKey = "site-name-staging");
+
+		SitePages.gotoPageMenuItem(
+			menuItem = "Configure",
+			pageName = "Test Page Name");
+
+		Page.editName(pageNameEdit = "Test Page Edit");
+
+		Navigator.gotoStagedSitePage(
+			pageName = "Test Page Edit",
+			siteName = "Site Name");
+
+		Page.view(
+			pageName = "Test Page Edit",
+			privacy = "Public Pages");
+	}
+
 	@priority = "4"
 	test EnableStagingWithWebContentReferencedFromDeletedSite {
 		JSONWebcontent.addWebContent(
@@ -755,6 +801,49 @@ definition {
 			dmDocumentTitle = "DM Document Title");
 	}
 
+	@description = "This is a use case for LPS-91959."
+	@priority = "3"
+	test PublishPageDeletions {
+		JSONLayout.addPublicLayout(
+			groupName = "Site Name",
+			layoutName = "Test Page");
+
+		Navigator.openSiteURL(siteName = "Site Name");
+
+		ProductMenu.gotoPortlet(
+			category = "Publishing",
+			panel = "Site Administration",
+			portlet = "Staging");
+
+		Staging.activateStagingCP(siteName = "Site Name");
+
+		SitePages.openPagesAdmin(siteURLKey = "site-name-staging");
+
+		SitePages.deletePage(pageName = "Staging Test Page");
+
+		Navigator.gotoStagedSitePage(
+			pageName = "Test Page",
+			siteName = "Site Name");
+
+		Page.viewNoPG(pageName = "Staging Test Page");
+
+		Staging.gotoPublishToLive();
+
+		AssertElementPresent(
+			key_itemName = "Pages",
+			locator1 = "StagingPublishToLive#SIMPLE_PUBLICATION_DELETION");
+
+		Staging.configurePublishToLive(pageDeletion = "true");
+
+		Staging.publishToLive();
+
+		Navigator.gotoSitePage(
+			pageName = "Test Page",
+			siteName = "Site Name");
+
+		Page.viewNoPG(pageName = "Staging Test Page");
+	}
+
 	@description = "This is a use case for LPS-90924."
 	@priority = "3"
 	test PublishPageRevisionWithPortletSettingsChanges {
@@ -814,9 +903,7 @@ definition {
 
 		Workflow.gotoPreviewView();
 
-		Page.viewWithWorkflowPG(
-			pageName = "Page Revision Page",
-			workflowStatus = "Pending (Review)");
+		Page.viewWithWorkflowPG(workflowStatus = "Pending (Review)");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Page Revision Page",
@@ -846,17 +933,13 @@ definition {
 
 		Workflow.gotoPreviewView();
 
-		Page.viewWithWorkflowPG(
-			pageName = "Page Revision Page",
-			workflowStatus = "Pending (Review)");
+		Page.viewWithWorkflowPG(workflowStatus = "Pending (Review)");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Page Revision Page",
 			siteName = "Site Name");
 
-		Page.viewWithWorkflowPG(
-			pageName = "Page Revision Page",
-			workflowStatus = "Pending (Review)");
+		Page.viewWithWorkflowPG(workflowStatus = "Pending (Review)");
 
 		UserBar.gotoDropdownItem(dropdownItem = "My Workflow Tasks");
 
@@ -876,9 +959,7 @@ definition {
 
 		Workflow.gotoPreviewView();
 
-		Page.viewWithWorkflowPG(
-			pageName = "Page Revision Page",
-			workflowStatus = "Ready for Publication");
+		Page.viewWithWorkflowPG(workflowStatus = "Ready for Publication");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Page Revision Page",
@@ -3315,6 +3396,159 @@ definition {
 			pageName3 = "Test Page 2");
 	}
 
+	@description = "This is a use case for LPS-97827."
+	@priority = "2"
+	test ViewParentPageNameAfterPublishChangesInChildPage {
+		JSONLayout.addPublicLayout(
+			groupName = "Site Name",
+			layoutName = "Child Page A",
+			parentLayoutName = "Staging Test Page");
+
+		JSONLayout.addPublicLayout(
+			groupName = "Site Name",
+			layoutName = "Child Page B",
+			parentLayoutName = "Staging Test Page");
+
+		JSONLayout.addPublicLayout(
+			groupName = "Site Name",
+			layoutName = "Child Page C",
+			parentLayoutName = "Staging Test Page");
+
+		Navigator.openSiteURL(siteName = "Site Name");
+
+		ProductMenu.gotoPortlet(
+			category = "Publishing",
+			panel = "Site Administration",
+			portlet = "Staging");
+
+		Staging.activateStagingCP(
+			pageVersioningEnabled = "true",
+			siteName = "Site Name");
+
+		SitePages.openPagesAdmin(siteURLKey = "site-name-staging");
+
+		SitePages.gotoPageMenuItem(
+			menuItem = "Configure",
+			pageName = "Staging Test Page");
+
+		Page.editName(pageNameEdit = "Staging Page Edit");
+
+		Navigator.gotoStagedSitePage(
+			pageName = "Staging Page Edit",
+			siteName = "Site Name");
+
+		Staging.markAsReadyForPublication();
+
+		Staging.gotoPublishToLive();
+
+		Staging.publishToLive();
+
+		Navigator.gotoStagedSitePage(
+			pageName = "Staging Page Edit",
+			siteName = "Site Name");
+
+		Page.view(
+			pageName = "Staging Page Edit",
+			privacy = "Public Pages");
+
+		Navigator.gotoSitePage(
+			pageName = "Staging Page Edit",
+			siteName = "Site Name");
+
+		Page.view(
+			pageName = "Staging Page Edit",
+			privacy = "Public Pages");
+
+		Navigator.openSiteURL(siteName = "Site Name");
+
+		ProductMenu.gotoPortlet(
+			category = "Configuration",
+			panel = "Site Administration",
+			portlet = "Workflow");
+
+		Workflow.configureWorkflow(
+			workflowDefinition = "Single Approver",
+			workflowResourceValue = "Page Revision");
+
+		Navigator.openStagingSiteURL(siteName = "Site Name");
+
+		Page.gotoChildPagePG(
+			childPageName = "Child Page A",
+			pageName = "Staging Page Edit");
+
+		Portlet.addPG(portletName = "Blogs");
+
+		Page.viewWithWorkflowPG(workflowStatus = "Draft");
+
+		Staging.submitForPublicationPageRevision();
+
+		Navigator.openStagingSiteURL(siteName = "Site Name");
+
+		Page.gotoChildPagePG(
+			childPageName = "Child Page A",
+			pageName = "Staging Page Edit");
+
+		Page.viewWithWorkflowPG(workflowStatus = "Pending (Review)");
+
+		Navigator.gotoStagedSitePage(
+			pageName = "Staging Page Edit",
+			siteName = "Site Name");
+
+		Page.viewWithWorkflowPG(workflowStatus = "Ready for Publication");
+
+		UserBar.gotoDropdownItem(dropdownItem = "My Workflow Tasks");
+
+		Workflow.assignToMeTaskByActions(
+			workflowAssetTitle = "Child Page A",
+			workflowAssetType = "Page Revision",
+			workflowTask = "Review");
+
+		Workflow.approveTaskByActions(
+			workflowAssetTitle = "Child Page A",
+			workflowAssetType = "Page Revision",
+			workflowTask = "Review");
+
+		Navigator.openStagingSiteURL(siteName = "Site Name");
+
+		Page.gotoChildPagePG(
+			childPageName = "Child Page A",
+			pageName = "Staging Page Edit");
+
+		Page.viewWithWorkflowPG(workflowStatus = "Ready for Publication");
+
+		Navigator.gotoStagedSitePage(
+			pageName = "Staging Page Edit",
+			siteName = "Site Name");
+
+		Page.viewWithWorkflowPG(workflowStatus = "Ready for Publication");
+
+		Navigator.openStagingSiteURL(siteName = "Site Name");
+
+		Page.gotoChildPagePG(
+			childPageName = "Child Page A",
+			pageName = "Staging Page Edit");
+
+		Staging.gotoPublishToLive();
+
+		Staging.publishToLive();
+
+		Navigator.openStagingSiteURL(siteName = "Site Name");
+
+		Page.gotoChildPagePG(
+			childPageName = "Child Page A",
+			pageName = "Staging Page Edit");
+
+		Portlet.viewPG(portletName = "Blogs");
+
+		Navigator.gotoSitePage(
+			pageName = "Staging Page Edit",
+			siteName = "Site Name");
+
+		Page.view(
+			pageName = "Staging Page Edit",
+			privacy = "Public Pages");
+	}
+
 	@description = "This is a use case for LPS-82355."
 	@priority = "5"
 	test ViewPublishDocumentTypeWithConfiguredAssetType {
@@ -3601,6 +3835,42 @@ definition {
 		AssetPublisherPortlet.viewAssetPG(
 			assetContent = "Web Content With Category",
 			assetTitle = "Web Content Title 2");
+	}
+
+	@description = "This is a use case for LPS-98019."
+	@priority = "3"
+	test ViewSearchPageKeywordsParameterWithStaging {
+		Navigator.openSiteURL(siteName = "Site Name");
+
+		ProductMenu.gotoPortlet(
+			category = "Publishing",
+			panel = "Site Administration",
+			portlet = "Staging");
+
+		Staging.activateStagingCP(
+			pageVersioningEnabled = "true",
+			siteName = "Site Name");
+
+		Navigator.gotoStagedSitePage(
+			pageName = "Staging Test Page",
+			siteName = "Site Name");
+
+		Portlet.addPG(portletName = "Search Bar");
+
+		SearchPortlets.configureWidgetParameterNames(keywordsParameterName = "query");
+
+		SearchPortlets.searchWidget(searchTerm = "test");
+
+		var portalURL = PropsUtil.get("portal.url");
+		var keywordsParameterName = StringUtil.extractLast("${portalURL}", "?");
+		var keywordsParameter = StringUtil.extractFirst("${keywordsParameterName}", "=");
+
+		if ("${keywordsParameter}" == "query") {
+			SelectFrame(value1 = "relative=top");
+		}
+		else {
+			fail("Invalid keywords parameter.");
+		}
 	}
 
 	@description = "This is a use case for LPS-77935."

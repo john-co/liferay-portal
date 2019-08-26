@@ -16,12 +16,15 @@ package com.liferay.fragment.web.internal.display.context;
 
 import com.liferay.fragment.constants.FragmentActionKeys;
 import com.liferay.fragment.constants.FragmentConstants;
+import com.liferay.fragment.contributor.FragmentCollectionContributor;
+import com.liferay.fragment.contributor.FragmentCollectionContributorTracker;
 import com.liferay.fragment.model.FragmentCollection;
 import com.liferay.fragment.model.FragmentEntry;
 import com.liferay.fragment.service.FragmentCollectionLocalServiceUtil;
 import com.liferay.fragment.service.FragmentEntryLocalServiceUtil;
 import com.liferay.fragment.service.FragmentEntryServiceUtil;
 import com.liferay.fragment.web.internal.constants.FragmentTypeConstants;
+import com.liferay.fragment.web.internal.constants.FragmentWebKeys;
 import com.liferay.fragment.web.internal.security.permission.resource.FragmentPermission;
 import com.liferay.fragment.web.internal.util.FragmentPortletUtil;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItem;
@@ -47,6 +50,7 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -72,6 +76,10 @@ public class FragmentDisplayContext {
 		_renderResponse = renderResponse;
 		_httpServletRequest = httpServletRequest;
 
+		_fragmentCollectionContributorTracker =
+			(FragmentCollectionContributorTracker)
+				_httpServletRequest.getAttribute(
+					FragmentWebKeys.FRAGMENT_COLLECTION_CONTRIBUTOR_TRACKER);
 		_themeDisplay = (ThemeDisplay)_httpServletRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
 	}
@@ -136,6 +144,60 @@ public class FragmentDisplayContext {
 		};
 	}
 
+	public SearchContainer getContributedFragmentEntriesSearchContainer() {
+		if (_contributedFragmentEntriesSearchContainer != null) {
+			return _contributedFragmentEntriesSearchContainer;
+		}
+
+		SearchContainer contributedFragmentEntriesSearchContainer =
+			new SearchContainer(
+				_renderRequest, _getPortletURL(), null,
+				"there-are-no-fragments");
+
+		contributedFragmentEntriesSearchContainer.setId(
+			"fragmentEntries" + getFragmentCollectionKey());
+
+		List<FragmentEntry> fragmentEntries = null;
+
+		FragmentCollectionContributor fragmentCollectionContributor =
+			_getFragmentCollectionContributor();
+
+		if (isNavigationComponents() || isNavigationSections()) {
+			int type = FragmentConstants.TYPE_SECTION;
+
+			if (isNavigationComponents()) {
+				type = FragmentConstants.TYPE_COMPONENT;
+			}
+
+			fragmentEntries = fragmentCollectionContributor.getFragmentEntries(
+				type, _themeDisplay.getLocale());
+		}
+		else {
+			fragmentEntries = fragmentCollectionContributor.getFragmentEntries(
+				FragmentConstants.TYPE_SECTION, _themeDisplay.getLocale());
+
+			fragmentEntries.addAll(
+				fragmentCollectionContributor.getFragmentEntries(
+					FragmentConstants.TYPE_COMPONENT,
+					_themeDisplay.getLocale()));
+		}
+
+		contributedFragmentEntriesSearchContainer.setResults(
+			ListUtil.subList(
+				fragmentEntries,
+				contributedFragmentEntriesSearchContainer.getStart(),
+				contributedFragmentEntriesSearchContainer.getEnd()));
+		contributedFragmentEntriesSearchContainer.setRowChecker(
+			new EmptyOnClickRowChecker(_renderResponse));
+		contributedFragmentEntriesSearchContainer.setTotal(
+			fragmentEntries.size());
+
+		_contributedFragmentEntriesSearchContainer =
+			contributedFragmentEntriesSearchContainer;
+
+		return _contributedFragmentEntriesSearchContainer;
+	}
+
 	public FragmentCollection getFragmentCollection() {
 		if (_fragmentCollection != null) {
 			return _fragmentCollection;
@@ -148,38 +210,51 @@ public class FragmentDisplayContext {
 		return _fragmentCollection;
 	}
 
+	public FragmentCollectionContributor getFragmentCollectionContributor() {
+		return _fragmentCollectionContributorTracker.
+			getFragmentCollectionContributor(getFragmentCollectionKey());
+	}
+
+	public List<FragmentCollectionContributor>
+		getFragmentCollectionContributors() {
+
+		return _fragmentCollectionContributorTracker.
+			getFragmentCollectionContributors();
+	}
+
 	public long getFragmentCollectionId() {
 		if (Validator.isNotNull(_fragmentCollectionId)) {
 			return _fragmentCollectionId;
 		}
 
-		long defaultFragmentCollectionId = 0;
-
-		List<FragmentCollection> fragmentCollections =
-			FragmentCollectionLocalServiceUtil.getFragmentCollections(
-				_themeDisplay.getScopeGroupId(), 0, 1);
-
-		if (ListUtil.isEmpty(fragmentCollections)) {
-			fragmentCollections =
-				FragmentCollectionLocalServiceUtil.getFragmentCollections(
-					_themeDisplay.getCompanyGroupId(), 0, 1);
-		}
-
-		if (ListUtil.isNotEmpty(fragmentCollections)) {
-			FragmentCollection fragmentCollection = fragmentCollections.get(0);
-
-			defaultFragmentCollectionId =
-				fragmentCollection.getFragmentCollectionId();
-		}
-
 		_fragmentCollectionId = ParamUtil.getLong(
 			_httpServletRequest, "fragmentCollectionId",
-			defaultFragmentCollectionId);
+			_getDefaultFragmentCollectionId());
 
 		return _fragmentCollectionId;
 	}
 
+	public String getFragmentCollectionKey() {
+		if (_fragmentCollectionKey != null) {
+			return _fragmentCollectionKey;
+		}
+
+		_fragmentCollectionKey = ParamUtil.getString(
+			_httpServletRequest, "fragmentCollectionKey",
+			_getDefaultFragmentCollectionKey());
+
+		return _fragmentCollectionKey;
+	}
+
 	public String getFragmentCollectionName() throws PortalException {
+		if (isSelectedFragmentCollectionContributor()) {
+			FragmentCollectionContributor fragmentCollectionContributor =
+				_getFragmentCollectionContributor();
+
+			return fragmentCollectionContributor.getName(
+				_themeDisplay.getLocale());
+		}
+
 		FragmentCollection fragmentCollection = getFragmentCollection();
 
 		if (fragmentCollection == null) {
@@ -382,6 +457,10 @@ public class FragmentDisplayContext {
 	}
 
 	public List<NavigationItem> getNavigationItems() {
+		if (!_isShowResourcesTab()) {
+			return Collections.emptyList();
+		}
+
 		return new NavigationItemList() {
 			{
 				add(
@@ -394,18 +473,15 @@ public class FragmentDisplayContext {
 							LanguageUtil.get(_httpServletRequest, "fragments"));
 					});
 
-				if (_isScopeGroup()) {
-					add(
-						navigationItem -> {
-							navigationItem.setActive(
-								Objects.equals(_getTabs1(), "resources"));
-							navigationItem.setHref(
-								_getPortletURL(), "tabs1", "resources");
-							navigationItem.setLabel(
-								LanguageUtil.get(
-									_httpServletRequest, "resources"));
-						});
-				}
+				add(
+					navigationItem -> {
+						navigationItem.setActive(
+							Objects.equals(_getTabs1(), "resources"));
+						navigationItem.setHref(
+							_getPortletURL(), "tabs1", "resources");
+						navigationItem.setLabel(
+							LanguageUtil.get(_httpServletRequest, "resources"));
+					});
 			}
 		};
 	}
@@ -484,12 +560,82 @@ public class FragmentDisplayContext {
 		return false;
 	}
 
+	public boolean isSelectedFragmentCollectionContributor() {
+		if (Validator.isNotNull(getFragmentCollectionKey())) {
+			return true;
+		}
+
+		return false;
+	}
+
 	public boolean isViewResources() {
 		if (Objects.equals(_getTabs1(), "resources") && _isScopeGroup()) {
 			return true;
 		}
 
 		return false;
+	}
+
+	public boolean showFragmentCollectionActions() {
+		if (!isSelectedFragmentCollectionContributor()) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private long _getDefaultFragmentCollectionId() {
+		if (Validator.isNotNull(_getSelectedFragmentCollectionKey())) {
+			return 0;
+		}
+
+		List<FragmentCollection> fragmentCollections =
+			FragmentCollectionLocalServiceUtil.getFragmentCollections(
+				_themeDisplay.getScopeGroupId(), 0, 1);
+
+		if (ListUtil.isNotEmpty(fragmentCollections)) {
+			FragmentCollection fragmentCollection = fragmentCollections.get(0);
+
+			return fragmentCollection.getFragmentCollectionId();
+		}
+
+		fragmentCollections =
+			FragmentCollectionLocalServiceUtil.getFragmentCollections(
+				_themeDisplay.getCompanyGroupId(), 0, 1);
+
+		if (ListUtil.isNotEmpty(fragmentCollections)) {
+			FragmentCollection fragmentCollection = fragmentCollections.get(0);
+
+			return fragmentCollection.getFragmentCollectionId();
+		}
+
+		return 0;
+	}
+
+	private String _getDefaultFragmentCollectionKey() {
+		if ((_getSelectedFragmentCollectionId() > 0) ||
+			(_getDefaultFragmentCollectionId() > 0)) {
+
+			return StringPool.BLANK;
+		}
+
+		List<FragmentCollectionContributor> fragmentCollectionContributors =
+			_fragmentCollectionContributorTracker.
+				getFragmentCollectionContributors();
+
+		if (ListUtil.isEmpty(fragmentCollectionContributors)) {
+			return StringPool.BLANK;
+		}
+
+		FragmentCollectionContributor fragmentCollectionContributor =
+			fragmentCollectionContributors.get(0);
+
+		return fragmentCollectionContributor.getFragmentCollectionKey();
+	}
+
+	private FragmentCollectionContributor _getFragmentCollectionContributor() {
+		return _fragmentCollectionContributorTracker.
+			getFragmentCollectionContributor(getFragmentCollectionKey());
 	}
 
 	private String _getKeywords() {
@@ -517,8 +663,20 @@ public class FragmentDisplayContext {
 		PortletURL portletURL = _renderResponse.createRenderURL();
 
 		portletURL.setParameter("mvcRenderCommandName", "/fragment/view");
-		portletURL.setParameter(
-			"fragmentCollectionId", String.valueOf(getFragmentCollectionId()));
+
+		long fragmentCollectionId = getFragmentCollectionId();
+
+		if (fragmentCollectionId > 0) {
+			portletURL.setParameter(
+				"fragmentCollectionId", String.valueOf(fragmentCollectionId));
+		}
+
+		String fragmentCollectionKey = getFragmentCollectionKey();
+
+		if (Validator.isNotNull(fragmentCollectionKey)) {
+			portletURL.setParameter(
+				"fragmentCollectionKey", fragmentCollectionKey);
+		}
 
 		String keywords = _getKeywords();
 
@@ -539,6 +697,15 @@ public class FragmentDisplayContext {
 		}
 
 		return portletURL;
+	}
+
+	private long _getSelectedFragmentCollectionId() {
+		return ParamUtil.getLong(_httpServletRequest, "fragmentCollectionId");
+	}
+
+	private String _getSelectedFragmentCollectionKey() {
+		return ParamUtil.getString(
+			_httpServletRequest, "fragmentCollectionKey");
 	}
 
 	private String _getTabs1() {
@@ -563,8 +730,24 @@ public class FragmentDisplayContext {
 		return false;
 	}
 
+	private boolean _isShowResourcesTab() {
+		if (isSelectedFragmentCollectionContributor()) {
+			return false;
+		}
+
+		if (!_isScopeGroup()) {
+			return false;
+		}
+
+		return true;
+	}
+
+	private SearchContainer _contributedFragmentEntriesSearchContainer;
 	private FragmentCollection _fragmentCollection;
+	private final FragmentCollectionContributorTracker
+		_fragmentCollectionContributorTracker;
 	private Long _fragmentCollectionId;
+	private String _fragmentCollectionKey;
 	private SearchContainer _fragmentEntriesSearchContainer;
 	private FragmentEntry _fragmentEntry;
 	private Long _fragmentEntryId;

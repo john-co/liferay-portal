@@ -1312,15 +1312,43 @@ public class ContentPageEditorDisplayContext {
 			}
 		}
 
+		JSONObject layoutDataJSONObject = JSONFactoryUtil.createJSONObject(
+			_getLayoutData());
+
+		JSONArray structureJSONArray = layoutDataJSONObject.getJSONArray(
+			"structure");
+
+		Iterator<JSONObject> iteratorStructure = structureJSONArray.iterator();
+
+		iteratorStructure.forEachRemaining(
+			structureJSONObject -> {
+				JSONObject configJSONObject = structureJSONObject.getJSONObject(
+					"config");
+
+				if (configJSONObject != null) {
+					JSONObject backgroundImageJSONObject =
+						configJSONObject.getJSONObject("backgroundImage");
+
+					if (backgroundImageJSONObject != null) {
+						SoyContext mappedAssetEntrySoyContext =
+							_getMappedAssetEntrySoyContexts(
+								backgroundImageJSONObject, mappedClassPKs);
+
+						if (mappedAssetEntrySoyContext != null) {
+							mappedAssetEntriesSoyContexts.add(
+								mappedAssetEntrySoyContext);
+						}
+					}
+				}
+			});
+
 		return mappedAssetEntriesSoyContexts;
 	}
 
 	private SoyContext _getMappedAssetEntrySoyContexts(
 		JSONObject jsonObject, List<Long> mappedClassPKs) {
 
-		if (!jsonObject.has("classNameId") || !jsonObject.has("classPK") ||
-			!jsonObject.has("fieldId")) {
-
+		if (!jsonObject.has("classNameId") || !jsonObject.has("classPK")) {
 			return null;
 		}
 

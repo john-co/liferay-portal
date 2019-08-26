@@ -16,6 +16,7 @@ package com.liferay.portal.vulcan.internal.jaxrs.writer.interceptor;
 
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.vulcan.fields.NestedField;
+import com.liferay.portal.vulcan.fields.NestedFieldId;
 import com.liferay.portal.vulcan.internal.fields.NestedFieldsContext;
 import com.liferay.portal.vulcan.internal.fields.NestedFieldsContextThreadLocal;
 import com.liferay.portal.vulcan.internal.fields.servlet.NestedFieldsHttpServletRequestWrapperTest;
@@ -79,10 +80,12 @@ public class NestedFieldsWriterInterceptorTest {
 			Mockito.any(Message.class)
 		);
 
-		_productResourceImpl = new ProductResourceImpl();
+		_productResource_v1_0_Impl = new ProductResource_v1_0_Impl();
+		_productResource_v2_0_Impl = new ProductResource_v2_0_Impl();
 
 		Mockito.doReturn(
-			Collections.singletonList(_productResourceImpl)
+			Arrays.asList(
+				_productResource_v1_0_Impl, _productResource_v2_0_Impl)
 		).when(
 			_nestedFieldsWriterInterceptor
 		).getResources();
@@ -93,8 +96,8 @@ public class NestedFieldsWriterInterceptorTest {
 
 	@Test
 	public void testGetNestedFieldsForMultipleItems() throws Exception {
-		Product product1 = _toProduct(1L);
-		Product product2 = _toProduct(2L);
+		Product product1 = _toProduct(1L, null);
+		Product product2 = _toProduct(2L, null);
 
 		Mockito.when(
 			_writerInterceptorContext.getEntity()
@@ -114,7 +117,8 @@ public class NestedFieldsWriterInterceptorTest {
 		NestedFieldsContextThreadLocal.setNestedFieldsContext(
 			new NestedFieldsContext(
 				Arrays.asList("productOptions", "skus"), new MessageImpl(),
-				new MultivaluedHashMap<>(), new MultivaluedHashMap<>()));
+				new MultivaluedHashMap<>(), "v1.0",
+				new MultivaluedHashMap<>()));
 
 		_nestedFieldsWriterInterceptor.aroundWriteTo(_writerInterceptorContext);
 
@@ -122,15 +126,15 @@ public class NestedFieldsWriterInterceptorTest {
 
 		Assert.assertEquals(Arrays.toString(skus), 4, skus.length);
 
-		ProductOption[] productOptionsDTOs = product1.getProductOptions();
+		ProductOption[] productOptions = product1.getProductOptions();
 
 		Assert.assertEquals(
-			Arrays.toString(productOptionsDTOs), 3, productOptionsDTOs.length);
+			Arrays.toString(productOptions), 3, productOptions.length);
 	}
 
 	@Test
 	public void testGetNestedFieldsForSingleItem() throws Exception {
-		Product product = _toProduct(1L);
+		Product product = _toProduct(1L, null);
 
 		Mockito.when(
 			_writerInterceptorContext.getEntity()
@@ -150,7 +154,7 @@ public class NestedFieldsWriterInterceptorTest {
 		NestedFieldsContextThreadLocal.setNestedFieldsContext(
 			new NestedFieldsContext(
 				Arrays.asList("productOptions", "skus"), new MessageImpl(),
-				_getPathParameters(), new MultivaluedHashMap<>()));
+				_getPathParameters(), "v1.0", new MultivaluedHashMap<>()));
 
 		_nestedFieldsWriterInterceptor.aroundWriteTo(_writerInterceptorContext);
 
@@ -165,8 +169,104 @@ public class NestedFieldsWriterInterceptorTest {
 	}
 
 	@Test
+	public void testGetNestedFieldsWithDeeplyNestedFields() throws Exception {
+		Product product1 = _toProduct(1L, null);
+		Product product2 = _toProduct(2L, null);
+
+		Mockito.when(
+			_writerInterceptorContext.getEntity()
+		).thenReturn(
+			Arrays.asList(product1, product2)
+		);
+
+		Mockito.doReturn(
+			new NestedFieldsHttpServletRequestWrapperTest.
+				MockHttpServletRequest()
+		).when(
+			_nestedFieldsWriterInterceptor
+		).getHttpServletRequest(
+			Mockito.any(Message.class)
+		);
+
+		NestedFieldsContextThreadLocal.setNestedFieldsContext(
+			new NestedFieldsContext(
+				Arrays.asList(
+					"productOptions", "productOptions.productOptionValues"),
+				new MessageImpl(), new MultivaluedHashMap<>(), "v1.0",
+				new MultivaluedHashMap<>()));
+
+		_nestedFieldsWriterInterceptor.aroundWriteTo(_writerInterceptorContext);
+
+		ProductOption[] productOptions = product1.getProductOptions();
+
+		Assert.assertEquals(
+			Arrays.toString(productOptions), 3, productOptions.length);
+
+		ProductOptionValue[] productOptionValues =
+			productOptions[0].getProductOptionValues();
+
+		Assert.assertEquals(
+			Arrays.toString(productOptionValues), 3,
+			productOptionValues.length);
+
+		productOptionValues = productOptions[1].getProductOptionValues();
+
+		Assert.assertEquals(
+			Arrays.toString(productOptionValues), 2,
+			productOptionValues.length);
+
+		productOptionValues = productOptions[2].getProductOptionValues();
+
+		Assert.assertEquals(
+			Arrays.toString(productOptionValues), 0,
+			productOptionValues.length);
+	}
+
+	@Test
+	public void testGetNestedFieldsWithNestedFieldId() throws Exception {
+		Product product = _toProduct(1L, "externalCode");
+
+		Mockito.when(
+			_writerInterceptorContext.getEntity()
+		).thenReturn(
+			product
+		);
+
+		Mockito.doReturn(
+			new NestedFieldsHttpServletRequestWrapperTest.
+				MockHttpServletRequest()
+		).when(
+			_nestedFieldsWriterInterceptor
+		).getHttpServletRequest(
+			Mockito.any(Message.class)
+		);
+
+		NestedFieldsContextThreadLocal.setNestedFieldsContext(
+			new NestedFieldsContext(
+				Collections.singletonList("categories"), new MessageImpl(),
+				_getPathParameters(), "v1.0", new MultivaluedHashMap<>()));
+
+		_nestedFieldsWriterInterceptor.aroundWriteTo(_writerInterceptorContext);
+
+		Category[] categories = product.getCategories();
+
+		Assert.assertEquals(Arrays.toString(categories), 3, categories.length);
+
+		NestedFieldsContextThreadLocal.setNestedFieldsContext(
+			new NestedFieldsContext(
+				Collections.singletonList("categories"), new MessageImpl(),
+				_getPathParameters(), "v2.0", new MultivaluedHashMap<>()));
+
+		_nestedFieldsWriterInterceptor.aroundWriteTo(_writerInterceptorContext);
+
+		categories = product.getCategories();
+
+		Assert.assertEquals(Arrays.toString(categories), 2, categories.length);
+	}
+
+	@Test
 	public void testGetNestedFieldsWithNonexistendFieldName() throws Exception {
-		Product product = _toProduct(1L);
+		Product product = _toProduct(1L, null);
 
 		Mockito.when(
 			_writerInterceptorContext.getEntity()
@@ -177,7 +277,7 @@ public class NestedFieldsWriterInterceptorTest {
 		NestedFieldsContextThreadLocal.setNestedFieldsContext(
 			new NestedFieldsContext(
 				Collections.emptyList(), new MessageImpl(),
-				_getPathParameters(), new MultivaluedHashMap<>()));
+				_getPathParameters(), "v1.0", new MultivaluedHashMap<>()));
 
 		_nestedFieldsWriterInterceptor.aroundWriteTo(_writerInterceptorContext);
 
@@ -188,7 +288,7 @@ public class NestedFieldsWriterInterceptorTest {
 		NestedFieldsContextThreadLocal.setNestedFieldsContext(
 			new NestedFieldsContext(
 				Collections.singletonList("nonexistent"), new MessageImpl(),
-				_getPathParameters(), new MultivaluedHashMap<>()));
+				_getPathParameters(), "v1.0", new MultivaluedHashMap<>()));
 
 		_nestedFieldsWriterInterceptor.aroundWriteTo(_writerInterceptorContext);
 
@@ -199,7 +299,7 @@ public class NestedFieldsWriterInterceptorTest {
 
 	@Test
 	public void testGetNestedFieldsWithPagination() throws Exception {
-		Product product = _toProduct(1L);
+		Product product = _toProduct(1L, null);
 
 		Mockito.when(
 			_writerInterceptorContext.getEntity()
@@ -221,7 +321,7 @@ public class NestedFieldsWriterInterceptorTest {
 		NestedFieldsContextThreadLocal.setNestedFieldsContext(
 			new NestedFieldsContext(
 				Collections.singletonList("skus"), new MessageImpl(),
-				_getPathParameters(), new MultivaluedHashMap<>()));
+				_getPathParameters(), "v1.0", new MultivaluedHashMap<>()));
 
 		_nestedFieldsWriterInterceptor.aroundWriteTo(_writerInterceptorContext);
 
@@ -232,7 +332,7 @@ public class NestedFieldsWriterInterceptorTest {
 
 	@Test
 	public void testGetNestedFieldsWithQueryParameter() throws IOException {
-		Product product = _toProduct(1L);
+		Product product = _toProduct(1L, null);
 
 		Mockito.when(
 			_writerInterceptorContext.getEntity()
@@ -262,7 +362,7 @@ public class NestedFieldsWriterInterceptorTest {
 		NestedFieldsContextThreadLocal.setNestedFieldsContext(
 			new NestedFieldsContext(
 				Collections.singletonList("productOptions"), new MessageImpl(),
-				_getPathParameters(), queryParameters));
+				_getPathParameters(), "v1.0", queryParameters));
 
 		_nestedFieldsWriterInterceptor.aroundWriteTo(_writerInterceptorContext);
 
@@ -277,8 +377,39 @@ public class NestedFieldsWriterInterceptorTest {
 	}
 
 	@Test
+	public void testGetNestedFieldsWithResourceVersioning() throws Exception {
+		Product product = _toProduct(1L, null);
+
+		Mockito.when(
+			_writerInterceptorContext.getEntity()
+		).thenReturn(
+			product
+		);
+
+		Mockito.doReturn(
+			new NestedFieldsHttpServletRequestWrapperTest.
+				MockHttpServletRequest()
+		).when(
+			_nestedFieldsWriterInterceptor
+		).getHttpServletRequest(
+			Mockito.any(Message.class)
+		);
+
+		NestedFieldsContextThreadLocal.setNestedFieldsContext(
+			new NestedFieldsContext(
+				Collections.singletonList("skus"), new MessageImpl(),
+				_getPathParameters(), "v2.0", new MultivaluedHashMap<>()));
+
+		_nestedFieldsWriterInterceptor.aroundWriteTo(_writerInterceptorContext);
+
+		Sku[] skus = product.getSkus();
+
+		Assert.assertEquals(Arrays.toString(skus), 6, skus.length);
+	}
+
+	@Test
 	public void testInjectResourceContexts() throws Exception {
-		Product product = _toProduct(1L);
+		Product product = _toProduct(1L, null);
 
 		Mockito.when(
 			_writerInterceptorContext.getEntity()
@@ -298,21 +429,47 @@ public class NestedFieldsWriterInterceptorTest {
 		NestedFieldsContextThreadLocal.setNestedFieldsContext(
 			new NestedFieldsContext(
 				Arrays.asList("productOptions", "skus"), new MessageImpl(),
-				_getPathParameters(), new MultivaluedHashMap<>()));
+				_getPathParameters(), "v1.0", new MultivaluedHashMap<>()));
 
-		Assert.assertNull(_productResourceImpl.themeDisplay);
+		Assert.assertNull(_productResource_v1_0_Impl.themeDisplay);
 
 		_nestedFieldsWriterInterceptor.aroundWriteTo(_writerInterceptorContext);
 
-		Assert.assertNotNull(_productResourceImpl.themeDisplay);
+		Assert.assertNotNull(_productResource_v1_0_Impl.themeDisplay);
 	}
 
-	private static Product _toProduct(long id) {
+	private static Category _toCategory(long id) {
+		Category category = new Category();
+
+		category.setId(id);
+
+		return category;
+	}
+
+	private static Product _toProduct(long id, String externalCode) {
 		Product product = new Product();
 
+		product.setExternalCode(externalCode);
 		product.setId(id);
 
 		return product;
+	}
+
+	private static ProductOption _toProductOption(long id, String name) {
+		ProductOption productOption = new ProductOption();
+
+		productOption.setId(id);
+		productOption.setName(name);
+
+		return productOption;
+	}
+
+	private static ProductOptionValue _toProductOptionValue(long id) {
+		ProductOptionValue productOptionValue = new ProductOptionValue();
+
+		productOptionValue.setId(id);
+
+		return productOptionValue;
 	}
 
 	private static Sku _toSku(long id) {
@@ -332,13 +489,67 @@ public class NestedFieldsWriterInterceptorTest {
 	}
 
 	private NestedFieldsWriterInterceptor _nestedFieldsWriterInterceptor;
-	private ProductResourceImpl _productResourceImpl;
+	private ProductResource_v1_0_Impl _productResource_v1_0_Impl;
+	private ProductResource_v2_0_Impl _productResource_v2_0_Impl;
 	private WriterInterceptorContext _writerInterceptorContext;
 
-	private static class BaseProductResourceImpl implements ProductResource {
+	@Path("/v1.0")
+	private static class BaseProductResource_v1_0_Impl
+		implements ProductResource_v1_0 {
 
 		@GET
-		@Path("/{id}/productOption")
+		@Path("/products/{id}/productOptions")
+		@Produces("application/*")
+		public List<ProductOption> getProductOptions(
+			@NotNull @PathParam("id") Long id,
+			@QueryParam("name") String name) {
+
+			return Collections.emptyList();
+		}
+
+		@GET
+		@Path("/productOptions/{id}/productOptionValues")
+		@Produces("application/*")
+		public List<ProductOptionValue> getProductOptionValues(
+			@NotNull @PathParam("id") Long id) {
+
+			return Collections.emptyList();
+		}
+
+		@GET
+		@Path("/products")
+		@Produces("application/*")
+		public List<Product> getProducts() {
+			return Collections.emptyList();
+		}
+
+		@GET
+		@Path("/products/{id}/skus")
+		@Produces("application/*")
+		public Page<Sku> getSkus(
+			@NotNull @PathParam("id") Long id,
+			@Context @NotNull Pagination pagination) {
+
+			return Page.of(Collections.emptyList());
+		}
+
+	}
+
+	@Path("/v2.0")
+	private static class BaseProductResource_v2_0_Impl
+		implements ProductResource_v2_0 {
+
+		@GET
+		@Path("/products/{productExternalCode}/categories")
+		@Produces("application/*")
+		public List<Category> getCategories(
+			@NotNull @PathParam("productExternalCode") String externalCode) {
+
+			return Collections.emptyList();
+		}
+
+		@GET
+		@Path("/products/{id}/productOptions")
 		@Produces("application/*")
 		public List<ProductOption> getProductOptions(
 			@NotNull @PathParam("id") Long id,
@@ -355,7 +566,7 @@ public class NestedFieldsWriterInterceptorTest {
 		}
 
 		@GET
-		@Path("/{id}/sku")
+		@Path("/products/{id}/skus")
 		@Produces("application/*")
 		public Page<Sku> getSkus(
 			@NotNull @PathParam("id") Long id,
@@ -363,6 +574,29 @@ public class NestedFieldsWriterInterceptorTest {
 
 			return Page.of(Collections.emptyList());
 		}
+
+	}
+
+	private static class Category {
+
+		public Long getId() {
+			return _id;
+		}
+
+		public String getName() {
+			return _name;
+		}
+
+		public void setId(Long id) {
+			_id = id;
+		}
+
+		public void setName(String name) {
+			_name = name;
+		}
+
+		private Long _id;
+		private String _name;
 
 	}
 
@@ -400,6 +634,14 @@ public class NestedFieldsWriterInterceptorTest {
 
 	private static class Product {
 
+		public Category[] getCategories() {
+			return categories;
+		}
+
+		public String getExternalCode() {
+			return externalCode;
+		}
+
 		public Long getId() {
 			return id;
 		}
@@ -410,6 +652,14 @@ public class NestedFieldsWriterInterceptorTest {
 
 		public Sku[] getSkus() {
 			return skus;
+		}
+
+		public void setCategories(Category[] categories) {
+			this.categories = categories;
+		}
+
+		public void setExternalCode(String externalCode) {
+			this.externalCode = externalCode;
 		}
 
 		public void setId(Long id) {
@@ -424,6 +674,8 @@ public class NestedFieldsWriterInterceptorTest {
 			this.skus = skus;
 		}
 
+		protected Category[] categories;
+		protected String externalCode;
 		protected Long id;
 		protected ProductOption[] productOptions;
 		protected Sku[] skus;
@@ -433,27 +685,53 @@ public class NestedFieldsWriterInterceptorTest {
 	private static class ProductOption {
 
 		public Long getId() {
-			return _id;
+			return id;
 		}
 
 		public String getName() {
-			return _name;
+			return name;
+		}
+
+		public ProductOptionValue[] getProductOptionValues() {
+			return productOptionValues;
 		}
 
 		public void setId(Long id) {
-			_id = id;
+			this.id = id;
 		}
 
 		public void setName(String name) {
-			_name = name;
+			this.name = name;
 		}
 
-		private Long _id;
-		private String _name;
+		public void setProductOptionValues(
+			ProductOptionValue[] productOptionValues) {
+
+			this.productOptionValues = productOptionValues;
+		}
+
+		protected Long id;
+		protected String name;
+		protected ProductOptionValue[] productOptionValues;
 
 	}
 
-	private static class ProductResourceImpl extends BaseProductResourceImpl {
+	private static class ProductOptionValue {
+
+		public Long getId() {
+			return id;
+		}
+
+		public void setId(Long id) {
+			this.id = id;
+		}
+
+		protected Long id;
+
+	}
+
+	private static class ProductResource_v1_0_Impl
+		extends BaseProductResource_v1_0_Impl {
 
 		@NestedField("productOptions")
 		@Override
@@ -467,12 +745,109 @@ public class NestedFieldsWriterInterceptorTest {
 				_toProductOption(3L, "test3"));
 
 			if (name != null) {
-				Stream<ProductOption> productOptionDTOStream =
+				Stream<ProductOption> productOptionStream =
 					productOptions.stream();
 
-				productOptions = productOptionDTOStream.filter(
-					productOptionDTO -> Objects.equals(
-						productOptionDTO.getName(), name)
+				productOptions = productOptionStream.filter(
+					productOption -> Objects.equals(
+						productOption.getName(), name)
+				).collect(
+					Collectors.toList()
+				);
+			}
+
+			return productOptions;
+		}
+
+		@NestedField("productOptionValues")
+		public List<ProductOptionValue> getProductOptionValues(Long id) {
+			if (id == 1) {
+				return Arrays.asList(
+					_toProductOptionValue(1L), _toProductOptionValue(2L),
+					_toProductOptionValue(3L));
+			}
+			else if (id == 2) {
+				return Arrays.asList(
+					_toProductOptionValue(4L), _toProductOptionValue(5L));
+			}
+			else {
+				return Collections.emptyList();
+			}
+		}
+
+		@GET
+		@Path("/products")
+		@Produces("application/*")
+		public List<Product> getProducts() {
+			return Arrays.asList(_toProduct(1, null), _toProduct(2, null));
+		}
+
+		@NestedField("skus")
+		@Override
+		public Page<Sku> getSkus(Long id, Pagination pagination) {
+			if (!Objects.equals(id, 1L)) {
+				return Page.of(Collections.emptyList());
+			}
+
+			List<Sku> skus = Arrays.asList(
+				_toSku(1L), _toSku(2L), _toSku(3L), _toSku(4L));
+
+			skus = skus.subList(
+				pagination.getStartPosition(),
+				Math.min(pagination.getEndPosition(), skus.size()));
+
+			return Page.of(skus);
+		}
+
+		@Context
+		public ThemeDisplay themeDisplay;
+
+		@NestedField("categories")
+		protected List<Category> getCategories(
+			@NestedFieldId("externalCode") String externalCode) {
+
+			if (!Objects.equals(externalCode, "externalCode")) {
+				return Collections.emptyList();
+			}
+
+			return Arrays.asList(
+				_toCategory(1L), _toCategory(2L), _toCategory(3L));
+		}
+
+	}
+
+	private static class ProductResource_v2_0_Impl
+		extends BaseProductResource_v2_0_Impl {
+
+		@NestedField("categories")
+		public List<Category> getCategories(
+			@NestedFieldId("externalCode") String externalCode) {
+
+			if (!Objects.equals(externalCode, "externalCode")) {
+				return Collections.emptyList();
+			}
+
+			return Arrays.asList(_toCategory(1L), _toCategory(2L));
+		}
+
+		@NestedField("productOptions")
+		@Override
+		public List<ProductOption> getProductOptions(Long id, String name) {
+			if (id != 1) {
+				return Collections.emptyList();
+			}
+
+			List<ProductOption> productOptions = Arrays.asList(
+				_toProductOption(1L, "test1"), _toProductOption(2L, "test2"),
+				_toProductOption(3L, "test3"));
+
+			if (name != null) {
+				Stream<ProductOption> productOptionStream =
+					productOptions.stream();
+
+				productOptions = productOptionStream.filter(
+					productOption -> Objects.equals(
+						productOption.getName(), name)
 				).collect(
 					Collectors.toList()
 				);
@@ -485,10 +860,10 @@ public class NestedFieldsWriterInterceptorTest {
 		@Path("/products")
 		@Produces("application/*")
 		public List<Product> getProducts() {
-			return Arrays.asList(_toProduct(1), _toProduct(2));
+			return Arrays.asList(_toProduct(1, null), _toProduct(2, null));
 		}
 
-		@NestedField("skus")
+		@NestedField(parentClass = Product.class, value = "skus")
 		@Override
 		public Page<Sku> getSkus(Long id, Pagination pagination) {
 			if (!Objects.equals(id, 1L)) {
@@ -496,7 +871,8 @@ public class NestedFieldsWriterInterceptorTest {
 			}
 
 			List<Sku> skus = Arrays.asList(
-				_toSku(1L), _toSku(2L), _toSku(3L), _toSku(4L));
+				_toSku(1L), _toSku(2L), _toSku(3L), _toSku(4L), _toSku(5L),
+				_toSku(6L));
 
 			skus = skus.subList(
 				pagination.getStartPosition(),
@@ -522,14 +898,14 @@ public class NestedFieldsWriterInterceptorTest {
 	private static class Sku {
 
 		public Long getId() {
-			return _id;
+			return id;
 		}
 
 		public void setId(Long id) {
-			_id = id;
+			this.id = id;
 		}
 
-		private Long _id;
+		protected Long id;
 
 	}
 
@@ -543,7 +919,21 @@ public class NestedFieldsWriterInterceptorTest {
 
 	}
 
-	private interface ProductResource {
+	private interface ProductResource_v1_0 {
+
+		public List<ProductOption> getProductOptions(Long id, String name);
+
+		public List<ProductOptionValue> getProductOptionValues(Long id);
+
+		public List<Product> getProducts();
+
+		public Page<Sku> getSkus(Long id, Pagination pagination);
+
+	}
+
+	private interface ProductResource_v2_0 {
+
+		public List<Category> getCategories(String externalCode);
 
 		public List<ProductOption> getProductOptions(Long id, String name);
 

@@ -155,28 +155,31 @@ public class ProductMenuAppDeployer implements AppDeployer {
 	}
 
 	private void _deployAppPortlet(long appId, String appName) {
-		Dictionary properties = new HashMapDictionary() {
-			{
-				put("com.liferay.portlet.add-default-resource", true);
-				put("com.liferay.portlet.display-category", "category.hidden");
-				put("com.liferay.portlet.use-default-template", "true");
-				put("javax.portlet.display-name", appName);
-				put("javax.portlet.name", _getPortletName(appId));
-				put(
-					"javax.portlet.init-param.template-path",
-					"/META-INF/resources/");
-				put("javax.portlet.init-param.view-template", "/view.jsp");
-				put(
-					"javax.portlet.security-role-ref",
-					"administrator,guest,power-user,user ");
-				put("javax.portlet.supports.mime-type", "text/html ");
-			}
-		};
-
 		_addServiceRegistration(
 			appId,
 			_bundleContext.registerService(
-				Portlet.class, new ProductMenuAppPortlet(), properties));
+				Portlet.class, new ProductMenuAppPortlet(),
+				new HashMapDictionary() {
+					{
+						put("com.liferay.portlet.add-default-resource", true);
+						put(
+							"com.liferay.portlet.display-category",
+							"category.hidden");
+						put("com.liferay.portlet.use-default-template", "true");
+						put("javax.portlet.display-name", appName);
+						put("javax.portlet.name", _getPortletName(appId));
+						put(
+							"javax.portlet.init-param.template-path",
+							"/META-INF/resources/");
+						put(
+							"javax.portlet.init-param.view-template",
+							"/view.jsp");
+						put(
+							"javax.portlet.security-role-ref",
+							"administrator,guest,power-user,user ");
+						put("javax.portlet.supports.mime-type", "text/html ");
+					}
+				}));
 	}
 
 	private String _getPanelCategoryKey(long appId) {

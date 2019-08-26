@@ -19,6 +19,13 @@ import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.dao.jdbc.DataAccess;
 import com.liferay.portal.kernel.test.util.DBAssertionUtil;
 import com.liferay.portal.kernel.upgrade.UpgradeMVCCVersion;
+import com.liferay.portal.kernel.xml.Document;
+import com.liferay.portal.kernel.xml.Element;
+import com.liferay.portal.kernel.xml.UnsecureSAXReaderUtil;
+
+import java.io.InputStream;
+
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
@@ -68,6 +75,22 @@ public class UpgradeMVCCVersionTest extends UpgradeMVCCVersion {
 
 		DBAssertionUtil.assertColumns(
 			_TABLE_NAME, "id", "userId", "mvccversion");
+	}
+
+	@Override
+	protected List<Element> getClassElements() throws Exception {
+		Thread currentThread = Thread.currentThread();
+
+		ClassLoader classLoader = currentThread.getContextClassLoader();
+
+		InputStream inputStream = classLoader.getResourceAsStream(
+			"META-INF/test-portal-hbm.xml");
+
+		Document document = UnsecureSAXReaderUtil.read(inputStream);
+
+		Element rootElement = document.getRootElement();
+
+		return rootElement.elements("class");
 	}
 
 	@Override

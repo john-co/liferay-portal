@@ -90,6 +90,10 @@ public class DDMRESTDataProvider implements DDMDataProvider {
 			Throwable cause = he.getCause();
 
 			if (cause instanceof ConnectException) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(cause, cause);
+				}
+
 				DDMDataProviderResponse.Builder builder =
 					DDMDataProviderResponse.Builder.newBuilder();
 
@@ -513,7 +517,7 @@ public class DDMRESTDataProvider implements DDMDataProvider {
 		DDMRESTDataProvider.class);
 
 	private static final Pattern _pathParameterPattern = Pattern.compile(
-		"\\{(.*)\\}");
+		"\\{(.+?)\\}");
 
 	private PortalCache<String, DDMDataProviderResponse> _portalCache;
 

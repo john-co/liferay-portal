@@ -87,7 +87,7 @@ function SegmentsExperimentsSidebar({
 					active={editionModal.active}
 					description={editionModal.description}
 					error={editionModal.error}
-					goal={editionModal.goal}
+					goal={editionModal.goal.value}
 					goals={initialGoals}
 					name={editionModal.name}
 					onClose={_handleEditModalClose}
@@ -127,7 +127,7 @@ function SegmentsExperimentsSidebar({
 			classPK: page.classPK,
 			description: segmentsExperiment.description,
 			goal: segmentsExperiment.goal,
-			goalTarget: '',
+			goalTarget: segmentsExperiment.goalTarget,
 			name: segmentsExperiment.name,
 			segmentsExperienceId: segmentsExperiment.segmentsExperienceId
 		};
@@ -149,12 +149,13 @@ function SegmentsExperimentsSidebar({
 				setSegmentsExperiment({
 					description: segmentsExperiment.description,
 					goal: segmentsExperiment.goal,
-					goalTarget: segmentsExperiment.goalTarget,
 					name: segmentsExperiment.name,
+					segmentsEntryName: segmentsExperiment.segmentsEntryName,
 					segmentsExperienceId:
 						segmentsExperiment.segmentsExperienceId,
 					segmentsExperimentId:
-						segmentsExperiment.segmentsExperimentId
+						segmentsExperiment.segmentsExperimentId,
+					status: segmentsExperiment.status
 				});
 			})
 			.catch(function _errorCallback() {
@@ -163,6 +164,7 @@ function SegmentsExperimentsSidebar({
 					description: segmentsExperiment.description,
 					error: Liferay.Language.get('create-test-error'),
 					name: segmentsExperiment.name,
+					segmentsEntryName: segmentsExperiment.segmentsEntryName,
 					segmentsExperienceId:
 						segmentsExperiment.segmentsExperienceId
 				});
@@ -174,10 +176,11 @@ function SegmentsExperimentsSidebar({
 			active: true,
 			description: segmentsExperiment.description,
 			goal: segmentsExperiment.goal,
-			goalTarget: '',
 			name: segmentsExperiment.name,
+			segmentsEntryName: segmentsExperiment.segmentsEntryName,
 			segmentsExperienceId: segmentsExperiment.segmentsExperienceId,
-			segmentsExperimentId: segmentsExperiment.segmentsExperimentId
+			segmentsExperimentId: segmentsExperiment.segmentsExperimentId,
+			status: segmentsExperiment.status
 		});
 	}
 
@@ -185,7 +188,7 @@ function SegmentsExperimentsSidebar({
 		const body = {
 			description: segmentsExperiment.description,
 			goal: segmentsExperiment.goal,
-			goalTarget: '',
+			goalTarget: segmentsExperiment.goalTarget,
 			name: segmentsExperiment.name,
 			segmentsExperimentId: segmentsExperiment.segmentsExperimentId
 		};
@@ -203,10 +206,12 @@ function SegmentsExperimentsSidebar({
 					description: segmentsExperiment.description,
 					goal: segmentsExperiment.goal,
 					name: segmentsExperiment.name,
+					segmentsEntryName: segmentsExperiment.segmentsEntryName,
 					segmentsExperienceId:
 						segmentsExperiment.segmentsExperienceId,
 					segmentsExperimentId:
-						segmentsExperiment.segmentsExperimentId
+						segmentsExperiment.segmentsExperimentId,
+					status: segmentsExperiment.status
 				});
 			})
 			.catch(function _errorCallback() {
@@ -215,10 +220,12 @@ function SegmentsExperimentsSidebar({
 					description: segmentsExperiment.description,
 					error: Liferay.Language.get('edit-test-error'),
 					name: segmentsExperiment.name,
+					segmentsEntryName: segmentsExperiment.segmentsEntryName,
 					segmentsExperienceId:
 						segmentsExperiment.segmentsExperienceId,
 					segmentsExperimentId:
-						segmentsExperiment.segmentsExperimentId
+						segmentsExperiment.segmentsExperimentId,
+					status: segmentsExperiment.status
 				});
 			});
 	}

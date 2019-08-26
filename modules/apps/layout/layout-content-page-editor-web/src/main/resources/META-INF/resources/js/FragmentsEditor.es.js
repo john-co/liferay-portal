@@ -37,6 +37,16 @@ import {Store} from './store/store.es';
 import templates from './FragmentsEditor.soy';
 
 /**
+ * DOM selector where the fragmentEntryLinks are rendered
+ */
+const WRAPPER_SELECTOR = '.fragment-entry-link-list-wrapper';
+
+/**
+ * DOM selector where the sidebar is rendered
+ */
+const SIDEBAR_SELECTOR = '.fragments-editor-sidebar';
+
+/**
  * FragmentsEditor
  * @review
  */
@@ -186,7 +196,11 @@ class FragmentsEditor extends Component {
 				appendItem: this._shiftPressed,
 				type: UPDATE_ACTIVE_ITEM
 			});
-		} else if (dom.closest(event.target, '.fragment-entry-link-list')) {
+		} else if (
+			(dom.closest(event.target, WRAPPER_SELECTOR) ||
+				event.target === document.querySelector(WRAPPER_SELECTOR)) &&
+			!dom.closest(event.target, SIDEBAR_SELECTOR)
+		) {
 			this.store.dispatch({
 				type: CLEAR_ACTIVE_ITEM
 			});

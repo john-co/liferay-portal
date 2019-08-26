@@ -148,6 +148,7 @@ public class SegmentsExperimentDisplayContext {
 				).put(
 					"segmentsExperiment",
 					SegmentsExperimentUtil.toSegmentsExperimentJSONObject(
+						locale,
 						_getDraftSegmentsExperimentOptional(
 							segmentsExperience.getSegmentsExperienceId()
 						).orElse(
@@ -167,6 +168,7 @@ public class SegmentsExperimentDisplayContext {
 			).put(
 				"segmentsExperiment",
 				SegmentsExperimentUtil.toSegmentsExperimentJSONObject(
+					locale,
 					_getDraftSegmentsExperimentOptional(
 						SegmentsExperienceConstants.ID_DEFAULT
 					).orElse(
@@ -198,9 +200,11 @@ public class SegmentsExperimentDisplayContext {
 		return segmentsExperimentGoalsJSONArray;
 	}
 
-	public JSONObject getSegmentsExperimentJSONObject() throws PortalException {
+	public JSONObject getSegmentsExperimentJSONObject(Locale locale)
+		throws PortalException {
+
 		return SegmentsExperimentUtil.toSegmentsExperimentJSONObject(
-			_getSegmentsExperiment());
+			locale, _getSegmentsExperiment());
 	}
 
 	public JSONArray getSegmentsExperimentRelsJSONArray(Locale locale)
@@ -235,12 +239,11 @@ public class SegmentsExperimentDisplayContext {
 			return _segmentsExperienceId;
 		}
 
-		HttpServletRequest originalHttpServletRequest =
-			_portal.getOriginalServletRequest(_httpServletRequest);
+		_segmentsExperienceId = _getRequestSegmentsExperienceId();
 
-		_segmentsExperienceId = ParamUtil.getLong(
-			originalHttpServletRequest, "segmentsExperienceId",
-			SegmentsExperienceConstants.ID_DEFAULT);
+		if (_segmentsExperienceId == -1) {
+			_segmentsExperienceId = SegmentsExperienceConstants.ID_DEFAULT;
+		}
 
 		return _segmentsExperienceId;
 	}
@@ -272,9 +275,53 @@ public class SegmentsExperimentDisplayContext {
 		return Optional.ofNullable(segmentsExperiment);
 	}
 
+	private long _getRequestSegmentsExperienceId() {
+		HttpServletRequest originalHttpServletRequest =
+			_portal.getOriginalServletRequest(_httpServletRequest);
+
+		return ParamUtil.getLong(
+			originalHttpServletRequest, "segmentsExperienceId", -1);
+	}
+
+	private String _getRequestSegmentsExperimentKey() {
+		HttpServletRequest originalHttpServletRequest =
+			_portal.getOriginalServletRequest(_httpServletRequest);
+
+		return ParamUtil.getString(
+			originalHttpServletRequest, "segmentsExperimentKey");
+	}
+
 	private SegmentsExperiment _getSegmentsExperiment() throws PortalException {
 		if (_segmentsExperiment != null) {
 			return _segmentsExperiment;
+		}
+
+		long requestSegmentsExperienceId = _getRequestSegmentsExperienceId();
+
+		if (requestSegmentsExperienceId != -1) {
+			_segmentsExperiment = _getDraftSegmentsExperimentOptional(
+				getSelectedSegmentsExperienceId()
+			).orElse(
+				null
+			);
+
+			return _segmentsExperiment;
+		}
+
+		String requestSegmentsExperimentKey =
+			_getRequestSegmentsExperimentKey();
+
+		if (Validator.isNotNull(requestSegmentsExperimentKey)) {
+			SegmentsExperiment segmentsExperiment =
+				_segmentsExperimentService.fetchSegmentsExperiment(
+					_themeDisplay.getScopeGroupId(),
+					requestSegmentsExperimentKey);
+
+			if (segmentsExperiment != null) {
+				_segmentsExperiment = segmentsExperiment;
+
+				return _segmentsExperiment;
+			}
 		}
 
 		_segmentsExperiment = _getDraftSegmentsExperimentOptional(

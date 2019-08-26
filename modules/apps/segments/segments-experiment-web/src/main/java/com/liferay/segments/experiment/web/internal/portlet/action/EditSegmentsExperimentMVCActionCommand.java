@@ -99,6 +99,9 @@ public class EditSegmentsExperimentMVCActionCommand
 	private JSONObject _editSegmentsExperiment(ActionRequest actionRequest)
 		throws PortalException {
 
+		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
 		SegmentsExperiment segmentsExperiment =
 			_segmentsExperimentService.updateSegmentsExperiment(
 				ParamUtil.getLong(actionRequest, "segmentsExperimentId"),
@@ -110,7 +113,7 @@ public class EditSegmentsExperimentMVCActionCommand
 		return JSONUtil.put(
 			"segmentsExperiment",
 			SegmentsExperimentUtil.toSegmentsExperimentJSONObject(
-				segmentsExperiment));
+				themeDisplay.getLocale(), segmentsExperiment));
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(

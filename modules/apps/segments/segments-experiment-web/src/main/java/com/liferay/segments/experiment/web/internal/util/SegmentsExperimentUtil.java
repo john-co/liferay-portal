@@ -17,13 +17,18 @@ package com.liferay.segments.experiment.web.internal.util;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.json.JSONUtil;
+import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.util.PrefsPropsUtil;
+import com.liferay.portal.kernel.util.ResourceBundleUtil;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.segments.constants.SegmentsExperimentConstants;
 import com.liferay.segments.model.SegmentsExperiment;
 import com.liferay.segments.model.SegmentsExperimentRel;
 
 import java.util.Locale;
+import java.util.Optional;
+import java.util.ResourceBundle;
 
 /**
  * @author David Arques
@@ -48,30 +53,49 @@ public class SegmentsExperimentUtil {
 		return true;
 	}
 
+	public static JSONObject toGoalJSONObject(
+		Locale locale, UnicodeProperties typeSettingsProperties) {
+
+		ResourceBundle resourceBundle = ResourceBundleUtil.getBundle(
+			"content.Language", locale, SegmentsExperimentUtil.class);
+
+		String goal = typeSettingsProperties.getProperty("goal");
+
+		return JSONUtil.put(
+			"label", LanguageUtil.get(resourceBundle, goal)
+		).put(
+			"target", typeSettingsProperties.getProperty("goalTarget")
+		).put(
+			"value", goal
+		);
+	}
+
 	public static JSONObject toSegmentsExperimentJSONObject(
-		SegmentsExperiment segmentsExperiment) {
+			Locale locale, SegmentsExperiment segmentsExperiment)
+		throws PortalException {
 
 		if (segmentsExperiment == null) {
 			return null;
 		}
 
-		UnicodeProperties typeSettingsProperties =
-			segmentsExperiment.getTypeSettingsProperties();
-
 		return JSONUtil.put(
 			"description", segmentsExperiment.getDescription()
 		).put(
-			"goal", typeSettingsProperties.getProperty("goal")
-		).put(
-			"goalTarget", typeSettingsProperties.getProperty("goalTarget")
+			"goal",
+			toGoalJSONObject(
+				locale, segmentsExperiment.getTypeSettingsProperties())
 		).put(
 			"name", segmentsExperiment.getName()
+		).put(
+			"segmentsEntryName", segmentsExperiment.getSegmentsEntryName(locale)
 		).put(
 			"segmentsExperienceId",
 			String.valueOf(segmentsExperiment.getSegmentsExperienceId())
 		).put(
 			"segmentsExperimentId",
 			String.valueOf(segmentsExperiment.getSegmentsExperimentId())
+		).put(
+			"status", toStatusJSONObject(locale, segmentsExperiment.getStatus())
 		);
 	}
 
@@ -96,6 +120,28 @@ public class SegmentsExperimentUtil {
 		).put(
 			"segmentsExperimentRelId",
 			String.valueOf(segmentsExperimentRel.getSegmentsExperimentRelId())
+		);
+	}
+
+	public static JSONObject toStatusJSONObject(
+		Locale locale, int statusValue) {
+
+		Optional<SegmentsExperimentConstants.Status> statusOptional =
+			SegmentsExperimentConstants.Status.parse(statusValue);
+
+		if (!statusOptional.isPresent()) {
+			return null;
+		}
+
+		SegmentsExperimentConstants.Status status = statusOptional.get();
+
+		ResourceBundle resourceBundle = ResourceBundleUtil.getBundle(
+			"content.Language", locale, SegmentsExperimentUtil.class);
+
+		return JSONUtil.put(
+			"label", LanguageUtil.get(resourceBundle, status.getLabel())
+		).put(
+			"value", status.getValue()
 		);
 	}
 

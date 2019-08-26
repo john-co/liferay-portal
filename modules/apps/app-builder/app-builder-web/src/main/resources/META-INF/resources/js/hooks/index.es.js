@@ -13,5 +13,6 @@
  */
 
 import useKeyDown from './useKeyDown.es';
+import useTitle from './useTitle.es';
 
-export {useKeyDown};
+export {useKeyDown, useTitle};

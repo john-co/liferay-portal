@@ -37,12 +37,21 @@ function Variant({
 			<ClayList.ItemField expand>
 				<ClayList.ItemTitle>
 					<ClayButton
+						className="lfr-portal-tooltip text-truncate"
+						data-title={name}
 						displayType="unstyled"
 						onClick={_handleVariantNavigation}
 					>
-						{control
-							? Liferay.Language.get('variant-control')
-							: name}
+						{control ? (
+							<>
+								<span className="mr-2">
+									{Liferay.Language.get('variant-control')}
+								</span>
+								<ClayIcon symbol="lock" />
+							</>
+						) : (
+							name
+						)}
 					</ClayButton>
 				</ClayList.ItemTitle>
 			</ClayList.ItemField>
@@ -52,6 +61,7 @@ function Variant({
 					<ClayList.ItemField>
 						<ClayButton
 							borderless
+							className="component-action"
 							displayType="secondary"
 							onClick={_handleEditVariantContent}
 							small
@@ -70,6 +80,7 @@ function Variant({
 										'show-actions'
 									)}
 									borderless
+									className="component-action"
 									displayType="secondary"
 									small
 								>

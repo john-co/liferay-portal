@@ -95,7 +95,7 @@
 						value="{$item.editableValues.config ? $item.editableValues.config.href : ''}"
 					>
 				</div>
-			{else}
+			{elseif $_sourceTypes}
 				{call .linkMapping}
 					{param assetBrowserLinks: $assetBrowserLinks /}
 					{param fieldId: $item.editableValues.config.mappedField or $item.editableValues.config.fieldId /}
@@ -113,9 +113,11 @@
 					{param selectedSourceTypeId: $_selectedSourceTypeId /}
 					{param store: $store /}
 				{/call}
+			{else}
+				<p class="mb-0 sheet-text">{msg desc=""}you-must-previously-set-the-mapping-for-this-display-page-template-in-order-to-select-a-content-field{/msg}</p>
 			{/if}
 
-			{if $_targetTypes}
+			{if $_targetTypes and ($_sourceTypes or $linkType == 'manual')}
 				<div class="form-group">
 					<label for="floatingToolbarLinkTargetPanelOption">
 						{msg desc=""}target{/msg}

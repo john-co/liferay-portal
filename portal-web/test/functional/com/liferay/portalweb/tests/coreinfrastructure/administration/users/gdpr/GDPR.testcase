@@ -46,6 +46,8 @@ definition {
 			MessageboardsThread.tearDownCP();
 
 			WikiPage.tearDownCP();
+
+			Site.tearDownCP();
 		}
 	}
 
@@ -219,14 +221,140 @@ definition {
 			userFirstName = "userfn",
 			userLastName = "userln");
 
-		GDPR.deleteEntryFromApplicationCP(
+		GDPR.filterByApplications(
 			applications = "Blogs",
-			itemsCount = "1",
-			rowEntry = "Blogs Entry Title");
+			itemsCount = "1");
+
+		GDPR.deleteEntryCP(rowEntry = "Blogs Entry Title");
 
 		GDPR.viewNoEntryInApplicationCP(applications = "Blogs");
 
 		BlogsNavigator.openBlogsAdmin(siteURLKey = "guest");
+
+		LexiconEntry.viewNoEntry(rowEntry = "Blogs Entry Title");
+	}
+
+	@priority = "4"
+	test DeleteEntryFromPersonalSiteScope {
+		User.logoutPG();
+
+		User.loginUserPG(
+			password = "test",
+			userEmailAddress = "userea@liferay.com");
+
+		UserBar.gotoDropdownItem(dropdownItem = "My Profile");
+
+		ProductMenu.gotoPortlet(
+			category = "Content &amp; Data",
+			panel = "Site Administration",
+			portlet = "Blogs");
+
+		Blogs.addEntry(
+			entryContent = "Blogs Entry Content",
+			entryTitle = "Blogs Entry in My Profile");
+
+		Navigator.openURL();
+
+		UserBar.gotoDropdownItem(dropdownItem = "My Dashboard");
+
+		ProductMenu.gotoPortlet(
+			category = "Content &amp; Data",
+			panel = "Site Administration",
+			portlet = "Blogs");
+
+		Blogs.addEntry(
+			entryContent = "Blogs Entry Content",
+			entryTitle = "Blogs Entry in My Dashboard");
+
+		ProductMenu.gotoPortlet(
+			category = "Content &amp; Data",
+			panel = "Site Administration",
+			portlet = "Message Boards");
+
+		MessageboardsThread.addCP(
+			threadBody = "MB Thread Message Body",
+			threadSubject = "MB Thread Message Subject in My Dashboard");
+
+		User.logoutAndLoginPG(
+			userLoginEmailAddress = "test@liferay.com",
+			userLoginFullName = "Test Test");
+
+		ProductMenu.gotoPortlet(
+			category = "Users",
+			panel = "Control Panel",
+			portlet = "Users and Organizations");
+
+		User.deletePersonalDataCP(
+			userFirstName = "userfn",
+			userLastName = "userln");
+
+		GDPR.filterByScope(scope = "Personal Site");
+
+		GDPR.filterByApplications(
+			applications = "All Applications",
+			itemsCount = "4");
+
+		GDPR.deleteEntryCP();
+
+		AssertElementPresent(
+			key_tab = "Auto Anonymize Data",
+			locator1 = "NavTab#ACTIVE_TAB_LINK");
+
+		GDPR.viewNoEntryInApplicationCP(applications = "All Applications");
+	}
+
+	@priority = "4"
+	test DeleteEntryFromRegularSitesScope {
+		JSONGroup.addGroup(groupName = "Site Name");
+
+		JSONLayout.addPublicLayout(
+			groupName = "Site Name",
+			layoutName = "Site Page 1");
+
+		JSONUser.addUserToSite(
+			groupName = "Site Name",
+			userEmailAddress = "userea@liferay.com");
+
+		User.logoutPG();
+
+		User.loginUserPG(
+			password = "test",
+			userEmailAddress = "userea@liferay.com");
+
+		BlogsNavigator.openBlogsAdmin(siteURLKey = "site-name");
+
+		Blogs.addEntry(
+			entryContent = "Blogs Entry Content",
+			entryTitle = "Blogs Entry Title");
+
+		User.logoutAndLoginPG(
+			userLoginEmailAddress = "test@liferay.com",
+			userLoginFullName = "Test Test");
+
+		ProductMenu.gotoPortlet(
+			category = "Users",
+			panel = "Control Panel",
+			portlet = "Users and Organizations");
+
+		User.deletePersonalDataCP(
+			userFirstName = "userfn",
+			userLastName = "userln");
+
+		GDPR.filterByScope(scope = "Regular Sites");
+
+		GDPR.filterByApplications(
+			applications = "All Applications",
+			itemsCount = "1");
+
+		GDPR.deleteEntryCP();
+
+		AssertElementPresent(
+			key_tab = "Auto Anonymize Data",
+			locator1 = "NavTab#ACTIVE_TAB_LINK");
+
+		GDPR.viewNoEntryInApplicationCP(applications = "All Applications");
+
+		BlogsNavigator.openBlogsAdmin(siteURLKey = "site-name");
 
 		LexiconEntry.viewNoEntry(rowEntry = "Blogs Entry Title");
 	}
@@ -259,9 +387,12 @@ definition {
 			userFirstName = "userfn",
 			userLastName = "userln");
 
-		GDPR.editEntryFromApplicationCP(
+		GDPR.filterByApplications(
 			applications = "Documents and Media",
-			itemsCount = "1",
+			itemsCount = "1");
+
+		GDPR.editEntryCP(
+			applications = "Documents and Media",
 			rowEntry = "DM Document Title");
 
 		DMDocument.editCmd(

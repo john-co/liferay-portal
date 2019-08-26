@@ -32,6 +32,18 @@ export {PortletBase};
 export {Slider} from './liferay/compat/slider/Slider.es';
 export {Treeview} from './liferay/compat/treeview/Treeview.es';
 
+export {
+	default as createActionURL
+} from './liferay/util/portlet_url/create_action_url.es';
+export {
+	default as createPortletURL
+} from './liferay/util/portlet_url/create_portlet_url.es';
+export {
+	default as createRenderURL
+} from './liferay/util/portlet_url/create_render_url.es';
+export {
+	default as createResourceURL
+} from './liferay/util/portlet_url/create_resource_url.es';
 export {fetch};
 export {navigate};
 export {

@@ -17,6 +17,7 @@ package com.liferay.gradle.plugins.defaults;
 import aQute.bnd.osgi.Constants;
 import aQute.bnd.version.Version;
 
+import com.liferay.gradle.plugins.JspCDefaultsPlugin;
 import com.liferay.gradle.plugins.LiferayBasePlugin;
 import com.liferay.gradle.plugins.LiferayOSGiPlugin;
 import com.liferay.gradle.plugins.baseline.BaselinePlugin;
@@ -3075,10 +3076,11 @@ public class LiferayOSGiDefaultsPlugin implements Plugin<Project> {
 	private void _configureTaskCompileJSP(
 		Project project, Jar jarJSPsTask, LiferayExtension liferayExtension) {
 
-		boolean jspPrecompileEnabled = GradleUtil.getProperty(
-			project, "jsp.precompile.enabled", false);
+		boolean compileJspInclude = GradleUtil.getProperty(
+			project, JspCDefaultsPlugin.COMPILE_JSP_INCLUDE_PROPERTY_NAME,
+			false);
 
-		if (!jspPrecompileEnabled) {
+		if (!compileJspInclude) {
 			return;
 		}
 
@@ -3086,7 +3088,6 @@ public class LiferayOSGiDefaultsPlugin implements Plugin<Project> {
 			project, JspCPlugin.COMPILE_JSP_TASK_NAME);
 
 		Properties artifactProperties = null;
-		String dirName = null;
 
 		TaskContainer taskContainer = project.getTasks();
 
@@ -3095,59 +3096,16 @@ public class LiferayOSGiDefaultsPlugin implements Plugin<Project> {
 				LiferayRelengPlugin.RECORD_ARTIFACT_TASK_NAME);
 
 		if (recordArtifactTask != null) {
-			String artifactURL = null;
-
 			File artifactPropertiesFile = recordArtifactTask.getOutputFile();
 
 			if (artifactPropertiesFile.exists()) {
 				artifactProperties = GUtil.loadProperties(
 					artifactPropertiesFile);
-
-				artifactURL = artifactProperties.getProperty("artifact.url");
-			}
-
-			if (Validator.isNotNull(artifactURL)) {
-				int index = artifactURL.lastIndexOf('/');
-
-				dirName = artifactURL.substring(
-					index + 1, artifactURL.length() - 4);
 			}
 		}
 
 		boolean jspPrecompileFromSource = GradleUtil.getProperty(
 			project, "jsp.precompile.from.source", true);
-
-		if (Validator.isNull(dirName) || jspPrecompileFromSource) {
-			dirName =
-				GradleUtil.getArchivesBaseName(project) + "-" +
-					project.getVersion();
-		}
-
-		final File jspPrecompileDir = new File(
-			liferayExtension.getLiferayHome(), "work/" + dirName);
-
-		Action<Task> taskAction = new Action<Task>() {
-
-			@Override
-			public void execute(Task task) {
-				final JavaCompile javaCompile = (JavaCompile)task;
-
-				Action<CopySpec> copySpecAction = new Action<CopySpec>() {
-
-					@Override
-					public void execute(CopySpec copySpec) {
-						copySpec.from(javaCompile.getDestinationDir());
-						copySpec.into(jspPrecompileDir);
-					}
-
-				};
-
-				project.copy(copySpecAction);
-			}
-
-		};
-
-		javaCompile.doLast(taskAction);
 
 		if (!jspPrecompileFromSource && (artifactProperties != null)) {
 			Task generateJSPJavaTask = GradleUtil.getTask(
@@ -3291,10 +3249,11 @@ public class LiferayOSGiDefaultsPlugin implements Plugin<Project> {
 	private void _configureTaskGenerateJSPJava(
 		Project project, LiferayExtension liferayExtension) {
 
-		boolean jspPrecompileEnabled = GradleUtil.getProperty(
-			project, "jsp.precompile.enabled", false);
+		boolean compileJspInclude = GradleUtil.getProperty(
+			project, JspCDefaultsPlugin.COMPILE_JSP_INCLUDE_PROPERTY_NAME,
+			false);
 
-		if (!jspPrecompileEnabled) {
+		if (!compileJspInclude) {
 			return;
 		}
 

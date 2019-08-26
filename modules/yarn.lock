@@ -7233,10 +7233,10 @@ escodegen@^1.6.1, escodegen@^1.9.1:
   optionalDependencies:
     source-map "~0.6.1"
 
-eslint-config-liferay@^7.0.0:
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/eslint-config-liferay/-/eslint-config-liferay-7.0.0.tgz#f6efd7a6308f0b7bf6fa97339ee480a12f2d4235"
-  integrity sha512-pz0m1Ac8bSvYFIxOfoRS0wrawazLJYs8xxKUvSyCMG/z2mOPLc4fn8MC0lERrnSw1ycbZBZsXDFFXo+FYAolIg==
+eslint-config-liferay@^8.0.0:
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/eslint-config-liferay/-/eslint-config-liferay-8.0.0.tgz#2ee8154684da4548fe3f03d457d22615128640d8"
+  integrity sha512-aA91/hSGFMBvVmcrbjSrUuakhiO6Q/r9JCAKljrlgXdAMThSnNNlqTZ9DoFN6QYKRcbNKis7XTNYLAgg+bcqUg==
   dependencies:
     eslint-config-prettier "5.0.0"
     eslint-plugin-no-for-of-loops "^1.0.0"
@@ -11655,10 +11655,10 @@ liferay-npm-bundler-plugin-resolve-linked-dependencies@2.12.0:
     read-json-sync "^2.0.0"
     semver "^5.5.0"
 
-liferay-npm-bundler-preset-liferay-dev@1.6.0:
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/liferay-npm-bundler-preset-liferay-dev/-/liferay-npm-bundler-preset-liferay-dev-1.6.0.tgz#1d80e2f6c5a8e7a2fbf9e282c605c19a00e58cfa"
-  integrity sha512-2Ezh53sdaULtLCvtfe/8Wht5rtGPTEc+PO1bjYSueUwtB1Cu4o2XCaCInFONQnUTcWpBcfqMLPGCuaVWZErWfg==
+liferay-npm-bundler-preset-liferay-dev@1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/liferay-npm-bundler-preset-liferay-dev/-/liferay-npm-bundler-preset-liferay-dev-1.7.0.tgz#0c9f5038a2086ec5534e0bcffee9313769c783a5"
+  integrity sha512-UNnMurKUEI3Z5WZJjCxWhWyB2ic+E2zKWIOyXBLEN5BgYABefWgk7dlBEpOsLe986/l9nVppnd5s8JUGVt8k5A==
   dependencies:
     babel-preset-liferay-standard "2.12.0"
     liferay-npm-bundler-plugin-exclude-imports "2.12.0"
@@ -11703,10 +11703,10 @@ liferay-npm-bundler@2.12.0:
     semver "^5.5.0"
     xml-js "^1.6.8"
 
-liferay-npm-scripts@7.2.0-beta.1:
-  version "7.2.0-beta.1"
-  resolved "https://registry.yarnpkg.com/liferay-npm-scripts/-/liferay-npm-scripts-7.2.0-beta.1.tgz#2a37361a5a54e11f4b475362abb277be3bbe1e19"
-  integrity sha512-7eOviXDQ+bq+Mfy0VmVjus62XU4ORzl1X4I+C10A6u3EKBUobzE7izmp0mkMhPG40fGkOvqE2sIpVQfqYLU29w==
+liferay-npm-scripts@8.0.0:
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/liferay-npm-scripts/-/liferay-npm-scripts-8.0.0.tgz#05c7d0ab51e720c51300f5ca29fac1f990727bd1"
+  integrity sha512-L38c8oO8/YuEBrMD4f4yLhMmSQhLCRgn6/DyJz4ckARHgA0c71yvyhfCXD+VeIydTR6LaJn7ThgWLFXEkKJ2Gg==
   dependencies:
     "@babel/cli" "^7.2.3"
     "@babel/plugin-proposal-class-properties" "7.4.4"
@@ -11730,7 +11730,7 @@ liferay-npm-scripts@7.2.0-beta.1:
     css-loader "^3.0.0"
     deepmerge "^4.0.0"
     eslint "6.1.0"
-    eslint-config-liferay "^7.0.0"
+    eslint-config-liferay "^8.0.0"
     glob "^7.1.3"
     http-proxy-middleware "^0.19.1"
     jest "^24.5.0"
@@ -11738,7 +11738,7 @@ liferay-npm-scripts@7.2.0-beta.1:
     liferay-lang-key-dev-loader "^1.0.3"
     liferay-npm-bridge-generator "2.12.0"
     liferay-npm-bundler "2.12.0"
-    liferay-npm-bundler-preset-liferay-dev "1.6.0"
+    liferay-npm-bundler-preset-liferay-dev "1.7.0"
     liferay-theme-tasks "9.4.0"
     metal-tools-soy "4.3.2"
     minimist "^1.2.0"
@@ -12600,7 +12600,7 @@ metal-affix@2.0.0:
     metal-position "^2.0.0"
     metal-state "^2.0.0"
 
-metal-ajax@2.1.1:
+metal-ajax@2.1.1, metal-ajax@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/metal-ajax/-/metal-ajax-2.1.1.tgz#f715dd98fb38bc2ad2269eb960f3318ff8a4e543"
   integrity sha512-r61ku32uivdaBd3joWrTiGV2kyG9Nvpt4gq4Npo/9MDWj2Tcm4xk2PZ7iKpIAF88JD4dwW+etjgK5Il3SzC9+g==
@@ -12649,7 +12649,7 @@ metal-component@2.16.8, metal-component@^2.0.0, metal-component@^2.13.2, metal-c
     metal-events "^2.16.8"
     metal-state "^2.16.8"
 
-metal-debounce@^2.0.1, metal-debounce@^2.0.2:
+metal-debounce@^2.0.0, metal-debounce@^2.0.1, metal-debounce@^2.0.2:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/metal-debounce/-/metal-debounce-2.0.2.tgz#e5cbe97e76bf0e57a09df927de8b65a47c1f2fc5"
   integrity sha512-BFAVzGDN50drx6cV88JgI1pyI2z4awQZejMgefxpwJgcvsFXMQyymDFRzuEtecYARSHWyGPjfB5BYrpaKY8uKQ==
@@ -12918,7 +12918,7 @@ metal-uri@2.4.0, metal-uri@^2.0.0, metal-uri@^2.2.6:
     path-browserify "0.0.0"
     url "^0.11.0"
 
-metal-useragent@3.0.1:
+metal-useragent@3.0.1, metal-useragent@^3.0.0:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/metal-useragent/-/metal-useragent-3.0.1.tgz#9bc3056a744eaef5e15ed6763c77da266e0f0330"
   integrity sha512-rld1rRGmis/Wt1O/d8nIeEDOBhzCzz2xvteTbsJzE+1sixoTYcCQk6cRBxFFKur6U5LUEEyC7sV4+mHndVHAgQ==
@@ -15120,15 +15120,15 @@ react-docgen@^4.1.0:
     node-dir "^0.1.10"
     recast "^0.17.3"
 
-react-dom@16.8.6, react-dom@^16.8.3, react-dom@^16.8.6:
-  version "16.8.6"
-  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.8.6.tgz#71d6303f631e8b0097f56165ef608f051ff6e10f"
-  integrity sha512-1nL7PIq9LTL3fthPqwkvr2zY7phIPjYrT0jp4HjyEQrEROnw4dG41VVwi/wfoCneoleqrNX7iAD+pXebJZwrwA==
+react-dom@16.9.0, react-dom@^16.8.3:
+  version "16.9.0"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.9.0.tgz#5e65527a5e26f22ae3701131bcccaee9fb0d3962"
+  integrity sha512-YFT2rxO9hM70ewk9jq0y6sQk8cL02xm4+IzYBz75CQGlClQQ1Bxq0nhHF6OtSbit+AIahujJgb/CPRibFkMNJQ==
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
     prop-types "^15.6.2"
-    scheduler "^0.13.6"
+    scheduler "^0.15.0"
 
 react-draggable@^3.1.1:
   version "3.3.0"
@@ -15326,15 +15326,14 @@ react-transition-group@^2.2.1:
     prop-types "^15.6.2"
     react-lifecycles-compat "^3.0.4"
 
-react@16.8.6, react@^16.8.3, react@^16.8.6:
-  version "16.8.6"
-  resolved "https://registry.yarnpkg.com/react/-/react-16.8.6.tgz#ad6c3a9614fd3a4e9ef51117f54d888da01f2bbe"
-  integrity sha512-pC0uMkhLaHm11ZSJULfOBqV4tIZkx87ZLvbbQYunNixAAvjnC+snJCg0XQXn9VIsttVsbZP/H/ewzgsd5fxKXw==
+react@16.9.0, react@^16.8.3:
+  version "16.9.0"
+  resolved "https://registry.yarnpkg.com/react/-/react-16.9.0.tgz#40ba2f9af13bc1a38d75dbf2f4359a5185c4f7aa"
+  integrity sha512-+7LQnFBwkiw+BobzOF6N//BdoNw0ouwmSJTEm9cglOOmsg/TMiFHZLe2sEoN5M7LgJTj9oHH0gxklfnQe66S1w==
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
     prop-types "^15.6.2"
-    scheduler "^0.13.6"
 
 reactcss@^1.2.0:
   version "1.2.3"
@@ -16128,10 +16127,10 @@ sax@>=0.6.0, sax@^1.2.4, sax@~1.2.4:
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.4.tgz#2816234e2378bddc4e5354fab5caa895df7100d9"
   integrity sha512-NqVDv9TpANUjFm0N8uM5GxL36UgKi9/atZw+x7YFnQ8ckwFGKrl4xX4yWtrey3UJm5nP1kUbnYgLopqWNSRhWw==
 
-scheduler@^0.13.6:
-  version "0.13.6"
-  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.13.6.tgz#466a4ec332467b31a91b9bf74e5347072e4cd889"
-  integrity sha512-IWnObHt413ucAYKsD9J1QShUKkbKLQQHdxRyw73sw4FN26iWr3DY/H34xGPe4nmL1DwXyWmSWmMrA9TfQbE/XQ==
+scheduler@^0.15.0:
+  version "0.15.0"
+  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.15.0.tgz#6bfcf80ff850b280fed4aeecc6513bc0b4f17f8e"
+  integrity sha512-xAefmSfN6jqAa7Kuq7LIJY0bwAPG3xlCj0HMEBQk1lxYiDKZscY2xJ5U/61ZTrYbmNQbXa+gc7czPkVo11tnCg==
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
@@ -16239,17 +16238,22 @@ send@0.17.1:
     range-parser "~1.2.1"
     statuses "~1.5.0"
 
-senna@3.0.0-milestone.4, senna@^2.3.1:
-  version "3.0.0-milestone.4"
-  resolved "https://registry.yarnpkg.com/senna/-/senna-3.0.0-milestone.4.tgz#64cefd7a31342980b15c1ece0c74243f45d43ac8"
-  integrity sha512-Z+q7pyHCppv7FivAGPjtD4nWRJ6UOI5Z2d2H98pXGco0yExcPz71KOa9o9CXOYBI347QtQwEYvr4CDOCiMKRlA==
+senna@2.7.8, senna@^2.3.1:
+  version "2.7.8"
+  resolved "https://registry.yarnpkg.com/senna/-/senna-2.7.8.tgz#5b3610898d2d94218e635cbbc6bdbe59ff4022d6"
+  integrity sha512-/8bTT0phnukMy/AhgkR9yZZThIpktcIbprpIKmCbMmpRiti/pPtAux9oP0yK9wvyu+KITESF7TibvR6CKnPi6g==
   dependencies:
     bootstrap "^3.3.6"
     metal "^2.16.5"
+    metal-ajax "^2.1.1"
+    metal-debounce "^2.0.0"
     metal-dom "^2.16.8"
     metal-events "^2.16.5"
     metal-path-parser "^1.0.3"
+    metal-promise "^2.0.1"
+    metal-structs "^1.0.0"
     metal-uri "^2.2.6"
+    metal-useragent "^3.0.0"
 
 sequencify@~0.0.7:
   version "0.0.7"

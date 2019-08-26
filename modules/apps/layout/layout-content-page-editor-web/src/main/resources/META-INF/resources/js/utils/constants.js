@@ -40,6 +40,17 @@ export const COMPATIBLE_TYPES = {
 
 	image: ['ddm-image', 'image'],
 
+	link: [
+		'ddm-date',
+		'ddm-decimal',
+		'ddm-integer',
+		'ddm-number',
+		'ddm-text-html',
+		'text',
+		'textarea',
+		'url'
+	],
+
 	'rich-text': [
 		'ddm-date',
 		'ddm-decimal',
@@ -108,10 +119,10 @@ export const FLOATING_TOOLBAR_BUTTONS = {
 	},
 
 	fragmentConfiguration: {
-		icon: '',
+		icon: 'cog',
 		id: 'fragment_configuration',
 		panelId: 'fragment_configuration',
-		title: '',
+		title: Liferay.Language.get('fragment-configuration'),
 		type: 'panel'
 	},
 
@@ -152,14 +163,6 @@ export const FLOATING_TOOLBAR_BUTTONS = {
 		id: 'spacing',
 		panelId: 'spacing',
 		title: Liferay.Language.get('spacing'),
-		type: 'panel'
-	},
-
-	textProperties: {
-		icon: 'pencil',
-		id: 'text_properties',
-		panelId: 'text_properties',
-		title: Liferay.Language.get('text-properties'),
 		type: 'panel'
 	}
 };
@@ -217,6 +220,14 @@ export const FRAGMENTS_EDITOR_ROW_TYPES = {
  */
 export const FREEMARKER_FRAGMENT_ENTRY_PROCESSOR =
 	'com.liferay.fragment.entry.processor.freemarker.FreeMarkerFragmentEntryProcessor';
+
+/**
+ * Available mapping source type ids
+ */
+export const MAPPING_SOURCE_TYPE_IDS = {
+	content: 'specific_content',
+	structure: 'structure'
+};
 
 /**
  * Available attributes for target config key

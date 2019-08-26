@@ -12,17 +12,16 @@
  * details.
  */
 
-import ClayIcon from '@clayui/icon';
-import ClayLink from '@clayui/link';
-import ClayNavigationBar from '@clayui/navigation-bar';
 import React, {useEffect, useState} from 'react';
+import EditTableViewTabs from './EditTableViewTabs.es';
+import EditTableViewTabColumns from './EditTableViewTabColumns.es';
 import Button from '../../components/button/Button.es';
 import {Loading} from '../../components/loading/Loading.es';
 import Sidebar from '../../components/sidebar/Sidebar.es';
+import {useTitle} from '../../hooks/index.es';
 import {addItem, getItem, updateItem} from '../../utils/client.es';
 
-const {Item} = ClayNavigationBar;
-const {Body, Header} = Sidebar;
+const {Body} = Sidebar;
 
 export default ({
 	history,
@@ -30,30 +29,18 @@ export default ({
 		params: {dataDefinitionId, dataListViewId}
 	}
 }) => {
-	const [isOpen, setOpen] = useState(true);
-
-	const toggle = () => {
-		setOpen(!isOpen);
-	};
-
 	const [state, setState] = useState({
 		dataDefinition: null,
 		dataListView: null
 	});
 
-	const onSave = () => {
-		if (dataListViewId) {
-			updateItem(
-				`/o/data-engine/v1.0/data-list-views/${dataListViewId}`,
-				dataListView
-			).then(() => history.goBack());
-		} else {
-			addItem(
-				`/o/data-engine/v1.0/data-definitions/${dataDefinitionId}/data-list-views`,
-				dataListView
-			).then(() => history.goBack());
-		}
-	};
+	let title = Liferay.Language.get('new-table-view');
+
+	if (dataListViewId) {
+		title = Liferay.Language.get('edit-table-view');
+	}
+
+	useTitle(title);
 
 	const onChange = event => {
 		const name = event.target.value;
@@ -67,6 +54,47 @@ export default ({
 				}
 			}
 		}));
+	};
+
+	const validate = () => {
+		const {dataListView} = state;
+
+		if (!dataListView) {
+			return null;
+		}
+
+		const name = dataListView.name.en_US.trim();
+
+		if (name === '') {
+			return null;
+		}
+
+		return {
+			...dataListView,
+			name: {
+				en_US: name
+			}
+		};
+	};
+
+	const handleSubmit = () => {
+		const dataListView = validate();
+
+		if (dataListView === null) {
+			return;
+		}
+
+		if (dataListViewId) {
+			updateItem(
+				`/o/data-engine/v1.0/data-list-views/${dataListViewId}`,
+				dataListView
+			).then(() => history.goBack());
+		} else {
+			addItem(
+				`/o/data-engine/v1.0/data-definitions/${dataDefinitionId}/data-list-views`,
+				dataListView
+			).then(() => history.goBack());
+		}
 	};
 
 	useEffect(() => {
@@ -103,130 +131,61 @@ export default ({
 
 	return (
 		<Loading isLoading={dataDefinition === null}>
-			<nav className="component-tbar subnav-tbar-light tbar tbar-article">
-				<div className="container-fluid container-fluid-max-xl">
-					<ul className="tbar-nav">
-						<li className="tbar-item tbar-item-expand">
-							<div className="input-group">
-								<div className="input-group-item">
-									<input
-										aria-label={Liferay.Language.get(
-											'untitled-table-view'
-										)}
-										className="form-control form-control-inline"
-										onChange={onChange}
-										placeholder={Liferay.Language.get(
-											'untitled-table-view'
-										)}
-										type="text"
-										value={dataListViewName}
-									/>
-								</div>
-							</div>
-						</li>
-						<li className="tbar-item">
-							<div className="tbar-section">
-								<Button
-									className="mr-3"
-									displayType="secondary"
-									onClick={() => history.goBack()}
-									small
-								>
-									{Liferay.Language.get('cancel')}
-								</Button>
-								<Button className="mr-3" onClick={onSave} small>
-									{Liferay.Language.get('save')}
-								</Button>
-							</div>
-						</li>
-					</ul>
-				</div>
-			</nav>
-			<Sidebar isOpen={isOpen}>
-				<Header>
-					<div className="autofit-row sidebar-section">
-						<div className="autofit-col autofit-col-expand">
-							<div className="input-group">
-								<div className="input-group-item">
-									<input
-										aria-label={Liferay.Language.get(
-											'search'
-										)}
-										className="form-control input-group-inset input-group-inset-after"
-										placeholder={Liferay.Language.get(
-											'search'
-										)}
-										type="text"
-									/>
+			<form
+				onSubmit={event => {
+					event.preventDefault();
 
-									<div className="input-group-inset-item input-group-inset-item-after">
-										<Button
-											displayType="unstyled"
-											symbol="search"
+					handleSubmit();
+				}}
+			>
+				<nav className="component-tbar subnav-tbar-light tbar tbar-article">
+					<div className="container-fluid container-fluid-max-xl">
+						<ul className="tbar-nav">
+							<li className="tbar-item tbar-item-expand">
+								<div className="input-group">
+									<div className="input-group-item">
+										<input
+											aria-label={Liferay.Language.get(
+												'untitled-table-view'
+											)}
+											className="form-control form-control-inline"
+											onChange={onChange}
+											placeholder={Liferay.Language.get(
+												'untitled-table-view'
+											)}
+											type="text"
+											value={dataListViewName}
 										/>
 									</div>
 								</div>
-								<div className="input-group-item input-group-item-shrink">
+							</li>
+							<li className="tbar-item">
+								<div className="tbar-section">
 									<Button
+										className="mr-3"
 										displayType="secondary"
-										onClick={toggle}
-										symbol="angle-right"
-									/>
+										onClick={() => history.goBack()}
+										small
+									>
+										{Liferay.Language.get('cancel')}
+									</Button>
+									<Button
+										className="mr-3"
+										onClick={handleSubmit}
+										small
+									>
+										{Liferay.Language.get('save')}
+									</Button>
 								</div>
-							</div>
-						</div>
+							</li>
+						</ul>
 					</div>
-				</Header>
+				</nav>
+			</form>
+			<Sidebar onSearch={() => {}}>
 				<Body>
-					<ClayNavigationBar triggerLabel="Item 1">
-						<Item active>
-							<ClayLink
-								className="nav-link"
-								displayType="unstyled"
-							>
-								{Liferay.Language.get('columns')}
-							</ClayLink>
-						</Item>
-						<Item>
-							<ClayLink
-								className="nav-link"
-								displayType="unstyled"
-							>
-								{Liferay.Language.get('filters')}
-							</ClayLink>
-						</Item>
-					</ClayNavigationBar>
-					<dl className="sidebar-dl sidebar-section">
-						<dd className="sidebar-dd">
-							<ul className="list-group sidebar-list-group">
-								{dataDefinitionFields.map(
-									(dataDefinitionField, index) => (
-										<li
-											className="list-group-item list-group-item-flex"
-											key={index}
-										>
-											<div className="autofit-col">
-												<div className="sticker sticker-secondary">
-													<span className="inline-item">
-														<ClayIcon symbol="drag" />
-													</span>
-												</div>
-											</div>
-											<div className="autofit-col autofit-col-expand">
-												<section className="autofit-section">
-													<div className="list-group-title text-truncate-inline">
-														{
-															dataDefinitionField.name
-														}
-													</div>
-												</section>
-											</div>
-										</li>
-									)
-								)}
-							</ul>
-						</dd>
-					</dl>
+					<EditTableViewTabs />
+					<EditTableViewTabColumns columns={dataDefinitionFields} />
 				</Body>
 			</Sidebar>
 		</Loading>

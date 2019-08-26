@@ -75,6 +75,8 @@ ItemSelectorRepositoryEntryManagementToolbarDisplayContext itemSelectorRepositor
 		<liferay-util:include page="/repository_entry_browser/search_info.jsp" servletContext="<%= application %>" />
 	</c:if>
 
+	<div class="message-container"></div>
+
 	<%
 	long folderId = ParamUtil.getLong(request, "folderId");
 
@@ -514,50 +516,6 @@ ItemSelectorRepositoryEntryManagementToolbarDisplayContext itemSelectorRepositor
 		'selectedItem',
 		function(event) {
 			Liferay.Util.getOpener().Liferay.fire('<%= itemSelectedEventName %>', event);
-		}
-	);
-</aui:script>
-
-<aui:script use="liferay-item-selector-repository-entry-browser">
-	new Liferay.ItemSelectorRepositoryEntryBrowser(
-		{
-			closeCaption: '<%= UnicodeLanguageUtil.get(request, tabName) %>',
-
-			<c:if test="<%= uploadURL != null %>">
-
-				<%
-				String imageEditorPortletId = PortletProviderUtil.getPortletId(Image.class.getName(), PortletProvider.Action.EDIT);
-				%>
-
-				<c:if test="<%= Validator.isNotNull(imageEditorPortletId) %>">
-					<liferay-portlet:renderURL portletName="<%= imageEditorPortletId %>" var="viewImageEditorURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
-						<liferay-portlet:param name="mvcRenderCommandName" value="/image_editor/view" />
-					</liferay-portlet:renderURL>
-
-					editItemURL: '<%= viewImageEditorURL.toString() %>',
-				</c:if>
-			</c:if>
-
-			maxFileSize: '<%= maxFileSize %>',
-			on: {
-				selectedItem: function(event) {
-					Liferay.Util.getOpener().Liferay.fire('<%= itemSelectedEventName %>', event);
-				}
-			},
-			rootNode: '#<%= randomNamespace %>ItemSelectorContainer',
-			validExtensions: '<%= ListUtil.isEmpty(extensions) ? "*" : StringUtil.merge(extensions) %>'
-
-			<c:if test="<%= uploadURL != null %>">
-
-				<%
-				String returnType = ItemSelectorRepositoryEntryBrowserUtil.getItemSelectorReturnTypeClassName(itemSelectorReturnTypeResolver, existingFileEntryReturnType);
-
-				uploadURL.setParameter("returnType", returnType);
-				%>
-
-				, uploadItemReturnType: '<%= HtmlUtil.escapeAttribute(returnType) %>',
-				uploadItemURL: '<%= uploadURL.toString() %>'
-			</c:if>
 		}
 	);
 </aui:script>

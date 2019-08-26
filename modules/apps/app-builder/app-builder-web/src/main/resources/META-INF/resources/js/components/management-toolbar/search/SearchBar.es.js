@@ -12,16 +12,25 @@
  * details.
  */
 
-import React from 'react';
+import React, {useContext} from 'react';
 import SearchInput from './SearchInput.es';
 import SearchSort from './SearchSort.es';
+import {SearchContext} from '../../search-container/SearchContext.es';
 
-export default ({columns}) => {
+export default ({columns, totalCount}) => {
+	const {
+		state: {
+			query: {keywords}
+		}
+	} = useContext(SearchContext);
+
+	const disabled = keywords === '' && totalCount === 0;
+
 	return (
 		<div className="navbar-form navbar-form-autofit navbar-overlay navbar-overlay-sm-down">
 			<div className="container-fluid container-fluid-max-xl">
-				<SearchSort columns={columns} />
-				<SearchInput />
+				<SearchSort columns={columns} disabled={disabled} />
+				<SearchInput disabled={disabled} />
 			</div>
 		</div>
 	);
