@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import State, {Config} from 'metal-state';
 
 /**
@@ -42,7 +56,7 @@ class GeoJSONBase extends State {
 	}
 
 	/**
-	 * Parses a nativeFeaturesData object and return an array of the
+	 * Parses an object and return an array of the
 	 * parsed features. If no feature has been parsed it may return an
 	 * empty array.
 	 * @abstract
@@ -51,7 +65,11 @@ class GeoJSONBase extends State {
 	 * @return {Object[]} List of native features to be added
 	 * @review
 	 */
-	_getNativeFeatures(nativeFeaturesData) {
+	_getNativeFeatures(
+		/* eslint-disable no-unused-vars */
+		nativeFeaturesData
+		/* eslint-enable no-unused-vars */
+	) {
 		throw new Error('Must be implemented');
 	}
 
@@ -63,7 +81,11 @@ class GeoJSONBase extends State {
 	 * @return {Object} Wrapped native feature
 	 * @review
 	 */
-	_wrapNativeFeature(nativeFeature) {
+	_wrapNativeFeature(
+		/* eslint-disable no-unused-vars */
+		nativeFeature
+		/* eslint-enable no-unused-vars */
+	) {
 		throw new Error('Must be implemented');
 	}
 }

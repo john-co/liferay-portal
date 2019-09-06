@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 AUI.add(
 	'liferay-search-container-move',
 	function(A) {
@@ -47,21 +61,7 @@ AUI.add(
 			NS: 'move',
 
 			prototype: {
-				initializer: function() {
-					var instance = this;
-
-					instance._initDragAndDrop();
-
-					instance._initDropTargets();
-				},
-
-				destructor: function() {
-					var instance = this;
-
-					new A.EventHandle(instance._eventHandles).detach();
-				},
-
-				_getMoveText: function(selectedItemsCount, targetAvailable) {
+				_getMoveText(selectedItemsCount, targetAvailable) {
 					var moveText = STR_BLANK;
 
 					if (targetAvailable) {
@@ -89,7 +89,7 @@ AUI.add(
 					return moveText;
 				},
 
-				_initDragAndDrop: function() {
+				_initDragAndDrop() {
 					var instance = this;
 
 					var host = instance.get(STR_HOST);
@@ -124,7 +124,7 @@ AUI.add(
 					]);
 				},
 
-				_initDropTargets: function() {
+				_initDropTargets() {
 					var instance = this;
 
 					var dropTargets = instance.get('dropTargets');
@@ -139,19 +139,19 @@ AUI.add(
 
 							var targetNodes = container.all(target.selector);
 
-							targetNodes.each(function(item, index) {
+							targetNodes.each(function(item) {
 								item.plug(A.Plugin.Drop, {
 									groups: [host.get('id')]
 								}).drop.on({
-									'drop:enter': function(event) {
+									'drop:enter'() {
 										item.addClass(target.activeCssClass);
 									},
 
-									'drop:exit': function(event) {
+									'drop:exit'() {
 										item.removeClass(target.activeCssClass);
 									},
 
-									'drop:hit': function(event) {
+									'drop:hit'(event) {
 										item.removeClass(target.activeCssClass);
 
 										var selectedItems = instance._ddHandler.dd.get(
@@ -163,7 +163,7 @@ AUI.add(
 										);
 
 										host.executeAction(target.action, {
-											selectedItems: selectedItems,
+											selectedItems,
 											targetItem: dropTarget
 										});
 									}
@@ -185,7 +185,7 @@ AUI.add(
 					}
 				},
 
-				_onDragDropHit: function(event) {
+				_onDragDropHit(event) {
 					var instance = this;
 
 					var proxyNode = event.target.get(STR_DRAG_NODE);
@@ -195,7 +195,7 @@ AUI.add(
 					proxyNode.empty();
 				},
 
-				_onDragEnter: function(event) {
+				_onDragEnter(event) {
 					var instance = this;
 
 					var dragNode = event.drag.get(STR_NODE);
@@ -226,7 +226,7 @@ AUI.add(
 					}
 				},
 
-				_onDragExit: function(event) {
+				_onDragExit(event) {
 					var instance = this;
 
 					var proxyNode = event.target.get(STR_DRAG_NODE);
@@ -240,7 +240,7 @@ AUI.add(
 					proxyNode.html(Lang.sub(moveText, [selectedItemsCount]));
 				},
 
-				_onDragStart: function(event) {
+				_onDragStart(event) {
 					var instance = this;
 
 					var target = event.target;
@@ -274,8 +274,8 @@ AUI.add(
 					var dd = instance._ddHandler.dd;
 
 					dd.set(STR_DATA, {
-						selectedItems: selectedItems,
-						selectedItemsCount: selectedItemsCount
+						selectedItems,
+						selectedItemsCount
 					});
 
 					var proxyNode = target.get(STR_DRAG_NODE);
@@ -292,7 +292,7 @@ AUI.add(
 					proxyNode.addClass(instance.get('tooltipClass'));
 				},
 
-				_valueDDConfig: function() {
+				_valueDDConfig() {
 					var instance = this;
 
 					var host = instance.get(STR_HOST);
@@ -303,6 +303,20 @@ AUI.add(
 						groups: [host.get('id')],
 						offsetNode: false
 					};
+				},
+
+				destructor() {
+					var instance = this;
+
+					new A.EventHandle(instance._eventHandles).detach();
+				},
+
+				initializer() {
+					var instance = this;
+
+					instance._initDragAndDrop();
+
+					instance._initDropTargets();
 				}
 			}
 		});

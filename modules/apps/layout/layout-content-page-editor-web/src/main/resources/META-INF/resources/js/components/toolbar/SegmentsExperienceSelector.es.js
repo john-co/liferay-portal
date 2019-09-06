@@ -1,8 +1,21 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
+import 'frontend-js-web/liferay/compat/modal/Modal.es';
 import Component from 'metal-component';
 import Soy, {Config} from 'metal-soy';
-import getConnectedComponent from '../../store/ConnectedComponent.es';
-import './segmentsExperiences/modal.es';
-import templates from './SegmentsExperienceSelector.soy';
+
 import {
 	CREATE_SEGMENTS_EXPERIENCE,
 	DELETE_SEGMENTS_EXPERIENCE,
@@ -10,12 +23,13 @@ import {
 	SELECT_SEGMENTS_EXPERIENCE,
 	UPDATE_SEGMENTS_EXPERIENCE_PRIORITY
 } from '../../actions/actions.es';
-import {Modal} from 'frontend-js-web';
+import getConnectedComponent from '../../store/ConnectedComponent.es';
 import {setIn} from '../../utils/FragmentsEditorUpdateUtils.es';
+import templates from './SegmentsExperienceSelector.soy';
+import './segmentsExperiences/modal.es';
 
 const DISMISS_ALERT_ANIMATION_WAIT = 500;
 const MODAL_EXPERIENCE_STATE_KEY = 'modalExperienceState';
-const NEW_SEGMENT_TO_SELECT = 'segmentsEntryId';
 
 /**
  * Stores a given modalState
@@ -85,14 +99,12 @@ function restoreExperiencesState() {
  * and if the current url provides a segment id
  *
  * @param {string} classPK
+ * @param {string} incomingSegmentId
  * @returns {modalState|null}
  */
-function getExperiencesState(classPK) {
+function getExperiencesState(classPK, incomingSegmentId) {
 	if (!classPK) return null;
 	const prevState = restoreExperiencesState();
-	const url = window.location.href;
-	const urlParams = new URLSearchParams(url);
-	const incomingSegmentId = urlParams.get(NEW_SEGMENT_TO_SELECT);
 
 	if (
 		incomingSegmentId &&
@@ -101,14 +113,14 @@ function getExperiencesState(classPK) {
 	) {
 		const {modalStates, selectedSegmentsExperienceId} = prevState;
 		return {
-			selectedSegmentsExperienceId,
 			modalStates: {
 				[prevState.modalStates.type]: {
 					name: modalStates.experienceName,
 					segmentsEntryId: incomingSegmentId,
 					segmentsExperienceId: modalStates.segmentsExperienceId
 				}
-			}
+			},
+			selectedSegmentsExperienceId
 		};
 	}
 	return null;
@@ -203,7 +215,10 @@ class SegmentsExperienceSelector extends Component {
 	 */
 	syncClassPK(next) {
 		if (next) {
-			const experiencesState = getExperiencesState(next);
+			const experiencesState = getExperiencesState(
+				next,
+				this.selectedSegmentsEntryId
+			);
 			this.modalStates = experiencesState && experiencesState.modalStates;
 			if (
 				experiencesState &&
@@ -491,10 +506,10 @@ class SegmentsExperienceSelector extends Component {
 
 		storeExperiencesState({
 			modalStates: {
-				type,
-				experienceName,
 				classPK,
-				segmentsExperienceId
+				experienceName,
+				segmentsExperienceId,
+				type
 			},
 			selectedSegmentsExperienceId: this.segmentsExperienceId
 		});
@@ -749,6 +764,11 @@ class SegmentsExperienceSelector extends Component {
 
 SegmentsExperienceSelector.STATE = {
 	/**
+	 * Url to redirect the user when clicking new experience
+	 */
+	editSegmentsEntryURL: Config.string(),
+
+	/**
 	 * Contains the state of Experience edition and creation
 	 */
 	modalStates: Config.object(),
@@ -761,9 +781,9 @@ SegmentsExperienceSelector.STATE = {
 		.value(false),
 
 	/**
-	 * Url to redirect the user when clicking new experience
+	 * Segments Id of a just created Segment to recover Experiences modal state
 	 */
-	editSegmentsEntryURL: Config.string()
+	selectedSegmentsEntryId: Config.string()
 };
 
 const ConnectedSegmentsExperienceSelector = getConnectedComponent(

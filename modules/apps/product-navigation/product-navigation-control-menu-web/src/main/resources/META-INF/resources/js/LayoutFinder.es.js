@@ -1,9 +1,24 @@
-import {Config} from 'metal-state';
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
+import 'frontend-js-web/liferay/compat/modal/Modal.es';
+import {fetch} from 'frontend-js-web';
 import Component from 'metal-component';
 import dom from 'metal-dom';
 import Soy from 'metal-soy';
+import {Config} from 'metal-state';
 
-import {Modal} from 'frontend-js-web';
 import templates from './LayoutFinder.soy';
 
 /**
@@ -115,7 +130,6 @@ class LayoutFinder extends Component {
 
 			promise = fetch(this.findLayoutsURL, {
 				body: formData,
-				credentials: 'include',
 				method: 'post'
 			})
 				.then(response => {
@@ -158,6 +172,60 @@ class LayoutFinder extends Component {
  * @type {!Object}
  */
 LayoutFinder.STATE = {
+	/**
+	 * Document click handler
+	 * @default null
+	 * @instance
+	 * @memberOf LayoutFinder
+	 * @review
+	 * @type {Object}
+	 */
+	_documentClickHandler: Config.object()
+		.internal()
+		.value(null),
+
+	/**
+	 * Keywords to find layouts with
+	 * @default ''
+	 * @instance
+	 * @memberOf LayoutFinder
+	 * @private
+	 * @review
+	 * @type {string}
+	 */
+	_keywords: Config.string().value(''),
+
+	/**
+	 * True when it's loading page results
+	 * @default false
+	 * @instance
+	 * @memberOf LayoutFinder
+	 * @private
+	 * @review
+	 * @type {boolean}
+	 */
+	_loading: Config.bool().value(false),
+
+	/**
+	 * Show layout finder dialog
+	 * @default false
+	 * @instance
+	 * @memberOf LayoutFinder
+	 * @review
+	 * @type {boolean}
+	 */
+	_showFinder: Config.bool().value(false),
+
+	/**
+	 * URL to access Pages Administration portlet with keywords parameter
+	 * @default undefined
+	 * @instance
+	 * @memberOf LayoutFinder
+	 * @review
+	 * @type {string}
+	 */
+	_viewInPageAdministrationURL: Config.string(),
+
 	/**
 	 * Namespace for Pages Administration portlet
 	 * @default undefined
@@ -241,61 +309,7 @@ LayoutFinder.STATE = {
 	 * @review
 	 * @type {number}
 	 */
-	totalCount: Config.number().value(0),
-
-	/**
-	 * Document click handler
-	 * @default null
-	 * @instance
-	 * @memberOf LayoutFinder
-	 * @review
-	 * @type {Object}
-	 */
-	_documentClickHandler: Config.object()
-		.internal()
-		.value(null),
-
-	/**
-	 * Keywords to find layouts with
-	 * @default ''
-	 * @instance
-	 * @memberOf LayoutFinder
-	 * @private
-	 * @review
-	 * @type {string}
-	 */
-	_keywords: Config.string().value(''),
-
-	/**
-	 * True when it's loading page results
-	 * @default false
-	 * @instance
-	 * @memberOf LayoutFinder
-	 * @private
-	 * @review
-	 * @type {boolean}
-	 */
-	_loading: Config.bool().value(false),
-
-	/**
-	 * Show layout finder dialog
-	 * @default false
-	 * @instance
-	 * @memberOf LayoutFinder
-	 * @review
-	 * @type {boolean}
-	 */
-	_showFinder: Config.bool().value(false),
-
-	/**
-	 * URL to access Pages Administration portlet with keywords parameter
-	 * @default undefined
-	 * @instance
-	 * @memberOf LayoutFinder
-	 * @review
-	 * @type {string}
-	 */
-	_viewInPageAdministrationURL: Config.string()
+	totalCount: Config.number().value(0)
 };
 
 Soy.register(LayoutFinder, templates);

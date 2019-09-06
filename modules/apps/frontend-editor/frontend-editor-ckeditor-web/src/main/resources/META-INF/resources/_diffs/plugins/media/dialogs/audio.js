@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 CKEDITOR.dialog.add('audio', function(editor) {
 	var TPL_SCRIPT =
 		'boundingBox: "#" + mediaId,' + 'oggUrl: "{oggUrl}",' + 'url: "{url}"';
@@ -62,9 +76,6 @@ CKEDITOR.dialog.add('audio', function(editor) {
 	}
 
 	return {
-		minHeight: 200,
-		minWidth: 400,
-
 		contents: [
 			{
 				elements: [
@@ -98,18 +109,21 @@ CKEDITOR.dialog.add('audio', function(editor) {
 			}
 		],
 
-		title: Liferay.Language.get('audio-properties'),
+		minHeight: 200,
+		minWidth: 400,
 
-		onOk: function() {
+		onOk() {
 			var instance = this;
 
 			editor.plugins.media.onOkCallback(instance, editor, 'audio');
 		},
 
-		onShow: function() {
+		onShow() {
 			var instance = this;
 
 			editor.plugins.media.onShowCallback(instance, editor, 'audio');
-		}
+		},
+
+		title: Liferay.Language.get('audio-properties')
 	};
 });

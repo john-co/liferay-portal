@@ -78,12 +78,12 @@ public class DDMFormInstanceRecordModelImpl
 	public static final String TABLE_NAME = "DDMFormInstanceRecord";
 
 	public static final Object[][] TABLE_COLUMNS = {
-		{"uuid_", Types.VARCHAR}, {"formInstanceRecordId", Types.BIGINT},
-		{"groupId", Types.BIGINT}, {"companyId", Types.BIGINT},
-		{"userId", Types.BIGINT}, {"userName", Types.VARCHAR},
-		{"versionUserId", Types.BIGINT}, {"versionUserName", Types.VARCHAR},
-		{"createDate", Types.TIMESTAMP}, {"modifiedDate", Types.TIMESTAMP},
-		{"formInstanceId", Types.BIGINT},
+		{"mvccVersion", Types.BIGINT}, {"uuid_", Types.VARCHAR},
+		{"formInstanceRecordId", Types.BIGINT}, {"groupId", Types.BIGINT},
+		{"companyId", Types.BIGINT}, {"userId", Types.BIGINT},
+		{"userName", Types.VARCHAR}, {"versionUserId", Types.BIGINT},
+		{"versionUserName", Types.VARCHAR}, {"createDate", Types.TIMESTAMP},
+		{"modifiedDate", Types.TIMESTAMP}, {"formInstanceId", Types.BIGINT},
 		{"formInstanceVersion", Types.VARCHAR}, {"storageId", Types.BIGINT},
 		{"version", Types.VARCHAR}, {"lastPublishDate", Types.TIMESTAMP}
 	};
@@ -92,6 +92,7 @@ public class DDMFormInstanceRecordModelImpl
 		new HashMap<String, Integer>();
 
 	static {
+		TABLE_COLUMNS_MAP.put("mvccVersion", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("uuid_", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("formInstanceRecordId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("groupId", Types.BIGINT);
@@ -110,7 +111,7 @@ public class DDMFormInstanceRecordModelImpl
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table DDMFormInstanceRecord (uuid_ VARCHAR(75) null,formInstanceRecordId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,versionUserId LONG,versionUserName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,formInstanceId LONG,formInstanceVersion VARCHAR(75) null,storageId LONG,version VARCHAR(75) null,lastPublishDate DATE null)";
+		"create table DDMFormInstanceRecord (mvccVersion LONG default 0 not null,uuid_ VARCHAR(75) null,formInstanceRecordId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,versionUserId LONG,versionUserName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,formInstanceId LONG,formInstanceVersion VARCHAR(75) null,storageId LONG,version VARCHAR(75) null,lastPublishDate DATE null)";
 
 	public static final String TABLE_SQL_DROP =
 		"drop table DDMFormInstanceRecord";
@@ -127,21 +128,6 @@ public class DDMFormInstanceRecordModelImpl
 
 	public static final String TX_MANAGER = "liferayTransactionManager";
 
-	public static final boolean ENTITY_CACHE_ENABLED = GetterUtil.getBoolean(
-		com.liferay.dynamic.data.mapping.service.util.ServiceProps.get(
-			"value.object.entity.cache.enabled.com.liferay.dynamic.data.mapping.model.DDMFormInstanceRecord"),
-		true);
-
-	public static final boolean FINDER_CACHE_ENABLED = GetterUtil.getBoolean(
-		com.liferay.dynamic.data.mapping.service.util.ServiceProps.get(
-			"value.object.finder.cache.enabled.com.liferay.dynamic.data.mapping.model.DDMFormInstanceRecord"),
-		true);
-
-	public static final boolean COLUMN_BITMASK_ENABLED = GetterUtil.getBoolean(
-		com.liferay.dynamic.data.mapping.service.util.ServiceProps.get(
-			"value.object.column.bitmask.enabled.com.liferay.dynamic.data.mapping.model.DDMFormInstanceRecord"),
-		true);
-
 	public static final long COMPANYID_COLUMN_BITMASK = 1L;
 
 	public static final long FORMINSTANCEID_COLUMN_BITMASK = 2L;
@@ -155,6 +141,14 @@ public class DDMFormInstanceRecordModelImpl
 	public static final long UUID_COLUMN_BITMASK = 32L;
 
 	public static final long FORMINSTANCERECORDID_COLUMN_BITMASK = 64L;
+
+	public static void setEntityCacheEnabled(boolean entityCacheEnabled) {
+		_entityCacheEnabled = entityCacheEnabled;
+	}
+
+	public static void setFinderCacheEnabled(boolean finderCacheEnabled) {
+		_finderCacheEnabled = finderCacheEnabled;
+	}
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -171,6 +165,7 @@ public class DDMFormInstanceRecordModelImpl
 
 		DDMFormInstanceRecord model = new DDMFormInstanceRecordImpl();
 
+		model.setMvccVersion(soapModel.getMvccVersion());
 		model.setUuid(soapModel.getUuid());
 		model.setFormInstanceRecordId(soapModel.getFormInstanceRecordId());
 		model.setGroupId(soapModel.getGroupId());
@@ -212,10 +207,6 @@ public class DDMFormInstanceRecordModelImpl
 
 		return models;
 	}
-
-	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(
-		com.liferay.dynamic.data.mapping.service.util.ServiceProps.get(
-			"lock.expiration.time.com.liferay.dynamic.data.mapping.model.DDMFormInstanceRecord"));
 
 	public DDMFormInstanceRecordModelImpl() {
 	}
@@ -347,6 +338,12 @@ public class DDMFormInstanceRecordModelImpl
 				new LinkedHashMap
 					<String, BiConsumer<DDMFormInstanceRecord, ?>>();
 
+		attributeGetterFunctions.put(
+			"mvccVersion", DDMFormInstanceRecord::getMvccVersion);
+		attributeSetterBiConsumers.put(
+			"mvccVersion",
+			(BiConsumer<DDMFormInstanceRecord, Long>)
+				DDMFormInstanceRecord::setMvccVersion);
 		attributeGetterFunctions.put("uuid", DDMFormInstanceRecord::getUuid);
 		attributeSetterBiConsumers.put(
 			"uuid",
@@ -443,6 +440,17 @@ public class DDMFormInstanceRecordModelImpl
 			attributeGetterFunctions);
 		_attributeSetterBiConsumers = Collections.unmodifiableMap(
 			(Map)attributeSetterBiConsumers);
+	}
+
+	@JSON
+	@Override
+	public long getMvccVersion() {
+		return _mvccVersion;
+	}
+
+	@Override
+	public void setMvccVersion(long mvccVersion) {
+		_mvccVersion = mvccVersion;
 	}
 
 	@JSON
@@ -785,6 +793,7 @@ public class DDMFormInstanceRecordModelImpl
 		DDMFormInstanceRecordImpl ddmFormInstanceRecordImpl =
 			new DDMFormInstanceRecordImpl();
 
+		ddmFormInstanceRecordImpl.setMvccVersion(getMvccVersion());
 		ddmFormInstanceRecordImpl.setUuid(getUuid());
 		ddmFormInstanceRecordImpl.setFormInstanceRecordId(
 			getFormInstanceRecordId());
@@ -853,12 +862,12 @@ public class DDMFormInstanceRecordModelImpl
 
 	@Override
 	public boolean isEntityCacheEnabled() {
-		return ENTITY_CACHE_ENABLED;
+		return _entityCacheEnabled;
 	}
 
 	@Override
 	public boolean isFinderCacheEnabled() {
-		return FINDER_CACHE_ENABLED;
+		return _finderCacheEnabled;
 	}
 
 	@Override
@@ -900,6 +909,8 @@ public class DDMFormInstanceRecordModelImpl
 	public CacheModel<DDMFormInstanceRecord> toCacheModel() {
 		DDMFormInstanceRecordCacheModel ddmFormInstanceRecordCacheModel =
 			new DDMFormInstanceRecordCacheModel();
+
+		ddmFormInstanceRecordCacheModel.mvccVersion = getMvccVersion();
 
 		ddmFormInstanceRecordCacheModel.uuid = getUuid();
 
@@ -1065,6 +1076,10 @@ public class DDMFormInstanceRecordModelImpl
 
 	}
 
+	private static boolean _entityCacheEnabled;
+	private static boolean _finderCacheEnabled;
+
+	private long _mvccVersion;
 	private String _uuid;
 	private String _originalUuid;
 	private long _formInstanceRecordId;

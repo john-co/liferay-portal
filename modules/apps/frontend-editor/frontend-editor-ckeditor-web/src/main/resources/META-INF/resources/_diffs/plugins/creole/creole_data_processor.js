@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 (function() {
 	var CKTools = CKEDITOR.tools;
 
@@ -66,47 +80,7 @@
 	};
 
 	CreoleDataProcessor.prototype = {
-		constructor: CreoleDataProcessor,
-
-		toDataFormat: function(html, config) {
-			var instance = this;
-
-			var data = instance._convert(html);
-
-			return data;
-		},
-
-		toHtml: function(data, config) {
-			var instance = this;
-
-			if (config) {
-				var fragment = CKEDITOR.htmlParser.fragment.fromHtml(data);
-
-				var writer = new CKEDITOR.htmlParser.basicWriter();
-
-				config.filter.applyTo(fragment);
-
-				fragment.writeHtml(writer);
-
-				data = writer.getHtml();
-			} else {
-				var div = document.createElement('div');
-
-				if (!instance._creoleParser) {
-					instance._creoleParser = new CKEDITOR.CreoleParser({
-						imagePrefix: attachmentURLPrefix
-					});
-				}
-
-				instance._creoleParser.parse(div, data);
-
-				data = div.innerHTML;
-			}
-
-			return data || enterModeEmptyValue[instance._editor.enterMode];
-		},
-
-		_appendNewLines: function(total) {
+		_appendNewLines(total) {
 			var instance = this;
 
 			var count = 0;
@@ -126,7 +100,7 @@
 			}
 		},
 
-		_convert: function(data) {
+		_convert(data) {
 			var instance = this;
 
 			var node = document.createElement('div');
@@ -144,7 +118,9 @@
 			return endResult;
 		},
 
-		_handle: function(node) {
+		_endResult: null,
+
+		_handle(node) {
 			var instance = this;
 
 			if (!instance._endResult) {
@@ -188,7 +164,7 @@
 			instance._handleData(node.data, node);
 		},
 
-		_handleBreak: function(element, listTagsIn, listTagsOut) {
+		_handleBreak(element, listTagsIn, _listTagsOut) {
 			var instance = this;
 
 			var newLineCharacter = STR_LIST_ITEM_ESCAPE_CHARACTERS;
@@ -208,7 +184,7 @@
 			}
 		},
 
-		_handleData: function(data, element) {
+		_handleData(data, _element) {
 			var instance = this;
 
 			if (data) {
@@ -220,7 +196,7 @@
 					if (!instance._verbatim) {
 						data = data.replace(
 							REGEX_CREOLE_RESERVED_CHARACTERS,
-							function(match, p1, offset, string) {
+							function(_match, p1, _offset, _string) {
 								var res = '';
 
 								if (!instance._endResult.length) {
@@ -256,7 +232,7 @@
 			}
 		},
 
-		_handleElementEnd: function(element, listTagsIn, listTagsOut) {
+		_handleElementEnd(element, _listTagsIn, listTagsOut) {
 			var instance = this;
 
 			var tagName = element.tagName;
@@ -294,7 +270,7 @@
 			instance._verbatim = false;
 		},
 
-		_handleElementStart: function(element, listTagsIn, listTagsOut) {
+		_handleElementStart(element, listTagsIn, listTagsOut) {
 			var instance = this;
 
 			var tagName = element.tagName;
@@ -366,12 +342,12 @@
 			}
 		},
 
-		_handleEm: function(element, listTagsIn, listTagsOut) {
+		_handleEm(_element, listTagsIn, listTagsOut) {
 			listTagsIn.push(TAG_EMPHASIZE);
 			listTagsOut.push(TAG_EMPHASIZE);
 		},
 
-		_handleHeader: function(element, listTagsIn, listTagsOut, params) {
+		_handleHeader(_element, listTagsIn, listTagsOut, params) {
 			var instance = this;
 
 			var res = new Array(parseInt(params[1], 10) + 1);
@@ -388,7 +364,7 @@
 			instance._verbatim = true;
 		},
 
-		_handleHr: function(element, listTagsIn, listTagsOut) {
+		_handleHr(element, listTagsIn, _listTagsOut) {
 			var instance = this;
 
 			if (instance._isDataAvailable() && !instance._isLastItemNewLine()) {
@@ -398,7 +374,7 @@
 			listTagsIn.push('----', NEW_LINE);
 		},
 
-		_handleImage: function(element, listTagsIn, listTagsOut) {
+		_handleImage(element, listTagsIn, listTagsOut) {
 			var attrAlt = element.getAttribute('alt');
 			var attrSrc = element.getAttribute('src');
 
@@ -413,7 +389,7 @@
 			listTagsOut.push('}}');
 		},
 
-		_handleLink: function(element, listTagsIn, listTagsOut) {
+		_handleLink(element, listTagsIn, listTagsOut) {
 			var instance = this;
 
 			var hrefAttribute = element.getAttribute('href');
@@ -437,7 +413,7 @@
 			}
 		},
 
-		_handleListItem: function(element, listTagsIn, listTagsOut) {
+		_handleListItem(element, listTagsIn, _listTagsOut) {
 			var instance = this;
 
 			if (instance._isDataAvailable() && !instance._isLastItemNewLine()) {
@@ -455,13 +431,13 @@
 			);
 		},
 
-		_handleOrderedList: function(element, listTagsIn, listTagsOut) {
+		_handleOrderedList(_element, _listTagsIn) {
 			var instance = this;
 
 			instance._listsStack.push(TAG_ORDERED_LIST_ITEM);
 		},
 
-		_handleParagraph: function(element, listTagsIn, listTagsOut) {
+		_handleParagraph(_element, _listTagsIn, listTagsOut) {
 			var instance = this;
 
 			if (instance._isDataAvailable()) {
@@ -471,7 +447,7 @@
 			listTagsOut.push(NEW_LINE);
 		},
 
-		_handlePre: function(element, listTagsIn, listTagsOut) {
+		_handlePre(_element, listTagsIn, listTagsOut) {
 			var instance = this;
 
 			instance._skipParse = true;
@@ -484,7 +460,7 @@
 			listTagsOut.push('}}}', NEW_LINE);
 		},
 
-		_handleStrong: function(element, listTagsIn, listTagsOut) {
+		_handleStrong(element, listTagsIn, listTagsOut) {
 			var instance = this;
 
 			var previousSibling = element.previousSibling;
@@ -500,7 +476,7 @@
 			listTagsOut.push(TAG_BOLD);
 		},
 
-		_handleStyles: function(element, stylesTagsIn, stylesTagsOut) {
+		_handleStyles(element, stylesTagsIn, stylesTagsOut) {
 			var style = element.style;
 
 			if (style) {
@@ -516,15 +492,24 @@
 			}
 		},
 
-		_handleTableCell: function(element, listTagsIn, listTagsOut) {
+		_handleTT(_element, listTagsIn, listTagsOut) {
+			var instance = this;
+
+			instance._skipParse = true;
+
+			listTagsIn.push('{{{');
+			listTagsOut.push('}}}');
+		},
+
+		_handleTableCell(_element, listTagsIn, _listTagsOut) {
 			listTagsIn.push(STR_PIPE);
 		},
 
-		_handleTableHeader: function(element, listTagsIn, listTagsOut) {
+		_handleTableHeader(_element, listTagsIn, _listTagsOut) {
 			listTagsIn.push(STR_PIPE, STR_EQUALS);
 		},
 
-		_handleTableRow: function(element, listTagsIn, listTagsOut) {
+		_handleTableRow(element, listTagsIn, listTagsOut) {
 			var instance = this;
 
 			if (instance._isDataAvailable()) {
@@ -534,22 +519,13 @@
 			listTagsOut.push(STR_PIPE);
 		},
 
-		_handleTT: function(element, listTagsIn, listTagsOut) {
-			var instance = this;
-
-			instance._skipParse = true;
-
-			listTagsIn.push('{{{');
-			listTagsOut.push('}}}');
-		},
-
-		_handleUnorderedList: function(element, listTagsIn, listTagsOut) {
+		_handleUnorderedList(_element, _listTagsIn, _listTagsOut) {
 			var instance = this;
 
 			instance._listsStack.push(TAG_UNORDERED_LIST_ITEM);
 		},
 
-		_hasClass: function(element, className) {
+		_hasClass(element, className) {
 			return (
 				(STR_SPACE + element.className + STR_SPACE).indexOf(
 					STR_SPACE + className + STR_SPACE
@@ -557,7 +533,7 @@
 			);
 		},
 
-		_hasParentNode: function(element, tags, level) {
+		_hasParentNode(element, tags, level) {
 			var instance = this;
 
 			if (!CKTools.isArray(tags)) {
@@ -592,7 +568,7 @@
 			return result;
 		},
 
-		_isDataAvailable: function() {
+		_isDataAvailable() {
 			var instance = this;
 
 			var endResult = instance._endResult;
@@ -600,7 +576,7 @@
 			return endResult && endResult.length;
 		},
 
-		_isIgnorable: function(node) {
+		_isIgnorable(node) {
 			var instance = this;
 
 			var nodeType = node.nodeType;
@@ -612,7 +588,7 @@
 			);
 		},
 
-		_isLastItemNewLine: function(node) {
+		_isLastItemNewLine() {
 			var instance = this;
 
 			var endResult = instance._endResult;
@@ -622,20 +598,22 @@
 			);
 		},
 
-		_isParentNode: function(element, tagName) {
+		_isParentNode(element, tagName) {
 			var instance = this;
 
 			return instance._hasParentNode(element, tagName, 1);
 		},
 
-		_isWhitespace: function(node) {
+		_isWhitespace(node) {
 			return (
 				node.isElementContentWhitespace ||
 				!REGEX_NOT_WHITESPACE.test(node.data)
 			);
 		},
 
-		_pushTagList: function(tagsList) {
+		_listsStack: [],
+
+		_pushTagList(tagsList) {
 			var instance = this;
 
 			var endResult;
@@ -653,31 +631,67 @@
 			}
 		},
 
-		_tagNameMatch: function(tagSrc, tagDest) {
+		_skipParse: false,
+
+		_tagNameMatch(tagSrc, tagDest) {
 			return (
 				(tagDest instanceof RegExp && tagDest.test(tagSrc)) ||
 				tagSrc === tagDest
 			);
 		},
 
-		_endResult: null,
+		_verbatim: true,
 
-		_listsStack: [],
+		constructor: CreoleDataProcessor,
 
-		_skipParse: false,
+		toDataFormat(html) {
+			var instance = this;
 
-		_verbatim: true
+			var data = instance._convert(html);
+
+			return data;
+		},
+
+		toHtml(data, config) {
+			var instance = this;
+
+			if (config) {
+				var fragment = CKEDITOR.htmlParser.fragment.fromHtml(data);
+
+				var writer = new CKEDITOR.htmlParser.basicWriter();
+
+				config.filter.applyTo(fragment);
+
+				fragment.writeHtml(writer);
+
+				data = writer.getHtml();
+			} else {
+				var div = document.createElement('div');
+
+				if (!instance._creoleParser) {
+					instance._creoleParser = new CKEDITOR.CreoleParser({
+						imagePrefix: attachmentURLPrefix
+					});
+				}
+
+				instance._creoleParser.parse(div, data);
+
+				data = div.innerHTML;
+			}
+
+			return data || enterModeEmptyValue[instance._editor.enterMode];
+		}
 	};
 
 	CKEDITOR.plugins.add('creole_data_processor', {
-		requires: ['htmlwriter'],
-
-		init: function(editor) {
+		init(editor) {
 			attachmentURLPrefix = editor.config.attachmentURLPrefix;
 
 			editor.dataProcessor = new CreoleDataProcessor(editor);
 
 			editor.fire('customDataProcessorLoaded');
-		}
+		},
+
+		requires: ['htmlwriter']
 	});
 })();

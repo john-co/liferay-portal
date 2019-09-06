@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 AUI.add(
 	'liferay-calendar-message-util',
 	function(A) {
@@ -12,22 +26,106 @@ AUI.add(
 			'</p>';
 
 		Liferay.CalendarMessageUtil = {
-			confirm: function(
-				message,
-				yesButtonLabel,
-				noButtonLabel,
-				yesFn,
-				noFn
-			) {
+			_queueableQuestionUpdateAllInvited(data) {
 				var instance = this;
 
+				var answers = data.answers;
+
+				var showNextQuestion = A.bind('run', instance.queue);
+
+				if (answers.cancel) {
+					A.soon(showNextQuestion);
+				} else {
+					Liferay.CalendarMessageUtil.confirm(
+						TPL_MESSAGE_UPDATE_ALL_INVITED,
+						Liferay.Language.get('save-changes'),
+						Liferay.Language.get('do-not-change-the-event'),
+						showNextQuestion,
+						function() {
+							answers.cancel = true;
+
+							showNextQuestion();
+						}
+					);
+				}
+			},
+
+			_queueableQuestionUpdateRecurring(data) {
+				var instance = this;
+
+				var answers = data.answers;
+
+				var showNextQuestion = A.bind('run', instance.queue);
+
+				if (answers.cancel) {
+					A.soon(showNextQuestion);
+				} else {
+					Liferay.RecurrenceUtil.openConfirmationPanel(
+						'update',
+						function() {
+							answers.updateInstance = true;
+
+							showNextQuestion();
+						},
+						function() {
+							answers.allFollowing = true;
+							answers.updateInstance = true;
+
+							showNextQuestion();
+						},
+						showNextQuestion,
+						function() {
+							answers.cancel = true;
+
+							showNextQuestion();
+						}
+					);
+				}
+			},
+
+			_queueableQuestionUserCalendarOnly(data) {
+				var instance = this;
+
+				var answers = data.answers;
+
+				var showNextQuestion = A.bind('run', instance.queue);
+
+				if (answers.cancel) {
+					A.soon(showNextQuestion);
+				} else {
+					var content = [
+						'<p class="calendar-portlet-confirmation-text">',
+						Lang.sub(
+							Liferay.Language.get(
+								'you-are-about-to-make-changes-that-will-only-affect-your-calendar-x'
+							),
+							[LString.escapeHTML(data.calendarName)]
+						),
+						'</p>'
+					].join(STR_BLANK);
+
+					Liferay.CalendarMessageUtil.confirm(
+						content,
+						Liferay.Language.get('save-changes'),
+						Liferay.Language.get('do-not-change-the-event'),
+						showNextQuestion,
+						function() {
+							answers.cancel = true;
+
+							showNextQuestion();
+						}
+					);
+				}
+			},
+
+			confirm(message, yesButtonLabel, noButtonLabel, yesFn, noFn) {
 				var confirmationPanel;
 
 				var getButtonConfig = function(label, callback) {
 					return {
-						label: label,
+						label,
 						on: {
-							click: function() {
+							click() {
 								if (callback) {
 									callback.apply(this, arguments);
 								}
@@ -58,7 +156,7 @@ AUI.add(
 				return confirmationPanel.render().show();
 			},
 
-			promptSchedulerEventUpdate: function(data) {
+			promptSchedulerEventUpdate(data) {
 				var instance = this;
 
 				data.answers = {};
@@ -108,7 +206,7 @@ AUI.add(
 				queue.run();
 			},
 
-			showAlert: function(container, message) {
+			showAlert(container, message) {
 				new A.Alert({
 					animated: true,
 					bodyContent: message,
@@ -119,7 +217,7 @@ AUI.add(
 				}).render(container);
 			},
 
-			showErrorMessage: function(container, errorMessage) {
+			showErrorMessage(container, errorMessage) {
 				var instance = this;
 
 				var alert = instance._alert;
@@ -148,7 +246,7 @@ AUI.add(
 				instance._alert = alert;
 			},
 
-			showSuccessMessage: function(container, message) {
+			showSuccessMessage(container, message) {
 				var instance = this;
 
 				if (!message) {
@@ -172,7 +270,7 @@ AUI.add(
 						show: 0
 					},
 					icon: 'check',
-					message: message,
+					message,
 					type: 'success'
 				});
 
@@ -183,103 +281,11 @@ AUI.add(
 				alert.show();
 
 				instance._alert = alert;
-			},
-
-			_queueableQuestionUpdateAllInvited: function(data) {
-				var instance = this;
-
-				var answers = data.answers;
-
-				var showNextQuestion = A.bind('run', instance.queue);
-
-				if (answers.cancel) {
-					A.soon(showNextQuestion);
-				} else {
-					Liferay.CalendarMessageUtil.confirm(
-						TPL_MESSAGE_UPDATE_ALL_INVITED,
-						Liferay.Language.get('save-changes'),
-						Liferay.Language.get('do-not-change-the-event'),
-						showNextQuestion,
-						function() {
-							answers.cancel = true;
-
-							showNextQuestion();
-						}
-					);
-				}
-			},
-
-			_queueableQuestionUpdateRecurring: function(data) {
-				var instance = this;
-
-				var answers = data.answers;
-
-				var showNextQuestion = A.bind('run', instance.queue);
-
-				if (answers.cancel) {
-					A.soon(showNextQuestion);
-				} else {
-					Liferay.RecurrenceUtil.openConfirmationPanel(
-						'update',
-						function() {
-							answers.updateInstance = true;
-
-							showNextQuestion();
-						},
-						function() {
-							answers.allFollowing = true;
-							answers.updateInstance = true;
-
-							showNextQuestion();
-						},
-						showNextQuestion,
-						function() {
-							answers.cancel = true;
-
-							showNextQuestion();
-						}
-					);
-				}
-			},
-
-			_queueableQuestionUserCalendarOnly: function(data) {
-				var instance = this;
-
-				var answers = data.answers;
-
-				var showNextQuestion = A.bind('run', instance.queue);
-
-				if (answers.cancel) {
-					A.soon(showNextQuestion);
-				} else {
-					var content = [
-						'<p class="calendar-portlet-confirmation-text">',
-						Lang.sub(
-							Liferay.Language.get(
-								'you-are-about-to-make-changes-that-will-only-affect-your-calendar-x'
-							),
-							[LString.escapeHTML(data.calendarName)]
-						),
-						'</p>'
-					].join(STR_BLANK);
-
-					Liferay.CalendarMessageUtil.confirm(
-						content,
-						Liferay.Language.get('save-changes'),
-						Liferay.Language.get('do-not-change-the-event'),
-						showNextQuestion,
-						function() {
-							answers.cancel = true;
-
-							showNextQuestion();
-						}
-					);
-				}
 			}
 		};
 	},
 	'',
 	{
-		requires: ['aui-alert', 'liferay-util-window']
+		requires: ['aui-alert', 'liferay-alert', 'liferay-util-window']
 	}
 );

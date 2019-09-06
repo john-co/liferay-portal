@@ -1,12 +1,24 @@
-/* eslint no-spaced-func: 0 */
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
 
 import Component from 'metal-jsx';
 import objectHash from 'object-hash';
 import {Config} from 'metal-state';
 import {
-	convertToSearchParams,
+	convertToFormData,
 	makeFetch
-} from 'dynamic-data-mapping-form-builder/js/util/fetch.es';
+} from 'dynamic-data-mapping-form-renderer/js/util/fetch.es';
 
 class AutoSave extends Component {
 	created() {
@@ -141,11 +153,14 @@ class AutoSave extends Component {
 
 		const state = this.getCurrentState();
 
-		formData.set(`${namespace}name`, JSON.stringify(state.name));
-		formData.set(`${namespace}published`, JSON.stringify(this.published));
-		formData.set(`${namespace}saveAsDraft`, saveAsDraft);
+		formData.append(`${namespace}name`, JSON.stringify(state.name));
+		formData.append(
+			`${namespace}published`,
+			JSON.stringify(this.published)
+		);
+		formData.append(`${namespace}saveAsDraft`, saveAsDraft);
 
-		return convertToSearchParams(formData);
+		return convertToFormData(formData);
 	}
 
 	_setInterval(minutes) {

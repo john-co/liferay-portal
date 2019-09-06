@@ -21,7 +21,7 @@ import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBus;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
-import com.liferay.segments.asah.connector.internal.cache.SegmentsAsahCache;
+import com.liferay.segments.asah.connector.internal.cache.AsahSegmentsEntryCache;
 import com.liferay.segments.asah.connector.internal.context.contributor.SegmentsAsahRequestContextContributor;
 import com.liferay.segments.context.Context;
 import com.liferay.segments.model.SegmentsEntryRel;
@@ -30,6 +30,7 @@ import com.liferay.segments.service.SegmentsEntryRelLocalService;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.LongStream;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -49,11 +50,11 @@ public class AsahSegmentsEntryProviderTest {
 	@Before
 	public void setUp() throws PortalException {
 		ReflectionTestUtil.setFieldValue(
-			_asahSegmentsEntryProvider, "_messageBus", _messageBus);
+			_asahSegmentsEntryProvider, "_asahSegmentsEntryCache",
+			_asahSegmentsEntryCache);
 
 		ReflectionTestUtil.setFieldValue(
-			_asahSegmentsEntryProvider, "_segmentsAsahCache",
-			_segmentsAsahCache);
+			_asahSegmentsEntryProvider, "_messageBus", _messageBus);
 
 		ReflectionTestUtil.setFieldValue(
 			_asahSegmentsEntryProvider, "_segmentsEntryRelLocalService",
@@ -69,12 +70,11 @@ public class AsahSegmentsEntryProviderTest {
 
 		List<SegmentsEntryRel> segmentsEntryRels = new ArrayList<>();
 
-		Arrays.stream(
-			segmentsEntryRelIds
-		).forEach(
+		LongStream stream = Arrays.stream(segmentsEntryRelIds);
+
+		stream.forEach(
 			segmentsEntryRelId -> segmentsEntryRels.add(
-				_createSegmentsEntryRel(segmentsEntryRelId))
-		);
+				_createSegmentsEntryRel(segmentsEntryRelId)));
 
 		long segmentsEntryId = RandomTestUtil.randomLong();
 
@@ -118,7 +118,7 @@ public class AsahSegmentsEntryProviderTest {
 		};
 
 		Mockito.when(
-			_segmentsAsahCache.getSegmentsEntryIds(userId)
+			_asahSegmentsEntryCache.getSegmentsEntryIds(userId)
 		).thenReturn(
 			segmentsEntryIds
 		);
@@ -126,7 +126,9 @@ public class AsahSegmentsEntryProviderTest {
 		Context context = new Context();
 
 		context.put(
-			SegmentsAsahRequestContextContributor.AC_CLIENT_USER_ID, userId);
+			SegmentsAsahRequestContextContributor.
+				KEY_SEGMENTS_ANONYMOUS_USER_ID,
+			userId);
 
 		Assert.assertArrayEquals(
 			segmentsEntryIds,
@@ -146,7 +148,8 @@ public class AsahSegmentsEntryProviderTest {
 		Context context = new Context();
 
 		context.put(
-			SegmentsAsahRequestContextContributor.AC_CLIENT_USER_ID,
+			SegmentsAsahRequestContextContributor.
+				KEY_SEGMENTS_ANONYMOUS_USER_ID,
 			StringPool.BLANK);
 
 		Assert.assertArrayEquals(
@@ -181,7 +184,7 @@ public class AsahSegmentsEntryProviderTest {
 		String userId = RandomTestUtil.randomString();
 
 		Mockito.when(
-			_segmentsAsahCache.getSegmentsEntryIds(userId)
+			_asahSegmentsEntryCache.getSegmentsEntryIds(userId)
 		).thenReturn(
 			null
 		);
@@ -189,7 +192,9 @@ public class AsahSegmentsEntryProviderTest {
 		Context context = new Context();
 
 		context.put(
-			SegmentsAsahRequestContextContributor.AC_CLIENT_USER_ID, userId);
+			SegmentsAsahRequestContextContributor.
+				KEY_SEGMENTS_ANONYMOUS_USER_ID,
+			userId);
 
 		Assert.assertArrayEquals(
 			new long[0],
@@ -217,14 +222,14 @@ public class AsahSegmentsEntryProviderTest {
 		return segmentsEntryRel;
 	}
 
+	@Mock
+	private AsahSegmentsEntryCache _asahSegmentsEntryCache;
+
 	private final AsahSegmentsEntryProvider _asahSegmentsEntryProvider =
 		new AsahSegmentsEntryProvider();
 
 	@Mock
 	private MessageBus _messageBus;
-
-	@Mock
-	private SegmentsAsahCache _segmentsAsahCache;
 
 	@Mock
 	private SegmentsEntryRelLocalService _segmentsEntryRelLocalService;

@@ -14,6 +14,9 @@
 
 package com.liferay.segments.asah.connector.internal.client;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 
 import java.util.List;
@@ -24,6 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
@@ -39,6 +43,33 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(immediate = true, service = JSONWebServiceClient.class)
 public class JSONWebServiceClientImpl implements JSONWebServiceClient {
+
+	@Override
+	public String doDelete(
+		String url, Map<String, String> parameters,
+		Map<String, String> headers) {
+
+		WebTarget webTarget = _client.target(_baseURI);
+
+		webTarget = webTarget.path(url);
+
+		for (Map.Entry<String, String> entry : parameters.entrySet()) {
+			webTarget = webTarget.queryParam(entry.getKey(), entry.getValue());
+		}
+
+		Invocation.Builder builder = webTarget.request(
+			MediaType.APPLICATION_JSON_TYPE);
+
+		for (Map.Entry<String, String> entry : headers.entrySet()) {
+			builder.header(entry.getKey(), entry.getValue());
+		}
+
+		Response response = builder.delete();
+
+		_validateResponse(response);
+
+		return response.readEntity(String.class);
+	}
 
 	@Override
 	public String doGet(
@@ -72,6 +103,48 @@ public class JSONWebServiceClientImpl implements JSONWebServiceClient {
 	}
 
 	@Override
+	public <T> T doPost(
+		Class<T> clazz, String url, T object, Map<String, String> headers) {
+
+		WebTarget webTarget = _client.target(_baseURI);
+
+		webTarget = webTarget.path(url);
+
+		Invocation.Builder builder = webTarget.request(
+			MediaType.APPLICATION_JSON_TYPE);
+
+		for (Map.Entry<String, String> entry : headers.entrySet()) {
+			builder.header(entry.getKey(), entry.getValue());
+		}
+
+		Response response = builder.post(
+			Entity.entity(object, MediaType.APPLICATION_JSON_TYPE));
+
+		_validateResponse(response);
+
+		return response.readEntity(clazz);
+	}
+
+	@Override
+	public <T> void doPut(String url, T object, Map<String, String> headers) {
+		WebTarget webTarget = _client.target(_baseURI);
+
+		webTarget = webTarget.path(url);
+
+		Invocation.Builder builder = webTarget.request(
+			MediaType.APPLICATION_JSON_TYPE);
+
+		for (Map.Entry<String, String> entry : headers.entrySet()) {
+			builder.header(entry.getKey(), entry.getValue());
+		}
+
+		Response response = builder.put(
+			Entity.entity(object, MediaType.APPLICATION_JSON_TYPE));
+
+		_validateResponse(response);
+	}
+
+	@Override
 	public String getBaseURI() {
 		return _baseURI;
 	}
@@ -85,7 +158,14 @@ public class JSONWebServiceClientImpl implements JSONWebServiceClient {
 	protected void activate() {
 		_client = _clientBuilder.build();
 
-		_client.register(JacksonJsonProvider.class);
+		JacksonJsonProvider jacksonJsonProvider = new JacksonJaxbJsonProvider();
+
+		jacksonJsonProvider.configure(
+			SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+		jacksonJsonProvider.configure(
+			DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+		_client.register(jacksonJsonProvider);
 	}
 
 	private void _validateResponse(Response response) {

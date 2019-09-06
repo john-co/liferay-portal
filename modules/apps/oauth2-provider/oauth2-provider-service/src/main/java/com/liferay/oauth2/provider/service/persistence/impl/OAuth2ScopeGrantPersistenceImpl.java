@@ -33,8 +33,7 @@ import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.dao.orm.SessionFactory;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.service.persistence.CompanyProvider;
-import com.liferay.portal.kernel.service.persistence.CompanyProviderWrapper;
+import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.portal.kernel.service.persistence.impl.TableMapper;
 import com.liferay.portal.kernel.service.persistence.impl.TableMapperFactory;
@@ -174,14 +173,14 @@ public class OAuth2ScopeGrantPersistenceImpl
 	 * @param start the lower bound of the range of o auth2 scope grants
 	 * @param end the upper bound of the range of o auth2 scope grants (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @param retrieveFromCache whether to retrieve from the finder cache
+	 * @param useFinderCache whether to use the finder cache
 	 * @return the ordered range of matching o auth2 scope grants
 	 */
 	@Override
 	public List<OAuth2ScopeGrant> findByOAuth2ApplicationScopeAliasesId(
 		long oAuth2ApplicationScopeAliasesId, int start, int end,
 		OrderByComparator<OAuth2ScopeGrant> orderByComparator,
-		boolean retrieveFromCache) {
+		boolean useFinderCache) {
 
 		boolean pagination = true;
 		FinderPath finderPath = null;
@@ -191,11 +190,14 @@ public class OAuth2ScopeGrantPersistenceImpl
 			(orderByComparator == null)) {
 
 			pagination = false;
-			finderPath =
-				_finderPathWithoutPaginationFindByOAuth2ApplicationScopeAliasesId;
-			finderArgs = new Object[] {oAuth2ApplicationScopeAliasesId};
+
+			if (useFinderCache) {
+				finderPath =
+					_finderPathWithoutPaginationFindByOAuth2ApplicationScopeAliasesId;
+				finderArgs = new Object[] {oAuth2ApplicationScopeAliasesId};
+			}
 		}
-		else {
+		else if (useFinderCache) {
 			finderPath =
 				_finderPathWithPaginationFindByOAuth2ApplicationScopeAliasesId;
 			finderArgs = new Object[] {
@@ -205,7 +207,7 @@ public class OAuth2ScopeGrantPersistenceImpl
 
 		List<OAuth2ScopeGrant> list = null;
 
-		if (retrieveFromCache) {
+		if (useFinderCache) {
 			list = (List<OAuth2ScopeGrant>)finderCache.getResult(
 				finderPath, finderArgs, this);
 
@@ -275,10 +277,14 @@ public class OAuth2ScopeGrantPersistenceImpl
 
 				cacheResult(list);
 
-				finderCache.putResult(finderPath, finderArgs, list);
+				if (useFinderCache) {
+					finderCache.putResult(finderPath, finderArgs, list);
+				}
 			}
 			catch (Exception e) {
-				finderCache.removeResult(finderPath, finderArgs);
+				if (useFinderCache) {
+					finderCache.removeResult(finderPath, finderArgs);
+				}
 
 				throw processException(e);
 			}
@@ -728,27 +734,31 @@ public class OAuth2ScopeGrantPersistenceImpl
 	 * @param applicationName the application name
 	 * @param bundleSymbolicName the bundle symbolic name
 	 * @param scope the scope
-	 * @param retrieveFromCache whether to retrieve from the finder cache
+	 * @param useFinderCache whether to use the finder cache
 	 * @return the matching o auth2 scope grant, or <code>null</code> if a matching o auth2 scope grant could not be found
 	 */
 	@Override
 	public OAuth2ScopeGrant fetchByC_O_A_B_S(
 		long companyId, long oAuth2ApplicationScopeAliasesId,
 		String applicationName, String bundleSymbolicName, String scope,
-		boolean retrieveFromCache) {
+		boolean useFinderCache) {
 
 		applicationName = Objects.toString(applicationName, "");
 		bundleSymbolicName = Objects.toString(bundleSymbolicName, "");
 		scope = Objects.toString(scope, "");
 
-		Object[] finderArgs = new Object[] {
-			companyId, oAuth2ApplicationScopeAliasesId, applicationName,
-			bundleSymbolicName, scope
-		};
+		Object[] finderArgs = null;
+
+		if (useFinderCache) {
+			finderArgs = new Object[] {
+				companyId, oAuth2ApplicationScopeAliasesId, applicationName,
+				bundleSymbolicName, scope
+			};
+		}
 
 		Object result = null;
 
-		if (retrieveFromCache) {
+		if (useFinderCache) {
 			result = finderCache.getResult(
 				_finderPathFetchByC_O_A_B_S, finderArgs, this);
 		}
@@ -843,14 +853,23 @@ public class OAuth2ScopeGrantPersistenceImpl
 				List<OAuth2ScopeGrant> list = q.list();
 
 				if (list.isEmpty()) {
-					finderCache.putResult(
-						_finderPathFetchByC_O_A_B_S, finderArgs, list);
+					if (useFinderCache) {
+						finderCache.putResult(
+							_finderPathFetchByC_O_A_B_S, finderArgs, list);
+					}
 				}
 				else {
 					if (list.size() > 1) {
 						Collections.sort(list, Collections.reverseOrder());
 
 						if (_log.isWarnEnabled()) {
+							if (!useFinderCache) {
+								finderArgs = new Object[] {
+									companyId, oAuth2ApplicationScopeAliasesId,
+									applicationName, bundleSymbolicName, scope
+								};
+							}
+
 							_log.warn(
 								"OAuth2ScopeGrantPersistenceImpl.fetchByC_O_A_B_S(long, long, String, String, String, boolean) with parameters (" +
 									StringUtil.merge(finderArgs) +
@@ -866,8 +885,10 @@ public class OAuth2ScopeGrantPersistenceImpl
 				}
 			}
 			catch (Exception e) {
-				finderCache.removeResult(
-					_finderPathFetchByC_O_A_B_S, finderArgs);
+				if (useFinderCache) {
+					finderCache.removeResult(
+						_finderPathFetchByC_O_A_B_S, finderArgs);
+				}
 
 				throw processException(e);
 			}
@@ -1222,7 +1243,7 @@ public class OAuth2ScopeGrantPersistenceImpl
 		oAuth2ScopeGrant.setNew(true);
 		oAuth2ScopeGrant.setPrimaryKey(oAuth2ScopeGrantId);
 
-		oAuth2ScopeGrant.setCompanyId(companyProvider.getCompanyId());
+		oAuth2ScopeGrant.setCompanyId(CompanyThreadLocal.getCompanyId());
 
 		return oAuth2ScopeGrant;
 	}
@@ -1529,14 +1550,14 @@ public class OAuth2ScopeGrantPersistenceImpl
 	 * @param start the lower bound of the range of o auth2 scope grants
 	 * @param end the upper bound of the range of o auth2 scope grants (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @param retrieveFromCache whether to retrieve from the finder cache
+	 * @param useFinderCache whether to use the finder cache
 	 * @return the ordered range of o auth2 scope grants
 	 */
 	@Override
 	public List<OAuth2ScopeGrant> findAll(
 		int start, int end,
 		OrderByComparator<OAuth2ScopeGrant> orderByComparator,
-		boolean retrieveFromCache) {
+		boolean useFinderCache) {
 
 		boolean pagination = true;
 		FinderPath finderPath = null;
@@ -1546,17 +1567,20 @@ public class OAuth2ScopeGrantPersistenceImpl
 			(orderByComparator == null)) {
 
 			pagination = false;
-			finderPath = _finderPathWithoutPaginationFindAll;
-			finderArgs = FINDER_ARGS_EMPTY;
+
+			if (useFinderCache) {
+				finderPath = _finderPathWithoutPaginationFindAll;
+				finderArgs = FINDER_ARGS_EMPTY;
+			}
 		}
-		else {
+		else if (useFinderCache) {
 			finderPath = _finderPathWithPaginationFindAll;
 			finderArgs = new Object[] {start, end, orderByComparator};
 		}
 
 		List<OAuth2ScopeGrant> list = null;
 
-		if (retrieveFromCache) {
+		if (useFinderCache) {
 			list = (List<OAuth2ScopeGrant>)finderCache.getResult(
 				finderPath, finderArgs, this);
 		}
@@ -1606,10 +1630,14 @@ public class OAuth2ScopeGrantPersistenceImpl
 
 				cacheResult(list);
 
-				finderCache.putResult(finderPath, finderArgs, list);
+				if (useFinderCache) {
+					finderCache.putResult(finderPath, finderArgs, list);
+				}
 			}
 			catch (Exception e) {
-				finderCache.removeResult(finderPath, finderArgs);
+				if (useFinderCache) {
+					finderCache.removeResult(finderPath, finderArgs);
+				}
 
 				throw processException(e);
 			}
@@ -1797,7 +1825,7 @@ public class OAuth2ScopeGrantPersistenceImpl
 
 		if (oAuth2ScopeGrant == null) {
 			oAuth2ScopeGrantToOAuth2AuthorizationTableMapper.addTableMapping(
-				companyProvider.getCompanyId(), pk, oAuth2AuthorizationPK);
+				CompanyThreadLocal.getCompanyId(), pk, oAuth2AuthorizationPK);
 		}
 		else {
 			oAuth2ScopeGrantToOAuth2AuthorizationTableMapper.addTableMapping(
@@ -1819,7 +1847,7 @@ public class OAuth2ScopeGrantPersistenceImpl
 
 		if (oAuth2ScopeGrant == null) {
 			oAuth2ScopeGrantToOAuth2AuthorizationTableMapper.addTableMapping(
-				companyProvider.getCompanyId(), pk,
+				CompanyThreadLocal.getCompanyId(), pk,
 				oAuth2Authorization.getPrimaryKey());
 		}
 		else {
@@ -1844,7 +1872,7 @@ public class OAuth2ScopeGrantPersistenceImpl
 		OAuth2ScopeGrant oAuth2ScopeGrant = fetchByPrimaryKey(pk);
 
 		if (oAuth2ScopeGrant == null) {
-			companyId = companyProvider.getCompanyId();
+			companyId = CompanyThreadLocal.getCompanyId();
 		}
 		else {
 			companyId = oAuth2ScopeGrant.getCompanyId();
@@ -1970,7 +1998,7 @@ public class OAuth2ScopeGrantPersistenceImpl
 		OAuth2ScopeGrant oAuth2ScopeGrant = fetchByPrimaryKey(pk);
 
 		if (oAuth2ScopeGrant == null) {
-			companyId = companyProvider.getCompanyId();
+			companyId = CompanyThreadLocal.getCompanyId();
 		}
 		else {
 			companyId = oAuth2ScopeGrant.getCompanyId();
@@ -2126,7 +2154,7 @@ public class OAuth2ScopeGrantPersistenceImpl
 
 	@Override
 	@Reference(
-		target = OAuthTwoPersistenceConstants.ORIGIN_BUNDLE_SYMBOLIC_NAME_FILTER,
+		target = OAuthTwoPersistenceConstants.SERVICE_CONFIGURATION_FILTER,
 		unbind = "-"
 	)
 	public void setConfiguration(Configuration configuration) {
@@ -2157,9 +2185,6 @@ public class OAuth2ScopeGrantPersistenceImpl
 	}
 
 	private boolean _columnBitmaskEnabled;
-
-	@Reference(service = CompanyProviderWrapper.class)
-	protected CompanyProvider companyProvider;
 
 	@Reference
 	protected EntityCache entityCache;
@@ -2195,5 +2220,14 @@ public class OAuth2ScopeGrantPersistenceImpl
 
 	private static final Set<String> _badColumnNames = SetUtil.fromArray(
 		new String[] {"oAuth2ApplicationScopeAliasesId"});
+
+	static {
+		try {
+			Class.forName(OAuthTwoPersistenceConstants.class.getName());
+		}
+		catch (ClassNotFoundException cnfe) {
+			throw new ExceptionInInitializerError(cnfe);
+		}
+	}
 
 }

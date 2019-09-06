@@ -14,28 +14,19 @@ definition {
 
 		User.firstLoginPG();
 
-		ProductMenu.gotoPortlet(
-			category = "Site Builder",
-			panel = "Site Administration",
-			portlet = "Pages");
+		JSONLayout.addPublicLayout(
+			groupName = "Guest",
+			layoutName = "Documents and Media Page");
 
-		SitePages.addPublicPage(
-			pageName = "Documents and Media Page",
-			sitePageType = "Widget Page");
-
-		SitePages.configurePage(
-			columnName = "1 Column",
-			pageName = "Documents and Media Page",
-			privacy = "Public Pages",
-			sitePageType = "Widget Page");
+		JSONLayout.addWidgetToPublicLayout(
+			column = "1",
+			groupName = "Guest",
+			layoutName = "Documents and Media Page",
+			widgetName = "Documents and Media");
 
 		Navigator.gotoPage(pageName = "Documents and Media Page");
-
-		Portlet.addPG(portletName = "Documents and Media");
 
 		DMDocument.enableActionsMenuOnPortlet();
-
-		Navigator.gotoPage(pageName = "Documents and Media Page");
 
 		LexiconEntry.changeDisplayStyle(displayStyle = "list");
 	}
@@ -298,13 +289,9 @@ definition {
 			dmDocumentFile = "Document_1.doc",
 			dmDocumentTitle = "Document_1.doc");
 
-		Refresh();
-
 		DMDocument.addPG(
 			dmDocumentFile = "Document_2.doc",
 			dmDocumentTitle = "Document_2.doc");
-
-		Refresh();
 
 		DMDocument.addPG(
 			dmDocumentFile = "Document_3.doc",
@@ -474,7 +461,8 @@ definition {
 	test AddSubFolderNameDocumentNameDuplicate {
 		JSONDocument.addFolder(
 			dmFolderDescription = "DM Folder Description",
-			dmFolderName = "DM Folder Name");
+			dmFolderName = "DM Folder Name",
+			groupName = "Guest");
 
 		Navigator.gotoPage(pageName = "Documents and Media Page");
 
@@ -731,6 +719,7 @@ definition {
 		DMDocument.downloadPG(dmDocumentTitle = "/D/M/Document Title");
 	}
 
+	@ignore = "true"
 	@priority = "5"
 	test EditAndDeleteGoogleDoc {
 		property portal.release = "false";
@@ -779,7 +768,8 @@ definition {
 	test EditDocument {
 		JSONDocument.addFile(
 			dmDocumentDescription = "DM Document Description",
-			dmDocumentTitle = "DM Document Title");
+			dmDocumentTitle = "DM Document Title",
+			groupName = "Guest");
 
 		Navigator.gotoPage(pageName = "Documents and Media Page");
 
@@ -1016,11 +1006,13 @@ definition {
 	test MoveFolderDocumentToFolder {
 		JSONDocument.addFolder(
 			dmFolderDescription = "DM Folder1 Description",
-			dmFolderName = "DM Folder1 Name");
+			dmFolderName = "DM Folder1 Name",
+			groupName = "Guest");
 
 		JSONDocument.addFolder(
 			dmFolderDescription = "DM Folder2 Description",
-			dmFolderName = "DM Folder2 Name");
+			dmFolderName = "DM Folder2 Name",
+			groupName = "Guest");
 
 		Navigator.gotoPage(pageName = "Documents and Media Page");
 
@@ -1044,6 +1036,7 @@ definition {
 			dmDocumentTitle = "DM Document Title");
 	}
 
+	@ignore = "true"
 	@priority = "5"
 	test MoveGoogleDocToFolder {
 		property portal.release = "false";
@@ -1437,7 +1430,8 @@ definition {
 	test UnlockDocumentInFolder {
 		JSONDocument.addFolder(
 			dmFolderDescription = "DM Folder Description",
-			dmFolderName = "DM Folder Name");
+			dmFolderName = "DM Folder Name",
+			groupName = "Guest");
 
 		Navigator.gotoPage(pageName = "Documents and Media Page");
 
@@ -1472,6 +1466,32 @@ definition {
 			dmDocumentDescription = "DM Document Description",
 			dmDocumentTitle = "DM Document Title",
 			dmDocumentVersionNumber = "2.0");
+	}
+
+	@description = "This test covers LPS-91595. It ensures that the document selection persists when navigating through the pagination in the DM widget."
+	@priority = "4"
+	test ViewDocumentPagination {
+		Navigator.gotoPage(pageName = "Documents and Media Page");
+
+		DMDocument.addMultiplePG(dmDocumentFileList = "Document_1.doc,Document_2.jpg,Document_3.xls,Document_4.txt,Document_1.txt,Document_2.xls,Document_3.jpg,Document_4.jpg,Document_1.xls,Document_2.doc");
+
+		Pagination.changePagination(itemsPerPage = "5");
+
+		Pagination.viewResults(results = "Showing 1 to 5 of 10 entries.");
+
+		DMDocument.checkDocumentCheckboxPG(dmDocumentTitle = "Document_2.jpg");
+
+		AssertTextEquals(
+			locator1 = "ManagementBar#NAVBAR_TEXT",
+			value1 = "1 of 10 Selected");
+
+		Click(locator1 = "Pagination#NEXT_LINK");
+
+		DMDocument.checkDocumentCheckboxPG(dmDocumentTitle = "Document_4.jpg");
+
+		AssertTextEquals(
+			locator1 = "ManagementBar#NAVBAR_TEXT",
+			value1 = "2 of 10 Selected");
 	}
 
 	@priority = "4"
@@ -1532,7 +1552,7 @@ definition {
 
 		JSONGroup.addGroup(groupName = "Site Name 1");
 
-		ProductMenu.gotoSite(site = "Site Name 1");
+		SitePages.openPagesAdmin(siteURLKey = "Site Name 1");
 
 		ProductMenu.gotoPortlet(
 			category = "People",
@@ -1541,7 +1561,7 @@ definition {
 
 		Site.assignUserGroupAsMemberCP(userGroupName = "UG UserGroup Name");
 
-		ProductMenu.gotoSite(site = "Site Name 1");
+		SitePages.openPagesAdmin(siteURLKey = "Site Name 1");
 
 		ProductMenu.gotoPortlet(
 			category = "People",
@@ -1552,7 +1572,7 @@ definition {
 			teamDescription = "Site Team Description",
 			teamName = "Site Team Name");
 
-		ProductMenu.gotoSite(site = "Site Name 1");
+		SitePages.openPagesAdmin(siteURLKey = "Site Name 1");
 
 		ProductMenu.gotoPortlet(
 			category = "People",
@@ -1563,7 +1583,7 @@ definition {
 			teamName = "Site Team Name",
 			userGroupName = "UG UserGroup Name");
 
-		ProductMenu.gotoSite(site = "Site Name 1");
+		SitePages.openPagesAdmin(siteURLKey = "Site Name 1");
 
 		ProductMenu.gotoPortlet(
 			category = "People",
@@ -1602,28 +1622,15 @@ definition {
 
 		JSONGroup.addGroup(groupName = "Site Name 2");
 
-		ProductMenu.gotoSite(site = "Site Name 2");
+		JSONLayout.addPublicLayout(
+			groupName = "Site Name 2",
+			layoutName = "Documents and Media Page");
 
-		ProductMenu.gotoPortlet(
-			category = "Site Builder",
-			panel = "Site Administration",
-			portlet = "Pages");
-
-		SitePages.addPublicPage(
-			pageName = "Documents and Media Page",
-			sitePageType = "Widget Page");
-
-		SitePages.configurePage(
-			columnName = "1 Column",
-			pageName = "Documents and Media Page",
-			privacy = "Public Pages",
-			sitePageType = "Widget Page");
-
-		Navigator.gotoSitePage(
-			pageName = "Documents and Media Page",
-			siteName = "Site Name 2");
-
-		Portlet.addPG(portletName = "Documents and Media");
+		JSONLayout.addWidgetToPublicLayout(
+			column = "1",
+			groupName = "Site Name 2",
+			layoutName = "Documents and Media Page",
+			widgetName = "Documents and Media");
 
 		Navigator.gotoSitePage(
 			pageName = "Documents and Media Page",
@@ -1701,7 +1708,7 @@ definition {
 
 		Pause(locator1 = "5000");
 
-		ProductMenu.gotoSite(site = "Site Name 1");
+		SitePages.openPagesAdmin(siteURLKey = "Site Name 1");
 
 		ProductMenu.gotoPortlet(
 			category = "Site Builder",

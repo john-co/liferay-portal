@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 +(function($) {
 	var CollapsibleSearch = function(element) {
 		var instance = this;
@@ -29,13 +43,13 @@
 	CollapsibleSearch.TRANSITION_DURATION = 500;
 
 	CollapsibleSearch.prototype = {
-		blur: function(event) {
+		blur(event) {
 			var $input = $(event.currentTarget);
 
 			$input.closest('.basic-search').removeClass('focus');
 		},
 
-		close: function(event) {
+		close(event) {
 			var instance = this;
 
 			var basicSearch = $(event.currentTarget).closest('.basic-search');
@@ -68,7 +82,7 @@
 			}
 		},
 
-		destroy: function() {
+		destroy() {
 			var instance = this;
 
 			instance.$close.off('click.lexicon.close.collapsible-search');
@@ -77,13 +91,13 @@
 			instance.$submit.off('click.lexicon.submit.collapsible-search');
 		},
 
-		focus: function(event) {
+		focus(event) {
 			$(event.currentTarget)
 				.closest('.basic-search')
 				.addClass('focus');
 		},
 
-		submit: function(event) {
+		submit(event) {
 			var instance = this;
 
 			if (window.innerWidth < CollapsibleSearch.BREAKPOINT) {

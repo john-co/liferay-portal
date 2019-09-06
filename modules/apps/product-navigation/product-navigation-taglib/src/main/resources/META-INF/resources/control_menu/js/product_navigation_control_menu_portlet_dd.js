@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 AUI.add(
 	'liferay-product-navigation-control-menu-portlet-dd',
 	function(A) {
@@ -19,18 +33,12 @@ AUI.add(
 
 			EXTENDS: A.Plugin.Base,
 
-			NAME: NAME,
+			NAME,
 
 			NS: NAME,
 
 			prototype: {
-				initializer: function() {
-					var instance = this;
-
-					instance._bindUIDragDrop();
-				},
-
-				_bindUIDragDrop: function() {
+				_bindUIDragDrop() {
 					var instance = this;
 
 					var portletItemOptions = {
@@ -44,7 +52,7 @@ AUI.add(
 							target: false
 						},
 						dragNodes: '[data-draggable]',
-						dropContainer: function(dropNode) {
+						dropContainer(dropNode) {
 							return dropNode.one(Layout.options.dropContainer);
 						}
 					};
@@ -73,7 +81,7 @@ AUI.add(
 					Liferay.fire('initLayout');
 				},
 
-				_onDragEnd: function(event) {
+				_onDragEnd(event) {
 					var instance = this;
 
 					var portletItem = event.currentTarget;
@@ -84,10 +92,16 @@ AUI.add(
 						var portletNode = event.target.get(STR_NODE);
 
 						instance.fire('dragEnd', {
-							appendNode: appendNode,
-							portletNode: portletNode
+							appendNode,
+							portletNode
 						});
 					}
+				},
+
+				initializer() {
+					var instance = this;
+
+					instance._bindUIDragDrop();
 				}
 			}
 		});

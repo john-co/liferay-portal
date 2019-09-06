@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import {Align} from 'metal-position';
 import Component from 'metal-component';
 import {Config} from 'metal-state';
@@ -200,16 +214,6 @@ class DisabledAreaPopover extends Component {
  */
 DisabledAreaPopover.STATE = {
 	/**
-	 * Selector for elements where this popover should be shown
-	 * @default undefined
-	 * @instance
-	 * @memberOf DisabledAreaPopover
-	 * @review
-	 * @type {!string}
-	 */
-	selector: Config.string().required(),
-
-	/**
 	 * Clicked element
 	 * @default null
 	 * @instance
@@ -251,7 +255,17 @@ DisabledAreaPopover.STATE = {
 	 * @review
 	 * @type {!string}
 	 */
-	_position: Config.string().value(null)
+	_position: Config.string().value(null),
+
+	/**
+	 * Selector for elements where this popover should be shown
+	 * @default undefined
+	 * @instance
+	 * @memberOf DisabledAreaPopover
+	 * @review
+	 * @type {!string}
+	 */
+	selector: Config.string().required()
 };
 
 Soy.register(DisabledAreaPopover, templates);

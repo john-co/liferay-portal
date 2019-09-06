@@ -1,12 +1,29 @@
-import {Modal, PortletBase} from 'frontend-js-web';
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
+import 'clay-button';
+import {PortletBase, fetch} from 'frontend-js-web';
+import 'frontend-js-web/liferay/compat/modal/Modal.es';
 import Soy from 'metal-soy';
-import templates from './Flags.soy';
 import {Config} from 'metal-state';
-import ClayButton from 'clay-button';
+
+import templates from './Flags.soy';
 
 /**
  * It opens a dialog where the user can flag the page.
  * @abstract
+ * @deprecated As of Athanasius (7.3.x), with no direct replacement
  * @extends {PortletBase}
  */
 
@@ -89,19 +106,18 @@ class Flags extends PortletBase {
 			this.ns('reporterEmailAddress')
 		] = this.refs.modal.refs.reporterEmailAddress.value;
 
-		let formData = new FormData();
+		const formData = new FormData();
 
-		for (let name in this.formData) {
+		for (const name in this.formData) {
 			formData.append(name, this.formData[name]);
 		}
 
 		fetch(this.uri, {
 			body: formData,
-			credentials: 'include',
-			method: 'post'
+			method: 'POST'
 		})
-			.then(xhr => {
-				if (xhr.status === Liferay.STATUS_CODE.OK) {
+			.then(response => {
+				if (response.status === Liferay.STATUS_CODE.OK) {
 					this._showConfirmationMessage = true;
 				}
 			})
@@ -132,6 +148,15 @@ Flags.STATE = {
 		.value(false),
 
 	/**
+	 * Selected reason to flag.
+	 * @instance
+	 * @memberof Flags
+	 * @type {String}
+	 */
+
+	_selectedReason: Config.string().internal(),
+
+	/**
 	 * Flag to indicate if dialog should show the confirmation message.
 	 * @default false
 	 * @instance
@@ -154,15 +179,6 @@ Flags.STATE = {
 	_showErrorMessage: Config.bool()
 		.internal()
 		.value(false),
-
-	/**
-	 * Selected reason to flag.
-	 * @instance
-	 * @memberof Flags
-	 * @type {String}
-	 */
-
-	_selectedReason: Config.string().internal(),
 
 	/**
 	 * Company name.

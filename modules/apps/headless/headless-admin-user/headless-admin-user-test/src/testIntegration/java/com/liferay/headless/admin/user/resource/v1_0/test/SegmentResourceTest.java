@@ -23,8 +23,8 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.model.ResourceConstants;
 import com.liferay.portal.kernel.model.Role;
-import com.liferay.portal.kernel.model.RoleConstants;
 import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.service.ResourcePermissionLocalServiceUtil;
 import com.liferay.portal.kernel.service.RoleLocalServiceUtil;
@@ -32,7 +32,7 @@ import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
 import com.liferay.portal.kernel.test.util.ServiceContextTestUtil;
 import com.liferay.portal.kernel.test.util.UserTestUtil;
-import com.liferay.segments.constants.SegmentsConstants;
+import com.liferay.segments.constants.SegmentsEntryConstants;
 import com.liferay.segments.model.SegmentsEntry;
 import com.liferay.segments.test.util.SegmentsTestUtil;
 
@@ -149,7 +149,7 @@ public class SegmentResourceTest extends BaseSegmentResourceTestCase {
 						"typeValue", "model"
 					))
 			).toString());
-		segment.setSource(SegmentsConstants.SOURCE_DEFAULT);
+		segment.setSource(SegmentsEntryConstants.SOURCE_DEFAULT);
 
 		return segment;
 	}
@@ -173,6 +173,12 @@ public class SegmentResourceTest extends BaseSegmentResourceTestCase {
 	@Override
 	protected Long testGetSiteUserAccountSegmentsPage_getUserAccountId() {
 		return _user.getUserId();
+	}
+
+	@Override
+	protected Segment testGraphQLSegment_addSegment() throws Exception {
+		return testGetSiteSegmentsPage_addSegment(
+			testGroup.getGroupId(), randomSegment());
 	}
 
 	private Segment _addSegment(Long siteId, Segment segment)

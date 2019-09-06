@@ -1,9 +1,23 @@
-import {DefaultEventHandler} from 'frontend-js-web';
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
+import {DefaultEventHandler, ItemSelectorDialog} from 'frontend-js-web';
 import {Config} from 'metal-state';
 
 class ElementsDefaultEventHandler extends DefaultEventHandler {
 	compareVersions(itemData) {
-		let namespace = this.namespace;
+		const namespace = this.namespace;
 
 		Liferay.Util.selectEntity(
 			{
@@ -52,6 +66,32 @@ class ElementsDefaultEventHandler extends DefaultEventHandler {
 		if (confirm(message)) {
 			this._send(itemData.deleteURL);
 		}
+	}
+
+	deleteArticleTranslations(itemData) {
+		this._openArticleTranslationsItemSelector(
+			Liferay.Language.get('delete'),
+			Liferay.Language.get('delete-translations'),
+			itemData.selectArticleTranslationsURL,
+			selectedItems => {
+				if (
+					confirm(
+						Liferay.Language.get(
+							'are-you-sure-you-want-to-delete-the-selected-entries'
+						)
+					)
+				) {
+					selectedItems.forEach(item => {
+						document.hrefFm.appendChild(item);
+					});
+				}
+
+				submitForm(
+					document.hrefFm,
+					itemData.deleteArticleTranslationsURL
+				);
+			}
+		);
 	}
 
 	expireArticles(itemData) {
@@ -104,6 +144,38 @@ class ElementsDefaultEventHandler extends DefaultEventHandler {
 
 	unsubscribeArticle(itemData) {
 		this._send(itemData.unsubscribeArticleURL);
+	}
+
+	/**
+	 * Opens an item selector to select some article translations.
+	 * @param {string} dialogButtonLabel
+	 * @param {string} dialogTitle
+	 * @param {string} selectArticleTranslationsURL
+	 * @param {function} callback Callback executed when some items have been
+	 *  selected. They will be sent as parameters to this callback
+	 * @private
+	 * @review
+	 */
+	_openArticleTranslationsItemSelector(
+		dialogButtonLabel,
+		dialogTitle,
+		selectArticleTranslationsURL,
+		callback
+	) {
+		const itemSelectorDialog = new ItemSelectorDialog({
+			buttonAddLabel: dialogButtonLabel,
+			eventName: this.ns('selectTranslations'),
+			title: dialogTitle,
+			url: selectArticleTranslationsURL
+		});
+
+		itemSelectorDialog.on('selectedItemChange', event => {
+			if (event.selectedItem) {
+				callback(event.selectedItem);
+			}
+		});
+
+		itemSelectorDialog.open();
 	}
 
 	_send(url) {

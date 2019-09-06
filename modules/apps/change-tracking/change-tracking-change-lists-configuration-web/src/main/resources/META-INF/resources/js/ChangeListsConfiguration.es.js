@@ -1,5 +1,19 @@
-import ClayNavigationBar from 'clay-navigation-bar';
-import {PortletBase, openToast} from 'frontend-js-web';
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
+import 'clay-navigation-bar';
+import {PortletBase, fetch, openToast} from 'frontend-js-web';
 import Soy from 'metal-soy';
 import {Config} from 'metal-state';
 
@@ -82,7 +96,7 @@ class ChangeListsConfiguration extends PortletBase {
 	_handleUserConfigSave(event) {
 		event.preventDefault();
 
-		let data = {
+		const data = {
 			checkoutCTCollectionConfirmationEnabled: this
 				.checkoutCTCollectionConfirmationEnabled
 		};
@@ -115,27 +129,22 @@ class ChangeListsConfiguration extends PortletBase {
 	_handleSave(event) {
 		event.preventDefault();
 
-		let data = {
+		const data = {
 			changeTrackingEnabled: this.changeTrackingEnabled
 		};
 
-		this._putDataRequest(
-			this.urlChangeTrackingConfiguration,
-			data,
-			response => {
-				Liferay.Util.navigate(this.urlConfiguration);
-			}
-		);
+		this._putDataRequest(this.urlChangeTrackingConfiguration, data, () => {
+			Liferay.Util.navigate(this.urlConfiguration);
+		});
 	}
 
 	/**
 	 * Saves the configuration and redirects the user to the overview screen.
 	 *
-	 * @param {!Event} event
 	 * @private
 	 */
-	_handleSaveAndGoToOverview(event) {
-		let data = {
+	_handleSaveAndGoToOverview() {
+		const data = {
 			changeTrackingEnabled: this.changeTrackingEnabled
 		};
 
@@ -161,17 +170,7 @@ class ChangeListsConfiguration extends PortletBase {
 	}
 
 	_getDataRequest(url, callback) {
-		let headers = new Headers();
-		headers.append('Content-Type', 'application/json');
-		headers.append('X-CSRF-Token', Liferay.authToken);
-
-		const request = {
-			credentials: 'include',
-			headers,
-			method: 'GET'
-		};
-
-		fetch(url, request)
+		fetch(url)
 			.then(response => response.json())
 			.then(response => callback(response))
 			.catch(error => {
@@ -191,20 +190,15 @@ class ChangeListsConfiguration extends PortletBase {
 	}
 
 	_putDataRequest(url, bodyData, callback) {
-		let body = JSON.stringify(bodyData);
-
-		let headers = new Headers();
-		headers.append('Content-Type', 'application/json');
-		headers.append('X-CSRF-Token', Liferay.authToken);
-
-		const request = {
-			body,
-			credentials: 'include',
-			headers,
+		const init = {
+			body: JSON.stringify(bodyData),
+			headers: {
+				'content-type': 'application/json'
+			},
 			method: 'PUT'
 		};
 
-		fetch(url, request)
+		fetch(url, init)
 			.then(response => response.json())
 			.then(response => callback(response))
 			.catch(error => {
@@ -310,14 +304,23 @@ ChangeListsConfiguration.STATE = {
 	).required(),
 
 	/**
-	 * If <code>true</code>, User Settings is available in navigation.
+	 * Path of the available icons.
 	 *
-	 * @default false
+	 * @default undefined
 	 * @instance
 	 * @memberOf ChangeListsConfiguration
-	 * @type {boolean}
+	 * @type {!string}
 	 */
-	userSettingsEnabled: Config.bool().value(false),
+	spritemap: Config.string().required(),
+
+	/**
+	 * Content types that support change tracking.
+	 *
+	 * @instance
+	 * @memberOf ChangeListsConfiguration
+	 * @type {string}
+	 */
+	tooltipBody: Config.string(),
 
 	/**
 	 * URL for the REST service to the change tracking configuration endpoint.
@@ -340,16 +343,6 @@ ChangeListsConfiguration.STATE = {
 	urlChangeTrackingUserConfiguration: Config.string().required(),
 
 	/**
-	 * URL for the Overview screen.
-	 *
-	 * @default undefined
-	 * @instance
-	 * @memberOf ChangeListsConfiguration
-	 * @type {!string}
-	 */
-	urlOverview: Config.string().required(),
-
-	/**
 	 * URL for the Configuration screen.
 	 *
 	 * @default undefined
@@ -360,23 +353,24 @@ ChangeListsConfiguration.STATE = {
 	urlConfiguration: Config.string().required(),
 
 	/**
-	 * Path of the available icons.
+	 * URL for the Overview screen.
 	 *
 	 * @default undefined
 	 * @instance
 	 * @memberOf ChangeListsConfiguration
 	 * @type {!string}
 	 */
-	spritemap: Config.string().required(),
+	urlOverview: Config.string().required(),
 
 	/**
-	 * Content types that support change tracking.
+	 * If <code>true</code>, User Settings is available in navigation.
 	 *
+	 * @default false
 	 * @instance
 	 * @memberOf ChangeListsConfiguration
-	 * @type {string}
+	 * @type {boolean}
 	 */
-	tooltipBody: Config.string()
+	userSettingsEnabled: Config.bool().value(false)
 };
 
 Soy.register(ChangeListsConfiguration, templates);

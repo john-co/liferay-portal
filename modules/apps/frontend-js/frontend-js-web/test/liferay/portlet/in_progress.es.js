@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import register from '../../../src/main/resources/META-INF/resources/liferay/portlet/register.es';
 
 describe('PortletHub', () => {
@@ -244,7 +258,6 @@ describe('PortletHub', () => {
 		});
 
 		it('returns true when setRenderState has been called but the updates have not been dispatched', () => {
-			const parameters = {};
 			const state = pageState.portlets.PortletC.state;
 
 			state.parameters.param1 = ['paramValue1'];
@@ -260,7 +273,6 @@ describe('PortletHub', () => {
 		});
 
 		it('returns true through a different hub when setRenderState has been called but the updates have not been dispatched', () => {
-			const parameters = {};
 			const state = pageState.portlets.PortletC.state;
 
 			state.parameters.param1 = ['paramValue1'];
@@ -276,7 +288,6 @@ describe('PortletHub', () => {
 		});
 
 		it('returns false after setRenderState updates have been dispatched', () => {
-			const parameters = {};
 			const state = pageState.portlets.PortletC.state;
 
 			state.parameters.param1 = ['paramValue1'];

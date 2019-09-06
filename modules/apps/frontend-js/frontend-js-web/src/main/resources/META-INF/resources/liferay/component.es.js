@@ -1,11 +1,24 @@
-import {isFunction} from 'metal';
-import Uri from 'metal-uri';
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
 
-let componentConfigs = {};
+import {isFunction} from 'metal';
+
+const componentConfigs = {};
 let componentPromiseWrappers = {};
-let components = {};
+const components = {};
 let componentsCache = {};
-let componentsFn = {};
+const componentsFn = {};
 
 const DEFAULT_CACHE_VALIDATION_PARAMS = ['p_p_id', 'p_p_lifecycle'];
 const DEFAULT_CACHE_VALIDATION_PORTLET_PARAMS = [
@@ -24,7 +37,7 @@ const _createPromiseWrapper = function(value) {
 	if (value) {
 		promiseWrapper = {
 			promise: Promise.resolve(value),
-			resolve: function() {}
+			resolve() {}
 		};
 	} else {
 		let promiseResolve;
@@ -34,7 +47,7 @@ const _createPromiseWrapper = function(value) {
 		});
 
 		promiseWrapper = {
-			promise: promise,
+			promise,
 			resolve: promiseResolve
 		};
 	}
@@ -43,13 +56,12 @@ const _createPromiseWrapper = function(value) {
 };
 
 /**
- * Restores a previously cached component markup
+ * Restores a previously cached component markup.
  *
- * @param {object} state Stored state associated with the registered task
- * @param {object} params Additional params passed in the task registration
- * @param {Fragment} node Temporary fragment holding the new markup
+ * @param {object} state The stored state associated with the registered task.
+ * @param {object} params The additional params passed in the task registration.
+ * @param {Fragment} node The temporary fragment holding the new markup.
  * @private
- * @review
  */
 const _restoreTask = function(state, params, node) {
 	const cache = state.data;
@@ -65,27 +77,33 @@ const _restoreTask = function(state, params, node) {
 };
 
 /**
- * Runs when an SPA navigation start is detected to:
- * - Cache the state and current markup of registered components matching that
- * have requested it through the `cacheState` configuration option. This state
- * can be used to initialize the component in the same state if it persists
- * throughout navigations.
- * - Register a DOM task to restore the markup of those components that are
- * present in the next screen to avoid a flickering effect due to state changes.
- * This can be done by querying the components screen cache using the
- * `Liferay.getComponentsCache` method.
+ * Runs when an SPA navigation start is detected to
+ *
+ * <ul>
+ * <li>
+ * Cache the state and current markup of registered components that have
+ * requested it through the <code>cacheState</code> configuration option. This
+ * state can be used to initialize the component in the same state if it
+ * persists throughout navigations.
+ * </li>
+ * <li>
+ * Register a DOM task to restore the markup of components that are present in
+ * the next screen to avoid a flickering effect due to state changes. This can
+ * be done by querying the components screen cache using the
+ * <code>Liferay.getComponentsCache</code> method.
+ * </li>
+ * </ul>
  *
  * @private
- * @review
  */
 
 const _onStartNavigate = function(event) {
-	const currentUri = new Uri(window.location.href);
-	const uri = new Uri(event.path);
+	const currentUri = new URL(window.location.href);
+	const uri = new URL(event.path, window.location.href);
 
 	const cacheableUri = DEFAULT_CACHE_VALIDATION_PARAMS.every(param => {
 		return (
-			uri.getParameterValue(param) === currentUri.getParameterValue(param)
+			uri.searchParams.get(param) === currentUri.searchParams.get(param)
 		);
 	});
 
@@ -104,8 +122,8 @@ const _onStartNavigate = function(event) {
 						const namespacedParam = `_${componentConfig.portletId}_${param}`;
 
 						cacheable =
-							uri.getParameterValue(namespacedParam) ===
-							currentUri.getParameterValue(namespacedParam);
+							uri.searchParams.get(namespacedParam) ===
+							currentUri.searchParams.get(namespacedParam);
 					}
 
 					return cacheable;
@@ -163,18 +181,19 @@ const _onStartNavigate = function(event) {
 };
 
 /**
- * This method acts in a dual way. It allows both to register a component and to
- * retrieve its instance from the global register.
+ * Registers a component and retrieves its instance from the global registry.
  *
- * @param {string} id The id of the component to retrieve or register
- * @param {object} value The component instance or a component constructor. If a
- * constructor is provided, it will be invoked the first time the component is
- * requested and its result will be stored and returned as the component
- * @param {object} componentConfig Custom component configuration. Can be used to
- * provide additional hints for the system handling of the component lifecycle
- * @return {object} The passed value, or the stored component for the provided id
+ * @param  {string} id The ID of the component to retrieve or register.
+ * @param  {object} value The component instance or a component constructor. If
+ *         a constructor is provided, it will be invoked the first time the
+ *         component is requested and its result will be stored and returned as
+ *         the component.
+ * @param  {object} componentConfig The Custom component configuration. This can
+ *         be used to provide additional hints for the system handling of the
+ *         component lifecycle.
+ * @return {object} The passed value, or the stored component for the provided
+ *         ID.
  */
-
 const component = function(id, value, componentConfig) {
 	let retVal;
 
@@ -195,6 +214,7 @@ const component = function(id, value, componentConfig) {
 			delete componentConfigs[id];
 			delete componentPromiseWrappers[id];
 
+			// eslint-disable-next-line no-console
 			console.warn(
 				'Component with id "' +
 					id +
@@ -228,12 +248,10 @@ const component = function(id, value, componentConfig) {
 /**
  * Retrieves a list of component instances after they've been registered.
  *
- * @param {...string} componentId The ids of the components to be received
+ * @param {...string} componentId The IDs of the components to receive.
  * @return {Promise} A promise to be resolved with all the requested component
- * instances after they've been successfully registered
- * @review
+ *         instances after they've been successfully registered.
  */
-
 const componentReady = function() {
 	let component;
 	let componentPromise;
@@ -266,14 +284,12 @@ const componentReady = function() {
 };
 
 /**
- * Destroys the component registered by the provided component id. Invokes the
- * component's own destroy lifecycle methods (destroy or dispose) and deletes
- * the internal references to the component in the component registry.
+ * Destroys the component registered by the provided component ID. This invokes
+ * the component's own destroy lifecycle methods (destroy or dispose) and
+ * deletes the internal references to the component in the component registry.
  *
- * @param {string} componentId The id of the component to destroy
- * @review
+ * @param {string} componentId The ID of the component to destroy.
  */
-
 const destroyComponent = function(componentId) {
 	const component = components[componentId];
 
@@ -292,14 +308,13 @@ const destroyComponent = function(componentId) {
 };
 
 /**
- * Destroys registered components matching the provided filter function. If
- * no filter function is provided, it will destroy all registered components.
+ * Destroys registered components matching the provided filter function. If no
+ * filter function is provided, it destroys all registered components.
  *
- * @param {Function} filterFn A method that receives a component destroy options
- * and the component itself and returns true if the component should be destroyed
- * @review
+ * @param {Function} filterFn A method that receives a component's destroy
+ *        options and the component itself, and returns <code>true</code> if the
+ *        component should be destroyed.
  */
-
 const destroyComponents = function(filterFn) {
 	var componentIds = Object.keys(components);
 
@@ -316,23 +331,20 @@ const destroyComponents = function(filterFn) {
 };
 
 /**
- * Clears the component promises map to make sure pending promises won't get
- * accidentally resolved at a later stage if a component with the same id appears
- * causing stale code to run.
+ * Clears the component promises map to make sure pending promises don't get
+ * accidentally resolved at a later stage if a component with the same ID
+ * appears, causing stale code to run.
  */
-
 const destroyUnfulfilledPromises = function() {
 	componentPromiseWrappers = {};
 };
 
 /**
- * Retrieves a registered component cached state.
+ * Retrieves a registered component's cached state.
  *
- * @param {string} componentId The id used to register the component
- * @return {object} The state the component had prior to the previous navigation
- * @review
+ * @param {string} componentId The ID used to register the component.
+ * @return {object} The state the component had prior to the previous navigation.
  */
-
 const getComponentCache = function(componentId) {
 	const componentCache = componentsCache[componentId];
 
@@ -340,9 +352,8 @@ const getComponentCache = function(componentId) {
 };
 
 /**
- * Initializes the component cache mechanism
+ * Initializes the component cache mechanism.
  */
-
 const initComponentCache = function() {
 	Liferay.on('startNavigate', _onStartNavigate);
 };

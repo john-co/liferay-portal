@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import getCN from 'classnames';
 import LocalizedDropdown from './LocalizedDropdown.es';
 import PropTypes from 'prop-types';
@@ -57,11 +71,13 @@ export default class LocalizedInput extends React.Component {
 
 		let hasError = false;
 
+		const value = event.target.value;
+
 		this.setState(
 			prevState => {
 				const newValues = {
 					...prevState.values,
-					[prevState.currentLang]: event.target.value
+					[prevState.currentLang]: value
 				};
 
 				hasError = !this._validateValues(newValues);
@@ -73,13 +89,13 @@ export default class LocalizedInput extends React.Component {
 							if (lang.key === prevState.currentLang) {
 								newLang = {
 									...lang,
-									hasValue: event.target.value !== ''
+									hasValue: value !== ''
 								};
 							}
 							return newLang;
 						}
 					),
-					currentValue: event.target.value,
+					currentValue: value,
 					hasError,
 					values: newValues
 				};
@@ -113,7 +129,7 @@ export default class LocalizedInput extends React.Component {
 		});
 
 		return (
-			<div className='input-group input-localized input-localized-input'>
+			<div className="input-group input-localized input-localized-input">
 				<LocalizedDropdown
 					availableLanguages={availableLanguages}
 					defaultLang={defaultLang}
@@ -123,12 +139,12 @@ export default class LocalizedInput extends React.Component {
 				/>
 				<div className={inputGroupItemClasses}>
 					<input
-						className='rounded form-control language-value field form-control-inline form-control'
-						data-testid='localized-main-input'
+						className="rounded form-control language-value field form-control-inline form-control"
+						data-testid="localized-main-input"
 						onChange={this._handleInputChange}
 						placeholder={placeholder}
 						readOnly={readOnly}
-						type='text'
+						type="text"
 						value={currentValue}
 					/>
 				</div>

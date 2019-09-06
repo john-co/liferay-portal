@@ -2,8 +2,16 @@ definition {
 
 	var dmDocumentTypeName = "File Upload";
 
-	macro gotoAddDocumentType {
+	macro gotoAddDocumentTypeCP {
 		LexiconEntry.gotoAdd();
+
+		var key_dmDocumentTypeName = "${dmDocumentTypeName}";
+
+		MenuItem.click(menuItem = "${dmDocumentTypeName}");
+	}
+
+	macro gotoAddDocumentTypePG {
+		Portlet.clickPortletPlusIconPG(portletName = "Documents and Media");
 
 		var key_dmDocumentTypeName = "${dmDocumentTypeName}";
 
@@ -160,16 +168,32 @@ definition {
 		var key_text = "Share";
 
 		AssertClick(
-			locator1 = "Button#ANY",
+			locator1 = "Button#SHARE_SIDENAV",
 			value1 = "Share");
 	}
 
-	macro gotoShareViaSharedAssets {
-		var key_assetTitle = "${dmDocumentTitle}";
+	macro gotoShareInfoPanel {
+		var key_dmDocumentTitle = "${dmDocumentTitle}";
+
+		AssertClick(
+			locator1 = "DocumentsAndMedia#DESCRIPTIVE_LIST_DOCUMENT_TITLE",
+			value1 = "${dmDocumentTitle}");
+
+		DMDocument.viewDocumentTitleCmdPG(dmDocumentTitle = "${dmDocumentTitle}");
+
+		Click.clickAt(locator1 = "Icon#INFO");
+
+		AssertElementPresent(locator1 = "Button#SHARE_SIDEBAR");
+
+		Click(locator1 = "Button#SHARE_SIDEBAR");
+	}
+
+	macro gotoShareViaSharedContent {
+		var key_contentTitle = "${dmDocumentTitle}";
 
 		Click(
-			locator1 = "Sharing#SHARED_CONTENT_ASSET_OPTIONS",
-			value1 = "${assetTitle}");
+			locator1 = "Sharing#SHARED_CONTENT_CONTENT_OPTIONS",
+			value1 = "${contentTitle}");
 
 		MenuItem.click(menuItem = "Share");
 	}

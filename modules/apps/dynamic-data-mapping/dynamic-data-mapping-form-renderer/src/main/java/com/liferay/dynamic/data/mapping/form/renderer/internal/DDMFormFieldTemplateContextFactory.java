@@ -39,6 +39,8 @@ import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.Validator;
 
+import java.math.BigDecimal;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -117,6 +119,8 @@ public class DDMFormFieldTemplateContextFactory {
 
 		Map<String, Object> ddmFormFieldTemplateContext = new HashMap<>();
 
+		ddmFormFieldTemplateContext.put("type", ddmFormField.getType());
+
 		setDDMFormFieldTemplateContextFieldName(
 			ddmFormFieldTemplateContext, ddmFormField.getName());
 		setDDMFormFieldTemplateContextLocalizedValue(
@@ -145,8 +149,7 @@ public class DDMFormFieldTemplateContextFactory {
 
 		if (_ddmFormRenderingContext.isReturnFullContext()) {
 			setProperties(
-				ddmFormFieldTemplateContext, ddmFormField, ddmFormFieldValue,
-				index, ddmFormFieldParameterName);
+				ddmFormFieldTemplateContext, ddmFormField, ddmFormFieldValue);
 		}
 
 		setPropertiesChangeableByRule(
@@ -559,6 +562,16 @@ public class DDMFormFieldTemplateContextFactory {
 			return;
 		}
 
+		LocalizedValue errorMessageLocalizedValue =
+			ddmFormFieldValidation.getErrorMessageLocalizedValue();
+
+		String errorMessage = StringPool.BLANK;
+
+		if (errorMessageLocalizedValue != null) {
+			errorMessage = GetterUtil.getString(
+				errorMessageLocalizedValue.getString(_locale));
+		}
+
 		Map<String, String> validation = new HashMap<>();
 
 		validation.put(
@@ -566,9 +579,7 @@ public class DDMFormFieldTemplateContextFactory {
 			GetterUtil.getString(
 				changedProperties.get("validationDataType"),
 				MapUtil.getString(changedProperties, "dataType")));
-		validation.put(
-			"errorMessage",
-			GetterUtil.getString(ddmFormFieldValidation.getErrorMessage()));
+		validation.put("errorMessage", errorMessage);
 		validation.put(
 			"expression",
 			GetterUtil.getString(ddmFormFieldValidation.getExpression()));
@@ -580,7 +591,7 @@ public class DDMFormFieldTemplateContextFactory {
 	}
 
 	protected void setDDMFormFieldTemplateContextValue(
-		DDMFormField ddmFormField, Map<String, Object> changedProperties,
+		Map<String, Object> changedProperties,
 		Map<String, Object> ddmFormFieldTemplateContext, Value value) {
 
 		if (changedProperties.get("value") != null) {
@@ -615,24 +626,28 @@ public class DDMFormFieldTemplateContextFactory {
 			_ddmFormFieldTypeServicesTracker.getDDMFormFieldValueAccessor(
 				ddmFormField.getType());
 
-		Map<String, Object> localizedValue = new HashMap<>();
+		Map<String, Object> localizedValues = new HashMap<>();
 
 		for (Locale availableLocale : value.getAvailableLocales()) {
 			String languageId = LanguageUtil.getLanguageId(availableLocale);
 
-			if (ddmFormFieldValueAccessor == null) {
-				localizedValue.put(
-					languageId, value.getString(availableLocale));
-			}
-			else {
-				localizedValue.put(
-					languageId,
+			Object localizedValue = value.getString(availableLocale);
+
+			if (ddmFormFieldValueAccessor != null) {
+				Object ddmFormFieldValueAccessorValue =
 					ddmFormFieldValueAccessor.getValue(
-						ddmFormFieldValue, availableLocale));
+						ddmFormFieldValue, availableLocale);
+
+				if (!(ddmFormFieldValueAccessorValue instanceof BigDecimal)) {
+					localizedValue = ddmFormFieldValueAccessor.getValue(
+						ddmFormFieldValue, availableLocale);
+				}
 			}
+
+			localizedValues.put(languageId, localizedValue);
 		}
 
-		ddmFormFieldTemplateContext.put("localizedValue", localizedValue);
+		ddmFormFieldTemplateContext.put("localizedValue", localizedValues);
 	}
 
 	protected void setDDMFormFieldTemplateContextVisibilityExpression(
@@ -664,8 +679,7 @@ public class DDMFormFieldTemplateContextFactory {
 
 	protected void setProperties(
 		Map<String, Object> ddmFormFieldTemplateContext,
-		DDMFormField ddmFormField, DDMFormFieldValue ddmFormFieldValue,
-		int index, String ddmFormFieldParameterName) {
+		DDMFormField ddmFormField, DDMFormFieldValue ddmFormFieldValue) {
 
 		setDDMFormFieldTemplateContextDataType(
 			ddmFormFieldTemplateContext, ddmFormField.getDataType());
@@ -712,7 +726,7 @@ public class DDMFormFieldTemplateContextFactory {
 		setDDMFormFieldTemplateContextValid(
 			changedProperties, ddmFormFieldTemplateContext, true);
 		setDDMFormFieldTemplateContextValue(
-			ddmFormField, changedProperties, ddmFormFieldTemplateContext,
+			changedProperties, ddmFormFieldTemplateContext,
 			ddmFormFieldValue.getValue());
 		setDDMFormFieldTemplateContextValueLocalizableValue(
 			ddmFormFieldTemplateContext, ddmFormFieldValue);

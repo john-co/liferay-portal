@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import {DefaultEventHandler, openSimpleInputModal} from 'frontend-js-web';
 import {Config} from 'metal-state';
 
@@ -7,6 +21,42 @@ class FragmentEntryDropdownDefaultEventHandler extends DefaultEventHandler {
 		this.one('#fragmentEntryIds').value = itemData.fragmentEntryId;
 
 		submitForm(this.one('#fragmentEntryFm'), itemData.copyFragmentEntryURL);
+	}
+
+	copyToContributedFragmentEntry(itemData) {
+		Liferay.Util.selectEntity(
+			{
+				dialog: {
+					constrain: true,
+					destroyOnHide: true,
+					modal: true
+				},
+				eventName: this.ns('selectFragmentCollection'),
+				id: this.ns('selectFragmentCollection'),
+				title: Liferay.Language.get('select-collection'),
+				uri: itemData.selectFragmentCollectionURL
+			},
+			function(selectedItem) {
+				if (selectedItem) {
+					this.one('#fragmentCollectionId').value = selectedItem.id;
+					this.one('#fragmentEntryKeys').value =
+						itemData.fragmentEntryKey;
+
+					submitForm(
+						this.one('#fragmentEntryFm'),
+						itemData.copyContributedFragmentEntryURL
+					);
+				}
+			}.bind(this)
+		);
+	}
+
+	copyToFragmentEntry(itemData) {
+		this._selectFragmentCollection(
+			itemData.fragmentEntryId,
+			itemData.selectFragmentCollectionURL,
+			itemData.copyFragmentEntryURL
+		);
 	}
 
 	deleteFragmentEntry(itemData) {
@@ -24,30 +74,10 @@ class FragmentEntryDropdownDefaultEventHandler extends DefaultEventHandler {
 	}
 
 	moveFragmentEntry(itemData) {
-		Liferay.Util.selectEntity(
-			{
-				dialog: {
-					constrain: true,
-					destroyOnHide: true,
-					modal: true
-				},
-				eventName: this.ns('selectFragmentCollection'),
-				id: this.ns('selectFragmentCollection'),
-				title: Liferay.Language.get('select-collection'),
-				uri: itemData.selectFragmentCollectionURL
-			},
-			function(selectedItem) {
-				if (selectedItem) {
-					this.one('#fragmentCollectionId').value = selectedItem.id;
-					this.one('#fragmentEntryIds').value =
-						itemData.fragmentEntryId;
-
-					submitForm(
-						this.one('#fragmentEntryFm'),
-						itemData.moveFragmentEntryURL
-					);
-				}
-			}.bind(this)
+		this._selectFragmentCollection(
+			itemData.fragmentEntryId,
+			itemData.selectFragmentCollectionURL,
+			itemData.moveFragmentEntryURL
 		);
 	}
 
@@ -93,6 +123,37 @@ class FragmentEntryDropdownDefaultEventHandler extends DefaultEventHandler {
 
 			itemSelectorDialog.open();
 		});
+	}
+
+	_selectFragmentCollection(
+		fragmentEntryId,
+		selectFragmentCollectionURL,
+		targetFragmentEntryURL
+	) {
+		Liferay.Util.selectEntity(
+			{
+				dialog: {
+					constrain: true,
+					destroyOnHide: true,
+					modal: true
+				},
+				eventName: this.ns('selectFragmentCollection'),
+				id: this.ns('selectFragmentCollection'),
+				title: Liferay.Language.get('select-collection'),
+				uri: selectFragmentCollectionURL
+			},
+			function(selectedItem) {
+				if (selectedItem) {
+					this.one('#fragmentCollectionId').value = selectedItem.id;
+					this.one('#fragmentEntryIds').value = fragmentEntryId;
+
+					submitForm(
+						this.one('#fragmentEntryFm'),
+						targetFragmentEntryURL
+					);
+				}
+			}.bind(this)
+		);
 	}
 
 	_send(url) {

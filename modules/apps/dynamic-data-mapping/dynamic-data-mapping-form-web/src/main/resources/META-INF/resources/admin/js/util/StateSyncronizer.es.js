@@ -1,8 +1,22 @@
-import * as FormSupport from 'dynamic-data-mapping-form-builder/js/components/Form/FormSupport.es';
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
+import * as FormSupport from 'dynamic-data-mapping-form-renderer/js/components/FormRenderer/FormSupport.es';
 import Component from 'metal-jsx';
 import {Config} from 'metal-state';
 import {EventHandler} from 'metal-events';
-import {PagesVisitor} from 'dynamic-data-mapping-form-builder/js/util/visitors.es';
+import {PagesVisitor} from 'dynamic-data-mapping-form-renderer/js/util/visitors.es';
 
 class StateSyncronizer extends Component {
 	created() {
@@ -79,30 +93,26 @@ class StateSyncronizer extends Component {
 	}
 
 	getState() {
-		const {
-			layoutProvider,
-			localizedDescription,
-			localizedName
-		} = this.props;
+		const {localizedDescription, localizedName, store} = this.props;
 
 		const state = {
 			availableLanguageIds: this.getAvailableLanguageIds(),
 			defaultLanguageId: this.getDefaultLanguageId(),
 			description: localizedDescription,
 			name: localizedName,
-			pages: layoutProvider.state.pages,
-			paginationMode: layoutProvider.state.paginationMode,
-			rules: layoutProvider.getRules(),
-			successPageSettings: layoutProvider.state.successPageSettings
+			pages: store.state.pages,
+			paginationMode: store.state.paginationMode,
+			rules: store.getRules(),
+			successPageSettings: store.state.successPageSettings
 		};
 
 		return state;
 	}
 
 	isEmpty() {
-		const {layoutProvider} = this.props;
+		const {store} = this.props;
 
-		return FormSupport.emptyPages(layoutProvider.state.pages);
+		return FormSupport.emptyPages(store.state.pages);
 	}
 
 	syncEditors(editingLanguageId = this.getDefaultLanguageId()) {
@@ -146,11 +156,11 @@ class StateSyncronizer extends Component {
 		});
 
 		if (settingsDDMForm) {
-			const settings = settingsDDMForm.get('context');
-
 			document.querySelector(
 				`#${namespace}serializedSettingsContext`
-			).value = JSON.stringify(settings);
+			).value = JSON.stringify({
+				pages: settingsDDMForm.pages
+			});
 		}
 
 		document.querySelector(`#${namespace}name`).value = JSON.stringify(
@@ -186,6 +196,8 @@ class StateSyncronizer extends Component {
 					...field,
 					settingsContext: {
 						...field.settingsContext,
+						availableLanguageIds: this.getAvailableLanguageIds(),
+						defaultLanguageId: this.getDefaultLanguageId(),
 						pages: this._getSerializedSettingsContextPages(
 							field.settingsContext.pages
 						)
@@ -241,13 +253,13 @@ class StateSyncronizer extends Component {
 
 StateSyncronizer.PROPS = {
 	descriptionEditor: Config.any(),
-	layoutProvider: Config.any(),
 	localizedDescription: Config.object().value({}),
 	localizedName: Config.object().value({}),
 	nameEditor: Config.any(),
 	namespace: Config.string().required(),
 	published: Config.bool(),
 	settingsDDMForm: Config.any(),
+	store: Config.any(),
 	translationManager: Config.any()
 };
 

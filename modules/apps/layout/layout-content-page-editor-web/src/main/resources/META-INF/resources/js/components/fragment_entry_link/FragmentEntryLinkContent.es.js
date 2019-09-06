@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import {closest, globalEval} from 'metal-dom';
 import Component from 'metal-component';
 import {Config} from 'metal-state';
@@ -54,9 +68,11 @@ class FragmentEntryLinkContent extends Component {
 	 * @inheritDoc
 	 */
 	rendered() {
-		if (this.content) {
-			this._renderContent(this.content);
-		}
+		requestAnimationFrame(() => {
+			if (this.content) {
+				this._renderContent(this.content, {evaluateJs: true});
+			}
+		});
 	}
 
 	/**
@@ -78,10 +94,13 @@ class FragmentEntryLinkContent extends Component {
 	 * Renders the content if it is changed.
 	 * @inheritDoc
 	 * @param {string} newContent The new content to render.
+	 * @param {string} prevContent
 	 */
-	syncContent(newContent) {
-		if (newContent && newContent !== this.content) {
-			this._renderContent(newContent);
+	syncContent(newContent, prevContent) {
+		if (newContent && newContent !== prevContent) {
+			requestAnimationFrame(() => {
+				this._renderContent(newContent, {evaluateJs: true});
+			});
 		}
 	}
 
@@ -159,7 +178,7 @@ class FragmentEntryLinkContent extends Component {
 			return new FragmentEditableBackgroundImage({
 				editableId,
 				editableValues,
-				element: element,
+				element,
 				fragmentEntryLinkId: this.fragmentEntryLinkId,
 				processor: BACKGROUND_IMAGE_FRAGMENT_ENTRY_PROCESSOR,
 				showMapping: this.showMapping,
@@ -240,13 +259,18 @@ class FragmentEntryLinkContent extends Component {
 	/**
 	 * Parses and renders the fragment entry link content with AUI.
 	 * @param {string} content
+	 * @param {object} [options={}]
+	 * @param {boolean} [options.evaluateJs]
 	 * @private
+	 * @review
 	 */
-	_renderContent(content) {
+	_renderContent(content, options = {}) {
 		if (content && this.refs.content) {
 			this.refs.content.innerHTML = content;
 
-			globalEval.runScriptsInElement(this.refs.content);
+			if (options.evaluateJs) {
+				globalEval.runScriptsInElement(this.refs.content);
+			}
 
 			if (this.editableValues) {
 				this._createEditables();
@@ -279,9 +303,8 @@ class FragmentEntryLinkContent extends Component {
 		segmentsExperienceId,
 		updateFunctions
 	}) {
-		const editableValues = this.editableValues[
-			EDITABLE_FRAGMENT_ENTRY_PROCESSOR
-		];
+		const editableValues =
+			this.editableValues[EDITABLE_FRAGMENT_ENTRY_PROCESSOR] || {};
 
 		Object.keys(editableValues).forEach(editableId => {
 			const editableValue = editableValues[editableId];

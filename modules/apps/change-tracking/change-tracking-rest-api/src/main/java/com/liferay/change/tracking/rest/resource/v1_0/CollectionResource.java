@@ -14,9 +14,11 @@
 
 package com.liferay.change.tracking.rest.resource.v1_0;
 
+import com.liferay.change.tracking.rest.constant.v1_0.CollectionType;
 import com.liferay.change.tracking.rest.dto.v1_0.Collection;
 import com.liferay.change.tracking.rest.dto.v1_0.CollectionUpdate;
 import com.liferay.portal.kernel.model.Company;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.vulcan.accept.language.AcceptLanguage;
 import com.liferay.portal.vulcan.pagination.Page;
@@ -24,31 +26,40 @@ import com.liferay.portal.vulcan.pagination.Pagination;
 
 import javax.annotation.Generated;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
+
+import org.osgi.annotation.versioning.ProviderType;
 
 /**
  * To access this resource, run:
  *
  *     curl -u your@email.com:yourpassword -D - http://localhost:8080/o/change-tracking/v1.0
  *
- * @author Mate Thurzo
+ * @author Máté Thurzó
  * @generated
  */
 @Generated("")
+@ProviderType
 public interface CollectionResource {
 
 	public Page<Collection> getCollectionsPage(
-			Long companyId, String type, Long userId, Pagination pagination,
-			Sort[] sorts)
+			CollectionType collectionType, Long companyId, Long userId,
+			Pagination pagination, Sort[] sorts)
 		throws Exception;
 
 	public Collection postCollection(
 			Long companyId, Long userId, CollectionUpdate collectionUpdate)
 		throws Exception;
 
-	public Response deleteCollection(Long collectionId) throws Exception;
+	public Response deleteCollection(Long collectionId, Long companyId)
+		throws Exception;
 
-	public Collection getCollection(Long collectionId) throws Exception;
+	public Collection getCollection(Long collectionId, Long companyId)
+		throws Exception;
 
 	public Response postCollectionCheckout(Long collectionId, Long userId)
 		throws Exception;
@@ -62,5 +73,18 @@ public interface CollectionResource {
 	}
 
 	public void setContextCompany(Company contextCompany);
+
+	public default void setContextHttpServletRequest(
+		HttpServletRequest contextHttpServletRequest) {
+	}
+
+	public default void setContextHttpServletResponse(
+		HttpServletResponse contextHttpServletResponse) {
+	}
+
+	public default void setContextUriInfo(UriInfo contextUriInfo) {
+	}
+
+	public void setContextUser(User contextUser);
 
 }

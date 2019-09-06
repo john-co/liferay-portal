@@ -527,9 +527,7 @@ public class MainServlet extends HttpServlet {
 			_log.debug("Check variables");
 		}
 
-		ServletContext servletContext = getServletContext();
-
-		httpServletRequest.setAttribute(WebKeys.CTX, servletContext);
+		httpServletRequest.setAttribute(WebKeys.CTX, getServletContext());
 
 		if (_log.isDebugEnabled()) {
 			_log.debug("Handle non-serializable request");
@@ -585,9 +583,10 @@ public class MainServlet extends HttpServlet {
 			return;
 		}
 
-		if (httpServletRequest.getAttribute(
-				AbsoluteRedirectsResponse.class.getName()) != null) {
+		Object classNameAttribute = httpServletRequest.getAttribute(
+			AbsoluteRedirectsResponse.class.getName());
 
+		if (classNameAttribute != null) {
 			if (_log.isDebugEnabled()) {
 				String currentURL = PortalUtil.getCurrentURL(
 					httpServletRequest);
@@ -1090,9 +1089,7 @@ public class MainServlet extends HttpServlet {
 
 		Layout layout = LayoutLocalServiceUtil.getLayout(plid);
 
-		Group group = layout.getGroup();
-
-		if (GroupLocalServiceUtil.isLiveGroupActive(group)) {
+		if (GroupLocalServiceUtil.isLiveGroupActive(layout.getGroup())) {
 			return false;
 		}
 
@@ -1153,11 +1150,9 @@ public class MainServlet extends HttpServlet {
 
 			httpServletRequest.setAttribute(PageContext.EXCEPTION, e);
 
-			ServletContext servletContext = getServletContext();
-
 			StrutsUtil.forward(
 				PropsValues.SERVLET_SERVICE_EVENTS_PRE_ERROR_PAGE,
-				servletContext, httpServletRequest, httpServletResponse);
+				getServletContext(), httpServletRequest, httpServletResponse);
 
 			if (e == httpServletRequest.getAttribute(PageContext.EXCEPTION)) {
 				httpServletRequest.removeAttribute(PageContext.EXCEPTION);
@@ -1211,9 +1206,8 @@ public class MainServlet extends HttpServlet {
 
 		String redirect = mainPath.concat("/portal/login");
 
-		String currentURL = PortalUtil.getCurrentURL(httpServletRequest);
-
-		redirect = HttpUtil.addParameter(redirect, "redirect", currentURL);
+		redirect = HttpUtil.addParameter(
+			redirect, "redirect", PortalUtil.getCurrentURL(httpServletRequest));
 
 		long plid = ParamUtil.getLong(httpServletRequest, "p_l_id");
 

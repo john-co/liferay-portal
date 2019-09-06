@@ -1218,9 +1218,8 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 
 	@Override
 	public String getFirstNumberIncrement(String locator) {
-		String firstNumber = getFirstNumber(locator);
-
-		return String.valueOf(GetterUtil.getInteger(firstNumber) + 1);
+		return String.valueOf(
+			GetterUtil.getInteger(getFirstNumber(locator)) + 1);
 	}
 
 	public Node getHtmlNode(String locator) {
@@ -1561,9 +1560,7 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 
 	@Override
 	public boolean isConfirmation(String pattern) {
-		String confirmation = getConfirmation();
-
-		return pattern.equals(confirmation);
+		return pattern.equals(getConfirmation());
 	}
 
 	@Override
@@ -1649,9 +1646,8 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 			return false;
 		}
 
-		String[] selectedLabels = getSelectedLabels(selectLocator);
-
-		List<String> selectedLabelsList = Arrays.asList(selectedLabels);
+		List<String> selectedLabelsList = Arrays.asList(
+			getSelectedLabels(selectLocator));
 
 		return !selectedLabelsList.contains(pattern);
 	}
@@ -1725,9 +1721,7 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 	public boolean isSikuliImagePresent(String image) throws Exception {
 		ScreenRegion screenRegion = new DesktopScreenRegion();
 
-		ImageTarget imageTarget = getImageTarget(image);
-
-		if (screenRegion.find(imageTarget) != null) {
+		if (screenRegion.find(getImageTarget(image)) != null) {
 			return true;
 		}
 
@@ -2317,16 +2311,12 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 
 	@Override
 	public void scrollWebElementIntoView(String locator) throws Exception {
-		WebElement webElement = getWebElement(locator);
-
-		scrollWebElementIntoView(webElement);
+		scrollWebElementIntoView(getWebElement(locator));
 	}
 
 	@Override
 	public void select(String selectLocator, String optionLocator) {
-		WebElement webElement = getWebElement(selectLocator);
-
-		Select select = new Select(webElement);
+		Select select = new Select(getWebElement(selectLocator));
 
 		String label = optionLocator;
 
@@ -2611,9 +2601,7 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 	public void sikuliAssertElementNotPresent(String image) throws Exception {
 		ScreenRegion screenRegion = new DesktopScreenRegion();
 
-		ImageTarget imageTarget = getImageTarget(image);
-
-		if (screenRegion.wait(imageTarget, 5000) != null) {
+		if (screenRegion.wait(getImageTarget(image), 5000) != null) {
 			throw new Exception("Element is present");
 		}
 	}
@@ -2622,9 +2610,7 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 	public void sikuliAssertElementPresent(String image) throws Exception {
 		ScreenRegion screenRegion = new DesktopScreenRegion();
 
-		ImageTarget imageTarget = getImageTarget(image);
-
-		screenRegion = screenRegion.wait(imageTarget, 5000);
+		screenRegion = screenRegion.wait(getImageTarget(image), 5000);
 
 		if (screenRegion == null) {
 			throw new Exception("Element is not present");
@@ -2647,9 +2633,8 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 
 		ScreenRegion screenRegion = new DesktopScreenRegion();
 
-		ImageTarget imageTarget = getImageTarget(image);
-
-		ScreenRegion imageTargetScreenRegion = screenRegion.find(imageTarget);
+		ScreenRegion imageTargetScreenRegion = screenRegion.find(
+			getImageTarget(image));
 
 		if (imageTargetScreenRegion != null) {
 			mouse.click(imageTargetScreenRegion.getCenter());
@@ -2664,10 +2649,8 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 
 		ScreenRegion screenRegion = new DesktopScreenRegion();
 
-		ImageTarget imageTarget = getImageTarget(image);
-
 		List<ScreenRegion> imageTargetScreenRegions = screenRegion.findAll(
-			imageTarget);
+			getImageTarget(image));
 
 		ScreenRegion imageTargetScreenRegion = imageTargetScreenRegions.get(
 			GetterUtil.getInteger(index));
@@ -2683,9 +2666,7 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 
 		ScreenRegion screenRegion = new DesktopScreenRegion();
 
-		ImageTarget imageTarget = getImageTarget(image);
-
-		screenRegion = screenRegion.find(imageTarget);
+		screenRegion = screenRegion.find(getImageTarget(image));
 
 		Mouse mouse = new DesktopMouse();
 
@@ -2735,9 +2716,7 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 	public void sikuliMouseMove(String image) throws Exception {
 		ScreenRegion screenRegion = new DesktopScreenRegion();
 
-		ImageTarget imageTarget = getImageTarget(image);
-
-		screenRegion = screenRegion.find(imageTarget);
+		screenRegion = screenRegion.find(getImageTarget(image));
 
 		Mouse mouse = new DesktopMouse();
 
@@ -3108,8 +3087,8 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 
 		filePath = LiferaySeleniumHelper.getSourceDirFilePath(filePath);
 
-		if (value.endsWith(".jar") || value.endsWith(".war") ||
-			value.endsWith(".zip")) {
+		if (value.endsWith(".jar") || value.endsWith(".lar") ||
+			value.endsWith(".war") || value.endsWith(".zip")) {
 
 			File file = new File(filePath);
 
@@ -4180,9 +4159,7 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 	}
 
 	protected void selectByRegexpText(String selectLocator, String regexp) {
-		WebElement webElement = getWebElement(selectLocator);
-
-		Select select = new Select(webElement);
+		Select select = new Select(getWebElement(selectLocator));
 
 		List<WebElement> optionWebElements = select.getOptions();
 
@@ -4206,9 +4183,7 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 	}
 
 	protected void selectByRegexpValue(String selectLocator, String regexp) {
-		WebElement webElement = getWebElement(selectLocator);
-
-		Select select = new Select(webElement);
+		Select select = new Select(getWebElement(selectLocator));
 
 		List<WebElement> optionWebElements = select.getOptions();
 

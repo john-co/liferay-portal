@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 AUI.add(
 	'liferay-alert',
 	function(A) {
@@ -11,7 +25,7 @@ AUI.add(
 				},
 
 				closeableNode: {
-					valueFn: function() {
+					valueFn() {
 						return A.Node.create(
 							'<button aria-label="' +
 								Liferay.Language.get('close') +
@@ -49,68 +63,13 @@ AUI.add(
 			NAME: 'liferayalert',
 
 			prototype: {
-				TPL_ALERT_NODE:
-					'<div class="container-fluid-1280 lfr-alert-wrapper"></div>',
-
-				TPL_ALERTS_CONTAINER: '<div class="lfr-alert-container"></div>',
-
-				TPL_CONTENT:
-					'<strong class="lead"><svg class="lexicon-icon" focusable="false"><use data-href="{pathThemeImages}/lexicon/icons.svg#{icon}" /><title>{title}</title></svg> {title}</strong>{message}',
-
-				bindUI: function() {
-					var instance = this;
-
-					var boundingBox = instance.get('boundingBox');
-
-					instance._eventHandles = [
-						instance.after(
-							['iconChange', 'messageChange', 'titleChange'],
-							instance._updateBodyContent,
-							instance
-						),
-						instance.after(
-							'typeChange',
-							instance._afterTypeChange,
-							instance
-						),
-						boundingBox.on(
-							'mouseenter',
-							instance._cancelHide,
-							instance
-						),
-						boundingBox.on(
-							'mouseleave',
-							instance._onMouseLeave,
-							instance
-						)
-					];
-
-					boundingBox.attr('role', 'alert');
-
-					Alert.superclass.bindUI.call(this);
-				},
-
-				render: function(parentNode) {
-					var instance = this;
-
-					instance._updateBodyContent();
-					instance._updateCssClass();
-
-					parentNode = A.one(parentNode);
-
-					return Alert.superclass.render.call(
-						this,
-						this._getParentNode(parentNode)
-					);
-				},
-
-				_afterTypeChange: function(event) {
+				_afterTypeChange() {
 					var instance = this;
 
 					instance._updateCssClass();
 				},
 
-				_cancelHide: function() {
+				_cancelHide() {
 					var instance = this;
 
 					instance._clearHideTimer();
@@ -118,7 +77,7 @@ AUI.add(
 					instance._set('visible', true);
 				},
 
-				_getAlertsContainer: function(targetNode) {
+				_getAlertsContainer(targetNode) {
 					var instance = this;
 
 					var alertsContainer = instance._alertsContainer;
@@ -164,7 +123,7 @@ AUI.add(
 					return alertsContainer;
 				},
 
-				_getParentNode: function(targetNode) {
+				_getParentNode(targetNode) {
 					var instance = this;
 
 					var parentNode = instance._parentNode;
@@ -184,7 +143,7 @@ AUI.add(
 					return parentNode;
 				},
 
-				_maybeHide: function() {
+				_maybeHide() {
 					var instance = this;
 
 					if (instance._ignoreHideDelay) {
@@ -195,7 +154,7 @@ AUI.add(
 					}
 				},
 
-				_onClickBoundingBox: function(event) {
+				_onClickBoundingBox(event) {
 					if (
 						event.target.ancestor('.close', true, '.liferayalert')
 					) {
@@ -205,7 +164,7 @@ AUI.add(
 					}
 				},
 
-				_onMouseLeave: function(event) {
+				_onMouseLeave() {
 					var instance = this;
 
 					var delay = instance.get('delay');
@@ -215,7 +174,7 @@ AUI.add(
 					}
 				},
 
-				_prepareTransition: function(visible) {
+				_prepareTransition(visible) {
 					var instance = this;
 
 					var parentNode = instance._getParentNode();
@@ -229,7 +188,7 @@ AUI.add(
 					}
 				},
 
-				_transition: function(visible) {
+				_transition(visible) {
 					var instance = this;
 
 					var parentNode = instance._getParentNode();
@@ -264,7 +223,7 @@ AUI.add(
 					}
 				},
 
-				_updateBodyContent: function() {
+				_updateBodyContent() {
 					var instance = this;
 
 					var bodyContent = Lang.sub(instance.TPL_CONTENT, {
@@ -277,10 +236,65 @@ AUI.add(
 					instance.set('bodyContent', bodyContent);
 				},
 
-				_updateCssClass: function() {
+				_updateCssClass() {
 					var instance = this;
 
 					instance.set('cssClass', 'alert-' + instance.get('type'));
+				},
+
+				TPL_ALERT_NODE:
+					'<div class="container-fluid-1280 lfr-alert-wrapper"></div>',
+
+				TPL_ALERTS_CONTAINER: '<div class="lfr-alert-container"></div>',
+
+				TPL_CONTENT:
+					'<strong class="lead"><svg class="lexicon-icon" focusable="false"><use data-href="{pathThemeImages}/lexicon/icons.svg#{icon}" /><title>{title}</title></svg> {title}</strong>{message}',
+
+				bindUI() {
+					var instance = this;
+
+					var boundingBox = instance.get('boundingBox');
+
+					instance._eventHandles = [
+						instance.after(
+							['iconChange', 'messageChange', 'titleChange'],
+							instance._updateBodyContent,
+							instance
+						),
+						instance.after(
+							'typeChange',
+							instance._afterTypeChange,
+							instance
+						),
+						boundingBox.on(
+							'mouseenter',
+							instance._cancelHide,
+							instance
+						),
+						boundingBox.on(
+							'mouseleave',
+							instance._onMouseLeave,
+							instance
+						)
+					];
+
+					boundingBox.attr('role', 'alert');
+
+					Alert.superclass.bindUI.call(this);
+				},
+
+				render(parentNode) {
+					var instance = this;
+
+					instance._updateBodyContent();
+					instance._updateCssClass();
+
+					parentNode = A.one(parentNode);
+
+					return Alert.superclass.render.call(
+						this,
+						this._getParentNode(parentNode)
+					);
 				}
 			}
 		});

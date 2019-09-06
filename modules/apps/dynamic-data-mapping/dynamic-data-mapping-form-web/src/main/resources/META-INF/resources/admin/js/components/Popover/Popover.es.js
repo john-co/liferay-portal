@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import Component, {Config} from 'metal-jsx';
 import dom from 'metal-dom';
 import getCN from 'classnames';
@@ -80,13 +94,13 @@ class Popover extends Component {
 					}
 				}}
 				placement={position}
-				ref='popover'
+				ref="popover"
 				visible={displayed}
 			>
 				{title && <PopoverBase.Header>{title}</PopoverBase.Header>}
 
 				<PopoverBase.Body>
-					{content && <span class='text-secondary'>{content}</span>}
+					{content && <span class="text-secondary">{content}</span>}
 
 					{children.length && children}
 				</PopoverBase.Body>

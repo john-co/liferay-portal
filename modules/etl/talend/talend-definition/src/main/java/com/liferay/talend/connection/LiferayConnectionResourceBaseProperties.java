@@ -14,7 +14,7 @@
 
 package com.liferay.talend.connection;
 
-import com.liferay.talend.resource.LiferayResourceProperties;
+import com.liferay.talend.resource.BaseLiferayResourceProperties;
 
 import org.apache.avro.Schema;
 
@@ -24,11 +24,12 @@ import org.slf4j.LoggerFactory;
 import org.talend.components.api.component.Connector;
 import org.talend.components.api.component.PropertyPathConnector;
 import org.talend.components.common.FixedConnectorsComponentProperties;
-import org.talend.components.common.SchemaProperties;
+import org.talend.daikon.properties.Properties;
 import org.talend.daikon.properties.presentation.Form;
 
 /**
  * @author Zoltán Takács
+ * @author Ivica Cardic
  */
 public abstract class LiferayConnectionResourceBaseProperties
 	extends FixedConnectorsComponentProperties
@@ -38,49 +39,12 @@ public abstract class LiferayConnectionResourceBaseProperties
 		super(name);
 	}
 
-	/**
-	 * This method returns the connection properties from the referenced
-	 * connection component if it was specified by the user, otherwise the
-	 * actual component's connection properties.
-	 *
-	 * @return LiferayConnectionProperties
-	 */
-	public LiferayConnectionProperties
-		getEffectiveLiferayConnectionProperties() {
+	public String getEndpoint() {
+		return resource.getEndpoint();
+	}
 
-		LiferayConnectionProperties liferayConnectionProperties =
-			getLiferayConnectionProperties();
-
-		if (liferayConnectionProperties == null) {
-			_log.error("LiferayConnectionProperties is null");
-		}
-
-		LiferayConnectionProperties referencedLiferayConnectionProperties =
-			liferayConnectionProperties.getReferencedConnectionProperties();
-
-		if (referencedLiferayConnectionProperties != null) {
-			if (_log.isDebugEnabled()) {
-				_log.debug("Using a reference connection properties");
-				_log.debug(
-					"API spec URL: " +
-						referencedLiferayConnectionProperties.apiSpecURL.
-							getValue());
-				_log.debug(
-					"User ID: " +
-						referencedLiferayConnectionProperties.getUserId());
-			}
-
-			return referencedLiferayConnectionProperties;
-		}
-
-		if (_log.isDebugEnabled()) {
-			_log.debug(
-				"API spec URL: " +
-					liferayConnectionProperties.apiSpecURL.getValue());
-			_log.debug("User ID: " + liferayConnectionProperties.getUserId());
-		}
-
-		return liferayConnectionProperties;
+	public int getItemsPerPage() {
+		return connection.getItemsPerPage();
 	}
 
 	@Override
@@ -89,7 +53,18 @@ public abstract class LiferayConnectionResourceBaseProperties
 	}
 
 	public Schema getSchema() {
-		return resource.main.schema.getValue();
+		return resource.getSchema();
+	}
+
+	@Override
+	public Properties init() {
+		Properties properties = super.init();
+
+		if (_logger.isTraceEnabled()) {
+			_logger.trace("Initialized " + System.identityHashCode(this));
+		}
+
+		return properties;
 	}
 
 	@Override
@@ -103,6 +78,10 @@ public abstract class LiferayConnectionResourceBaseProperties
 		for (Form childForm : resource.getForms()) {
 			resource.refreshLayout(childForm);
 		}
+	}
+
+	public void setSchema(Schema schema) {
+		resource.setSchema(schema);
 	}
 
 	@Override
@@ -126,23 +105,19 @@ public abstract class LiferayConnectionResourceBaseProperties
 	public void setupProperties() {
 		super.setupProperties();
 
-		resource = new LiferayResourceProperties("resource");
-
-		resource.connection = connection;
-
-		resource.setupProperties();
+		if (_logger.isTraceEnabled()) {
+			_logger.trace("Properties set " + System.identityHashCode(this));
+		}
 	}
 
 	public LiferayConnectionProperties connection =
 		new LiferayConnectionProperties("connection");
-	public LiferayResourceProperties resource;
+	public BaseLiferayResourceProperties resource;
 
 	protected transient PropertyPathConnector mainConnector =
 		new PropertyPathConnector(Connector.MAIN_NAME, "resource.main");
-	protected transient Schema temporaryMainSchema =
-		SchemaProperties.EMPTY_SCHEMA;
 
-	private static final Logger _log = LoggerFactory.getLogger(
+	private static final Logger _logger = LoggerFactory.getLogger(
 		LiferayConnectionResourceBaseProperties.class);
 
 	private static final long serialVersionUID = 4534371813009904L;

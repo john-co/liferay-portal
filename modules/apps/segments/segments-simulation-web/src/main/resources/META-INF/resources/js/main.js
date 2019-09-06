@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 AUI.add(
 	'liferay-portlet-segments-simulation',
 	function(A) {
@@ -25,19 +39,7 @@ AUI.add(
 			NAME: 'segmentsSimulation',
 
 			prototype: {
-				initializer: function() {
-					var instance = this;
-
-					instance._bindUI();
-				},
-
-				destructor: function() {
-					var instance = this;
-
-					new A.EventHandle(instance._eventHandles).detach();
-				},
-
-				_bindUI: function() {
+				_bindUI() {
 					var instance = this;
 
 					instance._eventHandles = [];
@@ -66,49 +68,73 @@ AUI.add(
 					);
 				},
 
-				_deactivateSimulation: function() {
+				_deactivateSimulation() {
 					var instance = this;
 
 					var form = instance.get('form');
 
-					A.io.request(instance.get('deactivateSimulationUrl'), {
-						form: form,
-						method: 'post',
-						after: {
-							success: function(event, id, obj) {
-								A.all('#' + form.id + ' input').set(
-									'checked',
-									false
-								);
-							}
+					const body = new URLSearchParams(new FormData(form));
+
+					Liferay.Util.fetch(
+						instance.get('deactivateSimulationUrl'),
+						{
+							body,
+							method: 'POST'
 						}
-					});
+					)
+						.then(response => {
+							return response.text();
+						})
+						.then(() => {
+							A.all('#' + form.id + ' input').set(
+								'checked',
+								false
+							);
+						});
 				},
 
-				_simulateSegmentsEntries: function() {
+				_simulateSegmentsEntries() {
 					var instance = this;
 
-					A.io.request(instance.get('simulateSegmentsEntriesUrl'), {
-						form: {
-							id: instance.get('form')
-						},
-						method: 'POST',
-						after: {
-							success: function(event, id, obj) {
-								var iframe = A.one('#simulationDeviceIframe');
+					const body = new URLSearchParams(
+						new FormData(instance.get('form'))
+					);
 
-								if (iframe) {
-									var iframeWindow = A.Node.getDOMNode(
-										iframe.get('contentWindow')
-									);
+					Liferay.Util.fetch(
+						instance.get('simulateSegmentsEntriesUrl'),
+						{
+							body,
+							method: 'POST'
+						}
+					)
+						.then(response => {
+							return response.text();
+						})
+						.then(() => {
+							const iframe = A.one('#simulationDeviceIframe');
 
-									if (iframeWindow) {
-										iframeWindow.location.reload();
-									}
+							if (iframe) {
+								const iframeWindow = A.Node.getDOMNode(
+									iframe.get('contentWindow')
+								);
+
+								if (iframeWindow) {
+									iframeWindow.location.reload();
 								}
 							}
-						}
-					});
+						});
+				},
+
+				destructor() {
+					var instance = this;
+
+					new A.EventHandle(instance._eventHandles).detach();
+				},
+
+				initializer() {
+					var instance = this;
+
+					instance._bindUI();
 				}
 			}
 		});

@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import {isDefAndNotNull, isString} from 'metal';
 
 // Constants for URL generation
@@ -51,7 +65,7 @@ const decodeUpdateString = function(pageRenderState, updateString) {
 		if (newRenderState.portlets) {
 			const keys = Object.keys(portlets);
 
-			for (const key of keys) {
+			keys.forEach(key => {
 				const newState = newRenderState.portlets[key].state;
 				const oldState = portlets[key].state;
 
@@ -64,9 +78,11 @@ const decodeUpdateString = function(pageRenderState, updateString) {
 				if (stateChanged(pageRenderState, newState, key)) {
 					portlets[key] = newRenderState.portlets[key];
 				}
-			}
+			});
 		}
-	} catch (e) {}
+	} catch (e) {
+		// Do nothing
+	}
 
 	return portlets;
 };
@@ -109,7 +125,7 @@ const encodeFormAsString = function(portletId, form) {
 				(type !== 'CHECKBOX' && type !== 'RADIO') ||
 				element.checked
 			) {
-				let param =
+				const param =
 					encodeURIComponent(portletId + name) +
 					'=' +
 					encodeURIComponent(value);
@@ -140,16 +156,18 @@ const encodeParameter = function(name, values) {
 				VALUE_DELIM +
 				VALUE_ARRAY_EMPTY;
 		} else {
-			for (let value of values) {
+			values.forEach(value => {
 				str += TOKEN_DELIM + encodeURIComponent(name);
+
 				if (value === null) {
 					str += VALUE_DELIM + VALUE_NULL;
 				} else {
 					str += VALUE_DELIM + encodeURIComponent(value);
 				}
-			}
+			});
 		}
 	}
+
 	return str;
 };
 
@@ -168,7 +186,7 @@ const generateActionUrl = function(portletId, url, form) {
 	const request = {
 		credentials: 'same-origin',
 		method: 'POST',
-		url: url
+		url
 	};
 
 	if (form) {
@@ -309,7 +327,7 @@ const getUpdatedPublicRenderParameters = function(
 
 			const keys = Object.keys(portletPublicParameters);
 
-			for (let key of keys) {
+			keys.forEach(key => {
 				if (
 					!isParameterInStateEqual(
 						pageRenderState,
@@ -322,7 +340,7 @@ const getUpdatedPublicRenderParameters = function(
 
 					publicRenderParameters[group] = state.parameters[key];
 				}
-			}
+			});
 		}
 	}
 
@@ -431,7 +449,7 @@ const getUrl = function(
 
 						const keys = Object.keys(stateParameters);
 
-						for (let key of keys) {
+						keys.forEach(key => {
 							if (
 								!isPublicParameter(
 									pageRenderState,
@@ -446,7 +464,8 @@ const getUrl = function(
 									RENDER_PARAM_KEY
 								);
 							}
-						}
+						});
+
 						url += str;
 					}
 				}
@@ -459,19 +478,25 @@ const getUrl = function(
 					const publicRenderParameters = {};
 
 					const mapKeys = Object.keys(pageRenderState.prpMap);
-					for (let mapKey of mapKeys) {
+
+					mapKeys.forEach(mapKey => {
 						const groupKeys = Object.keys(
 							pageRenderState.prpMap[mapKey]
 						);
-						for (let groupKey of groupKeys) {
+
+						groupKeys.forEach(groupKey => {
 							const groupName =
 								pageRenderState.prpMap[mapKey][groupKey];
+
 							const parts = groupName.split('|');
 
 							// Only need to add parameter once, since it is shared
 
 							if (
-								!publicRenderParameters.hasOwnProperty(mapKey)
+								!Object.hasOwnProperty.call(
+									publicRenderParameters,
+									mapKey
+								)
 							) {
 								publicRenderParameters[
 									mapKey
@@ -485,8 +510,8 @@ const getUrl = function(
 
 								str += publicRenderParameters[mapKey];
 							}
-						}
-					}
+						});
+					});
 
 					url += str;
 				}
@@ -500,12 +525,12 @@ const getUrl = function(
 		str = '';
 		const parameterKeys = Object.keys(parameters);
 
-		for (let parameterKey of parameterKeys) {
+		parameterKeys.forEach(parameterKey => {
 			str += encodeParameter(
 				portletId + parameterKey,
 				parameters[parameterKey]
 			);
-		}
+		});
 
 		url += str;
 	}
@@ -642,23 +667,25 @@ const stateChanged = function(pageRenderState, newState, portletId) {
 				// Has a parameter changed or been added?
 
 				const newKeys = Object.keys(newState.parameters);
-				for (const key of newKeys) {
+
+				newKeys.forEach(key => {
 					const newParameter = newState.parameters[key];
 					const oldParameter = oldState.parameters[key];
 
 					if (!isParameterEqual(newParameter, oldParameter)) {
 						result = true;
 					}
-				}
+				});
 
 				// Make sure no parameter was deleted
 
 				const oldKeys = Object.keys(oldState.parameters);
-				for (const key of oldKeys) {
+
+				oldKeys.forEach(key => {
 					if (!newState.parameters[key]) {
 						result = true;
 					}
-				}
+				});
 			}
 		}
 	}
@@ -740,7 +767,7 @@ const validateForm = function(form) {
 		enctype !== 'multipart/form-data'
 	) {
 		throw new TypeError(
-			`Invalid form enctype ${enctype}. Allowed: 'application\/x-www-form-urlencoded' & 'multipart\/form-data'`
+			`Invalid form enctype ${enctype}. Allowed: 'application/x-www-form-urlencoded' & 'multipart/form-data'`
 		);
 	}
 
@@ -790,7 +817,8 @@ const validateParameters = function(parameters) {
 	}
 
 	const keys = Object.keys(parameters);
-	for (let key of keys) {
+
+	keys.forEach(key => {
 		if (!Array.isArray(parameters[key])) {
 			throw new TypeError(`${key} parameter is not an array`);
 		}
@@ -798,7 +826,7 @@ const validateParameters = function(parameters) {
 		if (!parameters[key].length) {
 			throw new TypeError(`${key} parameter is an empty array`);
 		}
-	}
+	});
 };
 
 /**

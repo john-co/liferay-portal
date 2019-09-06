@@ -18,6 +18,7 @@ import com.liferay.dynamic.data.mapping.model.DDMStructureLayout;
 import com.liferay.petra.lang.HashUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.model.CacheModel;
+import com.liferay.portal.kernel.model.MVCCModel;
 
 import java.io.Externalizable;
 import java.io.IOException;
@@ -36,7 +37,7 @@ import org.osgi.annotation.versioning.ProviderType;
  */
 @ProviderType
 public class DDMStructureLayoutCacheModel
-	implements CacheModel<DDMStructureLayout>, Externalizable {
+	implements CacheModel<DDMStructureLayout>, Externalizable, MVCCModel {
 
 	@Override
 	public boolean equals(Object obj) {
@@ -51,8 +52,9 @@ public class DDMStructureLayoutCacheModel
 		DDMStructureLayoutCacheModel ddmStructureLayoutCacheModel =
 			(DDMStructureLayoutCacheModel)obj;
 
-		if (structureLayoutId ==
-				ddmStructureLayoutCacheModel.structureLayoutId) {
+		if ((structureLayoutId ==
+				ddmStructureLayoutCacheModel.structureLayoutId) &&
+			(mvccVersion == ddmStructureLayoutCacheModel.mvccVersion)) {
 
 			return true;
 		}
@@ -62,14 +64,28 @@ public class DDMStructureLayoutCacheModel
 
 	@Override
 	public int hashCode() {
-		return HashUtil.hash(0, structureLayoutId);
+		int hashCode = HashUtil.hash(0, structureLayoutId);
+
+		return HashUtil.hash(hashCode, mvccVersion);
+	}
+
+	@Override
+	public long getMvccVersion() {
+		return mvccVersion;
+	}
+
+	@Override
+	public void setMvccVersion(long mvccVersion) {
+		this.mvccVersion = mvccVersion;
 	}
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(25);
+		StringBundler sb = new StringBundler(31);
 
-		sb.append("{uuid=");
+		sb.append("{mvccVersion=");
+		sb.append(mvccVersion);
+		sb.append(", uuid=");
 		sb.append(uuid);
 		sb.append(", structureLayoutId=");
 		sb.append(structureLayoutId);
@@ -85,6 +101,10 @@ public class DDMStructureLayoutCacheModel
 		sb.append(createDate);
 		sb.append(", modifiedDate=");
 		sb.append(modifiedDate);
+		sb.append(", classNameId=");
+		sb.append(classNameId);
+		sb.append(", structureLayoutKey=");
+		sb.append(structureLayoutKey);
 		sb.append(", structureVersionId=");
 		sb.append(structureVersionId);
 		sb.append(", name=");
@@ -102,6 +122,8 @@ public class DDMStructureLayoutCacheModel
 	public DDMStructureLayout toEntityModel() {
 		DDMStructureLayoutImpl ddmStructureLayoutImpl =
 			new DDMStructureLayoutImpl();
+
+		ddmStructureLayoutImpl.setMvccVersion(mvccVersion);
 
 		if (uuid == null) {
 			ddmStructureLayoutImpl.setUuid("");
@@ -134,6 +156,15 @@ public class DDMStructureLayoutCacheModel
 		}
 		else {
 			ddmStructureLayoutImpl.setModifiedDate(new Date(modifiedDate));
+		}
+
+		ddmStructureLayoutImpl.setClassNameId(classNameId);
+
+		if (structureLayoutKey == null) {
+			ddmStructureLayoutImpl.setStructureLayoutKey("");
+		}
+		else {
+			ddmStructureLayoutImpl.setStructureLayoutKey(structureLayoutKey);
 		}
 
 		ddmStructureLayoutImpl.setStructureVersionId(structureVersionId);
@@ -170,6 +201,7 @@ public class DDMStructureLayoutCacheModel
 	public void readExternal(ObjectInput objectInput)
 		throws ClassNotFoundException, IOException {
 
+		mvccVersion = objectInput.readLong();
 		uuid = objectInput.readUTF();
 
 		structureLayoutId = objectInput.readLong();
@@ -183,6 +215,9 @@ public class DDMStructureLayoutCacheModel
 		createDate = objectInput.readLong();
 		modifiedDate = objectInput.readLong();
 
+		classNameId = objectInput.readLong();
+		structureLayoutKey = objectInput.readUTF();
+
 		structureVersionId = objectInput.readLong();
 		name = objectInput.readUTF();
 		description = objectInput.readUTF();
@@ -195,6 +230,8 @@ public class DDMStructureLayoutCacheModel
 
 	@Override
 	public void writeExternal(ObjectOutput objectOutput) throws IOException {
+		objectOutput.writeLong(mvccVersion);
+
 		if (uuid == null) {
 			objectOutput.writeUTF("");
 		}
@@ -219,6 +256,15 @@ public class DDMStructureLayoutCacheModel
 
 		objectOutput.writeLong(createDate);
 		objectOutput.writeLong(modifiedDate);
+
+		objectOutput.writeLong(classNameId);
+
+		if (structureLayoutKey == null) {
+			objectOutput.writeUTF("");
+		}
+		else {
+			objectOutput.writeUTF(structureLayoutKey);
+		}
 
 		objectOutput.writeLong(structureVersionId);
 
@@ -246,6 +292,7 @@ public class DDMStructureLayoutCacheModel
 		objectOutput.writeObject(_ddmFormLayout);
 	}
 
+	public long mvccVersion;
 	public String uuid;
 	public long structureLayoutId;
 	public long groupId;
@@ -254,6 +301,8 @@ public class DDMStructureLayoutCacheModel
 	public String userName;
 	public long createDate;
 	public long modifiedDate;
+	public long classNameId;
+	public String structureLayoutKey;
 	public long structureVersionId;
 	public String name;
 	public String description;

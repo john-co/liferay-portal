@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 AUI.add(
 	'liferay-layout-customization-settings',
 	function(A) {
@@ -15,42 +29,7 @@ AUI.add(
 			NAME: 'layoutcustomizationsettings',
 
 			prototype: {
-				initializer: function(config) {
-					var instance = this;
-
-					instance._controls = instance.byId(
-						'layoutCustomizableControls'
-					);
-					instance._manageCustomization = instance.byId(
-						'manageCustomization'
-					);
-
-					instance._bindUI();
-				},
-
-				destroy: function(event) {
-					var instance = this;
-
-					var columns = A.all('.portlet-column');
-
-					columns.each(function(item, index) {
-						var overlayMask = item.getData('customizationControls');
-
-						if (overlayMask) {
-							overlayMask.destroy();
-						}
-					});
-
-					var customizationsHandle = instance._customizationsHandle;
-
-					if (customizationsHandle) {
-						customizationsHandle.detach();
-
-						instance._customizationsHandle = null;
-					}
-				},
-
-				_bindUI: function() {
+				_bindUI() {
 					var instance = this;
 
 					var manageCustomization = instance._manageCustomization;
@@ -68,8 +47,8 @@ AUI.add(
 						var columns = A.all('.portlet-column');
 
 						Liferay.publish('updatedLayout', {
-							defaultFn: function(event) {
-								columns.each(function(item, index) {
+							defaultFn() {
+								columns.each(function(item) {
 									var overlayMask = item.getData(
 										'customizationControls'
 									);
@@ -86,7 +65,7 @@ AUI.add(
 					}
 				},
 
-				_createCustomizationMask: function(column) {
+				_createCustomizationMask(column) {
 					var instance = this;
 
 					var columnId = column.attr('id');
@@ -102,7 +81,7 @@ AUI.add(
 					var cssClass = 'customizable-layout-column';
 
 					var overlayMask = new A.OverlayMask({
-						cssClass: cssClass,
+						cssClass,
 						target: column,
 						zIndex: 10
 					}).render();
@@ -159,9 +138,7 @@ AUI.add(
 					return overlayMask;
 				},
 
-				_onChangeCustomization: function(event) {
-					var instance = this;
-
+				_onChangeCustomization(event) {
 					var checkbox = event.currentTarget;
 
 					var overlayMask = checkbox.getData('customizationControls');
@@ -189,15 +166,16 @@ AUI.add(
 
 					data[checkbox.attr('name')] = checkbox.attr('checked');
 
-					A.io.request(
+					Liferay.Util.fetch(
 						themeDisplay.getPathMain() + '/portal/update_layout',
 						{
-							data: data
+							body: Liferay.Util.objectToFormData(data),
+							method: 'POST'
 						}
 					);
 				},
 
-				_onManageCustomization: function(event) {
+				_onManageCustomization() {
 					var instance = this;
 
 					var customizationsHandle = instance._customizationsHandle;
@@ -219,7 +197,7 @@ AUI.add(
 
 					var columns = A.all('.portlet-column');
 
-					columns.each(function(item, index) {
+					columns.each(function(item) {
 						var overlayMask = item.getData('customizationControls');
 
 						if (!overlayMask) {
@@ -230,6 +208,41 @@ AUI.add(
 
 						overlayMask.toggle();
 					});
+				},
+
+				destroy() {
+					var instance = this;
+
+					var columns = A.all('.portlet-column');
+
+					columns.each(function(item) {
+						var overlayMask = item.getData('customizationControls');
+
+						if (overlayMask) {
+							overlayMask.destroy();
+						}
+					});
+
+					var customizationsHandle = instance._customizationsHandle;
+
+					if (customizationsHandle) {
+						customizationsHandle.detach();
+
+						instance._customizationsHandle = null;
+					}
+				},
+
+				initializer() {
+					var instance = this;
+
+					instance._controls = instance.byId(
+						'layoutCustomizableControls'
+					);
+					instance._manageCustomization = instance.byId(
+						'manageCustomization'
+					);
+
+					instance._bindUI();
 				}
 			}
 		});
@@ -240,7 +253,6 @@ AUI.add(
 	{
 		requires: [
 			'aui-base',
-			'aui-io-request',
 			'aui-overlay-mask-deprecated',
 			'liferay-portlet-base'
 		]

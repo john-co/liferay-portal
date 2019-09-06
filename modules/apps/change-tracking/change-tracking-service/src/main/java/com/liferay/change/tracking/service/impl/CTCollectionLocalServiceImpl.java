@@ -14,14 +14,11 @@
 
 package com.liferay.change.tracking.service.impl;
 
-import com.liferay.change.tracking.constants.CTConstants;
 import com.liferay.change.tracking.exception.CTCollectionDescriptionException;
 import com.liferay.change.tracking.exception.CTCollectionNameException;
 import com.liferay.change.tracking.model.CTCollection;
 import com.liferay.change.tracking.model.CTEntry;
-import com.liferay.change.tracking.model.CTEntryAggregate;
 import com.liferay.change.tracking.model.CTProcess;
-import com.liferay.change.tracking.service.CTEntryAggregateLocalService;
 import com.liferay.change.tracking.service.CTEntryLocalService;
 import com.liferay.change.tracking.service.CTProcessLocalService;
 import com.liferay.change.tracking.service.base.CTCollectionLocalServiceBaseImpl;
@@ -33,8 +30,8 @@ import com.liferay.portal.kernel.dao.orm.QueryDefinition;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.ModelHintsUtil;
 import com.liferay.portal.kernel.model.User;
-import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
@@ -57,8 +54,7 @@ public class CTCollectionLocalServiceImpl
 
 	@Override
 	public CTCollection addCTCollection(
-			long userId, String name, String description,
-			ServiceContext serviceContext)
+			long userId, String name, String description)
 		throws PortalException {
 
 		User user = userLocalService.getUser(userId);
@@ -73,11 +69,6 @@ public class CTCollectionLocalServiceImpl
 		ctCollection.setCompanyId(user.getCompanyId());
 		ctCollection.setUserId(user.getUserId());
 		ctCollection.setUserName(user.getFullName());
-
-		Date now = new Date();
-
-		ctCollection.setCreateDate(serviceContext.getCreateDate(now));
-		ctCollection.setModifiedDate(serviceContext.getModifiedDate(now));
 
 		ctCollection.setName(name);
 		ctCollection.setDescription(description);
@@ -102,36 +93,15 @@ public class CTCollectionLocalServiceImpl
 	public CTCollection deleteCTCollection(CTCollection ctCollection)
 		throws PortalException {
 
-		List<CTEntry> ctEntries = ctEntryPersistence.getCTCollectionCTEntries(
+		List<CTEntry> ctEntries = ctEntryPersistence.findByCTCollectionId(
 			ctCollection.getCtCollectionId());
 
 		for (CTEntry ctEntry : ctEntries) {
-			int ctCollectionsSize = ctEntryPersistence.getCTCollectionsSize(
-				ctEntry.getCtEntryId());
-
-			if (ctCollectionsSize > 1) {
-				continue;
-			}
-
 			_ctEntryLocalService.deleteCTEntry(ctEntry);
 		}
 
-		List<CTEntryAggregate> ctEntryAggregates =
-			ctEntryAggregatePersistence.getCTCollectionCTEntryAggregates(
-				ctCollection.getCtCollectionId());
-
-		for (CTEntryAggregate ctEntryAggregate : ctEntryAggregates) {
-			int ctCollectionsSize =
-				ctEntryAggregatePersistence.getCTCollectionsSize(
-					ctEntryAggregate.getCtEntryAggregateId());
-
-			if (ctCollectionsSize > 1) {
-				continue;
-			}
-
-			_ctEntryAggregateLocalService.deleteCTEntryAggregate(
-				ctEntryAggregate);
-		}
+		ctPreferencesPersistence.removeByCollectionId(
+			ctCollection.getCtCollectionId());
 
 		List<CTProcess> ctProcesses = ctProcessPersistence.findByCollectionId(
 			ctCollection.getCtCollectionId());
@@ -140,20 +110,26 @@ public class CTCollectionLocalServiceImpl
 			_ctProcessLocalService.deleteCTProcess(ctProcess);
 		}
 
-		ctCollectionPersistence.remove(ctCollection);
-
-		ctCollectionPersistence.clearCTEntries(
-			ctCollection.getCtCollectionId());
-
-		ctCollectionPersistence.clearCTEntryAggregates(
-			ctCollection.getCtCollectionId());
-
-		return ctCollection;
+		return ctCollectionPersistence.remove(ctCollection);
 	}
 
 	@Override
 	public CTCollection fetchCTCollection(long companyId, String name) {
 		return ctCollectionPersistence.fetchByC_N(companyId, name);
+	}
+
+	@Override
+	public List<CTCollection> getCTCollections(
+		long companyId, int status, int start, int end,
+		OrderByComparator<CTCollection> orderByComparator) {
+
+		if (status == WorkflowConstants.STATUS_ANY) {
+			return ctCollectionPersistence.findByCompanyId(
+				companyId, start, end, orderByComparator);
+		}
+
+		return ctCollectionPersistence.findByC_S(
+			companyId, status, start, end, orderByComparator);
 	}
 
 	@Override
@@ -185,11 +161,6 @@ public class CTCollectionLocalServiceImpl
 
 		dynamicQuery.add(companyIdProperty.eq(companyId));
 
-		Property nameProperty = PropertyFactoryUtil.forName("name");
-
-		dynamicQuery.add(
-			nameProperty.ne(CTConstants.CT_COLLECTION_NAME_PRODUCTION));
-
 		boolean includeActive = GetterUtil.getBoolean(
 			queryDefinition.getAttribute("includeActive"));
 
@@ -205,13 +176,15 @@ public class CTCollectionLocalServiceImpl
 
 		int status = queryDefinition.getStatus();
 
-		Property statusProperty = PropertyFactoryUtil.forName("status");
+		if (status != WorkflowConstants.STATUS_ANY) {
+			Property statusProperty = PropertyFactoryUtil.forName("status");
 
-		if (queryDefinition.isExcludeStatus()) {
-			dynamicQuery.add(statusProperty.ne(status));
-		}
-		else {
-			dynamicQuery.add(statusProperty.eq(status));
+			if (queryDefinition.isExcludeStatus()) {
+				dynamicQuery.add(statusProperty.ne(status));
+			}
+			else {
+				dynamicQuery.add(statusProperty.eq(status));
+			}
 		}
 
 		return ctCollectionLocalService.dynamicQuery(
@@ -221,8 +194,7 @@ public class CTCollectionLocalServiceImpl
 
 	@Override
 	public CTCollection updateCTCollection(
-			long userId, long ctCollectionId, String name, String description,
-			ServiceContext serviceContext)
+			long userId, long ctCollectionId, String name, String description)
 		throws PortalException {
 
 		User user = userLocalService.getUser(userId);
@@ -232,7 +204,7 @@ public class CTCollectionLocalServiceImpl
 		CTCollection ctCollection = ctCollectionPersistence.findByPrimaryKey(
 			ctCollectionId);
 
-		Date modifiedDate = serviceContext.getModifiedDate(new Date());
+		Date modifiedDate = new Date();
 
 		ctCollection.setModifiedDate(modifiedDate);
 
@@ -247,11 +219,10 @@ public class CTCollectionLocalServiceImpl
 
 	@Override
 	public CTCollection updateStatus(
-			long userId, CTCollection ctCollection, int status,
-			ServiceContext serviceContext)
+			long userId, CTCollection ctCollection, int status)
 		throws PortalException {
 
-		Date modifiedDate = serviceContext.getModifiedDate(new Date());
+		Date modifiedDate = new Date();
 
 		ctCollection.setModifiedDate(modifiedDate);
 
@@ -291,9 +262,6 @@ public class CTCollectionLocalServiceImpl
 				"Description is too long");
 		}
 	}
-
-	@Reference
-	private CTEntryAggregateLocalService _ctEntryAggregateLocalService;
 
 	@Reference
 	private CTEntryLocalService _ctEntryLocalService;

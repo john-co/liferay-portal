@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 AUI.add(
 	'liferay-calendar-simple-color-picker',
 	function(A) {
@@ -35,7 +49,7 @@ AUI.add(
 		var SimpleColorPicker = A.Component.create({
 			ATTRS: {
 				color: {
-					setter: function(val) {
+					setter(val) {
 						return val.toUpperCase();
 					},
 					validator: Lang.isString,
@@ -47,7 +61,7 @@ AUI.add(
 				},
 
 				pallete: {
-					setter: function(val) {
+					setter(val) {
 						return AArray.invoke(val, 'toUpperCase');
 					},
 					validator: Lang.isArray,
@@ -85,26 +99,7 @@ AUI.add(
 			UI_ATTRS: ['color', 'pallete'],
 
 			prototype: {
-				renderUI: function() {
-					var instance = this;
-
-					instance._renderPallete();
-				},
-
-				bindUI: function() {
-					var instance = this;
-
-					var contentBox = instance.get('contentBox');
-
-					contentBox.delegate(
-						'click',
-						instance._onClickColor,
-						STR_DOT + CSS_SIMPLE_COLOR_PICKER_ITEM,
-						instance
-					);
-				},
-
-				_onClickColor: function(event) {
+				_onClickColor(event) {
 					var instance = this;
 
 					var pallete = instance.get('pallete');
@@ -115,7 +110,7 @@ AUI.add(
 					);
 				},
 
-				_renderPallete: function() {
+				_renderPallete() {
 					var instance = this;
 
 					instance.items = A.NodeList.create(
@@ -127,7 +122,7 @@ AUI.add(
 					instance.get('contentBox').setContent(instance.items);
 				},
 
-				_uiSetColor: function(val) {
+				_uiSetColor(val) {
 					var instance = this;
 
 					var pallete = instance.get('pallete');
@@ -143,12 +138,31 @@ AUI.add(
 					}
 				},
 
-				_uiSetPallete: function(val) {
+				_uiSetPallete() {
 					var instance = this;
 
 					if (instance.get('rendered')) {
 						instance._renderPallete();
 					}
+				},
+
+				bindUI() {
+					var instance = this;
+
+					var contentBox = instance.get('contentBox');
+
+					contentBox.delegate(
+						'click',
+						instance._onClickColor,
+						STR_DOT + CSS_SIMPLE_COLOR_PICKER_ITEM,
+						instance
+					);
+				},
+
+				renderUI() {
+					var instance = this;
+
+					instance._renderPallete();
 				}
 			}
 		});

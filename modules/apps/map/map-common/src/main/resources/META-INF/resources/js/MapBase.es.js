@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import State, {Config} from 'metal-state';
 import {buildFragment} from 'metal-dom';
 
@@ -232,7 +246,12 @@ class MapBase extends State {
 	 * @return {Object} Created map
 	 * @review
 	 */
-	_createMap(geolocation, controlsConfig) {
+	_createMap(
+		/* eslint-disable no-unused-vars */
+		location,
+		controlsConfig
+		/* eslint-enable no-unused-vars */
+	) {
 		throw new Error('This method must be implemented');
 	}
 
@@ -483,7 +502,12 @@ class MapBase extends State {
 	 * @param {MapBase.POSITION} position Position defined in MapBase class
 	 * @review
 	 */
-	addControl(/* control, position */) {
+	addControl(
+		/* eslint-disable no-unused-vars */
+		control,
+		position
+		/* eslint-enable no-unused-vars */
+	) {
 		throw new Error('This method must be implemented');
 	}
 
@@ -503,7 +527,11 @@ class MapBase extends State {
 	 * @param {Object} location
 	 * @review
 	 */
-	setCenter(/* location */) {
+	setCenter(
+		/* eslint-disable no-unused-vars */
+		location
+		/* eslint-enable no-unused-vars */
+	) {
 		throw new Error('This method must be implemented');
 	}
 
@@ -587,8 +615,8 @@ class MapBase extends State {
 	setPosition(position) {
 		this.emit('positionChange', {
 			newVal: {
-				location: position.location,
-				address: position.address
+				address: position.address,
+				location: position.location
 			}
 		});
 

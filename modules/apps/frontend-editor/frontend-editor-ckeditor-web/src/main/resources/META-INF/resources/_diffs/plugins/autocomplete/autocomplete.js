@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 (function() {
 	var A = AUI();
 
@@ -29,13 +43,7 @@
 	};
 
 	AutoCompleteCKEditor.prototype = {
-		initializer: function() {
-			var instance = this;
-
-			instance._bindUIACCKEditor();
-		},
-
-		_bindUIACCKEditor: function() {
+		_bindUIACCKEditor() {
 			var instance = this;
 
 			instance._processCaret = A.bind('_processCaretPosition', instance);
@@ -60,7 +68,7 @@
 			});
 		},
 
-		_getACPositionBase: function() {
+		_getACPositionBase() {
 			var instance = this;
 
 			var inline = this.get(STR_EDITOR)
@@ -78,7 +86,7 @@
 			return inline ? [0, 0] : instance._contentsContainer.getXY();
 		},
 
-		_getACPositionOffset: function() {
+		_getACPositionOffset() {
 			var instance = this;
 
 			var caretContainer = instance._getCaretContainer();
@@ -92,13 +100,13 @@
 			return [0, Lang.toInt(containerAscendantNode.getStyle('fontSize'))];
 		},
 
-		_getCaretContainer: function() {
+		_getCaretContainer() {
 			var instance = this;
 
 			return instance._getCaretRange().startContainer;
 		},
 
-		_getCaretIndex: function(node) {
+		_getCaretIndex() {
 			var instance = this;
 
 			var range = instance._getCaretRange();
@@ -109,7 +117,7 @@
 			};
 		},
 
-		_getCaretOffset: function() {
+		_getCaretOffset() {
 			var instance = this;
 
 			var editor = instance.get(STR_EDITOR);
@@ -130,7 +138,7 @@
 			};
 		},
 
-		_getCaretRange: function() {
+		_getCaretRange() {
 			var instance = this;
 
 			var editor = instance.get(STR_EDITOR);
@@ -138,7 +146,7 @@
 			return editor.getSelection().getRanges()[0];
 		},
 
-		_getContainerAscendant: function(container, ascendant) {
+		_getContainerAscendant(container, ascendant) {
 			if (!ascendant) {
 				ascendant = AutoCompleteCKEditor.CONTAINER_ASCENDANT;
 			}
@@ -146,13 +154,13 @@
 			return container.getAscendant(ascendant, true);
 		},
 
-		_getInputElement: function(value) {
+		_getInputElement() {
 			var instance = this;
 
 			return A.one(instance.get(STR_EDITOR).element.$);
 		},
 
-		_getPrevTriggerPosition: function() {
+		_getPrevTriggerPosition() {
 			var instance = this;
 
 			var caretContainer = instance._getCaretContainer();
@@ -168,7 +176,7 @@
 
 			var triggers = instance._getTriggers();
 
-			AArray.each(triggers, function(item, index, collection) {
+			AArray.each(triggers, function(item) {
 				var triggerPosition = query.lastIndexOf(item);
 
 				if (triggerPosition !== -1 && triggerPosition > triggerIndex) {
@@ -189,11 +197,7 @@
 					) {
 						var nodeText = node.getText();
 
-						AArray.each(triggers, function(
-							item,
-							index,
-							collection
-						) {
+						AArray.each(triggers, function(item) {
 							var triggerPosition = nodeText.lastIndexOf(item);
 
 							if (
@@ -234,12 +238,12 @@
 			return {
 				container: triggerContainer,
 				index: triggerIndex,
-				query: query,
+				query,
 				value: trigger
 			};
 		},
 
-		_getQuery: function() {
+		_getQuery() {
 			var instance = this;
 
 			var prevTriggerPosition = instance._getPrevTriggerPosition();
@@ -263,7 +267,7 @@
 			return result;
 		},
 
-		_getWalker: function(endContainer, startContainer) {
+		_getWalker(endContainer, startContainer) {
 			var instance = this;
 
 			endContainer = endContainer || instance._getCaretContainer();
@@ -281,7 +285,7 @@
 			return walker;
 		},
 
-		_isEmptySelection: function() {
+		_isEmptySelection() {
 			var instance = this;
 
 			var editor = instance.get(STR_EDITOR);
@@ -298,7 +302,7 @@
 			);
 		},
 
-		_normalizeCKEditorKeyEvent: function(event) {
+		_normalizeCKEditorKeyEvent(event) {
 			return new A.DOMEventFacade({
 				keyCode: event.data.keyCode,
 				preventDefault: event.cancel,
@@ -307,7 +311,7 @@
 			});
 		},
 
-		_onEditorKey: function(event) {
+		_onEditorKey(event) {
 			var instance = this;
 
 			if (instance._isEmptySelection()) {
@@ -334,7 +338,7 @@
 			}
 		},
 
-		_processCaretPosition: function() {
+		_processCaretPosition() {
 			var instance = this;
 
 			var query = instance._getQuery();
@@ -342,7 +346,7 @@
 			instance._processKeyUp(query);
 		},
 
-		_replaceHtml: function(text, prevTriggerPosition) {
+		_replaceHtml(text, prevTriggerPosition) {
 			var instance = this;
 
 			var replaceContainer = instance._getContainerAscendant(
@@ -417,7 +421,7 @@
 			};
 		},
 
-		_setCaretIndex: function(node, caretIndex) {
+		_setCaretIndex(node, caretIndex) {
 			var instance = this;
 
 			var editor = instance.get(STR_EDITOR);
@@ -431,7 +435,7 @@
 			editor.focus();
 		},
 
-		_updateValue: function(value) {
+		_updateValue(value) {
 			var instance = this;
 
 			var prevTriggerPosition = instance._getPrevTriggerPosition();
@@ -446,6 +450,12 @@
 			var editor = instance.get('editor');
 
 			editor.fire('saveSnapshot');
+		},
+
+		initializer() {
+			var instance = this;
+
+			instance._bindUIACCKEditor();
 		}
 	};
 

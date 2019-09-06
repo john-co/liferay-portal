@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 AUI.add(
 	'liferay-util-window',
 	function(A) {
@@ -44,7 +58,7 @@ AUI.add(
 				},
 
 				toolbars: {
-					valueFn: function() {
+					valueFn() {
 						var instance = this;
 
 						return {
@@ -59,7 +73,7 @@ AUI.add(
 										Liferay.Language.get('close') +
 										'</title></svg>',
 									on: {
-										click: function(event) {
+										click(event) {
 											instance.hide();
 
 											event.domEvent.stopPropagation();
@@ -81,60 +95,7 @@ AUI.add(
 		});
 
 		A.mix(Window, {
-			DEFAULTS: {
-				centered: true,
-				modal: true,
-				visible: true,
-				zIndex: Liferay.zIndex.WINDOW
-			},
-
-			IFRAME_SUFFIX: '_iframe_',
-
-			TITLE_TEMPLATE: '<h3 class="modal-title" />',
-
-			getByChild: function(child) {
-				var instance = this;
-
-				var node = A.one(child).ancestor('.modal', true);
-
-				return A.Widget.getByNode(node);
-			},
-
-			getWindow: function(config) {
-				var instance = this;
-
-				instance._ensureDefaultId(config);
-
-				var modal = instance._getWindow(config);
-
-				instance._bindDOMWinResizeIfNeeded();
-
-				modal.render();
-
-				instance._setWindowDefaultSizeIfNeeded(modal);
-
-				modal.align();
-
-				return modal;
-			},
-
-			hideByChild: function(child) {
-				var instance = this;
-
-				return instance.getByChild(child).hide();
-			},
-
-			refreshByChild: function(child) {
-				var instance = this;
-
-				var dialog = instance.getByChild(child);
-
-				if (dialog && dialog.io) {
-					dialog.io.start();
-				}
-			},
-
-			_bindDOMWinResizeIfNeeded: function() {
+			_bindDOMWinResizeIfNeeded() {
 				var instance = this;
 
 				if (!instance._winResizeHandler) {
@@ -146,7 +107,7 @@ AUI.add(
 				}
 			},
 
-			_bindWindowHooks: function(modal, config) {
+			_bindWindowHooks(modal, config) {
 				var instance = this;
 
 				var id = modal.get('id');
@@ -158,7 +119,7 @@ AUI.add(
 				modal._opener = openingWindow;
 				modal._refreshWindow = refreshWindow;
 
-				modal.after('destroy', function(event) {
+				modal.after('destroy', function() {
 					if (modal._opener) {
 						var openerInFrame = !!modal._opener.frameElement;
 
@@ -214,7 +175,7 @@ AUI.add(
 				);
 			},
 
-			_ensureDefaultId: function(config) {
+			_ensureDefaultId(config) {
 				var instance = this;
 
 				if (!Lang.isValue(config.id)) {
@@ -226,9 +187,7 @@ AUI.add(
 				}
 			},
 
-			_getDialogIframeConfig: function(config) {
-				var instance = this;
-
+			_getDialogIframeConfig(config) {
 				var dialogIframeConfig;
 
 				var iframeId = config.iframeId;
@@ -271,7 +230,7 @@ AUI.add(
 						defaultDialogIframeConfig,
 						config.dialogIframe,
 						{
-							bindLoadHandler: function() {
+							bindLoadHandler() {
 								var instance = this;
 
 								var modal = instance.get('host');
@@ -289,7 +248,7 @@ AUI.add(
 								);
 
 								liferayHandles.push(
-									instance.node.on('load', function(event) {
+									instance.node.on('load', function() {
 										if (!popupReady) {
 											Liferay.fire('popupReady', {
 												windowName: iframeId
@@ -301,9 +260,9 @@ AUI.add(
 								);
 							},
 
-							iframeId: iframeId,
+							iframeId,
 							iframeTitle: config.title || '',
-							uri: uri
+							uri
 						}
 					);
 				}
@@ -311,7 +270,7 @@ AUI.add(
 				return dialogIframeConfig;
 			},
 
-			_getWindow: function(config) {
+			_getWindow(config) {
 				var instance = this;
 
 				var id = config.id;
@@ -338,7 +297,7 @@ AUI.add(
 							{
 								cssClass: 'modal-full-screen',
 								headerContent: titleNode,
-								id: id
+								id
 							},
 							modalConfig
 						)
@@ -396,7 +355,7 @@ AUI.add(
 				return modal;
 			},
 
-			_getWindowConfig: function(config) {
+			_getWindowConfig(config) {
 				var instance = this;
 
 				var modalConfig = A.merge(instance.DEFAULTS, config.dialog);
@@ -427,7 +386,7 @@ AUI.add(
 				return modalConfig;
 			},
 
-			_register: function(modal) {
+			_register(modal) {
 				var instance = this;
 
 				var id = modal.get('id');
@@ -438,7 +397,7 @@ AUI.add(
 				instance._map[id + instance.IFRAME_SUFFIX] = modal;
 			},
 
-			_resetFocus: function(modal) {
+			_resetFocus(modal) {
 				var contentBox = modal.get('contentBox');
 
 				var input = contentBox.one('input[type=text]');
@@ -448,9 +407,7 @@ AUI.add(
 				}
 			},
 
-			_setWindowDefaultSizeIfNeeded: function(modal) {
-				var instance = this;
-
+			_setWindowDefaultSizeIfNeeded(modal) {
 				var autoSizeNode = modal.get('autoSizeNode');
 
 				if (modal.get('autoHeight')) {
@@ -496,7 +453,7 @@ AUI.add(
 				}
 			},
 
-			_syncWindowsUI: function() {
+			_syncWindowsUI() {
 				var instance = this;
 
 				var modals = instance._map;
@@ -510,7 +467,7 @@ AUI.add(
 				});
 			},
 
-			_unregister: function(modal) {
+			_unregister(modal) {
 				var instance = this;
 
 				var id = modal.get('id');
@@ -521,7 +478,58 @@ AUI.add(
 				A.Array.invoke(modal._liferayHandles, 'detach');
 			},
 
-			_winResizeHandler: null
+			_winResizeHandler: null,
+
+			DEFAULTS: {
+				centered: true,
+				modal: true,
+				visible: true,
+				zIndex: Liferay.zIndex.WINDOW
+			},
+
+			IFRAME_SUFFIX: '_iframe_',
+
+			TITLE_TEMPLATE: '<h3 class="modal-title" />',
+
+			getByChild(child) {
+				var node = A.one(child).ancestor('.modal', true);
+
+				return A.Widget.getByNode(node);
+			},
+
+			getWindow(config) {
+				var instance = this;
+
+				instance._ensureDefaultId(config);
+
+				var modal = instance._getWindow(config);
+
+				instance._bindDOMWinResizeIfNeeded();
+
+				modal.render();
+
+				instance._setWindowDefaultSizeIfNeeded(modal);
+
+				modal.align();
+
+				return modal;
+			},
+
+			hideByChild(child) {
+				var instance = this;
+
+				return instance.getByChild(child).hide();
+			},
+
+			refreshByChild(child) {
+				var instance = this;
+
+				var dialog = instance.getByChild(child);
+
+				if (dialog && dialog.io) {
+					dialog.io.start();
+				}
+			}
 		});
 	},
 	'',

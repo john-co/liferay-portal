@@ -161,14 +161,13 @@ public class DLOpenerFileEntryReferenceUtil {
 	 * Returns the dl opener file entry reference where fileEntryId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
 	 *
 	 * @param fileEntryId the file entry ID
-	 * @param retrieveFromCache whether to retrieve from the finder cache
+	 * @param useFinderCache whether to use the finder cache
 	 * @return the matching dl opener file entry reference, or <code>null</code> if a matching dl opener file entry reference could not be found
 	 */
 	public static DLOpenerFileEntryReference fetchByFileEntryId(
-		long fileEntryId, boolean retrieveFromCache) {
+		long fileEntryId, boolean useFinderCache) {
 
-		return getPersistence().fetchByFileEntryId(
-			fileEntryId, retrieveFromCache);
+		return getPersistence().fetchByFileEntryId(fileEntryId, useFinderCache);
 	}
 
 	/**
@@ -193,6 +192,76 @@ public class DLOpenerFileEntryReferenceUtil {
 	 */
 	public static int countByFileEntryId(long fileEntryId) {
 		return getPersistence().countByFileEntryId(fileEntryId);
+	}
+
+	/**
+	 * Returns the dl opener file entry reference where referenceType = &#63; and fileEntryId = &#63; or throws a <code>NoSuchFileEntryReferenceException</code> if it could not be found.
+	 *
+	 * @param referenceType the reference type
+	 * @param fileEntryId the file entry ID
+	 * @return the matching dl opener file entry reference
+	 * @throws NoSuchFileEntryReferenceException if a matching dl opener file entry reference could not be found
+	 */
+	public static DLOpenerFileEntryReference findByR_F(
+			String referenceType, long fileEntryId)
+		throws com.liferay.document.library.opener.exception.
+			NoSuchFileEntryReferenceException {
+
+		return getPersistence().findByR_F(referenceType, fileEntryId);
+	}
+
+	/**
+	 * Returns the dl opener file entry reference where referenceType = &#63; and fileEntryId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param referenceType the reference type
+	 * @param fileEntryId the file entry ID
+	 * @return the matching dl opener file entry reference, or <code>null</code> if a matching dl opener file entry reference could not be found
+	 */
+	public static DLOpenerFileEntryReference fetchByR_F(
+		String referenceType, long fileEntryId) {
+
+		return getPersistence().fetchByR_F(referenceType, fileEntryId);
+	}
+
+	/**
+	 * Returns the dl opener file entry reference where referenceType = &#63; and fileEntryId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param referenceType the reference type
+	 * @param fileEntryId the file entry ID
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the matching dl opener file entry reference, or <code>null</code> if a matching dl opener file entry reference could not be found
+	 */
+	public static DLOpenerFileEntryReference fetchByR_F(
+		String referenceType, long fileEntryId, boolean useFinderCache) {
+
+		return getPersistence().fetchByR_F(
+			referenceType, fileEntryId, useFinderCache);
+	}
+
+	/**
+	 * Removes the dl opener file entry reference where referenceType = &#63; and fileEntryId = &#63; from the database.
+	 *
+	 * @param referenceType the reference type
+	 * @param fileEntryId the file entry ID
+	 * @return the dl opener file entry reference that was removed
+	 */
+	public static DLOpenerFileEntryReference removeByR_F(
+			String referenceType, long fileEntryId)
+		throws com.liferay.document.library.opener.exception.
+			NoSuchFileEntryReferenceException {
+
+		return getPersistence().removeByR_F(referenceType, fileEntryId);
+	}
+
+	/**
+	 * Returns the number of dl opener file entry references where referenceType = &#63; and fileEntryId = &#63;.
+	 *
+	 * @param referenceType the reference type
+	 * @param fileEntryId the file entry ID
+	 * @return the number of matching dl opener file entry references
+	 */
+	public static int countByR_F(String referenceType, long fileEntryId) {
+		return getPersistence().countByR_F(referenceType, fileEntryId);
 	}
 
 	/**
@@ -330,16 +399,16 @@ public class DLOpenerFileEntryReferenceUtil {
 	 * @param start the lower bound of the range of dl opener file entry references
 	 * @param end the upper bound of the range of dl opener file entry references (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @param retrieveFromCache whether to retrieve from the finder cache
+	 * @param useFinderCache whether to use the finder cache
 	 * @return the ordered range of dl opener file entry references
 	 */
 	public static List<DLOpenerFileEntryReference> findAll(
 		int start, int end,
 		OrderByComparator<DLOpenerFileEntryReference> orderByComparator,
-		boolean retrieveFromCache) {
+		boolean useFinderCache) {
 
 		return getPersistence().findAll(
-			start, end, orderByComparator, retrieveFromCache);
+			start, end, orderByComparator, useFinderCache);
 	}
 
 	/**

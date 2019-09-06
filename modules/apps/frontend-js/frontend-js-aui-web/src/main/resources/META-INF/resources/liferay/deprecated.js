@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 // For details about this file see: LPS-2155
 
 (function(A, Liferay) {
@@ -130,7 +144,7 @@
 
 				var defaultType = 'text';
 
-				el.all('input').each(function(item, index) {
+				el.all('input').each(function(item) {
 					var type = item.get('type') || defaultType;
 
 					item.addClass(type);
@@ -488,7 +502,7 @@
 						if (!el || !A.DOM.inDoc(el)) {
 							A.on(
 								'available',
-								function(event) {
+								function() {
 									el = A.one(window[elString]);
 
 									if (el) {

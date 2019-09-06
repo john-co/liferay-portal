@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 AUI.add(
 	'liferay-admin',
 	function(A) {
@@ -42,39 +56,7 @@ AUI.add(
 			NAME: 'admin',
 
 			prototype: {
-				initializer: function(config) {
-					var instance = this;
-
-					instance._eventHandles = [];
-
-					instance.bindUI();
-				},
-
-				bindUI: function() {
-					var instance = this;
-
-					instance._eventHandles.push(
-						instance
-							.get(STR_FORM)
-							.delegate(
-								STR_CLICK,
-								A.bind('_onSubmit', instance),
-								instance.get('submitButton')
-							)
-					);
-				},
-
-				destructor: function() {
-					var instance = this;
-
-					A.Array.invoke(instance._eventHandles, 'detach');
-
-					instance._eventHandles = null;
-
-					A.clearTimeout(instance._laterTimeout);
-				},
-
-				_addInputsFromData: function(data) {
+				_addInputsFromData(data) {
 					var instance = this;
 
 					var form = instance.get(STR_FORM);
@@ -98,7 +80,7 @@ AUI.add(
 					form.append(inputsArray.join(''));
 				},
 
-				_installXuggler: function(event) {
+				_installXuggler() {
 					var instance = this;
 
 					var form = instance.get(STR_FORM);
@@ -120,7 +102,7 @@ AUI.add(
 					);
 
 					A.one('#adminXugglerPanelContent').load(url, {
-						data: data,
+						data,
 						loadingMask: {
 							'strings.loading': Liferay.Language.get(
 								'xuggler-library-is-installing'
@@ -131,7 +113,7 @@ AUI.add(
 					});
 				},
 
-				_onSubmit: function(event) {
+				_onSubmit(event) {
 					var instance = this;
 
 					var data = event.currentTarget.getData();
@@ -159,6 +141,38 @@ AUI.add(
 					} else {
 						submitForm(form, instance.get(STR_URL));
 					}
+				},
+
+				bindUI() {
+					var instance = this;
+
+					instance._eventHandles.push(
+						instance
+							.get(STR_FORM)
+							.delegate(
+								STR_CLICK,
+								A.bind('_onSubmit', instance),
+								instance.get('submitButton')
+							)
+					);
+				},
+
+				destructor() {
+					var instance = this;
+
+					A.Array.invoke(instance._eventHandles, 'detach');
+
+					instance._eventHandles = null;
+
+					A.clearTimeout(instance._laterTimeout);
+				},
+
+				initializer() {
+					var instance = this;
+
+					instance._eventHandles = [];
+
+					instance.bindUI();
 				}
 			}
 		});
@@ -170,6 +184,7 @@ AUI.add(
 		requires: [
 			'aui-io-plugin-deprecated',
 			'aui-io-request',
+			'io',
 			'liferay-portlet-base',
 			'querystring-parse'
 		]

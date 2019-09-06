@@ -23,20 +23,23 @@ import com.liferay.change.tracking.rest.resource.v1_0.SettingsResource;
 import com.liferay.petra.function.UnsafeConsumer;
 import com.liferay.petra.function.UnsafeFunction;
 import com.liferay.portal.kernel.model.Company;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.vulcan.accept.language.AcceptLanguage;
-
-import graphql.annotations.annotationTypes.GraphQLField;
-import graphql.annotations.annotationTypes.GraphQLInvokeDetached;
-import graphql.annotations.annotationTypes.GraphQLName;
+import com.liferay.portal.vulcan.graphql.annotation.GraphQLField;
+import com.liferay.portal.vulcan.graphql.annotation.GraphQLName;
 
 import javax.annotation.Generated;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import org.osgi.service.component.ComponentServiceObjects;
 
 /**
- * @author Mate Thurzo
+ * @author Máté Thurzó
  * @generated
  */
 @Generated("")
@@ -59,8 +62,7 @@ public class Mutation {
 	}
 
 	@GraphQLField
-	@GraphQLInvokeDetached
-	public Collection postCollection(
+	public Collection createCollection(
 			@GraphQLName("companyId") Long companyId,
 			@GraphQLName("userId") Long userId,
 			@GraphQLName("collectionUpdate") CollectionUpdate collectionUpdate)
@@ -73,21 +75,21 @@ public class Mutation {
 				companyId, userId, collectionUpdate));
 	}
 
-	@GraphQLInvokeDetached
+	@GraphQLField
 	public Response deleteCollection(
-			@GraphQLName("collectionId") Long collectionId)
+			@GraphQLName("collectionId") Long collectionId,
+			@GraphQLName("companyId") Long companyId)
 		throws Exception {
 
 		return _applyComponentServiceObjects(
 			_collectionResourceComponentServiceObjects,
 			this::_populateResourceContext,
 			collectionResource -> collectionResource.deleteCollection(
-				collectionId));
+				collectionId, companyId));
 	}
 
 	@GraphQLField
-	@GraphQLInvokeDetached
-	public Response postCollectionCheckout(
+	public Response createCollectionCheckout(
 			@GraphQLName("collectionId") Long collectionId,
 			@GraphQLName("userId") Long userId)
 		throws Exception {
@@ -100,8 +102,7 @@ public class Mutation {
 	}
 
 	@GraphQLField
-	@GraphQLInvokeDetached
-	public Response postCollectionPublish(
+	public Response createCollectionPublish(
 			@GraphQLName("collectionId") Long collectionId,
 			@GraphQLName("ignoreCollision") Boolean ignoreCollision,
 			@GraphQLName("userId") Long userId)
@@ -114,8 +115,8 @@ public class Mutation {
 				collectionId, ignoreCollision, userId));
 	}
 
-	@GraphQLInvokeDetached
-	public Settings putSettings(
+	@GraphQLField
+	public Settings updateSettings(
 			@GraphQLName("companyId") Long companyId,
 			@GraphQLName("userId") Long userId,
 			@GraphQLName("settingsUpdate") SettingsUpdate settingsUpdate)
@@ -171,6 +172,10 @@ public class Mutation {
 
 		collectionResource.setContextAcceptLanguage(_acceptLanguage);
 		collectionResource.setContextCompany(_company);
+		collectionResource.setContextHttpServletRequest(_httpServletRequest);
+		collectionResource.setContextHttpServletResponse(_httpServletResponse);
+		collectionResource.setContextUriInfo(_uriInfo);
+		collectionResource.setContextUser(_user);
 	}
 
 	private void _populateResourceContext(SettingsResource settingsResource)
@@ -178,6 +183,10 @@ public class Mutation {
 
 		settingsResource.setContextAcceptLanguage(_acceptLanguage);
 		settingsResource.setContextCompany(_company);
+		settingsResource.setContextHttpServletRequest(_httpServletRequest);
+		settingsResource.setContextHttpServletResponse(_httpServletResponse);
+		settingsResource.setContextUriInfo(_uriInfo);
+		settingsResource.setContextUser(_user);
 	}
 
 	private static ComponentServiceObjects<CollectionResource>
@@ -187,5 +196,9 @@ public class Mutation {
 
 	private AcceptLanguage _acceptLanguage;
 	private Company _company;
+	private HttpServletRequest _httpServletRequest;
+	private HttpServletResponse _httpServletResponse;
+	private UriInfo _uriInfo;
+	private User _user;
 
 }

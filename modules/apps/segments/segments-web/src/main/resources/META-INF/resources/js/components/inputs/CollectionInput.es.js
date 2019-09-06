@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import propTypes from 'prop-types';
 import React from 'react';
 
@@ -66,29 +80,29 @@ class CollectionInput extends React.Component {
 		const {key, value} = this._stringToKeyValueObject(this.props.value);
 
 		return (
-			<React.Fragment>
+			<>
 				<input
-					className='criterion-input form-control'
-					data-testid='collection-key-input'
+					className="criterion-input form-control"
+					data-testid="collection-key-input"
 					disabled={disabled}
 					onChange={this._handleKeyChange}
 					onKeyDown={this._handleKeyDown}
 					placeholder={Liferay.Language.get('key')}
-					type='text'
+					type="text"
 					value={key}
 				/>
 
 				<input
-					className='criterion-input form-control'
-					data-testid='collection-value-input'
+					className="criterion-input form-control"
+					data-testid="collection-value-input"
 					disabled={disabled}
 					onChange={this._handleValueChange}
 					onKeyDown={this._handleKeyDown}
 					placeholder={Liferay.Language.get('value')}
-					type='text'
+					type="text"
 					value={value}
 				/>
-			</React.Fragment>
+			</>
 		);
 	}
 }

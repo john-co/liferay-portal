@@ -54,7 +54,7 @@ public abstract class StatusFinderBaseImpl extends BasePersistenceImpl<Status> {
 
 	@Override
 	@Reference(
-		target = ChatPersistenceConstants.ORIGIN_BUNDLE_SYMBOLIC_NAME_FILTER,
+		target = ChatPersistenceConstants.SERVICE_CONFIGURATION_FILTER,
 		unbind = "-"
 	)
 	public void setConfiguration(Configuration configuration) {
@@ -84,5 +84,14 @@ public abstract class StatusFinderBaseImpl extends BasePersistenceImpl<Status> {
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		StatusFinderBaseImpl.class);
+
+	static {
+		try {
+			Class.forName(ChatPersistenceConstants.class.getName());
+		}
+		catch (ClassNotFoundException cnfe) {
+			throw new ExceptionInInitializerError(cnfe);
+		}
+	}
 
 }

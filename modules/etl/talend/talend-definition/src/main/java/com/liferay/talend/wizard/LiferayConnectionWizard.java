@@ -20,31 +20,32 @@ import com.liferay.talend.ui.UIKeys;
 import org.talend.components.api.properties.ComponentProperties;
 import org.talend.components.api.wizard.ComponentWizard;
 import org.talend.components.api.wizard.ComponentWizardDefinition;
+import org.talend.daikon.properties.presentation.Form;
 
 /**
  * @author Zoltán Takács
+ * @author Igor Beslic
  */
 public class LiferayConnectionWizard extends ComponentWizard {
 
 	public LiferayConnectionWizard(
 		ComponentWizardDefinition componentWizardDefinition,
-		String repositoryLocation) {
+		ComponentProperties componentProperties, String repositoryLocation) {
 
 		super(componentWizardDefinition, repositoryLocation);
 
-		connection = new LiferayConnectionProperties("connection");
+		addForm(componentProperties.getForm(UIKeys.FORM_WIZARD));
 
-		connection.init();
+		schemaList = new LiferaySchemaListProperties("schemaList");
 
-		addForm(connection.getForm(UIKeys.FORM_WIZARD));
-	}
+		schemaList.setConnection(
+			(LiferayConnectionProperties)componentProperties);
 
-	public void setupProperties(
-		LiferayConnectionProperties liferayConnectionProperties) {
+		schemaList.setRepositoryLocation(getRepositoryLocation());
 
-		this.connection.setupProperties();
+		schemaList.init();
 
-		this.connection.copyValuesFrom(liferayConnectionProperties);
+		addForm(schemaList.getForm(Form.MAIN));
 	}
 
 	public boolean supportsProperties(ComponentProperties componentProperties) {
@@ -55,6 +56,6 @@ public class LiferayConnectionWizard extends ComponentWizard {
 		return false;
 	}
 
-	public LiferayConnectionProperties connection;
+	public LiferaySchemaListProperties schemaList;
 
 }

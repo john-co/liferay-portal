@@ -1,5 +1,19 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 CKEDITOR.plugins.add('wikilink', {
-	init: function(editor) {
+	init(editor) {
 		var instance = this;
 
 		editor.addCommand('link', new CKEDITOR.dialogCommand('link'));
@@ -70,7 +84,7 @@ CKEDITOR.plugins.add('wikilink', {
 		}
 
 		if (editor.contextMenu) {
-			editor.contextMenu.addListener(function(element, selection) {
+			editor.contextMenu.addListener(function(element) {
 				var selectionObj = null;
 
 				if (element && !element.isReadOnly()) {
@@ -91,7 +105,7 @@ CKEDITOR.plugins.add('wikilink', {
 });
 
 CKEDITOR.plugins.link = {
-	getSelectedLink: function(editor) {
+	getSelectedLink(editor) {
 		var selectedLink = null;
 
 		try {
@@ -121,9 +135,7 @@ CKEDITOR.plugins.link = {
 CKEDITOR.unlinkCommand = function() {};
 
 CKEDITOR.unlinkCommand.prototype = {
-	startDisabled: true,
-
-	exec: function(editor) {
+	exec(editor) {
 		var selection = editor.getSelection();
 
 		var bookmarks = selection.createBookmarks();
@@ -146,5 +158,7 @@ CKEDITOR.unlinkCommand.prototype = {
 		selection.selectRanges(ranges);
 		editor.document.$.execCommand('unlink', false, null);
 		selection.selectBookmarks(bookmarks);
-	}
+	},
+
+	startDisabled: true
 };

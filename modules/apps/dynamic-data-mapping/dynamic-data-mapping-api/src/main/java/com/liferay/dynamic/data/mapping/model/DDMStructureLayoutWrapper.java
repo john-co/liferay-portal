@@ -46,6 +46,7 @@ public class DDMStructureLayoutWrapper
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
+		attributes.put("mvccVersion", getMvccVersion());
 		attributes.put("uuid", getUuid());
 		attributes.put("structureLayoutId", getStructureLayoutId());
 		attributes.put("groupId", getGroupId());
@@ -54,6 +55,8 @@ public class DDMStructureLayoutWrapper
 		attributes.put("userName", getUserName());
 		attributes.put("createDate", getCreateDate());
 		attributes.put("modifiedDate", getModifiedDate());
+		attributes.put("classNameId", getClassNameId());
+		attributes.put("structureLayoutKey", getStructureLayoutKey());
 		attributes.put("structureVersionId", getStructureVersionId());
 		attributes.put("name", getName());
 		attributes.put("description", getDescription());
@@ -64,6 +67,12 @@ public class DDMStructureLayoutWrapper
 
 	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
+		Long mvccVersion = (Long)attributes.get("mvccVersion");
+
+		if (mvccVersion != null) {
+			setMvccVersion(mvccVersion);
+		}
+
 		String uuid = (String)attributes.get("uuid");
 
 		if (uuid != null) {
@@ -112,6 +121,19 @@ public class DDMStructureLayoutWrapper
 			setModifiedDate(modifiedDate);
 		}
 
+		Long classNameId = (Long)attributes.get("classNameId");
+
+		if (classNameId != null) {
+			setClassNameId(classNameId);
+		}
+
+		String structureLayoutKey = (String)attributes.get(
+			"structureLayoutKey");
+
+		if (structureLayoutKey != null) {
+			setStructureLayoutKey(structureLayoutKey);
+		}
+
 		Long structureVersionId = (Long)attributes.get("structureVersionId");
 
 		if (structureVersionId != null) {
@@ -140,6 +162,26 @@ public class DDMStructureLayoutWrapper
 	@Override
 	public String[] getAvailableLanguageIds() {
 		return model.getAvailableLanguageIds();
+	}
+
+	/**
+	 * Returns the fully qualified class name of this ddm structure layout.
+	 *
+	 * @return the fully qualified class name of this ddm structure layout
+	 */
+	@Override
+	public String getClassName() {
+		return model.getClassName();
+	}
+
+	/**
+	 * Returns the class name ID of this ddm structure layout.
+	 *
+	 * @return the class name ID of this ddm structure layout
+	 */
+	@Override
+	public long getClassNameId() {
+		return model.getClassNameId();
 	}
 
 	/**
@@ -279,6 +321,16 @@ public class DDMStructureLayoutWrapper
 	}
 
 	/**
+	 * Returns the mvcc version of this ddm structure layout.
+	 *
+	 * @return the mvcc version of this ddm structure layout
+	 */
+	@Override
+	public long getMvccVersion() {
+		return model.getMvccVersion();
+	}
+
+	/**
 	 * Returns the name of this ddm structure layout.
 	 *
 	 * @return the name of this ddm structure layout
@@ -375,6 +427,16 @@ public class DDMStructureLayoutWrapper
 	}
 
 	/**
+	 * Returns the structure layout key of this ddm structure layout.
+	 *
+	 * @return the structure layout key of this ddm structure layout
+	 */
+	@Override
+	public String getStructureLayoutKey() {
+		return model.getStructureLayoutKey();
+	}
+
+	/**
 	 * Returns the structure version ID of this ddm structure layout.
 	 *
 	 * @return the structure version ID of this ddm structure layout
@@ -442,6 +504,21 @@ public class DDMStructureLayoutWrapper
 		throws com.liferay.portal.kernel.exception.LocaleException {
 
 		model.prepareLocalizedFieldsForImport(defaultImportLocale);
+	}
+
+	@Override
+	public void setClassName(String className) {
+		model.setClassName(className);
+	}
+
+	/**
+	 * Sets the class name ID of this ddm structure layout.
+	 *
+	 * @param classNameId the class name ID of this ddm structure layout
+	 */
+	@Override
+	public void setClassNameId(long classNameId) {
+		model.setClassNameId(classNameId);
 	}
 
 	/**
@@ -562,6 +639,16 @@ public class DDMStructureLayoutWrapper
 	}
 
 	/**
+	 * Sets the mvcc version of this ddm structure layout.
+	 *
+	 * @param mvccVersion the mvcc version of this ddm structure layout
+	 */
+	@Override
+	public void setMvccVersion(long mvccVersion) {
+		model.setMvccVersion(mvccVersion);
+	}
+
+	/**
 	 * Sets the name of this ddm structure layout.
 	 *
 	 * @param name the name of this ddm structure layout
@@ -642,6 +729,16 @@ public class DDMStructureLayoutWrapper
 	@Override
 	public void setStructureLayoutId(long structureLayoutId) {
 		model.setStructureLayoutId(structureLayoutId);
+	}
+
+	/**
+	 * Sets the structure layout key of this ddm structure layout.
+	 *
+	 * @param structureLayoutKey the structure layout key of this ddm structure layout
+	 */
+	@Override
+	public void setStructureLayoutKey(String structureLayoutKey) {
+		model.setStructureLayoutKey(structureLayoutKey);
 	}
 
 	/**

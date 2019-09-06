@@ -36,6 +36,7 @@ definition {
 	@priority = "5"
 	test ApproveInDMFolderCustomWorkflow {
 		property portal.release = "false";
+		property test.name.skip.portal.instance = "WorkflowDocumentsAndMedia#ApproveInDMFolderCustomWorkflow";
 		property testray.component.names = "Training";
 
 		ProductMenu.gotoPortlet(
@@ -122,7 +123,7 @@ definition {
 			roleTitle = "Board Member",
 			userScreenName = "usersn");
 
-		ProductMenu.gotoSite(site = "Space Program Academy of Continuing Education");
+		Navigator.openSiteURL(siteName = "Space Program Academy of Continuing Education");
 
 		ProductMenu.gotoPortlet(
 			category = "Content &amp; Data",
@@ -231,7 +232,7 @@ definition {
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Space Program Academy of Continuing Education");
+		Navigator.openSiteURL(siteName = "Space Program Academy of Continuing Education");
 
 		for (var entryCount : list "1,2,3") {
 			ProductMenu.gotoPortlet(
@@ -268,6 +269,21 @@ definition {
 		DMFolder.configureWorkflowCP(
 			dmFolderName = "DM Folder Name",
 			workflowRestriction = "Parent Folder");
+
+		DMNavigator.gotoDocumentType();
+
+		DMDocumentType.add(
+			dmDocumentTypeDescription = "DM Document Type Description",
+			dmDocumentTypeFieldNames = "Text Box",
+			dmDocumentTypeName = "DM Document Type Name");
+
+		DMNavigator.openDocumentsAndMediaAdmin(siteURLKey = "guest");
+
+		DMFolder.configureWorkflowCP(
+			dmDocumentTypeName = "DM Document Type Name",
+			dmFolderName = "DM Folder Name",
+			workflowDefinition = "Single Approver",
+			workflowRestriction = "Specific Restrictions");
 
 		DMFolder.configureWorkflowCP(
 			dmFolderName = "DM Folder Name",
@@ -332,7 +348,7 @@ definition {
 			dmDocumentTitle = "DM Folder Name",
 			dmFolderName = "DM Folder Name");
 
-		DMNavigator.gotoAddDocumentType();
+		DMNavigator.gotoAddDocumentTypeCP();
 
 		DMDocument.editDocument(
 			dmDocumentDescription = "DM Document Description",
@@ -379,6 +395,15 @@ definition {
 		Button.clickSaveAsDraft();
 
 		Alert.viewSuccessMessage();
+
+		Navigator.openURL();
+
+		ProductMenu.gotoPortlet(
+			category = "Content &amp; Data",
+			panel = "Site Administration",
+			portlet = "Documents and Media");
+
+		DMFolder.gotoEntry(dmFolderName = "DM Folder Name");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",

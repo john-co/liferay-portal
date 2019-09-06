@@ -171,6 +171,24 @@ public class AssetEntryServiceSoap {
 		}
 	}
 
+	public static com.liferay.asset.kernel.model.AssetEntrySoap getEntry(
+			String className, long classPK)
+		throws RemoteException {
+
+		try {
+			com.liferay.asset.kernel.model.AssetEntry returnValue =
+				AssetEntryServiceUtil.getEntry(className, classPK);
+
+			return com.liferay.asset.kernel.model.AssetEntrySoap.toSoapModel(
+				returnValue);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
 	public static void incrementViewCounter(
 			com.liferay.asset.kernel.model.AssetEntrySoap assetEntry)
 		throws RemoteException {

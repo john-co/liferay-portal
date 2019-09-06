@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 AUI.add(
 	'liferay-asset-categories-selector',
 	function(A) {
@@ -64,9 +78,7 @@ AUI.add(
 		var AssetCategoriesSelector = A.Component.create({
 			ATTRS: {
 				curEntries: {
-					setter: function(value) {
-						var instance = this;
-
+					setter(value) {
 						if (Lang.isString(value)) {
 							value = value.split('_CATEGORY_');
 						}
@@ -77,9 +89,7 @@ AUI.add(
 				},
 
 				curEntryIds: {
-					setter: function(value) {
-						var instance = this;
-
+					setter(value) {
 						if (Lang.isString(value)) {
 							value = value.split(',');
 						}
@@ -95,7 +105,7 @@ AUI.add(
 				},
 
 				labelNode: {
-					setter: function(value) {
+					setter(value) {
 						return A.one(value) || A.Attribute.INVALID_VALUE;
 					},
 					value: null
@@ -122,9 +132,7 @@ AUI.add(
 				},
 
 				vocabularyGroupIds: {
-					setter: function(value) {
-						var instance = this;
-
+					setter(value) {
 						if (Lang.isString(value) && value) {
 							value = value.split(',');
 						}
@@ -135,9 +143,7 @@ AUI.add(
 				},
 
 				vocabularyIds: {
-					setter: function(value) {
-						var instance = this;
-
+					setter(value) {
 						if (Lang.isString(value) && value) {
 							value = value.split(',');
 						}
@@ -150,69 +156,12 @@ AUI.add(
 
 			EXTENDS: Liferay.AssetTagsSelector,
 
-			NAME: NAME,
+			NAME,
 
 			prototype: {
-				TREEVIEWS: {},
-				UI_EVENTS: {},
-
-				renderUI: function() {
-					var instance = this;
-
-					AssetCategoriesSelector.superclass.constructor.superclass.renderUI.apply(
-						instance,
-						arguments
-					);
-
-					instance._renderIcons();
-
-					instance.inputContainer.addClass('hide-accessible');
-
-					instance._applyARIARoles();
-				},
-
-				bindUI: function() {
-					var instance = this;
-
-					AssetCategoriesSelector.superclass.bindUI.apply(
-						instance,
-						arguments
-					);
-				},
-
-				syncUI: function() {
-					var instance = this;
-
-					AssetCategoriesSelector.superclass.constructor.superclass.syncUI.apply(
-						instance,
-						arguments
-					);
-
-					var matchKey = instance.get('matchKey');
-
-					instance.entries.getKey = function(obj) {
-						return obj.categoryId;
-					};
-
-					var curEntries = instance.get('curEntries');
-					var curEntryIds = instance.get('curEntryIds');
-
-					curEntryIds.forEach(function(item, index) {
-						var entry = {
-							categoryId: item
-						};
-
-						entry[matchKey] = curEntries[index];
-
-						entry.value = LString.unescapeHTML(entry.value);
-
-						instance.entries.add(entry);
-					});
-				},
-
 				_afterTBLFocusedChange: EMPTY_FN,
 
-				_applyARIARoles: function() {
+				_applyARIARoles() {
 					var instance = this;
 
 					var boundingBox = instance.get(BOUNDING_BOX);
@@ -227,7 +176,7 @@ AUI.add(
 
 				_bindTagsSelector: EMPTY_FN,
 
-				_clearEntries: function() {
+				_clearEntries() {
 					var instance = this;
 
 					var entries = instance.entries;
@@ -235,7 +184,7 @@ AUI.add(
 					entries.each(A.fn('removeAt', entries, 0));
 				},
 
-				_formatJSONResult: function(json) {
+				_formatJSONResult(json) {
 					var instance = this;
 
 					var output = [];
@@ -246,7 +195,7 @@ AUI.add(
 						type = 'radio';
 					}
 
-					json.forEach(function(item, index) {
+					json.forEach(function(item) {
 						var checked = false;
 						var treeId = 'category' + item.categoryId;
 
@@ -266,12 +215,12 @@ AUI.add(
 									instance
 								)
 							},
-							checked: checked,
+							checked,
 							id: treeId,
 							label: LString.escapeHTML(item.titleCurrentValue),
 							leaf: !item.hasChildren,
 							paginator: instance._getPaginatorConfig(item),
-							type: type
+							type
 						};
 
 						output.push(newTreeNode);
@@ -280,11 +229,7 @@ AUI.add(
 					return output;
 				},
 
-				_formatRequestData: function(
-					groupId,
-					parentVocabularyId,
-					treeNode
-				) {
+				_formatRequestData(groupId, parentVocabularyId, treeNode) {
 					var instance = this;
 
 					var data = {};
@@ -310,7 +255,7 @@ AUI.add(
 					return data;
 				},
 
-				_getEntries: function(className, callback) {
+				_getEntries(className, callback) {
 					var instance = this;
 
 					var portalModelResource = instance.get(
@@ -325,16 +270,15 @@ AUI.add(
 						Liferay.Service(
 							{
 								'$vocabularies = /assetvocabulary/get-vocabularies': {
-									vocabularyIds: vocabularyIds,
 									'$childrenCount = /assetcategory/get-vocabulary-root-categories-count': {
 										'@groupId': '$vocabularies.groupId',
 										'@vocabularyId':
 											'$vocabularies.vocabularyId'
 									},
-
 									'$group[descriptiveName] = /group/get-group': {
 										'@groupId': '$vocabularies.groupId'
-									}
+									},
+									vocabularyIds
 								}
 							},
 							callback
@@ -353,17 +297,16 @@ AUI.add(
 						Liferay.Service(
 							{
 								'$vocabularies = /assetvocabulary/get-groups-vocabularies': {
-									className: className,
-									groupIds: groupIds,
 									'$childrenCount = /assetcategory/get-vocabulary-root-categories-count': {
-										groupId: '$vocabularies.groupId',
 										'@vocabularyId':
-											'$vocabularies.vocabularyId'
+											'$vocabularies.vocabularyId',
+										groupId: '$vocabularies.groupId'
 									},
-
 									'$group[descriptiveName] = /group/get-group': {
 										'@groupId': '$vocabularies.groupId'
-									}
+									},
+									className,
+									groupIds
 								}
 							},
 							callback
@@ -371,7 +314,7 @@ AUI.add(
 					}
 				},
 
-				_getPaginatorConfig: function(item) {
+				_getPaginatorConfig(item) {
 					var instance = this;
 
 					var paginatorConfig = {
@@ -394,7 +337,7 @@ AUI.add(
 					return paginatorConfig;
 				},
 
-				_getTreeNodeAssetId: function(treeNode) {
+				_getTreeNodeAssetId(treeNode) {
 					var treeId = treeNode.get(ID);
 
 					var match = treeId.match(/(\d+)$/);
@@ -402,7 +345,7 @@ AUI.add(
 					return match ? match[1] : null;
 				},
 
-				_getTreeNodeAssetType: function(treeNode) {
+				_getTreeNodeAssetType(treeNode) {
 					var treeId = treeNode.get(ID);
 
 					var match = treeId.match(/^(vocabulary|category)/);
@@ -412,7 +355,7 @@ AUI.add(
 
 				_initSearch: EMPTY_FN,
 
-				_initSearchFocus: function() {
+				_initSearchFocus() {
 					var instance = this;
 
 					var popup = instance._popup;
@@ -470,15 +413,13 @@ AUI.add(
 					instance._searchBuffer = [];
 				},
 
-				_isValidString: function(value) {
-					var instance = this;
-
+				_isValidString(value) {
 					return Lang.isString(value) && value.length;
 				},
 
 				_onBoundingBoxClick: EMPTY_FN,
 
-				_onCheckboxCheck: function(event) {
+				_onCheckboxCheck(event) {
 					var instance = this;
 
 					var currentTarget = event.currentTarget;
@@ -509,7 +450,7 @@ AUI.add(
 					instance.entries.add(entry);
 				},
 
-				_onCheckboxClick: function(event) {
+				_onCheckboxClick(event) {
 					var instance = this;
 
 					var method = '_onCheckboxUncheck';
@@ -521,7 +462,7 @@ AUI.add(
 					instance[method](event);
 				},
 
-				_onCheckboxUncheck: function(event) {
+				_onCheckboxUncheck(event) {
 					var instance = this;
 
 					var currentTarget = event.currentTarget;
@@ -537,7 +478,7 @@ AUI.add(
 					instance.entries.removeKey(assetId);
 				},
 
-				_onCheckedChange: function(event) {
+				_onCheckedChange(event) {
 					var instance = this;
 
 					if (event.newVal) {
@@ -551,7 +492,7 @@ AUI.add(
 					}
 				},
 
-				_onSelectChange: function(event) {
+				_onSelectChange(event) {
 					var instance = this;
 
 					instance._clearEntries();
@@ -559,7 +500,7 @@ AUI.add(
 					instance._onCheckboxCheck(event);
 				},
 
-				_processSearchResults: function(searchResults, results) {
+				_processSearchResults(searchResults, results) {
 					var instance = this;
 
 					var buffer = instance._searchBuffer;
@@ -577,7 +518,7 @@ AUI.add(
 
 						var inputName = A.guid();
 
-						categories.forEach(function(item, index) {
+						categories.forEach(function(item) {
 							item.checked =
 								instance.entries.findIndexBy(
 									'categoryId',
@@ -604,7 +545,7 @@ AUI.add(
 					searchResults.html(buffer.join(''));
 				},
 
-				_renderIcons: function() {
+				_renderIcons() {
 					var instance = this;
 
 					var contentBox = instance.get('contentBox');
@@ -626,7 +567,7 @@ AUI.add(
 					instance.entryHolder.placeAfter(iconsBoundingBox);
 				},
 
-				_searchCategories: function(
+				_searchCategories(
 					event,
 					searchResults,
 					vocabularyIds,
@@ -647,15 +588,15 @@ AUI.add(
 						Liferay.Service(
 							{
 								'$display = /assetcategory/search-categories-display': {
+									'categories.$path = /assetcategory/get-category-path': {
+										'@categoryId':
+											'$display.categories.categoryId'
+									},
 									end: -1,
 									groupIds: vocabularyGroupIds,
 									start: -1,
 									title: searchValue,
-									vocabularyIds: vocabularyIds,
-									'categories.$path = /assetcategory/get-category-path': {
-										'@categoryId':
-											'$display.categories.categoryId'
-									}
+									vocabularyIds
 								}
 							},
 							callback
@@ -666,12 +607,12 @@ AUI.add(
 
 					var treeViews = instance.TREEVIEWS;
 
-					AObject.each(treeViews, function(item, index) {
+					AObject.each(treeViews, function(item) {
 						item.toggle(!searchValue);
 					});
 				},
 
-				_showPopup: function(event) {
+				_showPopup() {
 					var instance = this;
 
 					Liferay.Util.getTop()
@@ -684,7 +625,7 @@ AUI.add(
 					);
 				},
 
-				_showSelectPopup: function(event) {
+				_showSelectPopup(event) {
 					var instance = this;
 
 					instance._showPopup(event);
@@ -716,7 +657,7 @@ AUI.add(
 							instance
 						);
 
-						A.each(instance.TREEVIEWS, function(item, index) {
+						A.each(instance.TREEVIEWS, function(item) {
 							item.toggle(!searchValue);
 
 							item.expandAll();
@@ -734,7 +675,7 @@ AUI.add(
 					);
 				},
 
-				_vocabulariesIterator: function(item, index) {
+				_vocabulariesIterator(item) {
 					var instance = this;
 
 					var popup = instance._popup;
@@ -773,7 +714,7 @@ AUI.add(
 									vocabularyId
 								),
 								on: {
-									success: function(event) {
+									success() {
 										var treeViews = instance.TREEVIEWS;
 
 										var tree = treeViews[vocabularyId];
@@ -798,6 +739,63 @@ AUI.add(
 								'/asset/get_categories'
 						}
 					}).render(popup.entriesNode);
+				},
+
+				TREEVIEWS: {},
+				UI_EVENTS: {},
+
+				bindUI() {
+					var instance = this;
+
+					AssetCategoriesSelector.superclass.bindUI.apply(
+						instance,
+						arguments
+					);
+				},
+
+				renderUI() {
+					var instance = this;
+
+					AssetCategoriesSelector.superclass.constructor.superclass.renderUI.apply(
+						instance,
+						arguments
+					);
+
+					instance._renderIcons();
+
+					instance.inputContainer.addClass('hide-accessible');
+
+					instance._applyARIARoles();
+				},
+
+				syncUI() {
+					var instance = this;
+
+					AssetCategoriesSelector.superclass.constructor.superclass.syncUI.apply(
+						instance,
+						arguments
+					);
+
+					var matchKey = instance.get('matchKey');
+
+					instance.entries.getKey = function(obj) {
+						return obj.categoryId;
+					};
+
+					var curEntries = instance.get('curEntries');
+					var curEntryIds = instance.get('curEntryIds');
+
+					curEntryIds.forEach(function(item, index) {
+						var entry = {
+							categoryId: item
+						};
+
+						entry[matchKey] = curEntries[index];
+
+						entry.value = LString.unescapeHTML(entry.value);
+
+						instance.entries.add(entry);
+					});
 				}
 			}
 		});

@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 AUI.add(
 	'liferay-toggler-key-filter',
 	function(A) {
@@ -22,26 +36,12 @@ AUI.add(
 
 			EXTENDS: A.Plugin.Base,
 
-			NAME: NAME,
+			NAME,
 
 			NS: NAME,
 
 			prototype: {
-				initializer: function() {
-					var instance = this;
-
-					instance._toggleEvent = instance
-						.get('host')
-						.get('toggleEvent');
-
-					instance.beforeHostMethod(
-						'headerEventHandler',
-						instance._headerEventHandler,
-						instance
-					);
-				},
-
-				_headerEventHandler: function(event) {
+				_headerEventHandler(event) {
 					var instance = this;
 
 					var validAction = event.type === instance._toggleEvent;
@@ -58,6 +58,20 @@ AUI.add(
 					}
 
 					return retVal;
+				},
+
+				initializer() {
+					var instance = this;
+
+					instance._toggleEvent = instance
+						.get('host')
+						.get('toggleEvent');
+
+					instance.beforeHostMethod(
+						'headerEventHandler',
+						instance._headerEventHandler,
+						instance
+					);
 				}
 			}
 		});

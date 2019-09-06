@@ -24,10 +24,10 @@ import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBus;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.segments.asah.connector.internal.cache.SegmentsAsahCache;
+import com.liferay.segments.asah.connector.internal.cache.AsahSegmentsEntryCache;
 import com.liferay.segments.asah.connector.internal.constants.SegmentsAsahDestinationNames;
 import com.liferay.segments.asah.connector.internal.context.contributor.SegmentsAsahRequestContextContributor;
-import com.liferay.segments.constants.SegmentsConstants;
+import com.liferay.segments.constants.SegmentsEntryConstants;
 import com.liferay.segments.context.Context;
 import com.liferay.segments.model.SegmentsEntryRel;
 import com.liferay.segments.provider.SegmentsEntryProvider;
@@ -47,7 +47,7 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(
 	immediate = true,
-	property = "segments.entry.provider.source=" + SegmentsConstants.SOURCE_ASAH_FARO_BACKEND,
+	property = "segments.entry.provider.source=" + SegmentsEntryConstants.SOURCE_ASAH_FARO_BACKEND,
 	service = SegmentsEntryProvider.class
 )
 public class AsahSegmentsEntryProvider implements SegmentsEntryProvider {
@@ -93,14 +93,15 @@ public class AsahSegmentsEntryProvider implements SegmentsEntryProvider {
 
 		String userId = GetterUtil.getString(
 			context.get(
-				SegmentsAsahRequestContextContributor.AC_CLIENT_USER_ID));
+				SegmentsAsahRequestContextContributor.
+					KEY_SEGMENTS_ANONYMOUS_USER_ID));
 
 		if (Validator.isNull(userId)) {
 			return new long[0];
 		}
 
-		long[] cachedSegmentsEntryIds = _segmentsAsahCache.getSegmentsEntryIds(
-			userId);
+		long[] cachedSegmentsEntryIds =
+			_asahSegmentsEntryCache.getSegmentsEntryIds(userId);
 
 		if (cachedSegmentsEntryIds == null) {
 			if (_log.isDebugEnabled()) {
@@ -148,13 +149,13 @@ public class AsahSegmentsEntryProvider implements SegmentsEntryProvider {
 		AsahSegmentsEntryProvider.class);
 
 	@Reference
+	private AsahSegmentsEntryCache _asahSegmentsEntryCache;
+
+	@Reference
 	private DestinationFactory _destinationFactory;
 
 	@Reference
 	private MessageBus _messageBus;
-
-	@Reference
-	private SegmentsAsahCache _segmentsAsahCache;
 
 	@Reference
 	private SegmentsEntryRelLocalService _segmentsEntryRelLocalService;

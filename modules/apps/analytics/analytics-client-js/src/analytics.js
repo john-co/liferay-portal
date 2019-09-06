@@ -1,4 +1,17 @@
-import {LocalStorageMechanism, Storage} from 'metal-storage';
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import middlewares from './middlewares/defaults';
 
 // Gateway
@@ -26,17 +39,31 @@ const STORAGE_KEY_IDENTITY_HASH = 'ac_client_identity';
 
 const STORAGE_KEY_USER_ID = 'ac_client_user_id';
 
-// Creates LocalStorage wrapper
-
-const storage = new Storage(new LocalStorageMechanism());
-
 let instance;
+
+const getItem = key => {
+	let data;
+	const item = localStorage.getItem(key);
+	try {
+		data = JSON.parse(item);
+	} catch (e) {
+		return;
+	}
+	return data;
+};
+
+const setItem = (key, value) => {
+	try {
+		localStorage.setItem(key, JSON.stringify(value));
+	} catch (e) {
+		return;
+	}
+};
 
 /**
  * Analytics class that is desined to collect events that are captured
- * for later processing. It persists the events in the LocalStorage using the
- * metal-storage implementation and flushes it to the defined endpoint at
- * regular intervals.
+ * for later processing. It persists the events in localStorage
+ * and flushes it to the defined endpoint at regular intervals.
  */
 class Analytics {
 	/**
@@ -62,8 +89,8 @@ class Analytics {
 
 		instance.identityEndpoint = `${endpointUrl}/identity`;
 
-		instance.events = storage.get(STORAGE_KEY_EVENTS) || [];
-		instance.contexts = storage.get(STORAGE_KEY_CONTEXTS) || [];
+		instance.events = getItem(STORAGE_KEY_EVENTS) || [];
+		instance.contexts = getItem(STORAGE_KEY_CONTEXTS) || [];
 		instance.isFlushInProgress = false;
 
 		// Initializes default plugins
@@ -102,7 +129,7 @@ class Analytics {
 	}
 
 	_ensureIntegrity() {
-		const userId = storage.get(STORAGE_KEY_USER_ID);
+		const userId = getItem(STORAGE_KEY_USER_ID);
 
 		if (userId) {
 			this._setCookie(STORAGE_KEY_USER_ID, userId);
@@ -110,8 +137,8 @@ class Analytics {
 	}
 
 	_isNewUserIdRequired() {
-		const identityHash = storage.get(STORAGE_KEY_IDENTITY_HASH);
-		const storedUserId = storage.get(STORAGE_KEY_USER_ID);
+		const identityHash = getItem(STORAGE_KEY_IDENTITY_HASH);
+		const storedUserId = getItem(STORAGE_KEY_USER_ID);
 
 		let newUserIdRequired = false;
 
@@ -131,7 +158,7 @@ class Analytics {
 	 * @protected
 	 */
 	_persist(key, data) {
-		storage.set(key, data);
+		setItem(key, data);
 
 		return data;
 	}
@@ -199,7 +226,7 @@ class Analytics {
 		this._persist(STORAGE_KEY_USER_ID, userId);
 		this._setCookie(STORAGE_KEY_USER_ID, userId);
 
-		storage.remove(STORAGE_KEY_IDENTITY_HASH);
+		localStorage.removeItem(STORAGE_KEY_IDENTITY_HASH);
 
 		return userId;
 	}
@@ -223,7 +250,7 @@ class Analytics {
 	_getUserId() {
 		const newUserIdRequired = this._isNewUserIdRequired();
 
-		let userId = Promise.resolve(storage.get(STORAGE_KEY_USER_ID));
+		let userId = Promise.resolve(getItem(STORAGE_KEY_USER_ID));
 
 		if (newUserIdRequired) {
 			userId = Promise.resolve(this._generateUserId());
@@ -248,7 +275,7 @@ class Analytics {
 		};
 
 		const newIdentityHash = hash(bodyData);
-		const storedIdentityHash = storage.get(STORAGE_KEY_IDENTITY_HASH);
+		const storedIdentityHash = getItem(STORAGE_KEY_IDENTITY_HASH);
 
 		let identyHash = Promise.resolve(storedIdentityHash);
 
@@ -306,7 +333,11 @@ class Analytics {
 					this.reset(events);
 				})
 				.catch()
-				.then(() => (this.isFlushInProgress = false));
+				.then(() => {
+					this.isFlushInProgress = false;
+
+					return this.isFlushInProgress;
+				});
 		} else {
 			result = Promise.resolve();
 		}

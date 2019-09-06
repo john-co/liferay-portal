@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 AUI.add(
 	'liferay-calendar-recurrence-converter',
 	function(A) {
@@ -26,55 +40,7 @@ AUI.add(
 		var RecurrenceConverter = function() {};
 
 		A.mix(RecurrenceConverter.prototype, {
-			encodeRecurrence: function(recurrence) {
-				var instance = this;
-
-				var string = null;
-
-				if (recurrence) {
-					var components = [];
-
-					components.push(instance._encodeRRule(recurrence.rrule));
-
-					if (recurrence.exdate) {
-						components.push(
-							instance._encodeExDate(recurrence.exdate)
-						);
-					}
-
-					string = components.join('\n');
-				}
-
-				return string;
-			},
-
-			parseRecurrence: function(string) {
-				var instance = this;
-
-				var recurrence = null;
-
-				if (string) {
-					var parts = string.split('\n');
-
-					var rrule = instance._parseRRule(parts[0]);
-
-					if (rrule) {
-						recurrence = {
-							rrule: rrule
-						};
-
-						var exdate = instance._parseExDate(parts[1]);
-
-						if (exdate) {
-							recurrence.exdate = exdate;
-						}
-					}
-				}
-
-				return recurrence;
-			},
-
-			_encode: function(value) {
+			_encode(value) {
 				var instance = this;
 
 				var result = value;
@@ -90,26 +56,24 @@ AUI.add(
 				return result;
 			},
 
-			_encodeDate: function(date) {
-				var instance = this;
-
+			_encodeDate(date) {
 				var day = padNumber(date.getDate());
 				var month = padNumber(date.getMonth() + 1);
 
 				return [date.getFullYear(), month, day].join(STR_EMPTY);
 			},
 
-			_encodeDaysOfWeek: function(daysOfWeek) {
+			_encodeDaysOfWeek(daysOfWeek) {
 				daysOfWeek = A.Array.dedupe(daysOfWeek);
 
 				return daysOfWeek.join(STR_COMMA);
 			},
 
-			_encodeExDate: function(exdate) {
+			_encodeExDate(exdate) {
 				return EXDATE + STR_SEMICOLON + exdate;
 			},
 
-			_encodeRRule: function(rrule) {
+			_encodeRRule(rrule) {
 				var instance = this;
 
 				var components = A.Object.map(rrule, function(item, index) {
@@ -129,7 +93,7 @@ AUI.add(
 				return string;
 			},
 
-			_parseDate: function(string) {
+			_parseDate(string) {
 				var year = Lang.toInt(string.slice(0, 4));
 
 				var month = Lang.toInt(string.slice(4, 6)) - 1;
@@ -139,9 +103,7 @@ AUI.add(
 				return new Date(year, month, day);
 			},
 
-			_parseExDate: function(string) {
-				var instance = this;
-
+			_parseExDate(string) {
 				var exDate = null;
 
 				if (
@@ -154,18 +116,18 @@ AUI.add(
 				return exDate;
 			},
 
-			_parsePositionalByDay: function(string) {
+			_parsePositionalByDay(string) {
 				var position = string.slice(0, -2);
 
 				var dayOfWeek = string.slice(-2);
 
 				return {
-					dayOfWeek: dayOfWeek,
+					dayOfWeek,
 					position: Lang.toInt(position)
 				};
 			},
 
-			_parseRRule: function(string) {
+			_parseRRule(string) {
 				var instance = this;
 
 				var rrule = null;
@@ -209,6 +171,54 @@ AUI.add(
 				}
 
 				return rrule;
+			},
+
+			encodeRecurrence(recurrence) {
+				var instance = this;
+
+				var string = null;
+
+				if (recurrence) {
+					var components = [];
+
+					components.push(instance._encodeRRule(recurrence.rrule));
+
+					if (recurrence.exdate) {
+						components.push(
+							instance._encodeExDate(recurrence.exdate)
+						);
+					}
+
+					string = components.join('\n');
+				}
+
+				return string;
+			},
+
+			parseRecurrence(string) {
+				var instance = this;
+
+				var recurrence = null;
+
+				if (string) {
+					var parts = string.split('\n');
+
+					var rrule = instance._parseRRule(parts[0]);
+
+					if (rrule) {
+						recurrence = {
+							rrule
+						};
+
+						var exdate = instance._parseExDate(parts[1]);
+
+						if (exdate) {
+							recurrence.exdate = exdate;
+						}
+					}
+				}
+
+				return recurrence;
 			}
 		});
 

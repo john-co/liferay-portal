@@ -251,6 +251,14 @@ public class SegmentsExperienceLocalServiceWrapper
 			segmentsExperienceId);
 	}
 
+	@Override
+	public com.liferay.segments.model.SegmentsExperience
+		fetchSegmentsExperience(long groupId, String segmentsExperienceKey) {
+
+		return _segmentsExperienceLocalService.fetchSegmentsExperience(
+			groupId, segmentsExperienceKey);
+	}
+
 	/**
 	 * Returns the segments experience matching the UUID and group.
 	 *
@@ -325,6 +333,15 @@ public class SegmentsExperienceLocalServiceWrapper
 			segmentsExperienceId);
 	}
 
+	@Override
+	public com.liferay.segments.model.SegmentsExperience getSegmentsExperience(
+			long groupId, String segmentsExperienceKey)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _segmentsExperienceLocalService.getSegmentsExperience(
+			groupId, segmentsExperienceKey);
+	}
+
 	/**
 	 * Returns the segments experience matching the UUID and group.
 	 *
@@ -363,6 +380,14 @@ public class SegmentsExperienceLocalServiceWrapper
 
 	@Override
 	public java.util.List<com.liferay.segments.model.SegmentsExperience>
+		getSegmentsExperiences(long groupId, long classNameId, long classPK) {
+
+		return _segmentsExperienceLocalService.getSegmentsExperiences(
+			groupId, classNameId, classPK);
+	}
+
+	@Override
+	public java.util.List<com.liferay.segments.model.SegmentsExperience>
 			getSegmentsExperiences(
 				long groupId, long classNameId, long classPK, boolean active)
 		throws com.liferay.portal.kernel.exception.PortalException {
@@ -383,6 +408,16 @@ public class SegmentsExperienceLocalServiceWrapper
 		return _segmentsExperienceLocalService.getSegmentsExperiences(
 			groupId, classNameId, classPK, active, start, end,
 			orderByComparator);
+	}
+
+	@Override
+	public java.util.List<com.liferay.segments.model.SegmentsExperience>
+		getSegmentsExperiences(
+			long groupId, long[] segmentsEntryIds, long classNameId,
+			long classPK, boolean active) {
+
+		return _segmentsExperienceLocalService.getSegmentsExperiences(
+			groupId, segmentsEntryIds, classNameId, classPK, active);
 	}
 
 	@Override

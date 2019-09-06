@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 AUI.add(
 	'liferay-staging-processes-export-import',
 	function(A) {
@@ -52,122 +66,7 @@ AUI.add(
 			NAME: 'exportimport',
 
 			prototype: {
-				initializer: function(config) {
-					var instance = this;
-
-					instance._bindUI();
-
-					instance._exportLAR = config.exportLAR;
-					instance._layoutsExportTreeOutput = instance.byId(
-						config.pageTreeId + 'Output'
-					);
-
-					instance._nodeInputStates = [];
-
-					instance._initLabels();
-
-					instance._processesResourceURL =
-						config.processesResourceURL;
-
-					var eventHandles = [
-						Liferay.on(
-							instance.ns('viewBackgroundTaskDetails'),
-							instance._onViewBackgroundTaskDetails,
-							instance
-						)
-					];
-
-					instance._eventHandles = eventHandles;
-
-					instance._renderTimer = A.later(
-						RENDER_INTERVAL_IN_PROGRESS,
-						instance,
-						instance._renderProcesses
-					);
-				},
-
-				destructor: function() {
-					var instance = this;
-
-					if (instance._contentOptionsDialog) {
-						instance._contentOptionsDialog.destroy();
-					}
-
-					if (instance._globalConfigurationDialog) {
-						instance._globalConfigurationDialog.destroy();
-					}
-
-					if (instance._renderTimer) {
-						instance._renderTimer.cancel();
-					}
-
-					if (instance._scheduledPublishingEventsDialog) {
-						instance._scheduledPublishingEventsDialog.destroy();
-					}
-				},
-
-				getDateRangeChecker: function() {
-					var instance = this;
-
-					var today = new Date();
-
-					var todayMS = +today;
-
-					var clientTZOffset = today.getTimezoneOffset();
-
-					var serverTZOffset = this.get('timeZoneOffset');
-
-					var adjustedDate = new Date(
-						todayMS + serverTZOffset + clientTZOffset * 60 * 1000
-					);
-
-					var dateRangeChecker = {
-						todayUsed: adjustedDate,
-						validRange: true
-					};
-
-					if (instance._isChecked('rangeDateRangeNode')) {
-						dateRangeChecker.validRange =
-							instance._rangeEndsLater() &&
-							instance._rangeEndsInPast(adjustedDate) &&
-							instance._rangeStartsInPast(adjustedDate);
-					}
-
-					return dateRangeChecker;
-				},
-
-				showNotification: function(dateChecker) {
-					var instance = this;
-
-					if (instance._notice) {
-						instance._notice.remove();
-					}
-
-					var message = instance._getNotificationMessage(dateChecker);
-
-					instance._notice = new Liferay.Notice({
-						animationConfig: {
-							duration: 2,
-							left: '0px',
-							top: '0px'
-						},
-						closeText: false,
-						content:
-							message +
-							'<button aria-label="' +
-							Liferay.Language.get('close') +
-							'" type="button" class="close">&times;</button>',
-						noticeClass: 'hide',
-						timeout: 10000,
-						toggleText: false,
-						type: 'warning',
-						useAnimation: true
-					});
-
-					instance._notice.show();
-				},
-
-				_bindUI: function() {
+				_bindUI() {
 					var instance = this;
 
 					var form = instance.get('form');
@@ -247,9 +146,7 @@ AUI.add(
 					);
 
 					if (changeToPublicLayoutsButton) {
-						changeToPublicLayoutsButton.on(STR_CLICK, function(
-							event
-						) {
+						changeToPublicLayoutsButton.on(STR_CLICK, function() {
 							instance._changeLayouts(false);
 						});
 					}
@@ -259,9 +156,7 @@ AUI.add(
 					);
 
 					if (changeToPrivateLayoutsButton) {
-						changeToPrivateLayoutsButton.on(STR_CLICK, function(
-							event
-						) {
+						changeToPrivateLayoutsButton.on(STR_CLICK, function() {
 							instance._changeLayouts(true);
 						});
 					}
@@ -271,7 +166,7 @@ AUI.add(
 					);
 
 					if (contentOptionsLink) {
-						contentOptionsLink.on(STR_CLICK, function(event) {
+						contentOptionsLink.on(STR_CLICK, function() {
 							var contentOptionsDialog = instance._getContentOptionsDialog();
 
 							contentOptionsDialog.show();
@@ -291,7 +186,7 @@ AUI.add(
 					);
 
 					if (globalConfigurationLink) {
-						globalConfigurationLink.on(STR_CLICK, function(event) {
+						globalConfigurationLink.on(STR_CLICK, function() {
 							var globalConfigurationDialog = instance._getGlobalConfigurationDialog();
 
 							globalConfigurationDialog.show();
@@ -301,7 +196,7 @@ AUI.add(
 					var rangeLink = instance.byId('rangeLink');
 
 					if (rangeLink) {
-						rangeLink.on(STR_CLICK, function(event) {
+						rangeLink.on(STR_CLICK, function() {
 							instance._preventNameRequiredChecking();
 
 							instance._updateDateRange();
@@ -313,9 +208,7 @@ AUI.add(
 					);
 
 					if (scheduledPublishingEventsLink) {
-						scheduledPublishingEventsLink.on(STR_CLICK, function(
-							event
-						) {
+						scheduledPublishingEventsLink.on(STR_CLICK, function() {
 							var scheduledPublishingEventsDialog = instance._getScheduledPublishingEventsDialog();
 
 							scheduledPublishingEventsDialog.show();
@@ -323,7 +216,7 @@ AUI.add(
 					}
 				},
 
-				_changeLayouts: function(privateLayout) {
+				_changeLayouts(privateLayout) {
 					var instance = this;
 
 					var privateLayoutNode = instance.byId('privateLayout');
@@ -335,7 +228,7 @@ AUI.add(
 					instance._reloadForm();
 				},
 
-				_getContentDialog: function(portletId, portletTitle) {
+				_getContentDialog(portletId, portletTitle) {
 					var instance = this;
 
 					var contentNode = instance.byId('content_' + portletId);
@@ -356,7 +249,7 @@ AUI.add(
 										{
 											label: Liferay.Language.get('ok'),
 											on: {
-												click: function(event) {
+												click(event) {
 													event.domEvent.preventDefault();
 
 													instance._setContentLabels(
@@ -377,7 +270,7 @@ AUI.add(
 												'cancel'
 											),
 											on: {
-												click: function(event) {
+												click(event) {
 													event.domEvent.preventDefault();
 
 													instance._restoreNodeInputStates(
@@ -403,7 +296,7 @@ AUI.add(
 					return contentDialog;
 				},
 
-				_getContentOptionsDialog: function() {
+				_getContentOptionsDialog() {
 					var instance = this;
 
 					var contentOptionsDialog = instance._contentOptionsDialog;
@@ -425,7 +318,7 @@ AUI.add(
 										{
 											label: Liferay.Language.get('ok'),
 											on: {
-												click: function(event) {
+												click(event) {
 													event.domEvent.preventDefault();
 
 													instance._setContentOptionsLabels();
@@ -444,7 +337,7 @@ AUI.add(
 												'cancel'
 											),
 											on: {
-												click: function(event) {
+												click(event) {
 													event.domEvent.preventDefault();
 
 													instance._restoreNodeInputStates(
@@ -470,7 +363,7 @@ AUI.add(
 					return contentOptionsDialog;
 				},
 
-				_getGlobalConfigurationDialog: function() {
+				_getGlobalConfigurationDialog() {
 					var instance = this;
 
 					var globalConfigurationDialog =
@@ -498,7 +391,7 @@ AUI.add(
 													'ok'
 												),
 												on: {
-													click: function(event) {
+													click(event) {
 														event.domEvent.preventDefault();
 
 														instance._setGlobalConfigurationLabels();
@@ -513,7 +406,7 @@ AUI.add(
 													'cancel'
 												),
 												on: {
-													click: function(event) {
+													click(event) {
 														event.domEvent.preventDefault();
 
 														globalConfigurationDialog.hide();
@@ -536,7 +429,7 @@ AUI.add(
 					return globalConfigurationDialog;
 				},
 
-				_getNotificationMessage: function(dateChecker) {
+				_getNotificationMessage(dateChecker) {
 					var instance = this;
 
 					var message;
@@ -557,7 +450,7 @@ AUI.add(
 					return message;
 				},
 
-				_getScheduledPublishingEventsDialog: function() {
+				_getScheduledPublishingEventsDialog() {
 					var instance = this;
 
 					var scheduledPublishingEventsDialog =
@@ -585,7 +478,7 @@ AUI.add(
 													'close'
 												),
 												on: {
-													click: function(event) {
+													click(event) {
 														event.domEvent.preventDefault();
 
 														scheduledPublishingEventsDialog.hide();
@@ -606,7 +499,7 @@ AUI.add(
 					return scheduledPublishingEventsDialog;
 				},
 
-				_getSelectedDates: function() {
+				_getSelectedDates() {
 					var instance = this;
 
 					var startDatePicker = Liferay.component(
@@ -640,12 +533,12 @@ AUI.add(
 					startDate.setMilliseconds(0);
 
 					return {
-						endDate: endDate,
-						startDate: startDate
+						endDate,
+						startDate
 					};
 				},
 
-				_getValue: function(nodeName) {
+				_getValue(nodeName) {
 					var instance = this;
 
 					var value = STR_EMPTY;
@@ -659,23 +552,19 @@ AUI.add(
 					return value;
 				},
 
-				_initLabels: function() {
+				_initLabels() {
 					var instance = this;
 
-					instance
-						.all('.content-link')
-						.each(function(item, index, collection) {
-							instance._setContentLabels(
-								item.attr('data-portletid')
-							);
-						});
+					instance.all('.content-link').each(function(item) {
+						instance._setContentLabels(item.attr('data-portletid'));
+					});
 
 					instance._refreshDeletions();
 					instance._setContentOptionsLabels();
 					instance._setGlobalConfigurationLabels();
 				},
 
-				_isBackgroundTaskInProgress: function() {
+				_isBackgroundTaskInProgress() {
 					var instance = this;
 
 					var processesNode = instance.get('processesNode');
@@ -685,7 +574,7 @@ AUI.add(
 					);
 				},
 
-				_isChecked: function(nodeName) {
+				_isChecked(nodeName) {
 					var instance = this;
 
 					var node = instance.get(nodeName);
@@ -693,7 +582,7 @@ AUI.add(
 					return node && node.attr(STR_CHECKED);
 				},
 
-				_onViewBackgroundTaskDetails: function(config) {
+				_onViewBackgroundTaskDetails(config) {
 					var instance = this;
 
 					var node = instance.byId(instance.ns(config.nodeId));
@@ -716,11 +605,11 @@ AUI.add(
 						dialog: {
 							bodyContent: bodyNode
 						},
-						title: title
+						title
 					});
 				},
 
-				_preventNameRequiredChecking: function() {
+				_preventNameRequiredChecking() {
 					var instance = this;
 
 					var nameRequiredNode = instance.byId('nameRequired');
@@ -730,7 +619,7 @@ AUI.add(
 					}
 				},
 
-				_rangeEndsInPast: function(today) {
+				_rangeEndsInPast(today) {
 					var instance = this;
 
 					var selectedDates = instance._getSelectedDates();
@@ -738,7 +627,7 @@ AUI.add(
 					return ADate.isGreaterOrEqual(today, selectedDates.endDate);
 				},
 
-				_rangeEndsLater: function() {
+				_rangeEndsLater() {
 					var instance = this;
 
 					var selectedDates = instance._getSelectedDates();
@@ -749,7 +638,7 @@ AUI.add(
 					);
 				},
 
-				_rangeStartsInPast: function(today) {
+				_rangeStartsInPast(today) {
 					var instance = this;
 
 					var selectedDates = instance._getSelectedDates();
@@ -760,114 +649,86 @@ AUI.add(
 					);
 				},
 
-				_refreshDeletions: function() {
+				_refreshDeletions() {
 					var instance = this;
 
 					if (instance._isChecked('deletionsNode')) {
-						instance
-							.all('.deletions')
-							.each(function(item, index, collection) {
-								item.show();
-							});
+						instance.all('.deletions').each(function(item) {
+							item.show();
+						});
 					} else {
-						instance
-							.all('.deletions')
-							.each(function(item, index, collection) {
-								item.hide();
-							});
+						instance.all('.deletions').each(function(item) {
+							item.hide();
+						});
 					}
 				},
 
-				_reloadForm: function() {
+				_reloadForm() {
 					var instance = this;
 
 					var cmdNode = instance.byId('cmd');
 					var redirectNode = instance.byId('redirect');
 
 					if (cmdNode.val() === 'add' || cmdNode.val() === 'update') {
-						var portletURL = Liferay.PortletURL.createURL(
-							redirectNode.val()
-						);
-
-						portletURL.setParameter('cmd', cmdNode.val());
+						var redirectParameters = {
+							cmd: cmdNode.val()
+						};
 
 						if (instance._exportLAR) {
-							portletURL.setParameter(
-								'mvcRenderCommandName',
-								'editExportConfiguration'
-							);
-							portletURL.setParameter(
-								'tabs2',
-								'new-export-process'
-							);
-							portletURL.setParameter(
-								'exportConfigurationButtons',
-								'custom'
-							);
+							redirectParameters.mvcRenderCommandName =
+								'editExportConfiguration';
+							redirectParameters.tabs2 = 'new-export-process';
+							redirectParameters.exportConfigurationButtons =
+								'custom';
 						} else {
-							portletURL.setParameter(
-								'mvcRenderCommandName',
-								'editPublishConfiguration'
-							);
-							portletURL.setParameter(
-								'tabs2',
-								'new-publication-process'
-							);
-							portletURL.setParameter(
-								'publishConfigurationButtons',
-								'custom'
-							);
+							redirectParameters.mvcRenderCommandName =
+								'editPublishConfiguration';
+							redirectParameters.tabs2 =
+								'new-publication-process';
+							redirectParameters.publishConfigurationButtons =
+								'custom';
 						}
 
 						var groupIdNode = instance.byId('groupId');
 
 						if (groupIdNode) {
-							portletURL.setParameter(
-								'groupId',
-								groupIdNode.val()
-							);
+							redirectParameters.groupId = groupIdNode.val();
 						}
 
 						var liveGroupIdNode = instance.byId('liveGroupId');
 
 						if (liveGroupIdNode) {
-							portletURL.setParameter(
-								'liveGroupId',
-								liveGroupIdNode.val()
-							);
+							redirectParameters.liveGroupId = liveGroupIdNode.val();
 						}
 
 						var privateLayoutNode = instance.byId('privateLayout');
 
 						if (privateLayoutNode) {
-							portletURL.setParameter(
-								'privateLayout',
-								privateLayoutNode.val()
-							);
+							redirectParameters.privateLayout = privateLayoutNode.val();
 						}
 
 						var rootNodeNameNode = instance.byId('rootNodeName');
 
 						if (rootNodeNameNode) {
-							portletURL.setParameter(
-								'rootNodeName',
-								rootNodeNameNode.val()
-							);
+							redirectParameters.rootNodeName = rootNodeNameNode.val();
 						}
 
-						redirectNode.val(portletURL.toString());
+						var redirectPortletURL = Liferay.Util.PortletURL.createPortletURL(
+							redirectNode.val(),
+							redirectParameters
+						);
+
+						redirectNode.val(redirectPortletURL.toString());
 					}
 
 					if (cmdNode) {
 						var form = instance.get('form');
 
-						var portletURL = Liferay.PortletURL.createURL(
+						var formPortletURL = Liferay.Util.PortletURL.createActionURL(
 							form.get('action')
 						);
 
-						portletURL.setParameter('p_p_lifecycle', '0');
-
-						form.set('action', portletURL.toString());
+						form.set('action', formPortletURL.toString());
 
 						var currentURL = instance.byId('currentURL');
 
@@ -879,7 +740,7 @@ AUI.add(
 					}
 				},
 
-				_renderProcesses: function() {
+				_renderProcesses() {
 					var instance = this;
 
 					var checkedCheckboxes = A.all(
@@ -895,48 +756,43 @@ AUI.add(
 					var processesNode = instance.get('processesNode');
 
 					if (processesNode && instance._processesResourceURL) {
-						A.io.request(instance._processesResourceURL, {
-							method: 'GET',
-							on: {
-								failure: function() {
-									new Liferay.Notice({
-										closeText: false,
-										content:
-											Liferay.Language.get(
-												'your-request-failed-to-complete'
-											) +
-											'<button type="button" class="close">&times;</button>',
-										noticeClass: 'hide',
-										timeout: FAILURE_TIMEOUT,
-										toggleText: false,
-										type: 'warning',
-										useAnimation: true
-									}).show();
-								},
-								success: function(event, id, obj) {
-									processesNode.empty();
+						Liferay.Util.fetch(instance._processesResourceURL)
+							.then(response => response.text())
+							.then(response => {
+								processesNode.empty();
 
-									processesNode.plug(A.Plugin.ParseContent);
+								processesNode.plug(A.Plugin.ParseContent);
 
-									processesNode.setContent(
-										this.get('responseData')
-									);
+								processesNode.setContent(response);
 
-									instance._updateincompleteProcessMessage(
-										instance._isBackgroundTaskInProgress(),
-										processesNode.one(
-											'.incomplete-process-message'
-										)
-									);
+								instance._updateincompleteProcessMessage(
+									instance._isBackgroundTaskInProgress(),
+									processesNode.one(
+										'.incomplete-process-message'
+									)
+								);
 
-									instance._scheduleRenderProcess();
-								}
-							}
-						});
+								instance._scheduleRenderProcess();
+							})
+							.catch(() => {
+								new Liferay.Notice({
+									closeText: false,
+									content:
+										Liferay.Language.get(
+											'your-request-failed-to-complete'
+										) +
+										'<button type="button" class="close">&times;</button>',
+									noticeClass: 'hide',
+									timeout: FAILURE_TIMEOUT,
+									toggleText: false,
+									type: 'warning',
+									useAnimation: true
+								}).show();
+							});
 					}
 				},
 
-				_restoreNodeCheckedState: function(node, state) {
+				_restoreNodeCheckedState(node, state) {
 					var val = state.value;
 
 					if (val !== undefined) {
@@ -944,7 +800,7 @@ AUI.add(
 					}
 				},
 
-				_restoreNodeHiddenState: function(node, state) {
+				_restoreNodeHiddenState(node, state) {
 					var hiddenList = node.ancestorsByClassName(STR_HIDE);
 
 					hiddenList.each(function(hiddenNode) {
@@ -960,7 +816,7 @@ AUI.add(
 					}
 				},
 
-				_restoreNodeInputStates: function(node) {
+				_restoreNodeInputStates(node) {
 					var instance = this;
 
 					var inputNodes = [];
@@ -983,7 +839,7 @@ AUI.add(
 					});
 				},
 
-				_scheduleRenderProcess: function() {
+				_scheduleRenderProcess() {
 					var instance = this;
 
 					var renderInterval = RENDER_INTERVAL_IDLE;
@@ -999,7 +855,7 @@ AUI.add(
 					);
 				},
 
-				_setContentLabels: function(portletId) {
+				_setContentLabels(portletId) {
 					var instance = this;
 
 					var contentNode = instance.byId('content_' + portletId);
@@ -1008,7 +864,7 @@ AUI.add(
 
 					var selectedContent = [];
 
-					inputs.each(function(item, index, collection) {
+					inputs.each(function(item) {
 						var checked = item.attr(STR_CHECKED);
 
 						if (checked) {
@@ -1038,7 +894,7 @@ AUI.add(
 					);
 				},
 
-				_setContentOptionsLabels: function() {
+				_setContentOptionsLabels() {
 					var instance = this;
 
 					var selectedContentOptions = [];
@@ -1062,7 +918,7 @@ AUI.add(
 					);
 				},
 
-				_setGlobalConfigurationLabels: function() {
+				_setGlobalConfigurationLabels() {
 					var instance = this;
 
 					var selectedGlobalConfiguration = [];
@@ -1092,7 +948,7 @@ AUI.add(
 					);
 				},
 
-				_setLabels: function(linkId, labelDivId, label) {
+				_setLabels(linkId, labelDivId, label) {
 					var instance = this;
 
 					var linkNode = instance.byId(linkId);
@@ -1112,7 +968,7 @@ AUI.add(
 					}
 				},
 
-				_setNode: function(val) {
+				_setNode(val) {
 					var instance = this;
 
 					if (Lang.isString(val)) {
@@ -1124,7 +980,7 @@ AUI.add(
 					return val;
 				},
 
-				_storeNodeInputStates: function(node) {
+				_storeNodeInputStates(node) {
 					var instance = this;
 
 					var inputNodes = [];
@@ -1147,13 +1003,13 @@ AUI.add(
 						}
 
 						inputStates[id] = {
-							hiddenList: hiddenList,
+							hiddenList,
 							value: val
 						};
 					});
 				},
 
-				_updateDateRange: function(event) {
+				_updateDateRange() {
 					var instance = this;
 
 					var dateChecker = instance.getDateRangeChecker();
@@ -1169,7 +1025,7 @@ AUI.add(
 					}
 				},
 
-				_updateincompleteProcessMessage: function(inProgress, content) {
+				_updateincompleteProcessMessage(inProgress, content) {
 					var instance = this;
 
 					var incompleteProcessMessageNode = instance.get(
@@ -1194,6 +1050,121 @@ AUI.add(
 							}
 						}
 					}
+				},
+
+				destructor() {
+					var instance = this;
+
+					if (instance._contentOptionsDialog) {
+						instance._contentOptionsDialog.destroy();
+					}
+
+					if (instance._globalConfigurationDialog) {
+						instance._globalConfigurationDialog.destroy();
+					}
+
+					if (instance._renderTimer) {
+						instance._renderTimer.cancel();
+					}
+
+					if (instance._scheduledPublishingEventsDialog) {
+						instance._scheduledPublishingEventsDialog.destroy();
+					}
+				},
+
+				getDateRangeChecker() {
+					var instance = this;
+
+					var today = new Date();
+
+					var todayMS = +today;
+
+					var clientTZOffset = today.getTimezoneOffset();
+
+					var serverTZOffset = this.get('timeZoneOffset');
+
+					var adjustedDate = new Date(
+						todayMS + serverTZOffset + clientTZOffset * 60 * 1000
+					);
+
+					var dateRangeChecker = {
+						todayUsed: adjustedDate,
+						validRange: true
+					};
+
+					if (instance._isChecked('rangeDateRangeNode')) {
+						dateRangeChecker.validRange =
+							instance._rangeEndsLater() &&
+							instance._rangeEndsInPast(adjustedDate) &&
+							instance._rangeStartsInPast(adjustedDate);
+					}
+
+					return dateRangeChecker;
+				},
+
+				initializer(config) {
+					var instance = this;
+
+					instance._bindUI();
+
+					instance._exportLAR = config.exportLAR;
+					instance._layoutsExportTreeOutput = instance.byId(
+						config.pageTreeId + 'Output'
+					);
+
+					instance._nodeInputStates = [];
+
+					instance._initLabels();
+
+					instance._processesResourceURL =
+						config.processesResourceURL;
+
+					var eventHandles = [
+						Liferay.on(
+							instance.ns('viewBackgroundTaskDetails'),
+							instance._onViewBackgroundTaskDetails,
+							instance
+						)
+					];
+
+					instance._eventHandles = eventHandles;
+
+					instance._renderTimer = A.later(
+						RENDER_INTERVAL_IN_PROGRESS,
+						instance,
+						instance._renderProcesses
+					);
+				},
+
+				showNotification(dateChecker) {
+					var instance = this;
+
+					if (instance._notice) {
+						instance._notice.remove();
+					}
+
+					var message = instance._getNotificationMessage(dateChecker);
+
+					instance._notice = new Liferay.Notice({
+						animationConfig: {
+							duration: 2,
+							left: '0px',
+							top: '0px'
+						},
+						closeText: false,
+						content:
+							message +
+							'<button aria-label="' +
+							Liferay.Language.get('close') +
+							'" type="button" class="close">&times;</button>',
+						noticeClass: 'hide',
+						timeout: 10000,
+						toggleText: false,
+						type: 'warning',
+						useAnimation: true
+					});
+
+					instance._notice.show();
 				}
 			}
 		});
@@ -1205,14 +1176,12 @@ AUI.add(
 		requires: [
 			'aui-datatype',
 			'aui-dialog-iframe-deprecated',
-			'aui-io-request',
 			'aui-modal',
 			'aui-parse-content',
 			'aui-toggler',
 			'aui-tree-view',
 			'liferay-notice',
 			'liferay-portlet-base',
-			'liferay-portlet-url',
 			'liferay-store',
 			'liferay-util-window'
 		]

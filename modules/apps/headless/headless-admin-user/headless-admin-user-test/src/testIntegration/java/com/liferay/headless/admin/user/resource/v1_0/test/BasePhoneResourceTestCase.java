@@ -28,6 +28,10 @@ import com.liferay.headless.admin.user.client.pagination.Page;
 import com.liferay.headless.admin.user.client.resource.v1_0.PhoneResource;
 import com.liferay.headless.admin.user.client.serdes.v1_0.PhoneSerDes;
 import com.liferay.petra.string.StringBundler;
+import com.liferay.portal.kernel.json.JSONArray;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Company;
@@ -48,7 +52,9 @@ import java.lang.reflect.InvocationTargetException;
 
 import java.text.DateFormat;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -186,6 +192,11 @@ public abstract class BasePhoneResourceTestCase {
 
 	@Test
 	public void testGetOrganizationPhonesPage() throws Exception {
+		Page<Phone> page = phoneResource.getOrganizationPhonesPage(
+			testGetOrganizationPhonesPage_getOrganizationId());
+
+		Assert.assertEquals(0, page.getTotalCount());
+
 		Long organizationId = testGetOrganizationPhonesPage_getOrganizationId();
 		Long irrelevantOrganizationId =
 			testGetOrganizationPhonesPage_getIrrelevantOrganizationId();
@@ -194,7 +205,7 @@ public abstract class BasePhoneResourceTestCase {
 			Phone irrelevantPhone = testGetOrganizationPhonesPage_addPhone(
 				irrelevantOrganizationId, randomIrrelevantPhone());
 
-			Page<Phone> page = phoneResource.getOrganizationPhonesPage(
+			page = phoneResource.getOrganizationPhonesPage(
 				irrelevantOrganizationId);
 
 			Assert.assertEquals(1, page.getTotalCount());
@@ -210,8 +221,7 @@ public abstract class BasePhoneResourceTestCase {
 		Phone phone2 = testGetOrganizationPhonesPage_addPhone(
 			organizationId, randomPhone());
 
-		Page<Phone> page = phoneResource.getOrganizationPhonesPage(
-			organizationId);
+		page = phoneResource.getOrganizationPhonesPage(organizationId);
 
 		Assert.assertEquals(2, page.getTotalCount());
 
@@ -257,7 +267,38 @@ public abstract class BasePhoneResourceTestCase {
 	}
 
 	@Test
+	public void testGraphQLGetPhone() throws Exception {
+		Phone phone = testGraphQLPhone_addPhone();
+
+		List<GraphQLField> graphQLFields = getGraphQLFields();
+
+		GraphQLField graphQLField = new GraphQLField(
+			"query",
+			new GraphQLField(
+				"phone",
+				new HashMap<String, Object>() {
+					{
+						put("phoneId", phone.getId());
+					}
+				},
+				graphQLFields.toArray(new GraphQLField[0])));
+
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
+			invoke(graphQLField.toString()));
+
+		JSONObject dataJSONObject = jsonObject.getJSONObject("data");
+
+		Assert.assertTrue(
+			equalsJSONObject(phone, dataJSONObject.getJSONObject("phone")));
+	}
+
+	@Test
 	public void testGetUserAccountPhonesPage() throws Exception {
+		Page<Phone> page = phoneResource.getUserAccountPhonesPage(
+			testGetUserAccountPhonesPage_getUserAccountId());
+
+		Assert.assertEquals(0, page.getTotalCount());
+
 		Long userAccountId = testGetUserAccountPhonesPage_getUserAccountId();
 		Long irrelevantUserAccountId =
 			testGetUserAccountPhonesPage_getIrrelevantUserAccountId();
@@ -266,7 +307,7 @@ public abstract class BasePhoneResourceTestCase {
 			Phone irrelevantPhone = testGetUserAccountPhonesPage_addPhone(
 				irrelevantUserAccountId, randomIrrelevantPhone());
 
-			Page<Phone> page = phoneResource.getUserAccountPhonesPage(
+			page = phoneResource.getUserAccountPhonesPage(
 				irrelevantUserAccountId);
 
 			Assert.assertEquals(1, page.getTotalCount());
@@ -282,8 +323,7 @@ public abstract class BasePhoneResourceTestCase {
 		Phone phone2 = testGetUserAccountPhonesPage_addPhone(
 			userAccountId, randomPhone());
 
-		Page<Phone> page = phoneResource.getUserAccountPhonesPage(
-			userAccountId);
+		page = phoneResource.getUserAccountPhonesPage(userAccountId);
 
 		Assert.assertEquals(2, page.getTotalCount());
 
@@ -311,6 +351,11 @@ public abstract class BasePhoneResourceTestCase {
 		throws Exception {
 
 		return null;
+	}
+
+	protected Phone testGraphQLPhone_addPhone() throws Exception {
+		throw new UnsupportedOperationException(
+			"This method needs to be implemented");
 	}
 
 	protected void assertHttpResponseStatusCode(
@@ -355,6 +400,25 @@ public abstract class BasePhoneResourceTestCase {
 
 			Assert.assertTrue(
 				phones2 + " does not contain " + phone1, contains);
+		}
+	}
+
+	protected void assertEqualsJSONArray(
+		List<Phone> phones, JSONArray jsonArray) {
+
+		for (Phone phone : phones) {
+			boolean contains = false;
+
+			for (Object object : jsonArray) {
+				if (equalsJSONObject(phone, (JSONObject)object)) {
+					contains = true;
+
+					break;
+				}
+			}
+
+			Assert.assertTrue(
+				jsonArray + " does not contain " + phone, contains);
 		}
 	}
 
@@ -429,6 +493,20 @@ public abstract class BasePhoneResourceTestCase {
 		return new String[0];
 	}
 
+	protected List<GraphQLField> getGraphQLFields() {
+		List<GraphQLField> graphQLFields = new ArrayList<>();
+
+		graphQLFields.add(new GraphQLField("id"));
+
+		for (String additionalAssertFieldName :
+				getAdditionalAssertFieldNames()) {
+
+			graphQLFields.add(new GraphQLField(additionalAssertFieldName));
+		}
+
+		return graphQLFields;
+	}
+
 	protected String[] getIgnoredEntityFieldNames() {
 		return new String[0];
 	}
@@ -492,6 +570,69 @@ public abstract class BasePhoneResourceTestCase {
 			throw new IllegalArgumentException(
 				"Invalid additional assert field name " +
 					additionalAssertFieldName);
+		}
+
+		return true;
+	}
+
+	protected boolean equalsJSONObject(Phone phone, JSONObject jsonObject) {
+		for (String fieldName : getAdditionalAssertFieldNames()) {
+			if (Objects.equals("extension", fieldName)) {
+				if (!Objects.equals(
+						phone.getExtension(),
+						(String)jsonObject.getString("extension"))) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("id", fieldName)) {
+				if (!Objects.equals(
+						phone.getId(), (Long)jsonObject.getLong("id"))) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("phoneNumber", fieldName)) {
+				if (!Objects.equals(
+						phone.getPhoneNumber(),
+						(String)jsonObject.getString("phoneNumber"))) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("phoneType", fieldName)) {
+				if (!Objects.equals(
+						phone.getPhoneType(),
+						(String)jsonObject.getString("phoneType"))) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("primary", fieldName)) {
+				if (!Objects.equals(
+						phone.getPrimary(),
+						(Boolean)jsonObject.getBoolean("primary"))) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			throw new IllegalArgumentException(
+				"Invalid field name " + fieldName);
 		}
 
 		return true;
@@ -585,6 +726,23 @@ public abstract class BasePhoneResourceTestCase {
 			"Invalid entity field " + entityFieldName);
 	}
 
+	protected String invoke(String query) throws Exception {
+		HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
+
+		httpInvoker.body(
+			JSONUtil.put(
+				"query", query
+			).toString(),
+			"application/json");
+		httpInvoker.httpMethod(HttpInvoker.HttpMethod.POST);
+		httpInvoker.path("http://localhost:8080/o/graphql");
+		httpInvoker.userNameAndPassword("test@liferay.com:test");
+
+		HttpInvoker.HttpResponse httpResponse = httpInvoker.invoke();
+
+		return httpResponse.getContent();
+	}
+
 	protected Phone randomPhone() throws Exception {
 		return new Phone() {
 			{
@@ -611,6 +769,60 @@ public abstract class BasePhoneResourceTestCase {
 	protected Group irrelevantGroup;
 	protected Company testCompany;
 	protected Group testGroup;
+
+	protected class GraphQLField {
+
+		public GraphQLField(String key, GraphQLField... graphQLFields) {
+			this(key, new HashMap<>(), graphQLFields);
+		}
+
+		public GraphQLField(
+			String key, Map<String, Object> parameterMap,
+			GraphQLField... graphQLFields) {
+
+			_key = key;
+			_parameterMap = parameterMap;
+			_graphQLFields = graphQLFields;
+		}
+
+		@Override
+		public String toString() {
+			StringBuilder sb = new StringBuilder(_key);
+
+			if (!_parameterMap.isEmpty()) {
+				sb.append("(");
+
+				for (Map.Entry<String, Object> entry :
+						_parameterMap.entrySet()) {
+
+					sb.append(entry.getKey());
+					sb.append(":");
+					sb.append(entry.getValue());
+					sb.append(",");
+				}
+
+				sb.append(")");
+			}
+
+			if (_graphQLFields.length > 0) {
+				sb.append("{");
+
+				for (GraphQLField graphQLField : _graphQLFields) {
+					sb.append(graphQLField.toString());
+					sb.append(",");
+				}
+
+				sb.append("}");
+			}
+
+			return sb.toString();
+		}
+
+		private final GraphQLField[] _graphQLFields;
+		private final String _key;
+		private final Map<String, Object> _parameterMap;
+
+	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		BasePhoneResourceTestCase.class);

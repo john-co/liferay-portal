@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 AUI.add(
 	'liferay-menu-toggle',
 	function(A) {
@@ -44,31 +58,12 @@ AUI.add(
 				}
 			},
 
-			NAME: NAME,
+			NAME,
 
 			NS: NAME,
 
 			prototype: {
-				initializer: function(config) {
-					var instance = this;
-
-					var trigger = instance.get('trigger');
-
-					var triggerId = trigger.guid();
-
-					instance._handleId = triggerId + 'Handle';
-
-					instance._triggerNode = trigger;
-
-					instance._content = A.all(instance.get('content'));
-
-					AEvent.defineOutside('touchend');
-					AEvent.defineOutside('touchstart');
-
-					instance._bindUI();
-				},
-
-				_addMenuFilter: function() {
+				_addMenuFilter() {
 					var instance = this;
 
 					var menuFilter = instance._menuFilter;
@@ -98,7 +93,7 @@ AUI.add(
 					}
 				},
 
-				_bindUI: function() {
+				_bindUI() {
 					var instance = this;
 
 					if (instance._triggerNode) {
@@ -118,7 +113,7 @@ AUI.add(
 					}
 				},
 
-				_createMenuFilter: function(menu, menuItems) {
+				_createMenuFilter(menu, menuItems) {
 					var instance = this;
 
 					var results = [];
@@ -129,7 +124,7 @@ AUI.add(
 								.one('.nav-item-label')
 								.text()
 								.trim(),
-							node: node
+							node
 						});
 					});
 
@@ -145,7 +140,7 @@ AUI.add(
 					return instance._menuFilter;
 				},
 
-				_getEventOutside: function(event) {
+				_getEventOutside(event) {
 					var eventOutside = event._event.type;
 
 					eventOutside = eventOutside.toLowerCase();
@@ -161,15 +156,15 @@ AUI.add(
 					return eventOutside;
 				},
 
-				_isContent: function(target) {
+				_isContent(target) {
 					var instance = this;
 
-					return instance._content.some(function(item, index) {
+					return instance._content.some(function(item) {
 						return item.contains(target);
 					});
 				},
 
-				_isTouchEvent: function(event) {
+				_isTouchEvent(event) {
 					var eventType = event._event.type;
 
 					var touchEvent =
@@ -178,7 +173,7 @@ AUI.add(
 					return touchEvent && Liferay.Util.isTablet();
 				},
 
-				_toggleContent: function(force) {
+				_toggleContent(force) {
 					var instance = this;
 
 					instance._content.toggleClass('open', force);
@@ -198,7 +193,7 @@ AUI.add(
 					}
 				},
 
-				_toggleMenu: function(event, target) {
+				_toggleMenu(event, target) {
 					var instance = this;
 
 					var open = !instance.get('open');
@@ -246,18 +241,37 @@ AUI.add(
 
 						data[handleId] = open ? 'open' : 'closed';
 
-						Liferay.Store(data);
+						Object.entries(data).forEach((key, value) => {
+							Liferay.Util.Session.set(key, value);
+						});
 					}
 				},
 
-				_validateContent: function(value) {
-					var instance = this;
-
+				_validateContent(value) {
 					return (
 						Lang.isString(value) ||
 						Array.isArray(value) ||
 						A.instanceOf(value, A.Node)
 					);
+				},
+
+				initializer() {
+					var instance = this;
+
+					var trigger = instance.get('trigger');
+
+					var triggerId = trigger.guid();
+
+					instance._handleId = triggerId + 'Handle';
+
+					instance._triggerNode = trigger;
+
+					instance._content = A.all(instance.get('content'));
+
+					AEvent.defineOutside('touchend');
+					AEvent.defineOutside('touchstart');
+
+					instance._bindUI();
 				}
 			}
 		});
@@ -270,8 +284,7 @@ AUI.add(
 			'aui-node',
 			'event-outside',
 			'event-tap',
-			'liferay-menu-filter',
-			'liferay-store'
+			'liferay-menu-filter'
 		]
 	}
 );

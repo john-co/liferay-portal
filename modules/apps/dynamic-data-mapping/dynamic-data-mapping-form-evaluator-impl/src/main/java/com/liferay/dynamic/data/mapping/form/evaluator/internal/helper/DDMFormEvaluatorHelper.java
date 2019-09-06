@@ -35,6 +35,7 @@ import com.liferay.dynamic.data.mapping.model.DDMForm;
 import com.liferay.dynamic.data.mapping.model.DDMFormField;
 import com.liferay.dynamic.data.mapping.model.DDMFormFieldValidation;
 import com.liferay.dynamic.data.mapping.model.DDMFormRule;
+import com.liferay.dynamic.data.mapping.model.LocalizedValue;
 import com.liferay.dynamic.data.mapping.model.Value;
 import com.liferay.dynamic.data.mapping.storage.DDMFormFieldValue;
 import com.liferay.portal.kernel.language.LanguageUtil;
@@ -388,6 +389,19 @@ public class DDMFormEvaluatorHelper {
 		return false;
 	}
 
+	protected boolean isFieldVisible(
+		DDMFormEvaluatorFieldContextKey ddmFormFieldContextKey) {
+
+		Map<String, Object> ddmFormFieldPropertyChanges =
+			_ddmFormFieldsPropertyChanges.get(ddmFormFieldContextKey);
+
+		if (ddmFormFieldPropertyChanges == null) {
+			return true;
+		}
+
+		return GetterUtil.get(ddmFormFieldPropertyChanges.get("visible"), true);
+	}
+
 	protected void setRequiredErrorMessage(
 		DDMFormEvaluatorFieldContextKey fieldContextKey) {
 
@@ -434,6 +448,10 @@ public class DDMFormEvaluatorHelper {
 			return;
 		}
 
+		if (!isFieldVisible(ddmFormEvaluatorFieldContextKey)) {
+			return;
+		}
+
 		String fieldName = ddmFormEvaluatorFieldContextKey.getName();
 		String fieldInstanceId =
 			ddmFormEvaluatorFieldContextKey.getInstanceId();
@@ -473,7 +491,15 @@ public class DDMFormEvaluatorHelper {
 		builder.withInstanceId(fieldInstanceId);
 
 		if (!valid) {
-			String errorMessage = ddmFormFieldValidation.getErrorMessage();
+			String errorMessage = null;
+
+			LocalizedValue errorMessageLocalizedValue =
+				ddmFormFieldValidation.getErrorMessageLocalizedValue();
+
+			if (errorMessageLocalizedValue != null) {
+				errorMessage = errorMessageLocalizedValue.getString(
+					_resourceBundle.getLocale());
+			}
 
 			if (errorMessage == null) {
 				errorMessage = LanguageUtil.get(

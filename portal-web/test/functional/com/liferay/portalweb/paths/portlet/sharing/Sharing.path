@@ -8,6 +8,17 @@
 <tr><td rowspan="1" colspan="3">Sharing</td></tr>
 </thead>
 <tbody>
+	<!--BLOGS-->
+<tr>
+	<td>BLOGS_CONTENT</td>
+	<td>//div[contains(@class,'widget-mode')]//p</td>
+	<td></td>
+</tr>
+<tr>
+	<td>BLOGS_TITLE</td>
+	<td>//h2[contains(.,'${key_entryTitle}')]</td>
+	<td></td>
+</tr>
 <!--EMAIL-->
 <tr>
 	<td>EMAIL_VIEW_DOCUMENT_BUTTON</td>
@@ -62,6 +73,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>MODAL_INVITE_TO_COLLABORATE_FEEDBACK_ITEM</td>
+	<td>//div[contains(@class,'form-feedback-item') and contains(.,"User ${key_userEmailAddress} does not exist.")]</td>
+	<td></td>
+</tr>
+<tr>
 	<td></td>
 	<td></td>
 	<td></td>
@@ -69,7 +85,22 @@
 <!--NOTIFICATIONS-->
 <tr>
 	<td>NOTIFICATIONS_TITLE</td>
-	<td>//h4/a[contains(.,'${key_ownerName} has shared ${key_assetTitle} with you for ${key_assetSharingPermission}')]</td>
+	<td>//h4/a[contains(.,'${key_ownerName} has shared ${key_contentTitle} with you for ${key_contentSharingPermission}')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>NOTIFICATIONS_TITLE_SPECIAL</td>
+	<td>//h4/a[contains(.,"${key_ownerName} has shared ${key_contentTitle} with you for ${key_contentSharingPermission}")]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>NOTIFICATIONS_DELETE_ENTRY_TITLE</td>
+	<td>//div[contains(@class,'autofit-col')]/div[contains(.,'Notification no longer applies.')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>NOTIFICATIONS_DELETE_ENTRY_CONTENT</td>
+	<td>//div[contains(@class,'autofit-col')]/div[contains(.,'Notification for Sharing was deleted.')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -79,18 +110,38 @@
 </tr>
 <!--SHARED_CONTENT-->
 <tr>
-	<td>SHARED_CONTENT_ASSET_OPTIONS</td>
-	<td>//tr/td[contains(.,'${key_assetTitle}')]/..//div//a[span/*[name()='svg'][contains(@class,'icon-ellipsis')]]</td>
+	<td>SHARED_CONTENT_CONTENT_OPTIONS</td>
+	<td>//tr/td[contains(.,'${key_contentTitle}')]/..//div//a[span/*[name()='svg'][contains(@class,'icon-ellipsis')]]</td>
 	<td></td>
 </tr>
 <tr>
-	<td>SHARED_CONTENT_ASSET_TITLE</td>
-	<td>//tbody/tr/td[contains(@class,'table-cell-content')]/a[contains(.,'${key_assetTitle}')]</td>
+	<td>SHARED_CONTENT_CONTENT_STATUS</td>
+	<td>//span[contains(@class,'label-item') and contains(.,'${key_status}')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>SHARED_CONTENT_CONTENT_TITLE</td>
+	<td>//tbody/tr/td[contains(@class,'table-cell-content')]/a[contains(.,'${key_contentTitle}')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>SHARED_CONTENT_CONTENT_TITLE_2</td>
+	<td>//tbody/tr[2]/td[contains(@class,'table-cell-content')]/a[contains(.,'${key_contentTitle}')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>SHARED_CONTENT_CONTENT_TITLE_3</td>
+	<td>//tbody/tr[3]/td[contains(@class,'table-cell-content')]/a[contains(.,'${key_contentTitle}')]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>SHARED_CONTENT_ASSET_TYPE</td>
 	<td>//*[@data-qa-id='rowItemContent']/h5[contains(.,'${key_assetType}')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>SHARED_CONTENT_ELLIPSIS</td>
+	<td>//tr[contains(.,'${key_contentTitle}')]//a[contains(@title,'Actions')]</td>
 	<td></td>
 </tr>
 <tr>

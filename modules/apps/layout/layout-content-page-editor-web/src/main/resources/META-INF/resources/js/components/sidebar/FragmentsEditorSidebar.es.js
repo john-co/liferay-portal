@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import Component from 'metal-component';
 import {Config} from 'metal-state';
 import Soy from 'metal-soy';
@@ -17,15 +31,24 @@ class FragmentsEditorSidebar extends Component {
 	 * @review
 	 */
 	created() {
-		this._productMenuToggle = $('.product-menu-toggle');
-		this._handleHide = this._handleHide.bind(this);
-		const sidenav = Liferay.SideNavigation.instance(
-			this._productMenuToggle
+		const productMenuToggle = document.querySelector(
+			'.product-menu-toggle'
 		);
-		this._toggleHandle = sidenav.on(
-			'openStart.lexicon.sidenav',
-			this._handleHide
-		);
+
+		if (productMenuToggle) {
+			this._productMenuToggle = productMenuToggle;
+
+			this._handleHide = this._handleHide.bind(this);
+
+			const sidenav = Liferay.SideNavigation.instance(
+				this._productMenuToggle
+			);
+
+			this._toggleHandle = sidenav.on(
+				'openStart.lexicon.sidenav',
+				this._handleHide
+			);
+		}
 	}
 
 	/**
@@ -44,7 +67,11 @@ class FragmentsEditorSidebar extends Component {
 	 * @review
 	 */
 	rendered() {
-		if (this.selectedSidebarPanelId) {
+		const selectedSidebarPanel = this.sidebarPanels.find(
+			panel => panel.sidebarPanelId === this.selectedSidebarPanelId
+		);
+
+		if (selectedSidebarPanel) {
 			Liferay.SideNavigation.hide(this._productMenuToggle);
 		}
 	}
@@ -55,8 +82,8 @@ class FragmentsEditorSidebar extends Component {
 	 */
 	_handleHide() {
 		this.store.dispatch({
-			sidebarPanelId: '',
-			type: UPDATE_SELECTED_SIDEBAR_PANEL_ID
+			type: UPDATE_SELECTED_SIDEBAR_PANEL_ID,
+			value: ''
 		});
 	}
 }
@@ -69,16 +96,6 @@ class FragmentsEditorSidebar extends Component {
  */
 FragmentsEditorSidebar.STATE = {
 	/**
-	 * Internal property for subscribing to sidenav events.
-	 * @default undefined
-	 * @instance
-	 * @memberOf FragmentsEditorSidebar
-	 * @review
-	 * @type {EventHandle}
-	 */
-	_toggleHandle: Config.internal(),
-
-	/**
 	 * Synced ProductMenu toggle button.
 	 * @default undefined
 	 * @instance
@@ -86,12 +103,22 @@ FragmentsEditorSidebar.STATE = {
 	 * @review
 	 * @type {object}
 	 */
-	_productMenuToggle: Config.internal()
+	_productMenuToggle: Config.internal(),
+
+	/**
+	 * Internal property for subscribing to sidenav events.
+	 * @default undefined
+	 * @instance
+	 * @memberOf FragmentsEditorSidebar
+	 * @review
+	 * @type {EventHandle}
+	 */
+	_toggleHandle: Config.internal()
 };
 
 const ConnectedFragmentsEditorSidebar = getConnectedComponent(
 	FragmentsEditorSidebar,
-	['selectedSidebarPanelId']
+	['selectedSidebarPanelId', 'sidebarPanels']
 );
 
 Soy.register(ConnectedFragmentsEditorSidebar, templates);

@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 AUI.add(
 	'liferay-calendar-reminders',
 	function(A) {
@@ -57,28 +71,7 @@ AUI.add(
 			UI_ATTRS: ['values'],
 
 			prototype: {
-				initializer: function() {
-					var instance = this;
-
-					instance.tplReminder = new A.Template(TPL_REMINDER_SECTION);
-				},
-
-				bindUI: function() {
-					var instance = this;
-
-					var boundingBox = instance.get('boundingBox');
-
-					boundingBox.delegate(
-						'change',
-						instance._onChangeCheckbox,
-						'.calendar-portlet-reminder-check',
-						instance
-					);
-				},
-
-				_onChangeCheckbox: function(event) {
-					var instance = this;
-
+				_onChangeCheckbox(event) {
 					var target = event.target;
 
 					var checked = target.get('checked');
@@ -91,7 +84,7 @@ AUI.add(
 					}
 				},
 
-				_uiSetValues: function(val) {
+				_uiSetValues(val) {
 					var instance = this;
 
 					var boundingBox = instance.get('boundingBox');
@@ -109,8 +102,8 @@ AUI.add(
 							tplReminder.parse(
 								A.merge(strings, {
 									disabled: !value.interval,
-									i: i,
-									portletNamespace: portletNamespace,
+									i,
+									portletNamespace,
 									time: Liferay.Time.getDescription(
 										value.interval
 									)
@@ -120,6 +113,25 @@ AUI.add(
 					}
 
 					boundingBox.setContent(buffer.join(STR_BLANK));
+				},
+
+				bindUI() {
+					var instance = this;
+
+					var boundingBox = instance.get('boundingBox');
+
+					boundingBox.delegate(
+						'change',
+						instance._onChangeCheckbox,
+						'.calendar-portlet-reminder-check',
+						instance
+					);
+				},
+
+				initializer() {
+					var instance = this;
+
+					instance.tplReminder = new A.Template(TPL_REMINDER_SECTION);
 				}
 			}
 		});

@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import {Config} from 'metal-state';
 import {PortletBase} from 'frontend-js-web';
 import Soy from 'metal-soy';
@@ -93,7 +107,8 @@ class SelectMappingTypeForm extends PortletBase {
 		this._selectedMappingSubtypeId = '';
 
 		this.store.dispatch({
-			type: HIDE_MAPPING_TYPE_DIALOG
+			type: HIDE_MAPPING_TYPE_DIALOG,
+			value: false
 		});
 	}
 
@@ -162,7 +177,8 @@ class SelectMappingTypeForm extends PortletBase {
 
 		this.store
 			.dispatch({
-				type: HIDE_MAPPING_TYPE_DIALOG
+				type: HIDE_MAPPING_TYPE_DIALOG,
+				value: false
 			})
 			.dispatch({
 				mappingTypes,
@@ -217,25 +233,6 @@ class SelectMappingTypeForm extends PortletBase {
  */
 SelectMappingTypeForm.STATE = {
 	/**
-	 * List of available mapping types
-	 * @default null
-	 * @instance
-	 * @memberOf SelectMappingTypeForm
-	 * @private
-	 * @review
-	 * @type {Array<{
-	 *   id: !string,
-	 *   label: !string
-	 * }>}
-	 */
-	_mappingTypes: Config.arrayOf(
-		Config.shapeOf({
-			id: Config.string().required(),
-			label: Config.string().required()
-		})
-	).value(null),
-
-	/**
 	 * List of available mapping subtypes
 	 * @default null
 	 * @instance
@@ -255,17 +252,23 @@ SelectMappingTypeForm.STATE = {
 	).value([]),
 
 	/**
-	 * String with the selected mapping type id
-	 * @default ''
+	 * List of available mapping types
+	 * @default null
 	 * @instance
 	 * @memberOf SelectMappingTypeForm
 	 * @private
 	 * @review
-	 * @type {string}
+	 * @type {Array<{
+	 *   id: !string,
+	 *   label: !string
+	 * }>}
 	 */
-	_selectedMappingTypeId: Config.string()
-		.internal()
-		.value(''),
+	_mappingTypes: Config.arrayOf(
+		Config.shapeOf({
+			id: Config.string().required(),
+			label: Config.string().required()
+		})
+	).value(null),
 
 	/**
 	 * String with the selected mapping subtype id
@@ -277,6 +280,19 @@ SelectMappingTypeForm.STATE = {
 	 * @type {string}
 	 */
 	_selectedMappingSubtypeId: Config.string()
+		.internal()
+		.value(''),
+
+	/**
+	 * String with the selected mapping type id
+	 * @default ''
+	 * @instance
+	 * @memberOf SelectMappingTypeForm
+	 * @private
+	 * @review
+	 * @type {string}
+	 */
+	_selectedMappingTypeId: Config.string()
 		.internal()
 		.value('')
 };

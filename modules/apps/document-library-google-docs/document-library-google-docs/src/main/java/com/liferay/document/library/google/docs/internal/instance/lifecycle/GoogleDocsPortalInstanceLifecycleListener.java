@@ -16,7 +16,8 @@ package com.liferay.document.library.google.docs.internal.instance.lifecycle;
 
 import com.liferay.document.library.google.docs.internal.util.GoogleDocsDLFileEntryTypeHelper;
 import com.liferay.document.library.kernel.service.DLFileEntryTypeLocalService;
-import com.liferay.dynamic.data.mapping.io.DDMFormDeserializerTracker;
+import com.liferay.dynamic.data.mapping.io.DDMFormDeserializer;
+import com.liferay.dynamic.data.mapping.kernel.DDMStructureManager;
 import com.liferay.dynamic.data.mapping.service.DDMStructureLocalService;
 import com.liferay.dynamic.data.mapping.service.DDMStructureVersionLocalService;
 import com.liferay.dynamic.data.mapping.util.DDM;
@@ -26,6 +27,7 @@ import com.liferay.portal.instance.lifecycle.PortalInstanceLifecycleListener;
 import com.liferay.portal.kernel.exception.ModelListenerException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Company;
+import com.liferay.portal.kernel.module.framework.ModuleServiceLifecycle;
 import com.liferay.portal.kernel.service.ClassNameLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
 
@@ -45,7 +47,7 @@ public class GoogleDocsPortalInstanceLifecycleListener
 			GoogleDocsDLFileEntryTypeHelper googleDocsDLFileEntryTypeHelper =
 				new GoogleDocsDLFileEntryTypeHelper(
 					company, _classNameLocalService, _ddm,
-					_ddmFormDeserializerTracker, _ddmStructureLocalService,
+					_xsdDDMFormDeserializer, _ddmStructureLocalService,
 					_dlFileEntryTypeLocalService, _userLocalService);
 
 			googleDocsDLFileEntryTypeHelper.addGoogleDocsDLFileEntryType();
@@ -53,6 +55,11 @@ public class GoogleDocsPortalInstanceLifecycleListener
 		catch (PortalException pe) {
 			throw new ModelListenerException(pe);
 		}
+	}
+
+	@Reference(unbind = "-")
+	protected void setDDMStructureManager(
+		DDMStructureManager ddmStructureManager) {
 	}
 
 	@Reference(
@@ -68,14 +75,16 @@ public class GoogleDocsPortalInstanceLifecycleListener
 		DDMStructureVersionLocalService ddmStructureVersionLocalService) {
 	}
 
+	@Reference(target = ModuleServiceLifecycle.PORTAL_INITIALIZED, unbind = "-")
+	protected void setModuleServiceLifecycle(
+		ModuleServiceLifecycle moduleServiceLifecycle) {
+	}
+
 	@Reference
 	private ClassNameLocalService _classNameLocalService;
 
 	@Reference
 	private DDM _ddm;
-
-	@Reference
-	private DDMFormDeserializerTracker _ddmFormDeserializerTracker;
 
 	@Reference
 	private DDMStructureLocalService _ddmStructureLocalService;
@@ -85,5 +94,8 @@ public class GoogleDocsPortalInstanceLifecycleListener
 
 	@Reference
 	private UserLocalService _userLocalService;
+
+	@Reference(target = "(ddm.form.deserializer.type=xsd)")
+	private DDMFormDeserializer _xsdDDMFormDeserializer;
 
 }

@@ -1,4 +1,4 @@
-@import 'mixins';
+@import 'atlas-variables';
 
 @import 'variables';
 
@@ -14,10 +14,15 @@
 	position: relative;
 	width: 100%;
 
-	@include sm {
+	@include media-breakpoint-up(sm) {
 		float: left;
 		height: 50%;
 		width: 50%;
+	}
+
+	&.json {
+		height: 100%;
+		width: 100%;
 	}
 
 	&__syntax {

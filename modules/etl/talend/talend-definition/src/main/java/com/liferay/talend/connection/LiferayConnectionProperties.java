@@ -15,11 +15,10 @@
 package com.liferay.talend.connection;
 
 import com.liferay.talend.LiferayBaseComponentDefinition;
+import com.liferay.talend.common.util.URIUtil;
 import com.liferay.talend.runtime.ValidatedSoSSandboxRuntime;
 import com.liferay.talend.tliferayconnection.TLiferayConnectionDefinition;
 import com.liferay.talend.ui.UIKeys;
-import com.liferay.talend.utils.PropertiesUtils;
-import com.liferay.talend.utils.URIUtils;
 
 import java.net.URL;
 
@@ -53,6 +52,10 @@ public class LiferayConnectionProperties
 
 	public LiferayConnectionProperties(String name) {
 		super(name);
+
+		if (_logger.isTraceEnabled()) {
+			_logger.trace("Instantiated " + System.identityHashCode(this));
+		}
 	}
 
 	public void afterLoginType() {
@@ -70,15 +73,23 @@ public class LiferayConnectionProperties
 	}
 
 	public String getApplicationBaseHref() {
-		URL openAPISpecURL = URIUtils.toURL(_getValue(apiSpecURL));
+		URL openAPISpecURL = URIUtil.toURL(_getValue(apiSpecURL));
 
-		URL serverURL = URIUtils.extractServerURL(openAPISpecURL);
-		String jaxRSAppBase = URIUtils.extractJaxRSAppBasePathSegment(
+		URL serverURL = URIUtil.extractServerURL(openAPISpecURL);
+		String jaxRSAppBase = URIUtil.extractJaxRSAppBasePathSegment(
 			openAPISpecURL);
 
 		String serverHref = serverURL.toExternalForm();
 
 		return serverHref.concat(jaxRSAppBase);
+	}
+
+	public int getConnectTimeout() {
+		return _getValue(connectTimeout);
+	}
+
+	public int getItemsPerPage() {
+		return _getValue(itemsPerPage);
 	}
 
 	@Override
@@ -98,6 +109,10 @@ public class LiferayConnectionProperties
 		return _getValue(basicAuthorizationProperties.password);
 	}
 
+	public int getReadTimeout() {
+		return _getValue(readTimeout);
+	}
+
 	public String getReferencedComponentId() {
 		return referencedComponent.componentInstanceId.getStringValue();
 	}
@@ -111,14 +126,14 @@ public class LiferayConnectionProperties
 		}
 
 		if (getReferencedComponentId() != null) {
-			_log.error(
+			_logger.error(
 				"Connection has a reference to '{}' but the referenced " +
 					"Object is null",
 				getReferencedComponentId());
 		}
 
-		if (_log.isDebugEnabled()) {
-			_log.debug(
+		if (_logger.isDebugEnabled()) {
+			_logger.debug(
 				"Fall back to the actual instance " +
 					"LiferayConnectionProperties for the runtime environment");
 		}
@@ -130,8 +145,15 @@ public class LiferayConnectionProperties
 		return _getValue(basicAuthorizationProperties.userId);
 	}
 
-	public boolean isAnonymousLogin() {
-		return _getValue(basicAuthorizationProperties.anonymousLogin);
+	@Override
+	public Properties init() {
+		Properties properties = super.init();
+
+		if (_logger.isTraceEnabled()) {
+			_logger.trace("Initialized " + System.identityHashCode(this));
+		}
+
+		return properties;
 	}
 
 	public boolean isBasicAuthorization() {
@@ -140,6 +162,14 @@ public class LiferayConnectionProperties
 		}
 
 		return false;
+	}
+
+	public boolean isFollowRedirects() {
+		return _getValue(followRedirects);
+	}
+
+	public boolean isForceHttps() {
+		return _getValue(forceHttps);
 	}
 
 	public boolean isOAuth2Authorization() {
@@ -165,8 +195,17 @@ public class LiferayConnectionProperties
 			hidden = true;
 		}
 
-		PropertiesUtils.setHidden(form, apiSpecURL, hidden);
-		PropertiesUtils.setHidden(form, loginType, hidden);
+		Widget widget = form.getWidget(apiSpecURL.getName());
+
+		if (widget != null) {
+			widget.setHidden(hidden);
+		}
+
+		widget = form.getWidget(loginType.getName());
+
+		if (widget != null) {
+			widget.setHidden(hidden);
+		}
 
 		Form basicAuthorizationPropertiesForm =
 			basicAuthorizationProperties.getForm(
@@ -191,6 +230,10 @@ public class LiferayConnectionProperties
 		else {
 			basicAuthorizationPropertiesForm.setVisible(true);
 			oAuthAuthorizationPropertiesForm.setVisible(false);
+		}
+
+		if (_logger.isTraceEnabled()) {
+			_logger.trace("Refreshed " + System.identityHashCode(this));
 		}
 	}
 
@@ -235,6 +278,10 @@ public class LiferayConnectionProperties
 			_createAdvancedForm(
 				this, connectTimeout, readTimeout, itemsPerPage,
 				followRedirects, forceHttps));
+
+		if (_logger.isTraceEnabled()) {
+			_logger.trace("Layout set " + System.identityHashCode(this));
+		}
 	}
 
 	@Override
@@ -245,6 +292,10 @@ public class LiferayConnectionProperties
 		followRedirects.setValue(true);
 		forceHttps.setValue(false);
 		loginType.setValue(LoginType.BASIC);
+
+		if (_logger.isTraceEnabled()) {
+			_logger.trace("Properties set " + System.identityHashCode(this));
+		}
 	}
 
 	public ValidationResult validateTestConnection() {
@@ -419,7 +470,7 @@ public class LiferayConnectionProperties
 
 	private static final int _READ_TIMEOUT = 60;
 
-	private static final Logger _log = LoggerFactory.getLogger(
+	private static final Logger _logger = LoggerFactory.getLogger(
 		LiferayConnectionProperties.class);
 
 	private static final long serialVersionUID = -746398918369840241L;

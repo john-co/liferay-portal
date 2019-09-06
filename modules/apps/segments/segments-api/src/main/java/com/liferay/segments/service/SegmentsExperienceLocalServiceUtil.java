@@ -235,6 +235,13 @@ public class SegmentsExperienceLocalServiceUtil {
 		return getService().fetchSegmentsExperience(segmentsExperienceId);
 	}
 
+	public static com.liferay.segments.model.SegmentsExperience
+		fetchSegmentsExperience(long groupId, String segmentsExperienceKey) {
+
+		return getService().fetchSegmentsExperience(
+			groupId, segmentsExperienceKey);
+	}
+
 	/**
 	 * Returns the segments experience matching the UUID and group.
 	 *
@@ -300,6 +307,14 @@ public class SegmentsExperienceLocalServiceUtil {
 		return getService().getSegmentsExperience(segmentsExperienceId);
 	}
 
+	public static com.liferay.segments.model.SegmentsExperience
+			getSegmentsExperience(long groupId, String segmentsExperienceKey)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return getService().getSegmentsExperience(
+			groupId, segmentsExperienceKey);
+	}
+
 	/**
 	 * Returns the segments experience matching the UUID and group.
 	 *
@@ -334,6 +349,13 @@ public class SegmentsExperienceLocalServiceUtil {
 	}
 
 	public static java.util.List<com.liferay.segments.model.SegmentsExperience>
+		getSegmentsExperiences(long groupId, long classNameId, long classPK) {
+
+		return getService().getSegmentsExperiences(
+			groupId, classNameId, classPK);
+	}
+
+	public static java.util.List<com.liferay.segments.model.SegmentsExperience>
 			getSegmentsExperiences(
 				long groupId, long classNameId, long classPK, boolean active)
 		throws com.liferay.portal.kernel.exception.PortalException {
@@ -353,6 +375,15 @@ public class SegmentsExperienceLocalServiceUtil {
 		return getService().getSegmentsExperiences(
 			groupId, classNameId, classPK, active, start, end,
 			orderByComparator);
+	}
+
+	public static java.util.List<com.liferay.segments.model.SegmentsExperience>
+		getSegmentsExperiences(
+			long groupId, long[] segmentsEntryIds, long classNameId,
+			long classPK, boolean active) {
+
+		return getService().getSegmentsExperiences(
+			groupId, segmentsEntryIds, classNameId, classPK, active);
 	}
 
 	public static java.util.List<com.liferay.segments.model.SegmentsExperience>

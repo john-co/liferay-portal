@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 (function(jQuery) {
 	/*!
 	 * jQuery Form Plugin
@@ -124,7 +138,7 @@
 			options = $.extend(
 				true,
 				{
-					url: url,
+					url,
 					success: $.ajaxSettings.success,
 					type: method || $.ajaxSettings.type,
 					iframeSrc: /^https/i.test(window.location.href || '')
@@ -463,10 +477,10 @@
 					responseXML: null,
 					status: 0,
 					statusText: 'n/a',
-					getAllResponseHeaders: function() {},
-					getResponseHeader: function() {},
-					setRequestHeader: function() {},
-					abort: function(status) {
+					getAllResponseHeaders() {},
+					getResponseHeader() {},
+					setRequestHeader() {},
+					abort(status) {
 						var e = status === 'timeout' ? 'timeout' : 'aborted';
 						log('aborting upload... ' + e);
 						this.aborted = 1;

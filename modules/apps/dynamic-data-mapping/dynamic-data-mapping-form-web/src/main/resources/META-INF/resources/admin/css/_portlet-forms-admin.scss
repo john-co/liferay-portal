@@ -3,8 +3,16 @@
 	.ddm-translation-manager {
 		.modal-sm {
 			max-width: 300px;
+			position: relative;
 		}
 	}
+}
+
+:-ms-input-placeholder.form-builder-page-header-title,
+:-ms-input-placeholder.form-builder-page-header-description,
+.form-builder-page-header-description:-ms-input-placeholder,
+.form-builder-page-header-title:-ms-input-placeholder {
+	color: #6b6c7d !important;
 }
 
 .form-builder-publish-popover {
@@ -281,7 +289,7 @@
 						min-height: 40px;
 					}
 
-					@include md {
+					@include media-breakpoint-up(md) {
 						.layout-col-content {
 							padding-left: 20px;
 							padding-right: 20px;

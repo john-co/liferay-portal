@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import {isString} from 'metal';
 
 const NEW_LINE = '\r\n';
@@ -14,15 +28,15 @@ const REGEX_ELEMENT = /^<\w/;
 
 const REGEX_ELEMENT_CLOSE = /^<\/\w/;
 
-const REGEX_ELEMENT_NAMESPACED = /^<[\w:\-\.\,]+/;
+const REGEX_ELEMENT_NAMESPACED = /^<[\w:\-.,]+/;
 
-const REGEX_ELEMENT_NAMESPACED_CLOSE = /^<\/[\w:\-\.\,]+/;
+const REGEX_ELEMENT_NAMESPACED_CLOSE = /^<\/[\w:\-.,]+/;
 
 const REGEX_ELEMENT_OPEN = /<\w/;
 
-const REGEX_NAMESPACE_XML = /xmlns(?:\:|\=)/g;
+const REGEX_NAMESPACE_XML = /xmlns(?::|=)/g;
 
-const REGEX_NAMESPACE_XML_ATTR = /\s*(xmlns)(\:|\=)/g;
+const REGEX_NAMESPACE_XML_ATTR = /\s*(xmlns)(:|=)/g;
 
 const REGEX_TAG_CLOSE = /<\//;
 
@@ -59,13 +73,14 @@ export default function formatXML(content, options = {}) {
 		throw new TypeError('Parameter content must be a string');
 	}
 
+	content = content.trim();
 	content = content.replace(REGEX_WHITESPACE_BETWEEN_TAGS, '><');
 	content = content.replace(REGEX_TAG_OPEN, STR_TOKEN + '<');
 	content = content.replace(REGEX_NAMESPACE_XML_ATTR, STR_TOKEN + '$1$2');
 
 	let commentCounter = 0;
 	let inComment = false;
-	let items = content.split(STR_TOKEN);
+	const items = content.split(STR_TOKEN);
 	let level = 0;
 	let result = '';
 
@@ -102,7 +117,9 @@ export default function formatXML(content, options = {}) {
 		) {
 			result += item;
 
-			!inComment && --level;
+			if (!inComment) {
+				--level;
+			}
 		} else if (
 			REGEX_ELEMENT_OPEN.test(item) &&
 			!REGEX_TAG_CLOSE.test(item) &&

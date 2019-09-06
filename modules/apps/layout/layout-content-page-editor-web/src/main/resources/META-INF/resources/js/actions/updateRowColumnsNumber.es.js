@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import {
 	disableSavingChangesStatusAction,
 	enableSavingChangesStatusAction,
@@ -8,16 +22,14 @@ import {
 	getRowIndex
 } from '../utils/FragmentsEditorGetUtils.es';
 import {MAX_COLUMNS} from '../utils/rowConstants';
-import {
-	removeFragmentEntryLinks,
-	updatePageEditorLayoutData
-} from '../utils/FragmentsEditorFetchUtils.es';
+import {updatePageEditorLayoutData} from '../utils/FragmentsEditorFetchUtils.es';
 import {setIn, updateIn} from '../utils/FragmentsEditorUpdateUtils.es';
 import {
 	UPDATE_ROW_COLUMNS_NUMBER_ERROR,
 	UPDATE_ROW_COLUMNS_NUMBER_LOADING,
 	UPDATE_ROW_COLUMNS_NUMBER_SUCCESS
 } from './actions.es';
+import {removeFragmentEntryLinksAction} from './removeFragmentEntryLinks.es';
 
 /**
  * @param {number} numberOfColumns
@@ -32,7 +44,9 @@ function updateRowColumnsNumberAction(numberOfColumns, rowId) {
 		const columnsSize = Math.floor(MAX_COLUMNS / numberOfColumns);
 		const rowIndex = getRowIndex(state.layoutData.structure, rowId);
 
-		let columns = state.layoutData.structure[rowIndex].columns;
+		const columns = state.layoutData.structure[rowIndex].columns;
+
+		let fragmentEntryLinkIdsToRemove = [];
 		let nextData;
 
 		if (numberOfColumns > columns.length) {
@@ -51,19 +65,19 @@ function updateRowColumnsNumberAction(numberOfColumns, rowId) {
 			);
 		}
 
-		let fragmentEntryLinkIdsToRemove = getRowFragmentEntryLinkIds({
-			columns: columns.slice(numberOfColumns - columns.length)
-		});
+		if (columns.length > numberOfColumns) {
+			fragmentEntryLinkIdsToRemove = getRowFragmentEntryLinkIds({
+				columns: columns.slice(numberOfColumns - columns.length)
+			});
+		}
 
 		dispatch(updateRowColumnsNumberLoadingAction());
 		dispatch(enableSavingChangesStatusAction());
 
 		updatePageEditorLayoutData(nextData, state.segmentsExperienceId)
 			.then(() =>
-				removeFragmentEntryLinks(
-					nextData,
-					fragmentEntryLinkIdsToRemove,
-					state.segmentsExperienceId
+				dispatch(
+					removeFragmentEntryLinksAction(fragmentEntryLinkIdsToRemove)
 				)
 			)
 			.then(() => {
@@ -205,7 +219,7 @@ function _getColumnSize(numberOfColumns, columnsSize, columnIndex) {
  * @return {object}
  */
 function _removeColumns(layoutData, rowIndex, numberOfColumns, columnsSize) {
-	let nextData = updateIn(
+	const nextData = updateIn(
 		layoutData,
 		['structure', rowIndex, 'columns'],
 		columns => {

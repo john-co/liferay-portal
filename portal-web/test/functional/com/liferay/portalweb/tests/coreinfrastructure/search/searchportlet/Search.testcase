@@ -141,7 +141,7 @@ definition {
 
 		Navigator.openSpecificURL(url = "${portalURL}/web/guest/search-page");
 
-		SearchPortlets.addWidgets(searchPortletList = "Category Facet,Custom Facet,Folder Facet,Modified Facet,Search Insights,Search Options,Site Facet,Sort,Suggestions,Tag Facet,Type Facet,User Facet,Search Results,Search Bar");
+		SearchPortlets.addWidgets(searchPortletList = "Category Facet,Custom Facet,Folder Facet,Low Level Search Options,Modified Facet,Search Insights,Search Options,Site Facet,Sort,Suggestions,Tag Facet,Type Facet,User Facet,Search Results,Search Bar");
 
 		User.logoutPG();
 
@@ -149,13 +149,13 @@ definition {
 
 		// Workaround: Removed assertions for Suggestions, Sort, Search Results, and Modified Facet portlets until LPS-92008 is fixed. See LRQA-47720.
 
-		for (var portletName : list "Category Facet,Custom Facet,Folder Facet,Modified Facet,Search Insights,Search Options,Search Results,Site Facet,Sort,Suggestions,Tag Facet,Type Facet,User Facet") {
+		for (var portletName : list "Category Facet,Custom Facet,Folder Facet,Low Level Search Options,Modified Facet,Search Insights,Search Options,Search Results,Site Facet,Sort,Suggestions,Tag Facet,Type Facet,User Facet") {
 			Portlet.viewNoSpecificPG(portletName = "${portletName}");
 		}
 
 		Navigator.openSpecificURL(url = "${portalURL}/web/guest/search-page");
 
-		for (var portletName : list "Category Facet,Custom Facet,Folder Facet,Search Insights,Search Options,Site Facet,Tag Facet,Type Facet,User Facet") {
+		for (var portletName : list "Category Facet,Custom Facet,Folder Facet,Low Level Search Options,Search Insights,Search Options,Site Facet,Tag Facet,Type Facet,User Facet") {
 			Portlet.viewNoSpecificPG(portletName = "${portletName}");
 		}
 	}
@@ -264,10 +264,100 @@ definition {
 			value1 = "_explanation");
 	}
 
+	@description = "This is a use case for LPS-89561."
+	@priority = "4"
+	test AssertSearchURLWhenModifyingPagination {
+		property custom.properties = "search.container.page.default.delta=10";
+
+		for (var count : list "1,2,3,4,5,6,7,8,9,10,11") {
+			JSONWebcontent.addWebContent(
+				content = "WC Content ${count}",
+				groupName = "Guest",
+				title = "WC Title ${count}");
+		}
+
+		SearchPortlets.searchEmbedded(searchTerm = "WC Title");
+
+		SearchResultPortlet.paginateAndViewSearchResults(
+			searchAssetTitle = "WC Title 11",
+			searchAssetType = "Web Content Article",
+			searchTerm = "WC Title");
+
+		Pagination.changePagination(itemsPerPage = "5");
+
+		var currentURL = selenium.getCurrentUrl();
+
+		echo("Current URL: ${currentURL} ");
+
+		if ((!(contains("${currentURL}","delta=5"))) || (contains("${currentURL}", "start"))) {
+			fail("URL should preserve delta, but not contain start.");
+		}
+
+		Click(locator1 = "Pagination#NEXT_LINK");
+
+		AssertElementPresent(locator1 = "Pagination#CURRENT_PAGE_SELECT");
+
+		var currentURL = selenium.getCurrentUrl();
+
+		echo("Current URL: ${currentURL} ");
+
+		if ((!(contains("${currentURL}", "delta=5"))) || (!(contains("${currentURL}", "start=2")))) {
+			fail("URL should preserve delta and add start.");
+		}
+
+		Click(locator1 = "Pagination#NEXT_LINK");
+
+		AssertElementPresent(locator1 = "Pagination#CURRENT_PAGE_SELECT");
+
+		var currentURL = selenium.getCurrentUrl();
+
+		echo("Current URL: ${currentURL} ");
+
+		if ((!(contains("${currentURL}", "delta=5"))) && (!(contains("${currentURL}", "start=3")))) {
+			fail("URL should preserve delta and modify start.");
+		}
+
+		Pagination.changePagination(itemsPerPage = "10");
+
+		//Workaround LPS-98391
+
+		/*var currentURL = selenium.getCurrentUrl();
+
+		echo("Current URL: ${currentURL} ");
+
+		if ((!(contains("${currentURL}", "delta"))) && (!(contains("${currentURL}", "start")))) {
+			fail("Delta and start should be removed from URL.");
+		}
+
+		Click(locator1 = "Pagination#NEXT_LINK");
+
+		AssertElementPresent(locator1 = "Pagination#CURRENT_PAGE_SELECT");
+
+		var currentURL = selenium.getCurrentUrl();
+
+		echo("Current URL: ${currentURL} ");
+
+		if ((!(contains("${currentURL}", "delta"))) && (contains("${currentURL}", "start=2"))) {
+			fail("URL should preserve abscence of delta and start should be added.");
+		}
+
+		Click(locator1 = "Pagination#PREVIOUS_LINK");
+
+		AssertElementPresent(locator1 = "Pagination#CURRENT_PAGE_SELECT");
+
+		var currentURL = selenium.getCurrentUrl();
+
+		echo("Current URL: ${currentURL} ");
+
+		if ((!(contains("${currentURL}", "delta"))) && (contains("${currentURL}", "start=1"))) {
+			fail("URL should preserve abscence of delta and modify start.");
+		}*/
+	}
+
 	@description = "This is a use case for LPS-90078."
 	@priority = "4"
 	test ModifyPaginationPortalProperties {
-		property app.server.types = "jboss,resin,tcserver,tomcat,weblogic,websphere,wildfly";
+		property app.server.types = "jboss,tcserver,tomcat,weblogic,websphere,wildfly";
 		property custom.properties = "search.container.page.default.delta=2";
 		property database.types = "db2,hypersonic,mariadb,mysql,oracle,postgresql,sqlserver,sybase";
 		property portal.acceptance = "true";
@@ -772,6 +862,68 @@ definition {
 		SearchResultPortlet.viewNoSearchResults(searchTerm = "&quot;name1&quot;");
 	}
 
+	test SearchBlogsScopedToPage {
+		JSONLayout.addPublicLayout(
+			groupName = "Guest",
+			layoutName = "Blogs Page");
+
+		JSONLayout.addWidgetToPublicLayout(
+			column = "1",
+			groupName = "Guest",
+			layoutName = "Blogs Page",
+			widgetName = "Blogs");
+
+		Navigator.gotoPage(pageName = "Blogs Page");
+
+		BlogsConfiguration.configureScopePG(
+			portletName = "Blogs",
+			scopeSelection = "Blogs Page (Create New)");
+
+		IFrame.closeFrame();
+
+		Blogs.addEntry(
+			entryContent = "Entry Content",
+			entryTitle = "Entry Title");
+
+		SearchPortlets.searchEmbedded(searchTerm = "Entry Title");
+
+		SearchResultPortlet.viewSearchResults(
+			searchAssetTitle = "Entry Title",
+			searchAssetType = "Blogs Entry",
+			searchTerm = "Entry Title");
+	}
+
+	@priority = "4"
+	test SearchContentPagesSmoke {
+		JSONGroup.addGroup(groupName = "Site Name");
+
+		SitePages.openPagesAdmin(siteURLKey = "site-name");
+
+		ContentPages.addPage(pageName = "Test Content Page Name");
+
+		for (var portletName : list "Search Bar,Search Results") {
+			PageEditor.addWidget(portletName = "${portletName}");
+		}
+
+		PageEditor.clickPublish();
+
+		JSONWebcontent.addWebContent(
+			content = "Web Content",
+			groupName = "Site Name",
+			title = "WC Title");
+
+		Navigator.gotoSitePage(
+			pageName = "Test Content Page Name",
+			siteName = "Site Name");
+
+		SearchPortlets.searchEmbedded(searchTerm = "WC Title");
+
+		SearchResultPortlet.viewSearchResults(
+			searchAssetTitle = "WC Title",
+			searchAssetType = "Web Content Article",
+			searchTerm = "WC Title");
+	}
+
 	@priority = "4"
 	test SearchDeletedWebContent {
 		JSONWebcontent.addWebContent(
@@ -912,7 +1064,7 @@ definition {
 
 		Site.addBlankCP(siteName = "Test Site");
 
-		ProductMenu.gotoSite(site = "Test Site");
+		SitePages.openPagesAdmin(siteURLKey = "Test Site");
 
 		ProductMenu.gotoPortlet(
 			category = "Content &amp; Data",
@@ -962,7 +1114,7 @@ definition {
 
 	@priority = "5"
 	test SearchDocumentsAndMediaDocument {
-		property app.server.types = "jboss,resin,tcserver,tomcat,weblogic,websphere,wildfly";
+		property app.server.types = "jboss,tcserver,tomcat,weblogic,websphere,wildfly";
 		property database.types = "db2,hypersonic,mariadb,mysql,oracle,postgresql,sqlserver,sybase";
 		property environment.acceptance = "true";
 		property testray.component.names = "Training";
@@ -1447,6 +1599,122 @@ definition {
 			searchAssetType = "Wiki Page");
 	}
 
+	test SearchWithModifiedFacet {
+		JSONWebcontent.addWebContent(
+			content = "WC Content",
+			groupName = "Guest",
+			title = "WC Title");
+
+		SearchPortlets.searchEmbedded(searchTerm = "WC Title");
+
+		Portlet.gotoPortletOptions(
+			portletName = "Modified Facet",
+			portletOption = "Configuration");
+
+		SelectFrame(locator1 = "IFrame#CONFIGURATION");
+
+		Click(locator1 = "Button#ADD_ROW");
+
+		Type(
+			key_fieldLabel = "Label",
+			locator1 = "Search#MODIFIED_FACET_CONFIG_EMPTY_FIELD",
+			value1 = "Past 23 Hours");
+
+		Type(
+			key_fieldLabel = "Range",
+			locator1 = "Search#MODIFIED_FACET_CONFIG_EMPTY_FIELD",
+			value1 = "[past-24-hours TO past-hour]");
+
+		PortletEntry.save();
+
+		IFrame.closeFrame();
+
+		// Workaround for LPS-97383
+
+		Refresh();
+
+		AssertTextEquals.assertPartialText(
+			locator1 = "Search#MODIFIED_FACET_SELECTION",
+			range = "Past 23 Hours",
+			value1 = "Past 23 Hours");
+
+		Click(
+			locator1 = "Search#MODIFIED_FACET_SELECTION",
+			range = "Past 23 Hours");
+
+		SearchResultPortlet.viewNoSearchResults(searchTerm = "WC Title");
+
+		Portlet.gotoPortletOptions(
+			portletName = "Modified Facet",
+			portletOption = "Configuration");
+
+		SelectFrame(locator1 = "IFrame#CONFIGURATION");
+
+		Click(
+			key_rowIndexNumber = "2",
+			locator1 = "Button#DELETE_ROW_N");
+
+		PortletEntry.save();
+
+		IFrame.closeFrame();
+
+		// Workaround for LPS-97383
+
+		Refresh();
+
+		AssertElementNotPresent(
+			locator1 = "Search#MODIFIED_FACET_SELECTION",
+			range = "Past 23 Hours");
+
+		SearchResultPortlet.viewSearchResults(
+			searchAssetTitle = "WC Title",
+			searchAssetType = "Web Content Article",
+			searchTerm = "WC Title");
+
+		Click(
+			locator1 = "Search#MODIFIED_FACET_SELECTION",
+			range = "Custom Range");
+
+		Click(locator1 = "Search#CUSTOM_RANGE_FROM");
+
+		Click(locator1 = "YUICalendarWidget#NEXT_MONTH_ARROW");
+
+		Click(locator1 = "YUICalendarWidget#NEXT_MONTH_ARROW");
+
+		Click(
+			key_day = "1",
+			locator1 = "YUICalendarWidget#DATEPICKER_SPECIFIC_DAY");
+
+		Click(locator1 = "Button#SEARCH");
+
+		SearchResultPortlet.viewNoSearchResults(searchTerm = "WC Title");
+
+		// Workaround for LPS-82584
+
+		Click(locator1 = "Link#CLEAR");
+
+		Click(
+			locator1 = "Search#MODIFIED_FACET_SELECTION",
+			range = "Custom Range");
+
+		Click(locator1 = "Search#CUSTOM_RANGE_FROM");
+
+		Click(locator1 = "YUICalendarWidget#PREVIOUS_MONTH_ARROW");
+
+		Click(locator1 = "YUICalendarWidget#PREVIOUS_MONTH_ARROW");
+
+		Click(
+			key_day = "1",
+			locator1 = "YUICalendarWidget#DATEPICKER_SPECIFIC_DAY");
+
+		Click(locator1 = "Button#SEARCH");
+
+		SearchResultPortlet.viewSearchResults(
+			searchAssetTitle = "WC Title",
+			searchAssetType = "Web Content Article",
+			searchTerm = "WC Title");
+	}
+
 	test SearchWithNonLiferayIndex {
 		property test.name.skip.portal.instance = "Search#SearchWithNonLiferayIndex";
 
@@ -1761,7 +2029,7 @@ definition {
 			title = "organic",
 			vocabularyName = "Fruit Vocabulary");
 
-		var liferaySiteId = JSONGroup._getSiteIdByGroupName(groupName = "Guest");
+		var liferaySiteId = JSONGroupAPI._getGroupIdByName(groupName = "Guest");
 		var portalURL = PropsUtil.get("portal.url");
 		var webContentFolderName1 = "WC Folder Name 1";
 
@@ -1827,9 +2095,9 @@ definition {
 
 		JSONGroup.addGroup(groupName = "New Site");
 
-		var newSiteId = JSONGroup._getSiteIdByGroupName(groupName = "New Site");
+		var newSiteId = JSONGroupAPI._getGroupIdByName(groupName = "New Site");
 
-		ProductMenu.gotoSite(site = "New Site");
+		SitePages.openPagesAdmin(siteURLKey = "New Site");
 
 		ProductMenu.gotoPortlet(
 			category = "Content &amp; Data",

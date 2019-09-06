@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 AUI.add(
 	'liferay-calendar-interval-selector',
 	function(A) {
@@ -31,99 +45,7 @@ AUI.add(
 			NAME: 'interval-selector',
 
 			prototype: {
-				initializer: function(config) {
-					var instance = this;
-
-					instance.eventHandlers = [];
-
-					instance._containerNode = instance.byId(config.containerId);
-					instance._submitButtonNode = instance.byId(
-						config.submitButtonId
-					);
-
-					instance._duration = 0;
-					instance._endDate = new Date();
-					instance._startDate = new Date();
-					instance._validDate = true;
-
-					instance._initPicker(instance.get('endDatePicker'));
-					instance._initPicker(instance.get('endTimePicker'));
-					instance._initPicker(instance.get('startDatePicker'));
-					instance._initPicker(instance.get('startTimePicker'));
-
-					instance._setEndDate();
-					instance._setEndTime();
-					instance._setStartDate();
-					instance._setStartTime();
-					instance._setDuration();
-
-					instance.bindUI();
-				},
-
-				bindUI: function() {
-					var instance = this;
-
-					instance.startDurationPreservation();
-				},
-
-				destructor: function() {
-					var instance = this;
-
-					instance.stopDurationPreservation();
-
-					instance.eventHandlers = null;
-				},
-
-				setDuration: function(duration) {
-					var instance = this;
-
-					instance._duration = duration;
-				},
-
-				startDurationPreservation: function() {
-					var instance = this;
-
-					instance.eventHandlers.push(
-						instance
-							.get('endDatePicker')
-							.after(
-								EVENT_SELECTION_CHANGE,
-								instance._onEndDatePickerSelectionChange,
-								instance
-							),
-						instance
-							.get('endTimePicker')
-							.after(
-								EVENT_SELECTION_CHANGE,
-								instance._onEndTimePickerSelectionChange,
-								instance
-							),
-						instance
-							.get('startDatePicker')
-							.after(
-								EVENT_SELECTION_CHANGE,
-								instance._onStartDatePickerSelectionChange,
-								instance
-							),
-						instance
-							.get('startTimePicker')
-							.after(
-								EVENT_SELECTION_CHANGE,
-								instance._onStartTimePickerSelectionChange,
-								instance
-							)
-					);
-				},
-
-				stopDurationPreservation: function() {
-					var instance = this;
-
-					AArray.invoke(instance.eventHandlers, 'detach');
-				},
-
-				_initPicker: function(picker) {
-					var instance = this;
-
+				_initPicker(picker) {
 					var attrs = picker.getAttrs();
 
 					var inputNode = A.one(attrs.container._node.children[0]);
@@ -131,7 +53,7 @@ AUI.add(
 					picker.useInputNodeOnce(inputNode);
 				},
 
-				_onEndDatePickerSelectionChange: function() {
+				_onEndDatePickerSelectionChange() {
 					var instance = this;
 
 					instance._setEndDate();
@@ -153,7 +75,7 @@ AUI.add(
 					instance._validate();
 				},
 
-				_onEndTimePickerSelectionChange: function() {
+				_onEndTimePickerSelectionChange() {
 					var instance = this;
 
 					instance._setEndTime();
@@ -176,7 +98,7 @@ AUI.add(
 					instance._validate();
 				},
 
-				_onStartDatePickerSelectionChange: function() {
+				_onStartDatePickerSelectionChange() {
 					var instance = this;
 
 					instance._setStartDate();
@@ -193,7 +115,7 @@ AUI.add(
 					instance._validate();
 				},
 
-				_onStartTimePickerSelectionChange: function() {
+				_onStartTimePickerSelectionChange() {
 					var instance = this;
 
 					instance._setStartTime();
@@ -211,7 +133,7 @@ AUI.add(
 					instance._validate();
 				},
 
-				_setDuration: function() {
+				_setDuration() {
 					var instance = this;
 
 					instance._duration =
@@ -219,7 +141,7 @@ AUI.add(
 						instance._startDate.valueOf();
 				},
 
-				_setEndDate: function() {
+				_setEndDate() {
 					var instance = this;
 
 					var endDatePicker = instance.get('endDatePicker');
@@ -235,7 +157,7 @@ AUI.add(
 					endDate.setYear(endDateObj.getFullYear());
 				},
 
-				_setEndDatePickerDate: function() {
+				_setEndDatePickerDate() {
 					var instance = this;
 
 					var endDatePicker = instance.get('endDatePicker');
@@ -245,7 +167,7 @@ AUI.add(
 					endDatePicker.selectDates([instance._endDate]);
 				},
 
-				_setEndTime: function() {
+				_setEndTime() {
 					var instance = this;
 
 					var endTimePicker = instance.get('endTimePicker');
@@ -256,7 +178,7 @@ AUI.add(
 					instance._endDate.setMinutes(endTime.getMinutes());
 				},
 
-				_setEndTimePickerTime: function() {
+				_setEndTimePickerTime() {
 					var instance = this;
 
 					var endTimePicker = instance.get('endTimePicker');
@@ -264,7 +186,7 @@ AUI.add(
 					endTimePicker.selectDates([instance._endDate]);
 				},
 
-				_setStartDate: function() {
+				_setStartDate() {
 					var instance = this;
 
 					var startDatePicker = instance.get('startDatePicker');
@@ -280,7 +202,7 @@ AUI.add(
 					startDate.setYear(startDateObj.getFullYear());
 				},
 
-				_setStartDatePickerDate: function() {
+				_setStartDatePickerDate() {
 					var instance = this;
 
 					var startDatePicker = instance.get('startDatePicker');
@@ -290,7 +212,7 @@ AUI.add(
 					startDatePicker.selectDates([instance._startDate]);
 				},
 
-				_setStartTime: function() {
+				_setStartTime() {
 					var instance = this;
 
 					var startTimePicker = instance.get('startTimePicker');
@@ -303,7 +225,7 @@ AUI.add(
 					startDate.setMinutes(startTime.getMinutes());
 				},
 
-				_setStartTimePickerTime: function() {
+				_setStartTimePickerTime() {
 					var instance = this;
 
 					var startTimePicker = instance.get('startTimePicker');
@@ -311,7 +233,7 @@ AUI.add(
 					startTimePicker.selectDates([instance._startDate]);
 				},
 
-				_validate: function() {
+				_validate() {
 					var instance = this;
 
 					var validDate = instance._duration > 0;
@@ -347,6 +269,96 @@ AUI.add(
 							submitButton.attr('disabled', !validDate);
 						}
 					}
+				},
+
+				bindUI() {
+					var instance = this;
+
+					instance.startDurationPreservation();
+				},
+
+				destructor() {
+					var instance = this;
+
+					instance.stopDurationPreservation();
+
+					instance.eventHandlers = null;
+				},
+
+				initializer(config) {
+					var instance = this;
+
+					instance.eventHandlers = [];
+
+					instance._containerNode = instance.byId(config.containerId);
+					instance._submitButtonNode = instance.byId(
+						config.submitButtonId
+					);
+
+					instance._duration = 0;
+					instance._endDate = new Date();
+					instance._startDate = new Date();
+					instance._validDate = true;
+
+					instance._initPicker(instance.get('endDatePicker'));
+					instance._initPicker(instance.get('endTimePicker'));
+					instance._initPicker(instance.get('startDatePicker'));
+					instance._initPicker(instance.get('startTimePicker'));
+
+					instance._setEndDate();
+					instance._setEndTime();
+					instance._setStartDate();
+					instance._setStartTime();
+					instance._setDuration();
+
+					instance.bindUI();
+				},
+
+				setDuration(duration) {
+					var instance = this;
+
+					instance._duration = duration;
+				},
+
+				startDurationPreservation() {
+					var instance = this;
+
+					instance.eventHandlers.push(
+						instance
+							.get('endDatePicker')
+							.after(
+								EVENT_SELECTION_CHANGE,
+								instance._onEndDatePickerSelectionChange,
+								instance
+							),
+						instance
+							.get('endTimePicker')
+							.after(
+								EVENT_SELECTION_CHANGE,
+								instance._onEndTimePickerSelectionChange,
+								instance
+							),
+						instance
+							.get('startDatePicker')
+							.after(
+								EVENT_SELECTION_CHANGE,
+								instance._onStartDatePickerSelectionChange,
+								instance
+							),
+						instance
+							.get('startTimePicker')
+							.after(
+								EVENT_SELECTION_CHANGE,
+								instance._onStartTimePickerSelectionChange,
+								instance
+							)
+					);
+				},
+
+				stopDurationPreservation() {
+					var instance = this;
+
+					AArray.invoke(instance.eventHandlers, 'detach');
 				}
 			}
 		});

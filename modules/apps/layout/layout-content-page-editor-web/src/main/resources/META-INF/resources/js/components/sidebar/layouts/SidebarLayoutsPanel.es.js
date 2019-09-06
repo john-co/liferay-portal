@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import Component from 'metal-component';
 import {Config} from 'metal-state';
 import Soy from 'metal-soy';
@@ -122,16 +136,6 @@ class SidebarLayoutsPanel extends Component {
  */
 SidebarLayoutsPanel.STATE = {
 	/**
-	 * Store instance
-	 * @default undefined
-	 * @instance
-	 * @memberOf SidebarLayoutsPanel
-	 * @review
-	 * @type {Store}
-	 */
-	store: Config.instanceOf(Store),
-
-	/**
 	 * List of layouts to be shown
 	 * @default []
 	 * @memberOf SidebarLayoutsPanel
@@ -172,7 +176,17 @@ SidebarLayoutsPanel.STATE = {
 	 * @review
 	 * @type {object|null}
 	 */
-	_sidebarLayoutsDragDrop: Config.internal().value(null)
+	_sidebarLayoutsDragDrop: Config.internal().value(null),
+
+	/**
+	 * Store instance
+	 * @default undefined
+	 * @instance
+	 * @memberOf SidebarLayoutsPanel
+	 * @review
+	 * @type {Store}
+	 */
+	store: Config.instanceOf(Store)
 };
 
 Soy.register(SidebarLayoutsPanel, templates);

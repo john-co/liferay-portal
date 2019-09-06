@@ -1,12 +1,23 @@
-import {CancellablePromise} from 'metal-promise';
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import {openToast} from 'frontend-js-web';
 import {RequestScreen, utils} from 'senna';
 import {toRegex} from 'metal-path-parser';
-import Component from 'metal-component';
 import dom from 'metal-dom';
 import Router from 'metal-router';
 import State from 'metal-state';
-import Uri from 'metal-uri';
 
 /**
  * Specific Router implementation on top of metal-router to target the specific
@@ -107,13 +118,17 @@ class SoyPortletRouter extends State {
 					args
 				);
 
-				const uri = new Uri(redirect);
-				uri.removeParameter('p_p_lifecycle');
-				uri.removeParameter(`${instance.portletNamespace}pjax`);
+				const uri = new URL(redirect, window.location.origin);
+				uri.searchParams.delete('p_p_lifecycle');
+				uri.searchParams.delete(`${instance.portletNamespace}pjax`);
 
-				if (uri.hasParameter(`${instance.portletNamespace}no_p_p_id`)) {
-					uri.removeParameter('p_p_id');
-					uri.removeParameter(
+				if (
+					uri.searchParams.has(
+						`${instance.portletNamespace}no_p_p_id`
+					)
+				) {
+					uri.searchParams.delete('p_p_id');
+					uri.searchParams.delete(
 						`${instance.portletNamespace}no_p_p_id`
 					);
 				}
@@ -126,19 +141,19 @@ class SoyPortletRouter extends State {
 			 * only when the controller for the path and all its dependencies
 			 * have been successfully loaded. If the load fails , then it falls
 			 * back to an ordinary full page navigation.
-			 * @return {CancellablePromise} A promise to be resolved once the path
+			 * @return {Promise} A promise to be resolved once the path
 			 * and its needed controllers have been successully loaded or rejected
 			 * otherwise
 			 */
 			flip() {
 				const loadedState = super.maybeParseLastLoadedStateAsJson();
 
-				const deferred = new CancellablePromise((resolve, reject) => {
+				const deferred = new Promise((resolve, reject) => {
 					Liferay.Loader.require(
 						loadedState.javaScriptLoaderModule,
 						module => {
 							super.maybeRedirectRouter();
-							let component = module.default;
+							const component = module.default;
 
 							component.RENDERER.setInjectedData(
 								loadedState._INJECTED_DATA_
@@ -199,25 +214,23 @@ class SoyPortletRouter extends State {
 	 * @return {string} The equivalent fetch url
 	 */
 	getFetchUrl_(url) {
-		const uri = new Uri(url);
+		const uri = new URL(url, window.location.origin);
 
-		if (uri.hasParameter('p_p_lifecycle')) {
-			const original_p_p_lifecyle = uri.getParameterValue(
-				'p_p_lifecycle'
-			);
+		if (uri.searchParams.has('p_p_lifecycle')) {
+			const original_p_p_lifecyle = uri.searchParams.get('p_p_lifecycle');
 
-			uri.setParameterValue(
+			uri.searchParams.set(
 				`${this.portletNamespace}original_p_p_lifecycle`,
 				original_p_p_lifecyle
 			);
 		}
 
-		uri.setParameterValue('p_p_lifecycle', '2');
-		uri.setParameterValue(`${this.portletNamespace}pjax`, true);
+		uri.searchParams.set('p_p_lifecycle', '2');
+		uri.searchParams.set(`${this.portletNamespace}pjax`, true);
 
-		if (!uri.hasParameter('p_p_id')) {
-			uri.setParameterValue('p_p_id', this.portletId);
-			uri.setParameterValue(`${this.portletNamespace}no_p_p_id`, true);
+		if (!uri.searchParams.has('p_p_id')) {
+			uri.searchParams.add('p_p_id', this.portletId);
+			uri.searchParams.add(`${this.portletNamespace}no_p_p_id`, true);
 		}
 
 		return uri.toString();
@@ -238,9 +251,9 @@ class SoyPortletRouter extends State {
 				mappingPrefix = `/-${mappingPrefix}`;
 			}
 
-			const uri = new Uri(url);
+			const uri = new URL(url, window.location.origin);
 
-			const pathname = uri.getPathname();
+			const pathname = uri.pathname;
 
 			const currentPath = pathname.substring(
 				pathname.lastIndexOf(mappingPrefix)
@@ -321,10 +334,10 @@ class SoyPortletRouter extends State {
 	 */
 	initializeActionRouter_() {
 		const pathFn = url => {
-			const uri = new Uri(url);
+			const uri = new URL(url, window.location.origin);
 
-			const lifecycleParam = uri.getParameterValue('p_p_lifecycle');
-			const portletIdParam = uri.getParameterValue('p_p_id');
+			const lifecycleParam = uri.searchParams.get('p_p_lifecycle');
+			const portletIdParam = uri.searchParams.get('p_p_id');
 
 			return lifecycleParam === '1' && portletIdParam === this.portletId;
 		};
@@ -402,17 +415,21 @@ class SoyPortletRouter extends State {
 	 * @return {boolean} True if the supplied url is a simple default url
 	 */
 	isDefaultURL_(url) {
-		const uri = new Uri(url);
+		const uri = new URL(url, window.location.origin);
 
-		if (uri.getParameterValue('p_p_lifecycle') === '1') {
+		if (uri.searchParams.get('p_p_lifecycle') === '1') {
 			return false;
 		}
 
-		if (uri.hasParameter(`${this.portletNamespace}javax.portlet.action`)) {
+		if (
+			uri.searchParams.has(`${this.portletNamespace}javax.portlet.action`)
+		) {
 			return false;
 		}
 
-		if (uri.hasParameter(`${this.portletNamespace}mvcRenderCommandName`)) {
+		if (
+			uri.searchParams.has(`${this.portletNamespace}mvcRenderCommandName`)
+		) {
 			return false;
 		}
 
@@ -420,13 +437,13 @@ class SoyPortletRouter extends State {
 			return false;
 		}
 
-		const currentURI = new Uri(Liferay.currentURL);
+		const currentURI = new URL(Liferay.currentURL, window.location.origin);
 
-		if (uri.getPathname() === currentURI.getPathname()) {
+		if (uri.pathname === currentURI.pathname) {
 			return true;
 		}
 
-		if (uri.getPathname() === themeDisplay.getLayoutRelativeURL()) {
+		if (uri.pathname === themeDisplay.getLayoutRelativeURL()) {
 			return true;
 		}
 
@@ -461,13 +478,13 @@ class SoyPortletRouter extends State {
 	 * @return {boolean} True if the path matches the mvcRenderCommandName
 	 */
 	matchPath_(mvcRenderCommandName, path) {
-		const uri = new Uri(path);
+		const uri = new URL(path, window.location.origin);
 
-		const mvcRenderCommandNameParam = uri.getParameterValue(
+		const mvcRenderCommandNameParam = uri.searchParams.get(
 			`${this.portletNamespace}mvcRenderCommandName`
 		);
 
-		const portletIdParam = uri.getParameterValue('p_p_id');
+		const portletIdParam = uri.searchParams.get('p_p_id');
 
 		return (
 			mvcRenderCommandNameParam === mvcRenderCommandName &&
@@ -492,7 +509,7 @@ class SoyPortletRouter extends State {
 			openToast({
 				message,
 				title,
-				type: type
+				type
 			});
 		}
 	}
@@ -562,13 +579,6 @@ SoyPortletRouter.STATE = {
 	/**
 	 * @instance
 	 * @memberof SoyPortletRouter
-	 * @type {Array<string>}
-	 */
-	friendlyURLRoutes: {},
-
-	/**
-	 * @instance
-	 * @memberof SoyPortletRouter
 	 * @type {string}
 	 */
 	friendlyURLMapping: {},
@@ -579,6 +589,13 @@ SoyPortletRouter.STATE = {
 	 * @type {string}
 	 */
 	friendlyURLPrefix: {},
+
+	/**
+	 * @instance
+	 * @memberof SoyPortletRouter
+	 * @type {Array<string>}
+	 */
+	friendlyURLRoutes: {},
 
 	/**
 	 * @instance

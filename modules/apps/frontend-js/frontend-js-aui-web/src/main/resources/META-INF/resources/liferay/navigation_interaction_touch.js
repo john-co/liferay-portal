@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 AUI.add(
 	'liferay-navigation-interaction-touch',
 	function(A) {
@@ -10,7 +24,7 @@ AUI.add(
 		A.mix(
 			Liferay.NavigationInteraction.prototype,
 			{
-				_handleShowNavigationMenu: function(menuNew, menuOld, event) {
+				_handleShowNavigationMenu(menuNew) {
 					var instance = this;
 
 					var mapHover = instance.MAP_HOVER;
@@ -54,7 +68,7 @@ AUI.add(
 					Liferay.Data[handleId] = handle;
 				},
 
-				_initChildMenuHandlers: function(navigation) {
+				_initChildMenuHandlers(navigation) {
 					var instance = this;
 
 					if (navigation) {
@@ -97,7 +111,7 @@ AUI.add(
 
 				_initNodeFocusManager: A.Lang.emptyFn,
 
-				_onTouchClick: function(event) {
+				_onTouchClick(event) {
 					var instance = this;
 
 					var menuNew = event.currentTarget.ancestor(

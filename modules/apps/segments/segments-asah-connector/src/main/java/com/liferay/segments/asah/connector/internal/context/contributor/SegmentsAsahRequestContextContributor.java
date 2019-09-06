@@ -16,6 +16,7 @@ package com.liferay.segments.asah.connector.internal.context.contributor;
 
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.segments.constants.SegmentsWebKeys;
 import com.liferay.segments.context.Context;
 import com.liferay.segments.context.contributor.RequestContextContributor;
 
@@ -33,7 +34,7 @@ import org.osgi.service.component.annotations.Component;
 @Component(
 	immediate = true,
 	property = {
-		"request.context.contributor.key=" + SegmentsAsahRequestContextContributor.AC_CLIENT_USER_ID,
+		"request.context.contributor.key=" + SegmentsAsahRequestContextContributor.KEY_SEGMENTS_ANONYMOUS_USER_ID,
 		"request.context.contributor.type=id"
 	},
 	service = RequestContextContributor.class
@@ -41,16 +42,26 @@ import org.osgi.service.component.annotations.Component;
 public class SegmentsAsahRequestContextContributor
 	implements RequestContextContributor {
 
-	public static final String AC_CLIENT_USER_ID = "acClientUserId";
+	public static final String KEY_SEGMENTS_ANONYMOUS_USER_ID =
+		"segmentsAnonymousUserId";
 
 	@Override
 	public void contribute(
 		Context context, HttpServletRequest httpServletRequest) {
 
-		context.put(AC_CLIENT_USER_ID, _getACClientUserId(httpServletRequest));
+		String segmentsAnonymousUserId = _getSegmentsAnonymousUserId(
+			httpServletRequest);
+
+		httpServletRequest.setAttribute(
+			SegmentsWebKeys.SEGMENTS_ANONYMOUS_USER_ID,
+			segmentsAnonymousUserId);
+
+		context.put(KEY_SEGMENTS_ANONYMOUS_USER_ID, segmentsAnonymousUserId);
 	}
 
-	private String _getACClientUserId(HttpServletRequest httpServletRequest) {
+	private String _getSegmentsAnonymousUserId(
+		HttpServletRequest httpServletRequest) {
+
 		Cookie[] cookies = httpServletRequest.getCookies();
 
 		if (ArrayUtil.isEmpty(cookies)) {

@@ -14,20 +14,23 @@
 
 package com.liferay.change.tracking.rest.client.resource.v1_0;
 
+import com.liferay.change.tracking.rest.client.constant.v1_0.CollectionType;
 import com.liferay.change.tracking.rest.client.dto.v1_0.Collection;
 import com.liferay.change.tracking.rest.client.http.HttpInvoker;
 import com.liferay.change.tracking.rest.client.pagination.Page;
 import com.liferay.change.tracking.rest.client.pagination.Pagination;
 import com.liferay.change.tracking.rest.client.serdes.v1_0.CollectionSerDes;
 
+import java.util.LinkedHashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.annotation.Generated;
 
 /**
- * @author Mate Thurzo
+ * @author Máté Thurzó
  * @generated
  */
 @Generated("")
@@ -38,13 +41,13 @@ public interface CollectionResource {
 	}
 
 	public Page<Collection> getCollectionsPage(
-			Long companyId, String type, Long userId, Pagination pagination,
-			String sortString)
+			CollectionType collectionType, Long companyId, Long userId,
+			Pagination pagination, String sortString)
 		throws Exception;
 
 	public HttpInvoker.HttpResponse getCollectionsPageHttpResponse(
-			Long companyId, String type, Long userId, Pagination pagination,
-			String sortString)
+			CollectionType collectionType, Long companyId, Long userId,
+			Pagination pagination, String sortString)
 		throws Exception;
 
 	public Collection postCollection(
@@ -59,15 +62,18 @@ public interface CollectionResource {
 				collectionUpdate)
 		throws Exception;
 
-	public void deleteCollection(Long collectionId) throws Exception;
-
-	public HttpInvoker.HttpResponse deleteCollectionHttpResponse(
-			Long collectionId)
+	public void deleteCollection(Long collectionId, Long companyId)
 		throws Exception;
 
-	public Collection getCollection(Long collectionId) throws Exception;
+	public HttpInvoker.HttpResponse deleteCollectionHttpResponse(
+			Long collectionId, Long companyId)
+		throws Exception;
 
-	public HttpInvoker.HttpResponse getCollectionHttpResponse(Long collectionId)
+	public Collection getCollection(Long collectionId, Long companyId)
+		throws Exception;
+
+	public HttpInvoker.HttpResponse getCollectionHttpResponse(
+			Long collectionId, Long companyId)
 		throws Exception;
 
 	public void postCollectionCheckout(Long collectionId, Long userId)
@@ -106,8 +112,20 @@ public interface CollectionResource {
 			return this;
 		}
 
+		public Builder header(String key, String value) {
+			_headers.put(key, value);
+
+			return this;
+		}
+
 		public Builder locale(Locale locale) {
 			_locale = locale;
+
+			return this;
+		}
+
+		public Builder parameter(String key, String value) {
+			_parameters.put(key, value);
 
 			return this;
 		}
@@ -115,10 +133,12 @@ public interface CollectionResource {
 		private Builder() {
 		}
 
+		private Map<String, String> _headers = new LinkedHashMap<>();
 		private String _host = "localhost";
 		private Locale _locale;
 		private String _login = "test@liferay.com";
 		private String _password = "test";
+		private Map<String, String> _parameters = new LinkedHashMap<>();
 		private int _port = 8080;
 		private String _scheme = "http";
 
@@ -127,13 +147,13 @@ public interface CollectionResource {
 	public static class CollectionResourceImpl implements CollectionResource {
 
 		public Page<Collection> getCollectionsPage(
-				Long companyId, String type, Long userId, Pagination pagination,
-				String sortString)
+				CollectionType collectionType, Long companyId, Long userId,
+				Pagination pagination, String sortString)
 			throws Exception {
 
 			HttpInvoker.HttpResponse httpResponse =
 				getCollectionsPageHttpResponse(
-					companyId, type, userId, pagination, sortString);
+					collectionType, companyId, userId, pagination, sortString);
 
 			String content = httpResponse.getContent();
 
@@ -147,8 +167,8 @@ public interface CollectionResource {
 		}
 
 		public HttpInvoker.HttpResponse getCollectionsPageHttpResponse(
-				Long companyId, String type, Long userId, Pagination pagination,
-				String sortString)
+				CollectionType collectionType, Long companyId, Long userId,
+				Pagination pagination, String sortString)
 			throws Exception {
 
 			HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
@@ -158,14 +178,27 @@ public interface CollectionResource {
 					"Accept-Language", _builder._locale.toLanguageTag());
 			}
 
+			for (Map.Entry<String, String> entry :
+					_builder._headers.entrySet()) {
+
+				httpInvoker.header(entry.getKey(), entry.getValue());
+			}
+
+			for (Map.Entry<String, String> entry :
+					_builder._parameters.entrySet()) {
+
+				httpInvoker.parameter(entry.getKey(), entry.getValue());
+			}
+
 			httpInvoker.httpMethod(HttpInvoker.HttpMethod.GET);
+
+			if (collectionType != null) {
+				httpInvoker.parameter(
+					"collectionType", String.valueOf(collectionType));
+			}
 
 			if (companyId != null) {
 				httpInvoker.parameter("companyId", String.valueOf(companyId));
-			}
-
-			if (type != null) {
-				httpInvoker.parameter("type", String.valueOf(type));
 			}
 
 			if (userId != null) {
@@ -237,6 +270,18 @@ public interface CollectionResource {
 					"Accept-Language", _builder._locale.toLanguageTag());
 			}
 
+			for (Map.Entry<String, String> entry :
+					_builder._headers.entrySet()) {
+
+				httpInvoker.header(entry.getKey(), entry.getValue());
+			}
+
+			for (Map.Entry<String, String> entry :
+					_builder._parameters.entrySet()) {
+
+				httpInvoker.parameter(entry.getKey(), entry.getValue());
+			}
+
 			httpInvoker.httpMethod(HttpInvoker.HttpMethod.POST);
 
 			if (companyId != null) {
@@ -257,9 +302,11 @@ public interface CollectionResource {
 			return httpInvoker.invoke();
 		}
 
-		public void deleteCollection(Long collectionId) throws Exception {
+		public void deleteCollection(Long collectionId, Long companyId)
+			throws Exception {
+
 			HttpInvoker.HttpResponse httpResponse =
-				deleteCollectionHttpResponse(collectionId);
+				deleteCollectionHttpResponse(collectionId, companyId);
 
 			String content = httpResponse.getContent();
 
@@ -271,7 +318,7 @@ public interface CollectionResource {
 		}
 
 		public HttpInvoker.HttpResponse deleteCollectionHttpResponse(
-				Long collectionId)
+				Long collectionId, Long companyId)
 			throws Exception {
 
 			HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
@@ -281,7 +328,23 @@ public interface CollectionResource {
 					"Accept-Language", _builder._locale.toLanguageTag());
 			}
 
+			for (Map.Entry<String, String> entry :
+					_builder._headers.entrySet()) {
+
+				httpInvoker.header(entry.getKey(), entry.getValue());
+			}
+
+			for (Map.Entry<String, String> entry :
+					_builder._parameters.entrySet()) {
+
+				httpInvoker.parameter(entry.getKey(), entry.getValue());
+			}
+
 			httpInvoker.httpMethod(HttpInvoker.HttpMethod.DELETE);
+
+			if (companyId != null) {
+				httpInvoker.parameter("companyId", String.valueOf(companyId));
+			}
 
 			httpInvoker.path(
 				_builder._scheme + "://" + _builder._host + ":" +
@@ -295,9 +358,11 @@ public interface CollectionResource {
 			return httpInvoker.invoke();
 		}
 
-		public Collection getCollection(Long collectionId) throws Exception {
+		public Collection getCollection(Long collectionId, Long companyId)
+			throws Exception {
+
 			HttpInvoker.HttpResponse httpResponse = getCollectionHttpResponse(
-				collectionId);
+				collectionId, companyId);
 
 			String content = httpResponse.getContent();
 
@@ -320,7 +385,7 @@ public interface CollectionResource {
 		}
 
 		public HttpInvoker.HttpResponse getCollectionHttpResponse(
-				Long collectionId)
+				Long collectionId, Long companyId)
 			throws Exception {
 
 			HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
@@ -330,7 +395,23 @@ public interface CollectionResource {
 					"Accept-Language", _builder._locale.toLanguageTag());
 			}
 
+			for (Map.Entry<String, String> entry :
+					_builder._headers.entrySet()) {
+
+				httpInvoker.header(entry.getKey(), entry.getValue());
+			}
+
+			for (Map.Entry<String, String> entry :
+					_builder._parameters.entrySet()) {
+
+				httpInvoker.parameter(entry.getKey(), entry.getValue());
+			}
+
 			httpInvoker.httpMethod(HttpInvoker.HttpMethod.GET);
+
+			if (companyId != null) {
+				httpInvoker.parameter("companyId", String.valueOf(companyId));
+			}
 
 			httpInvoker.path(
 				_builder._scheme + "://" + _builder._host + ":" +
@@ -370,6 +451,18 @@ public interface CollectionResource {
 			if (_builder._locale != null) {
 				httpInvoker.header(
 					"Accept-Language", _builder._locale.toLanguageTag());
+			}
+
+			for (Map.Entry<String, String> entry :
+					_builder._headers.entrySet()) {
+
+				httpInvoker.header(entry.getKey(), entry.getValue());
+			}
+
+			for (Map.Entry<String, String> entry :
+					_builder._parameters.entrySet()) {
+
+				httpInvoker.parameter(entry.getKey(), entry.getValue());
 			}
 
 			httpInvoker.httpMethod(HttpInvoker.HttpMethod.POST);
@@ -418,6 +511,18 @@ public interface CollectionResource {
 			if (_builder._locale != null) {
 				httpInvoker.header(
 					"Accept-Language", _builder._locale.toLanguageTag());
+			}
+
+			for (Map.Entry<String, String> entry :
+					_builder._headers.entrySet()) {
+
+				httpInvoker.header(entry.getKey(), entry.getValue());
+			}
+
+			for (Map.Entry<String, String> entry :
+					_builder._parameters.entrySet()) {
+
+				httpInvoker.parameter(entry.getKey(), entry.getValue());
 			}
 
 			httpInvoker.httpMethod(HttpInvoker.HttpMethod.POST);

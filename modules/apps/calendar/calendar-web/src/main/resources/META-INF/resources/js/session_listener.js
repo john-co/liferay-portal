@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 AUI.add(
 	'liferay-calendar-session-listener',
 	function(A) {
@@ -15,16 +29,7 @@ AUI.add(
 			NAME: 'calendar-session-listener',
 
 			prototype: {
-				initializer: function() {
-					var instance = this;
-
-					Liferay.on(
-						'sessionExpired',
-						A.bind(instance._onSessionExpired, instance)
-					);
-				},
-
-				_disableCalendars: function() {
+				_disableCalendars() {
 					var instance = this;
 
 					var calendars = instance.get('calendars');
@@ -39,7 +44,7 @@ AUI.add(
 					});
 				},
 
-				_disableEvents: function() {
+				_disableEvents() {
 					var instance = this;
 
 					var scheduler = instance.get('scheduler');
@@ -49,7 +54,7 @@ AUI.add(
 					});
 				},
 
-				_disableScheduler: function() {
+				_disableScheduler() {
 					var instance = this;
 
 					var addEventButtons = A.all('.calendar-add-event-btn');
@@ -61,7 +66,7 @@ AUI.add(
 					scheduler.set('eventRecorder', null);
 				},
 
-				_onSessionExpired: function() {
+				_onSessionExpired() {
 					var instance = this;
 
 					instance._disableCalendars();
@@ -69,6 +74,15 @@ AUI.add(
 					instance._disableScheduler();
 
 					instance._disableEvents();
+				},
+
+				initializer() {
+					var instance = this;
+
+					Liferay.on(
+						'sessionExpired',
+						A.bind(instance._onSessionExpired, instance)
+					);
 				}
 			}
 		});

@@ -1,4 +1,17 @@
-/* globals expect */
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import editableValuesMigrator from '../../../src/main/resources/META-INF/resources/js/utils/fragmentMigrator.es';
 
 describe('fragmentMigrator', () => {
@@ -48,12 +61,12 @@ const singleEditableFragmentInput = {
 const singleEditableFragmentExpected = {
 	'com.liferay.fragment.entry.processor.editable.EditableFragmentEntryProcessor': {
 		'editable-fragment-id': {
-			defaultValue: 'Livingstone Hotels and Resorts',
 			[DEFAULT_SEGMENTS_EXPERIENCE_ID]: {
 				en_US: 'English Variation',
 				es_ES: 'Spanish variation',
 				pt_BR: 'Portuguese variation'
-			}
+			},
+			defaultValue: 'Livingstone Hotels and Resorts'
 		}
 	}
 };
@@ -78,20 +91,20 @@ const doubleEditableFragmentInput = {
 const doubleEditableFragmentExpected = {
 	'com.liferay.fragment.entry.processor.editable.EditableFragmentEntryProcessor': {
 		'editable-fragment-id': {
-			defaultValue: 'Livingstone Hotels and Resorts',
 			[DEFAULT_SEGMENTS_EXPERIENCE_ID]: {
 				en_US: 'English Variation',
 				es_ES: 'Spanish variation',
 				pt_BR: 'Portuguese variation'
-			}
+			},
+			defaultValue: 'Livingstone Hotels and Resorts'
 		},
 		'editable-fragment-id-2': {
-			defaultValue: 'Livingstone Hotels and Resorts',
 			[DEFAULT_SEGMENTS_EXPERIENCE_ID]: {
 				en_US: 'Livingstone Hotels and Resorts English Variation',
 				es_ES: 'Livingstone Hotels and Resorts Spanish variation',
 				pt_BR: 'Livingstone Hotels and Resorts Portuguese variation'
-			}
+			},
+			defaultValue: 'Livingstone Hotels and Resorts'
 		}
 	}
 };

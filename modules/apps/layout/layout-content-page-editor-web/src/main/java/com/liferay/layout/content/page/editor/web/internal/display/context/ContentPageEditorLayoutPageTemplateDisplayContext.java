@@ -20,16 +20,21 @@ import com.liferay.asset.kernel.model.ClassType;
 import com.liferay.asset.kernel.model.ClassTypeReader;
 import com.liferay.fragment.renderer.FragmentRendererController;
 import com.liferay.info.display.contributor.InfoDisplayContributor;
+import com.liferay.layout.content.page.editor.sidebar.panel.ContentPageEditorSidebarPanel;
 import com.liferay.layout.page.template.model.LayoutPageTemplateEntry;
 import com.liferay.layout.page.template.service.LayoutPageTemplateEntryLocalServiceUtil;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.comment.CommentManager;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.service.LayoutLocalServiceUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.template.soy.util.SoyContext;
 import com.liferay.portal.template.soy.util.SoyContextFactoryUtil;
+
+import java.util.List;
 
 import javax.portlet.RenderResponse;
 
@@ -43,14 +48,15 @@ public class ContentPageEditorLayoutPageTemplateDisplayContext
 
 	public ContentPageEditorLayoutPageTemplateDisplayContext(
 		HttpServletRequest httpServletRequest, RenderResponse renderResponse,
-		String className, long classPK, boolean showMapping,
+		boolean pageIsDisplayPage, CommentManager commentManager,
+		List<ContentPageEditorSidebarPanel> contentPageEditorSidebarPanels,
 		FragmentRendererController fragmentRendererController) {
 
 		super(
-			httpServletRequest, renderResponse, className, classPK,
-			fragmentRendererController);
+			httpServletRequest, renderResponse, commentManager,
+			contentPageEditorSidebarPanels, fragmentRendererController);
 
-		_showMapping = showMapping;
+		_pageIsDisplayPage = pageIsDisplayPage;
 	}
 
 	@Override
@@ -72,7 +78,7 @@ public class ContentPageEditorLayoutPageTemplateDisplayContext
 			"lastSaveDate", StringPool.BLANK
 		);
 
-		if (_showMapping) {
+		if (_pageIsDisplayPage) {
 			soyContext.put(
 				"mappingFieldsURL",
 				getFragmentEntryActionURL(
@@ -84,12 +90,12 @@ public class ContentPageEditorLayoutPageTemplateDisplayContext
 			getFragmentEntryActionURL(
 				"/content_layout/publish_layout_page_template_entry"));
 
-		if (_showMapping) {
+		if (_pageIsDisplayPage) {
 			soyContext.put("selectedMappingTypes", _getSelectedMappingTypes());
 		}
 
 		soyContext.put(
-			"sidebarPanels", getSidebarPanelSoyContexts(_showMapping));
+			"sidebarPanels", getSidebarPanelSoyContexts(_pageIsDisplayPage));
 
 		LayoutPageTemplateEntry layoutPageTemplateEntry =
 			_getLayoutPageTemplateEntry();
@@ -136,7 +142,7 @@ public class ContentPageEditorLayoutPageTemplateDisplayContext
 			return _layoutPageTemplateEntry;
 		}
 
-		Layout draftLayout = LayoutLocalServiceUtil.getLayout(classPK);
+		Layout draftLayout = themeDisplay.getLayout();
 
 		Layout layout = LayoutLocalServiceUtil.fetchLayout(
 			draftLayout.getClassPK());
@@ -210,14 +216,18 @@ public class ContentPageEditorLayoutPageTemplateDisplayContext
 
 		soyContext.put("type", typeSoyContext);
 
-		if (layoutPageTemplateEntry.getClassTypeId() > 0) {
+		String subtypeLabel = _getMappingSubtypeLabel();
+
+		if ((layoutPageTemplateEntry.getClassTypeId() >= 0) &&
+			Validator.isNotNull(subtypeLabel)) {
+
 			SoyContext subtypeSoyContext =
 				SoyContextFactoryUtil.createSoyContext();
 
 			subtypeSoyContext.put(
 				"id", layoutPageTemplateEntry.getClassTypeId()
 			).put(
-				"label", _getMappingSubtypeLabel()
+				"label", subtypeLabel
 			);
 
 			soyContext.put("subtype", subtypeSoyContext);
@@ -229,6 +239,6 @@ public class ContentPageEditorLayoutPageTemplateDisplayContext
 	private SoyContext _editorSoyContext;
 	private SoyContext _fragmentsEditorToolbarSoyContext;
 	private LayoutPageTemplateEntry _layoutPageTemplateEntry;
-	private final boolean _showMapping;
+	private final boolean _pageIsDisplayPage;
 
 }

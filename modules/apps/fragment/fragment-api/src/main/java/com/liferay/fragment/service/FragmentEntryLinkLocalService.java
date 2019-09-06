@@ -39,6 +39,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import java.io.Serializable;
 
 import java.util.List;
+import java.util.Map;
 
 import org.osgi.annotation.versioning.ProviderType;
 
@@ -79,7 +80,7 @@ public interface FragmentEntryLinkLocalService
 	/**
 	 * @deprecated As of Mueller (7.2.x), replaced by {@link
 	 #addFragmentEntryLink(long, long, long, long, long, long,
-	 String, String, String, String, String, int, String,
+	 String, String, String, String, String, String, int, String,
 	 ServiceContext)}
 	 */
 	@Deprecated
@@ -92,7 +93,7 @@ public interface FragmentEntryLinkLocalService
 	/**
 	 * @deprecated As of Mueller (7.2.x), replaced by {@link
 	 #addFragmentEntryLink(long, long, long, long, long, long,
-	 String, String, String, String, String, int, String,
+	 String, String, String, String, String, String, int, String,
 	 ServiceContext)}
 	 */
 	@Deprecated
@@ -106,7 +107,7 @@ public interface FragmentEntryLinkLocalService
 	/**
 	 * @deprecated As of Mueller (7.2.x), replaced by {@link
 	 #addFragmentEntryLink(long, long, long, long, long, long,
-	 String, String, String, String, String, int, String,
+	 String, String, String, String, String, String, int, String,
 	 ServiceContext)}
 	 */
 	@Deprecated
@@ -117,6 +118,13 @@ public interface FragmentEntryLinkLocalService
 			String rendererKey, ServiceContext serviceContext)
 		throws PortalException;
 
+	/**
+	 * @deprecated As of Mueller (7.2.x), replaced by {@link
+	 #addFragmentEntryLink(long, long, long, long, long, long,
+	 String, String, String, String, String, String, int, String,
+	 ServiceContext)}
+	 */
+	@Deprecated
 	public FragmentEntryLink addFragmentEntryLink(
 			long userId, long groupId, long originalFragmentEntryLinkId,
 			long fragmentEntryId, long classNameId, long classPK, String css,
@@ -124,10 +132,18 @@ public interface FragmentEntryLinkLocalService
 			int position, String rendererKey, ServiceContext serviceContext)
 		throws PortalException;
 
+	public FragmentEntryLink addFragmentEntryLink(
+			long userId, long groupId, long originalFragmentEntryLinkId,
+			long fragmentEntryId, long classNameId, long classPK, String css,
+			String html, String js, String configuration, String editableValues,
+			String namespace, int position, String rendererKey,
+			ServiceContext serviceContext)
+		throws PortalException;
+
 	/**
 	 * @deprecated As of Mueller (7.2.x), replaced by {@link
 	 #addFragmentEntryLink(long, long, long, long, long, long,
-	 String, String, String, String, String, int, String,
+	 String, String, String, String, String, String, int, String,
 	 ServiceContext)}
 	 */
 	@Deprecated
@@ -414,6 +430,13 @@ public interface FragmentEntryLinkLocalService
 			long fragmentEntryLinkId, int position)
 		throws PortalException;
 
+	/**
+	 * @deprecated As of Mueller (7.2.x), replaced by {@link
+	 #updateFragmentEntryLink(long, long, long, long, long, long,
+	 String, String, String, String, String, String, int,
+	 ServiceContext)}
+	 */
+	@Deprecated
 	public FragmentEntryLink updateFragmentEntryLink(
 			long userId, long fragmentEntryLinkId,
 			long originalFragmentEntryLinkId, long fragmentEntryId,
@@ -421,6 +444,13 @@ public interface FragmentEntryLinkLocalService
 			String editableValues, int position, ServiceContext serviceContext)
 		throws PortalException;
 
+	/**
+	 * @deprecated As of Mueller (7.2.x), replaced by {@link
+	 #updateFragmentEntryLink(long, long, long, long, long, long,
+	 String, String, String, String, String, String, int,
+	 ServiceContext)}
+	 */
+	@Deprecated
 	public FragmentEntryLink updateFragmentEntryLink(
 			long userId, long fragmentEntryLinkId,
 			long originalFragmentEntryLinkId, long fragmentEntryId,
@@ -430,13 +460,30 @@ public interface FragmentEntryLinkLocalService
 		throws PortalException;
 
 	public FragmentEntryLink updateFragmentEntryLink(
+			long userId, long fragmentEntryLinkId,
+			long originalFragmentEntryLinkId, long fragmentEntryId,
+			long classNameId, long classPK, String css, String html, String js,
+			String configuration, String editableValues, String namespace,
+			int position, ServiceContext serviceContext)
+		throws PortalException;
+
+	public FragmentEntryLink updateFragmentEntryLink(
 			long fragmentEntryLinkId, String editableValues)
+		throws PortalException;
+
+	public FragmentEntryLink updateFragmentEntryLink(
+			long fragmentEntryLinkId, String editableValues,
+			boolean updateClassedModel)
 		throws PortalException;
 
 	public void updateFragmentEntryLinks(
 			long userId, long groupId, long classNameId, long classPK,
 			long[] fragmentEntryIds, String editableValues,
 			ServiceContext serviceContext)
+		throws PortalException;
+
+	public void updateFragmentEntryLinks(
+			Map<Long, String> fragmentEntryLinksEditableValuesMap)
 		throws PortalException;
 
 	public void updateLatestChanges(long fragmentEntryLinkId)

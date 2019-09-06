@@ -7,6 +7,10 @@
 		<check name="NonbreakingSpaceCheck" />
 		<check name="ReturnCharacterCheck" />
 		<check name="SlantedQuotesCheck" />
+
+		<!-- Liferay Source Checks -->
+
+		<check name="NewFileCheck" />
 	</source-processor>
 	<source-processor name="BNDRunSourceProcessor">
 		<check name="BNDRunInstructionsOrderCheck" />
@@ -107,6 +111,10 @@
 		<check name="GradleJavaVersionCheck" />
 		<check name="GradlePropertiesCheck" />
 		<check name="GradleProvidedDependenciesCheck" />
+		<check name="GradleRequiredDependenciesCheck">
+			<property name="enabled" value="false" />
+		</check>
+		<check name="GradleStylingCheck" />
 		<check name="GradleTaskCreationCheck" />
 		<check name="GradleTestDependencyVersionCheck">
 			<property name="allowedDependencyNames" value="com.liferay.arquillian.arquillian-container-liferay" />
@@ -178,7 +186,6 @@
 		<check name="JavaStylingCheck" />
 		<check name="JavaSystemExceptionCheck" />
 		<check name="JavaTermDividersCheck" />
-		<check name="JavaTermMetadataLineBreakCheck" />
 		<check name="JavaTermOrderCheck" />
 		<check name="JavaTermStylingCheck" />
 		<check name="MethodCallsOrderCheck" />
@@ -215,9 +222,7 @@
 		<check name="JavaIllegalImportsCheck">
 			<property name="enforceJavaUtilFunctionImports" value="true" />
 		</check>
-		<check name="JavaInternalPackageCheck">
-			<property name="enabled" value="false" />
-		</check>
+		<check name="JavaInternalPackageCheck" />
 		<check name="JavaJSPDynamicIncludeCheck" />
 		<check name="JavaLogClassNameCheck" />
 		<check name="JavaLogLevelCheck" />
@@ -292,6 +297,7 @@
 
 		<check name="JSONDeprecatedPackagesCheck" />
 		<check name="JSONPackageJSONCheck" />
+		<check name="JSONPackageJSONBNDVersionCheck" />
 	</source-processor>
 	<source-processor name="JSPSourceProcessor">
 		<check name="CopyrightCheck">
@@ -332,8 +338,10 @@
 
 		<check name="JSPLanguageKeysCheck" />
 		<check name="JSPLogParametersCheck" />
+		<check name="JSPMissingTaglibsCheck" />
 		<check name="JSPSendRedirectCheck" />
 		<check name="JSPStringMethodsCheck" />
+		<check name="JSPUnusedJSPF" />
 		<check name="LocaleUtilCheck" />
 		<check name="ResourceBundleCheck" />
 		<check name="SubstringCheck" />
@@ -434,7 +442,9 @@
 		<check name="XMLIndentationCheck" />
 	</source-processor>
 	<source-processor name="TSSourceProcessor">
-		<check name="WhitespaceCheck" />
+		<check name="WhitespaceCheck">
+			<property name="allowTrailingEmptyLines" value="true" />
+		</check>
 	</source-processor>
 	<source-processor name="XMLSourceProcessor">
 		<check name="XMLBuildFileCheck" />

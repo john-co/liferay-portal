@@ -1,9 +1,26 @@
-import * as FormSupport from '../Form/FormSupport.es';
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
+import * as FormSupport from 'dynamic-data-mapping-form-renderer/js/components/FormRenderer/FormSupport.es';
 import Component from 'metal-jsx';
 import {Config} from 'metal-state';
 import {getFieldProperties} from '../../util/fieldSupport.es';
 import {pageStructure, ruleStructure} from '../../util/config.es';
-import {PagesVisitor, RulesVisitor} from '../../util/visitors.es';
+import {
+	PagesVisitor,
+	RulesVisitor
+} from 'dynamic-data-mapping-form-renderer/js/util/visitors.es';
 import {setLocalizedValue} from '../../util/i18n.es';
 
 import handleColumnResized from './handlers/columnResizedHandler.es';
@@ -13,8 +30,12 @@ import handleFieldClicked from './handlers/fieldClickedHandler.es';
 import handleFieldDeleted from './handlers/fieldDeletedHandler.es';
 import handleFieldDuplicated from './handlers/fieldDuplicatedHandler.es';
 import handleFieldEdited from './handlers/fieldEditedHandler.es';
+import handleFieldMoved from './handlers/fieldMovedHandler.es';
 import handleFieldSetAdded from './handlers/fieldSetAddedHandler.es';
 import handleLanguageIdDeleted from './handlers/languageIdDeletedHandler.es';
+import handlePaginationItemClicked from 'dynamic-data-mapping-form-renderer/js/store/actions/handlePaginationItemClicked.es';
+import handlePaginationNextClicked from 'dynamic-data-mapping-form-renderer/js/store/actions/handlePaginationNextClicked.es';
+import handlePaginationPreviousClicked from 'dynamic-data-mapping-form-renderer/js/store/actions/handlePaginationPreviousClicked.es';
 
 /**
  * LayoutProvider listens to your children's events to
@@ -39,9 +60,13 @@ class LayoutProvider extends Component {
 		return page;
 	}
 
+	dispatch(event, payload) {
+		this.emit(event, payload);
+	}
+
 	getChildContext() {
 		return {
-			dispatch: this.emit.bind(this),
+			dispatch: this.dispatch.bind(this),
 			store: this
 		};
 	}
@@ -65,7 +90,12 @@ class LayoutProvider extends Component {
 			pageDeleted: this._handlePageDeleted.bind(this),
 			pageReset: this._handlePageReset.bind(this),
 			pagesUpdated: this._handlePagesUpdated.bind(this),
+			paginationItemClicked: this._handlePaginationItemClicked.bind(this),
 			paginationModeUpdated: this._handlePaginationModeUpdated.bind(this),
+			paginationNextClicked: this._handlePaginationNextClicked.bind(this),
+			paginationPreviousClicked: this._handlePaginationPreviousClicked.bind(
+				this
+			),
 			ruleAdded: this._handleRuleAdded.bind(this),
 			ruleDeleted: this._handleRuleDeleted.bind(this),
 			ruleSaved: this._handleRuleSaved.bind(this),
@@ -75,17 +105,25 @@ class LayoutProvider extends Component {
 	}
 
 	getFocusedField() {
+		const {defaultLanguageId, editingLanguageId} = this.props;
 		let {focusedField} = this.state;
 
 		if (focusedField && focusedField.settingsContext) {
+			const settingsContext = {
+				...focusedField.settingsContext,
+				pages: this.getLocalizedPages(
+					focusedField.settingsContext.pages
+				)
+			};
+
 			focusedField = {
 				...focusedField,
-				settingsContext: {
-					...focusedField.settingsContext,
-					pages: this.getLocalizedPages(
-						focusedField.settingsContext.pages
-					)
-				}
+				...getFieldProperties(
+					settingsContext,
+					defaultLanguageId,
+					editingLanguageId
+				),
+				settingsContext
 			};
 		}
 
@@ -106,17 +144,27 @@ class LayoutProvider extends Component {
 					localizedValue = field.localizedValue[defaultLanguageId];
 				}
 
-				value = localizedValue;
-			}
-
-			if (value && value.JSONArray) {
-				value = value.JSONArray;
+				if (localizedValue !== undefined) {
+					value = localizedValue;
+				}
+			} else if (
+				field.dataType === 'ddm-options' &&
+				value[editingLanguageId] === undefined
+			) {
+				value = {
+					...value,
+					[editingLanguageId]: value[defaultLanguageId]
+				};
 			}
 
 			return {
 				...field,
 				defaultLanguageId,
 				editingLanguageId,
+				localizedValue: {
+					...field.localizedValue,
+					[editingLanguageId]: value
+				},
 				value
 			};
 		});
@@ -125,6 +173,7 @@ class LayoutProvider extends Component {
 	getPages() {
 		const {defaultLanguageId, editingLanguageId} = this.props;
 		let {pages} = this.state;
+
 		const visitor = new PagesVisitor(pages);
 
 		pages = visitor.mapFields(field => {
@@ -139,6 +188,8 @@ class LayoutProvider extends Component {
 				options,
 				settingsContext: {
 					...settingsContext,
+					availableLanguageIds: [editingLanguageId],
+					defaultLanguageId,
 					pages: this.getLocalizedPages(settingsContext.pages)
 				}
 			};
@@ -224,10 +275,6 @@ class LayoutProvider extends Component {
 					activePage,
 					defaultLanguageId,
 					editingLanguageId,
-					events: {
-						...this.getEvents(),
-						...child.props.events
-					},
 					focusedField: this.getFocusedField(),
 					pages: this.getPages(),
 					paginationMode,
@@ -262,15 +309,32 @@ class LayoutProvider extends Component {
 	}
 
 	_handleFieldChangesCanceled() {
-		const {
-			focusedField: {originalContext}
-		} = this.state;
+		const {focusedField, pages, previousFocusedField} = this.state;
+		const {settingsContext} = previousFocusedField;
 
-		Object.keys(originalContext).forEach(propertyName => {
+		const visitor = new PagesVisitor(settingsContext.pages);
+
+		visitor.mapFields(({fieldName, value}) => {
 			this._handleFieldEdited({
-				propertyName,
-				propertyValue: originalContext[propertyName]
+				propertyName: fieldName,
+				propertyValue: value
 			});
+		});
+
+		visitor.setPages(pages);
+
+		this.setState({
+			focusedField: previousFocusedField,
+			pages: visitor.mapFields(field => {
+				if (field.fieldName === focusedField.fieldName) {
+					return {
+						...field,
+						settingsContext
+					};
+				}
+
+				return field;
+			})
 		});
 	}
 
@@ -303,59 +367,8 @@ class LayoutProvider extends Component {
 		);
 	}
 
-	_handleFieldMoved({addedToPlaceholder, target, source}) {
-		let {pages} = this.state;
-		const {columnIndex, pageIndex, rowIndex} = source;
-
-		const column = FormSupport.getColumn(
-			pages,
-			pageIndex,
-			rowIndex,
-			columnIndex
-		);
-		const {fields} = column;
-		const newRow = FormSupport.implAddRow(12, fields);
-
-		pages = FormSupport.removeFields(
-			pages,
-			pageIndex,
-			rowIndex,
-			columnIndex
-		);
-
-		const pageTarget = pages[target.pageIndex];
-
-		const rowTarget = pageTarget.rows[target.rowIndex];
-
-		if (target.rowIndex > pages[pageIndex].rows.length - 1) {
-			pages = FormSupport.addRow(
-				pages,
-				target.rowIndex,
-				target.pageIndex,
-				newRow
-			);
-		} else if (addedToPlaceholder && rowTarget.columns.length === 1) {
-			pages = FormSupport.addRow(
-				pages,
-				target.rowIndex,
-				target.pageIndex,
-				newRow
-			);
-		} else {
-			pages = FormSupport.addFieldToColumn(
-				pages,
-				target.pageIndex,
-				target.rowIndex,
-				target.columnIndex,
-				fields[0]
-			);
-		}
-
-		pages[pageIndex].rows = FormSupport.removeEmptyRows(pages, pageIndex);
-
-		this.setState({
-			pages
-		});
+	_handleFieldMoved(event) {
+		this.setState(handleFieldMoved(this.props, this.state, event));
 	}
 
 	_handleFieldSetAdded(event) {
@@ -416,6 +429,10 @@ class LayoutProvider extends Component {
 		});
 	}
 
+	_handlePaginationItemClicked({pageIndex}) {
+		handlePaginationItemClicked({pageIndex}, this.dispatch.bind(this));
+	}
+
 	_handlePaginationModeUpdated() {
 		const {paginationMode} = this.state;
 		let newMode = 'paginated';
@@ -429,12 +446,28 @@ class LayoutProvider extends Component {
 		});
 	}
 
+	_handlePaginationNextClicked() {
+		const {activePage, pages} = this.state;
+
+		handlePaginationNextClicked(
+			{
+				activePage,
+				pages
+			},
+			this.dispatch.bind(this)
+		);
+	}
+
+	_handlePaginationPreviousClicked() {
+		const {activePage} = this.state;
+
+		handlePaginationPreviousClicked({activePage}, this.dispatch.bind(this));
+	}
+
 	_handleRuleAdded(rule) {
 		this.setState({
 			rules: [...this.state.rules, rule]
 		});
-
-		this.emit('ruleAdded', rule);
 	}
 
 	_handleRuleDeleted({ruleId}) {
@@ -563,6 +596,12 @@ class LayoutProvider extends Component {
 		};
 	}
 
+	_setPages(pages) {
+		return pages.filter(({contentRenderer}) => {
+			return contentRenderer !== 'success';
+		});
+	}
+
 	_successPageSettingsValueFn() {
 		return this.props.initialSuccessPageSettings;
 	}
@@ -594,7 +633,25 @@ LayoutProvider.PROPS = {
 	 * @type {?object}
 	 */
 
-	events: Config.setter('_setEvents'),
+	events: Config.setter('_setEvents').value({}),
+
+	/**
+	 * @default undefined
+	 * @instance
+	 * @memberof LayoutProvider
+	 * @type {?string}
+	 */
+
+	fieldSetDefinitionURL: Config.string(),
+
+	/**
+	 * @default []
+	 * @instance
+	 * @memberof LayoutProvider
+	 * @type {?(array|undefined)}
+	 */
+
+	fieldSets: Config.array().value([]),
 
 	/**
 	 * @default undefined
@@ -644,7 +701,16 @@ LayoutProvider.PROPS = {
 	 * @type {?(array|undefined)}
 	 */
 
-	spritemap: Config.string()
+	spritemap: Config.string(),
+
+	/**
+	 * @default undefined
+	 * @instance
+	 * @memberof LayoutProvider
+	 * @type {?string}
+	 */
+
+	view: Config.string()
 };
 
 LayoutProvider.STATE = {
@@ -657,7 +723,7 @@ LayoutProvider.STATE = {
 	activePage: Config.number().value(0),
 
 	/**
-	 * @default undefined
+	 * @default {}
 	 * @instance
 	 * @memberof LayoutProvider
 	 * @type {?object}
@@ -680,7 +746,9 @@ LayoutProvider.STATE = {
 	 * @type {?array}
 	 */
 
-	pages: Config.arrayOf(pageStructure).valueFn('_pagesValueFn'),
+	pages: Config.arrayOf(pageStructure)
+		.setter('_setPages')
+		.valueFn('_pagesValueFn'),
 
 	/**
 	 * @instance
@@ -689,6 +757,23 @@ LayoutProvider.STATE = {
 	 */
 
 	paginationMode: Config.string().valueFn('_paginationModeValueFn'),
+
+	/**
+	 * @default {}
+	 * @instance
+	 * @memberof LayoutProvider
+	 * @type {?object}
+	 */
+
+	previousFocusedField: Config.shapeOf({
+		columnIndex: Config.oneOfType([
+			Config.bool().value(false),
+			Config.number()
+		]).required(),
+		pageIndex: Config.number().required(),
+		rowIndex: Config.number().required(),
+		type: Config.string().required()
+	}).value({}),
 
 	/**
 	 * @default undefined

@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 AUI.add(
 	'liferay-search-filter',
 	function(A) {
@@ -11,9 +25,7 @@ AUI.add(
 			NAME: 'searchimpl',
 
 			prototype: {
-				initializer: function() {
-					var instance = this;
-
+				initializer() {
 					this._bindUIACBase();
 					this._syncUIACBase();
 				}
@@ -60,7 +72,7 @@ AUI.add(
 			NAME: 'searchfilter',
 
 			prototype: {
-				initializer: function(config) {
+				initializer() {
 					var instance = this;
 
 					var nodeList = instance.get('nodeList');
@@ -76,7 +88,7 @@ AUI.add(
 
 						var searchData = [];
 
-						nodes.each(function(item, index) {
+						nodes.each(function(item) {
 							searchData.push({
 								node: item,
 								search: item.attr(searchDataLocator)

@@ -1376,7 +1376,7 @@ public class LayoutServiceHttp {
 			java.util.Map<java.util.Locale, String> robotsMap, String type,
 			boolean hidden,
 			java.util.Map<java.util.Locale, String> friendlyURLMap,
-			boolean iconImage, byte[] iconBytes,
+			boolean hasIconImage, byte[] iconBytes,
 			com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
@@ -1388,8 +1388,8 @@ public class LayoutServiceHttp {
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, groupId, privateLayout, layoutId, parentLayoutId,
 				localeNamesMap, localeTitlesMap, descriptionMap, keywordsMap,
-				robotsMap, type, hidden, friendlyURLMap, iconImage, iconBytes,
-				serviceContext);
+				robotsMap, type, hidden, friendlyURLMap, hasIconImage,
+				iconBytes, serviceContext);
 
 			Object returnObj = null;
 
@@ -1808,6 +1808,44 @@ public class LayoutServiceHttp {
 		}
 	}
 
+	public static com.liferay.portal.kernel.model.Layout updateType(
+			HttpPrincipal httpPrincipal, long plid, String type)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		try {
+			MethodKey methodKey = new MethodKey(
+				LayoutServiceUtil.class, "updateType",
+				_updateTypeParameterTypes46);
+
+			MethodHandler methodHandler = new MethodHandler(
+				methodKey, plid, type);
+
+			Object returnObj = null;
+
+			try {
+				returnObj = TunnelUtil.invoke(httpPrincipal, methodHandler);
+			}
+			catch (Exception e) {
+				if (e instanceof
+						com.liferay.portal.kernel.exception.PortalException) {
+
+					throw (com.liferay.portal.kernel.exception.PortalException)
+						e;
+				}
+
+				throw new com.liferay.portal.kernel.exception.SystemException(
+					e);
+			}
+
+			return (com.liferay.portal.kernel.model.Layout)returnObj;
+		}
+		catch (com.liferay.portal.kernel.exception.SystemException se) {
+			_log.error(se, se);
+
+			throw se;
+		}
+	}
+
 	private static Log _log = LogFactoryUtil.getLog(LayoutServiceHttp.class);
 
 	private static final Class<?>[] _addLayoutParameterTypes0 = new Class[] {
@@ -1956,5 +1994,8 @@ public class LayoutServiceHttp {
 		};
 	private static final Class<?>[] _updatePriorityParameterTypes45 =
 		new Class[] {long.class, int.class};
+	private static final Class<?>[] _updateTypeParameterTypes46 = new Class[] {
+		long.class, String.class
+	};
 
 }

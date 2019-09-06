@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 AUI.add(
 	'liferay-layout-column',
 	function(A) {
@@ -8,8 +22,6 @@ AUI.add(
 		var CSS_DRAGGING = 'dragging';
 
 		Layout.getLastPortletNode = function(column) {
-			var instance = this;
-
 			var portlets = column.all(Layout.options.portletBoundary);
 
 			var lastIndex = portlets.size() - 1;
@@ -40,11 +52,7 @@ AUI.add(
 			NAME: 'ColumnLayout',
 
 			prototype: {
-				dragItem: 0,
-
-				_positionNode: function(event) {
-					var instance = this;
-
+				_positionNode(event) {
 					var portalLayout = event.currentTarget;
 
 					var activeDrop =
@@ -67,7 +75,7 @@ AUI.add(
 					}
 				},
 
-				_syncProxyNodeSize: function() {
+				_syncProxyNodeSize() {
 					var instance = this;
 
 					var dragNode = DDM.activeDrag.get('dragNode');
@@ -80,21 +88,23 @@ AUI.add(
 						proxyNode.set('offsetHeight', 30);
 						proxyNode.set('offsetWidth', 200);
 					}
-				}
+				},
+
+				dragItem: 0
 			},
 
-			register: function() {
+			register() {
 				var columnLayoutDefaults = A.merge(
 					Layout.DEFAULT_LAYOUT_OPTIONS,
 					{
 						after: {
-							'drag:end': function(event) {
+							'drag:end'() {
 								Layout._columnContainer.removeClass(
 									CSS_DRAGGING
 								);
 							},
 
-							'drag:start': function(event) {
+							'drag:start'() {
 								var node = DDM.activeDrag.get('node');
 								var nodeId = node.get('id');
 
@@ -112,18 +122,18 @@ AUI.add(
 							}
 						},
 						on: {
-							'drag:start': function(event) {
+							'drag:start'() {
 								Liferay.fire('portletDragStart');
 							},
 
-							'drop:enter': function(event) {
+							'drop:enter'() {
 								Liferay.Layout.updateOverNestedPortletInfo();
 							},
 
-							'drop:exit': function(event) {
+							'drop:exit'() {
 								Liferay.Layout.updateOverNestedPortletInfo();
 							},
-							placeholderAlign: function(event) {
+							placeholderAlign(event) {
 								var portalLayout = event.currentTarget;
 
 								var activeDrop = portalLayout.activeDrop;

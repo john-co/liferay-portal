@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import ManagementToolbar from '../../src/main/resources/META-INF/resources/management_toolbar/ManagementToolbar.es';
 
 describe('ManagementToolbar', () => {
@@ -10,7 +24,7 @@ describe('ManagementToolbar', () => {
 
 	beforeAll(() => {
 		global.Liferay = {
-			componentReady: function() {
+			componentReady() {
 				return {
 					then: jest.fn(cb => cb(searchContainer))
 				};
@@ -26,7 +40,7 @@ describe('ManagementToolbar', () => {
 			fire: jest.fn(eventName =>
 				searchContainerCallbacks[eventName].apply(this)
 			),
-			on: jest.fn((eventName, cb) => {
+			on: jest.fn(eventName => {
 				searchContainerCallbacks[eventName] = jest.fn();
 				return searchContainerHandle;
 			}),
@@ -40,13 +54,13 @@ describe('ManagementToolbar', () => {
 		});
 	});
 
-	it('should listen to the rowToggled event from the registered search container', () => {
+	it('listens to the rowToggled event from the registered search container', () => {
 		searchContainer.fire('rowToggled');
 
 		expect(searchContainerCallbacks.rowToggled).toHaveBeenCalled();
 	});
 
-	it('should deselect all searchContainer rows', () => {
+	it('deselects all searchContainer rows', () => {
 		managementToolbar._handleClearSelectionButtonClicked();
 
 		expect(searchContainer.select.toggleAllRows).toHaveBeenCalledWith(
@@ -55,7 +69,7 @@ describe('ManagementToolbar', () => {
 		);
 	});
 
-	it('should select all searchContainer rows', () => {
+	it('selects all searchContainer rows', () => {
 		managementToolbar._handleSelectAllButtonClicked();
 
 		expect(searchContainer.select.toggleAllRows).toHaveBeenCalledWith(
@@ -64,7 +78,7 @@ describe('ManagementToolbar', () => {
 		);
 	});
 
-	it('should toggle the searchContainer selected rows', () => {
+	it('toggles the searchContainer selected rows', () => {
 		managementToolbar._handleSelectPageCheckboxChanged({
 			data: {
 				checked: false

@@ -14,20 +14,21 @@
 
 package com.liferay.talend.runtime.reader;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-
-import com.liferay.talend.avro.ResourceNodeConverter;
+import com.liferay.talend.avro.JsonObjectIndexedRecordConverter;
 import com.liferay.talend.runtime.LiferaySource;
 import com.liferay.talend.tliferayinput.TLiferayInputProperties;
-import com.liferay.talend.utils.URIUtils;
 
 import java.io.IOException;
 
 import java.net.URI;
 
 import java.util.NoSuchElementException;
+
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObject;
+import javax.json.JsonValue;
 
 import javax.ws.rs.core.UriBuilder;
 
@@ -38,10 +39,10 @@ import org.slf4j.LoggerFactory;
 
 import org.talend.components.api.container.RuntimeContainer;
 import org.talend.components.api.exception.ComponentException;
-import org.talend.daikon.avro.converter.AvroConverter;
 
 /**
  * @author Zoltán Takács
+ * @author Igor Beslic
  */
 public class LiferayInputReader extends LiferayBaseReader<IndexedRecord> {
 
@@ -52,7 +53,10 @@ public class LiferayInputReader extends LiferayBaseReader<IndexedRecord> {
 		super(runtimeContainer, liferaySource);
 
 		liferayConnectionResourceBaseProperties = tLiferayInputProperties;
-		_queryCondition = tLiferayInputProperties.resource.condition.getValue();
+
+		_jsonObjectIndexedRecordConverter =
+			new JsonObjectIndexedRecordConverter(
+				tLiferayInputProperties.getSchema());
 	}
 
 	@Override
@@ -61,25 +65,26 @@ public class LiferayInputReader extends LiferayBaseReader<IndexedRecord> {
 			throw new IllegalStateException("Reader was not started");
 		}
 
-		_inputRecordsIndex++;
+		_currentItemIdx++;
 
-		// Fast return conditions
-
-		if (_inputRecordsIndex < _inputRecordsJsonNode.size()) {
+		if (_currentItemIdx < _itemsJsonArray.size()) {
 			dataCount++;
 			_hasMore = true;
 
 			return true;
 		}
 
-		int actual = _endpointJsonNode.path(
-			"page"
-		).asInt();
-		int last = _endpointJsonNode.path(
-			"lastPage"
-		).asInt();
+		if (_currentPage >= _lastPage) {
+			_hasMore = false;
 
-		if (actual >= last) {
+			return false;
+		}
+
+		_readEndpointJsonObject();
+
+		_currentItemIdx = 0;
+
+		if (_itemsJsonArray.size() <= 0) {
 			_hasMore = false;
 
 			return false;
@@ -87,25 +92,9 @@ public class LiferayInputReader extends LiferayBaseReader<IndexedRecord> {
 
 		_hasMore = true;
 
-		URI endpointURI =
-			liferayConnectionResourceBaseProperties.resource.getEndpointURI();
+		dataCount++;
 
-		_endpointJsonNode = _getEndpointJsonNode(endpointURI, ++actual, -1);
-
-		_inputRecordsJsonNode = _endpointJsonNode.path("items");
-
-		_inputRecordsIndex = 0;
-
-		_hasMore = _inputRecordsJsonNode.size() > 0;
-
-		if (_hasMore) {
-
-			// New result set available to retrieve
-
-			dataCount++;
-		}
-
-		return _hasMore;
+		return true;
 	}
 
 	@Override
@@ -120,144 +109,102 @@ public class LiferayInputReader extends LiferayBaseReader<IndexedRecord> {
 		}
 
 		try {
-			AvroConverter<Object, IndexedRecord> avroConverter = getConverter();
+			JsonValue currentJsonValue = getCurrentJsonValue();
 
-			return avroConverter.convertToAvro(getCurrentJsonNode());
+			if (!(currentJsonValue instanceof JsonObject)) {
+				throw new ComponentException(
+					new IllegalArgumentException(
+						"Expected json object instead of " +
+							currentJsonValue.getClass()));
+			}
+
+			return _jsonObjectIndexedRecordConverter.toIndexedRecord(
+				currentJsonValue.asJsonObject());
 		}
-		catch (IOException ioe) {
-			throw new ComponentException(ioe);
+		catch (Exception e) {
+			throw new ComponentException(e);
 		}
 	}
 
-	public JsonNode getCurrentJsonNode() throws NoSuchElementException {
-		return _inputRecordsJsonNode.get(_inputRecordsIndex);
+	public JsonValue getCurrentJsonValue() throws NoSuchElementException {
+		return _itemsJsonArray.get(_currentItemIdx);
 	}
 
 	@Override
 	public boolean start() throws IOException {
-		URI endpointURI =
-			liferayConnectionResourceBaseProperties.resource.getEndpointURI();
-
-		_endpointJsonNode = _getEndpointJsonNode(endpointURI, 1, -1);
-
-		if (_endpointJsonNode.has("items")) {
-			_inputRecordsJsonNode = _endpointJsonNode.path("items");
-
-			boolean start = false;
-
-			if (_inputRecordsJsonNode.size() > 0) {
-				start = true;
-			}
-
-			if (!start) {
-				return false;
-			}
-		}
-		else {
-			ArrayNode arrayNode = _objectMapper.createArrayNode();
-
-			_inputRecordsJsonNode = arrayNode.add(_endpointJsonNode);
+		if (_started) {
+			throw new IllegalStateException("Reader has already started");
 		}
 
-		dataCount++;
-		_inputRecordsIndex = 0;
-		_started = true;
+		_currentPage = 1;
+		_lastPage = Integer.MIN_VALUE;
+
+		_readEndpointJsonObject();
+
+		if (_itemsJsonArray.isEmpty()) {
+			return false;
+		}
+
+		dataCount = 0;
 		_hasMore = true;
+		_started = true;
 
 		return true;
 	}
 
-	/**
-	 * Returns implementation of AvroConverter, creates it if it does not exist.
-	 *
-	 * @return converter
-	 * @throws IOException
-	 * @review
-	 */
-	protected AvroConverter<Object, IndexedRecord> getConverter()
-		throws IOException {
-
-		if (_resourceEntityAvroConverter == null) {
-			_resourceEntityAvroConverter = new ResourceNodeConverter(
-				getSchema());
-		}
-
-		return _resourceEntityAvroConverter;
-	}
-
-	private JsonNode _getEndpointJsonNode(
-		URI endpointURI, int page, int pageSize) {
-
-		if (page <= 0) {
-			page = 1;
-		}
-
-		if (pageSize == -1) {
-			pageSize =
-				liferayConnectionResourceBaseProperties.connection.itemsPerPage.
-					getValue();
-		}
-
-		UriBuilder uriBuilder = UriBuilder.fromUri(endpointURI);
+	private void _readEndpointJsonObject() {
+		UriBuilder uriBuilder = UriBuilder.fromUri(
+			liferayConnectionResourceBaseProperties.resource.getEndpointURI());
 
 		URI resourceURI = uriBuilder.queryParam(
-			"page", page
+			"page", _currentPage++
 		).queryParam(
-			"pageSize", pageSize
+			"pageSize",
+			liferayConnectionResourceBaseProperties.getItemsPerPage()
 		).build();
-
-		URI decoratedResourceURI = URIUtils.addQueryConditionToURL(
-			resourceURI.toASCIIString(), _queryCondition);
 
 		LiferaySource liferaySource = (LiferaySource)getCurrentSource();
 
-		if (_log.isDebugEnabled()) {
-			_log.debug(
+		if (_logger.isDebugEnabled()) {
+			_logger.debug(
 				"Started to process resources at entry point: " +
-					decoratedResourceURI.toString());
+					resourceURI.toString());
 		}
 
-		return liferaySource.doGetRequest(decoratedResourceURI.toString());
+		JsonObject jsonObject = liferaySource.doGetRequest(
+			resourceURI.toString());
+
+		if (jsonObject.containsKey("items")) {
+			_itemsJsonArray = jsonObject.getJsonArray("items");
+
+			if (jsonObject.containsKey("lastPage")) {
+				_lastPage = jsonObject.getInt("lastPage");
+			}
+		}
+		else {
+			JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
+
+			jsonArrayBuilder.add(jsonObject);
+
+			_itemsJsonArray = jsonArrayBuilder.build();
+
+			_currentPage = 1;
+			_lastPage = 1;
+		}
+
+		_currentItemIdx = 0;
 	}
 
-	private static final Logger _log = LoggerFactory.getLogger(
+	private static final Logger _logger = LoggerFactory.getLogger(
 		LiferayInputReader.class);
 
-	private static final ObjectMapper _objectMapper = new ObjectMapper();
-
-	private transient JsonNode _endpointJsonNode;
-
-	/**
-	 * Represents state of this Reader: whether it has more records
-	 *
-	 * @review
-	 */
+	private transient int _currentItemIdx;
+	private int _currentPage;
 	private boolean _hasMore;
-
-	private transient int _inputRecordsIndex;
-
-	/**
-	 * Resource collection members field
-	 *
-	 * @review
-	 */
-	private transient JsonNode _inputRecordsJsonNode;
-
-	private final String _queryCondition;
-
-	/**
-	 * Converts row retrieved from data source to Avro format {@link
-	 * IndexedRecord}
-	 *
-	 * @review
-	 */
-	private AvroConverter _resourceEntityAvroConverter;
-
-	/**
-	 * Represents state of this Reader: whether it was started or not
-	 *
-	 * @review
-	 */
+	private transient JsonArray _itemsJsonArray;
+	private final JsonObjectIndexedRecordConverter
+		_jsonObjectIndexedRecordConverter;
+	private int _lastPage;
 	private boolean _started;
 
 }

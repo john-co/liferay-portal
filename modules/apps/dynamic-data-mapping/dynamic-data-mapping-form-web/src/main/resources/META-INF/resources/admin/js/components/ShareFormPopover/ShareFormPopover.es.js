@@ -1,31 +1,35 @@
-import Clipboard from 'metal-clipboard';
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
+import ClipboardJS from 'clipboard';
 import Component, {Config} from 'metal-jsx';
 import getCN from 'classnames';
 import Popover from '../Popover/Popover.es';
 import {Align} from 'metal-position';
-import {EventHandler} from 'metal-events';
 import {selectText} from 'dynamic-data-mapping-form-builder/js/util/dom.es';
 
 class ShareFormPopover extends Component {
 	attached() {
-		this._clipboard = new Clipboard({
-			selector: '.ddm-copy-clipboard'
-		});
-		this._eventHandler = new EventHandler();
+		this._clipboard = new ClipboardJS('.ddm-copy-clipboard');
 
-		this._eventHandler.add(
-			this._clipboard.on(
-				'success',
-				this._handleClipboardSuccess.bind(this)
-			)
-		);
+		this._clipboard.on('success', this._handleClipboardSuccess.bind(this));
 	}
 
 	disposeInternal() {
 		super.disposeInternal();
 
-		this._clipboard.dispose();
-		this._eventHandler.removeAllListeners();
+		this._clipboard.destroy();
 	}
 
 	render() {
@@ -54,18 +58,18 @@ class ShareFormPopover extends Component {
 				visible={visible}
 			>
 				<div class={formClasses}>
-					<div class='input-group'>
-						<div class='input-group-item input-group-prepend'>
+					<div class="input-group">
+						<div class="input-group-item input-group-prepend">
 							<input
-								class='form-control'
+								class="form-control"
 								readOnly={true}
-								ref='shareFieldURL'
-								type='text'
+								ref="shareFieldURL"
+								type="text"
 								value={url}
 							/>
 							{success && (
-								<div class='form-feedback-group'>
-									<div class='form-feedback-item'>
+								<div class="form-feedback-group">
+									<div class="form-feedback-item">
 										{Liferay.Language.get(
 											'copied-to-clipboard'
 										)}
@@ -73,17 +77,16 @@ class ShareFormPopover extends Component {
 								</div>
 							)}
 						</div>
-						<span class='input-group-append input-group-item input-group-item-shrink'>
+						<span class="input-group-append input-group-item input-group-item-shrink">
 							<button
 								class={buttonClasses}
-								data-clipboard
-								data-text={url}
-								type='button'
+								data-clipboard-text={url}
+								type="button"
 							>
 								{success ? (
-									<span class='publish-button-success-icon pl-2 pr-2'>
+									<span class="publish-button-success-icon pl-2 pr-2">
 										<svg
-											aria-hidden='true'
+											aria-hidden="true"
 											class={
 												'lexicon-icon lexicon-icon-check'
 											}
@@ -94,7 +97,7 @@ class ShareFormPopover extends Component {
 										</svg>
 									</span>
 								) : (
-									<span class='publish-button-text'>
+									<span class="publish-button-text">
 										{Liferay.Language.get('copy')}
 									</span>
 								)}

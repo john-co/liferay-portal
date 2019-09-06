@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 AUI.add(
 	'liferay-menu-filter',
 	function(A) {
@@ -40,23 +54,7 @@ AUI.add(
 			NAME: 'menufilter',
 
 			prototype: {
-				initializer: function() {
-					var instance = this;
-
-					instance._renderUI();
-					instance._bindUIACBase();
-					instance._syncUIACBase();
-				},
-
-				reset: function() {
-					var instance = this;
-
-					instance.get('inputNode').val(STR_EMPTY);
-
-					instance._menuItems.removeClass(CSS_HIDE);
-				},
-
-				_filterMenu: function(event) {
+				_filterMenu(event) {
 					var instance = this;
 
 					instance._menuItems.addClass(CSS_HIDE);
@@ -66,7 +64,7 @@ AUI.add(
 					});
 				},
 
-				_renderUI: function() {
+				_renderUI() {
 					var instance = this;
 
 					var node = instance.get('content');
@@ -82,6 +80,22 @@ AUI.add(
 					instance._menuItems = menuItems;
 
 					instance.on('results', instance._filterMenu, instance);
+				},
+
+				initializer() {
+					var instance = this;
+
+					instance._renderUI();
+					instance._bindUIACBase();
+					instance._syncUIACBase();
+				},
+
+				reset() {
+					var instance = this;
+
+					instance.get('inputNode').val(STR_EMPTY);
+
+					instance._menuItems.removeClass(CSS_HIDE);
 				}
 			}
 		});

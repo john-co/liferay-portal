@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import Soy from 'metal-soy';
 import {Config} from 'metal-state';
 import {PortletBase, openToast} from 'frontend-js-web';
@@ -17,7 +31,13 @@ class FragmentEditor extends PortletBase {
 	 * @inheritDoc
 	 */
 	shouldUpdate(changes) {
-		return changes._html || changes._js || changes._css || changes._saving;
+		return (
+			changes._html ||
+			changes._js ||
+			changes._configuration ||
+			changes._css ||
+			changes._saving
+		);
 	}
 
 	/**
@@ -25,6 +45,7 @@ class FragmentEditor extends PortletBase {
 	 *
 	 * @public
 	 * @return {{
+	 *   configuration: string,
 	 *   css: string,
 	 *   html: string,
 	 *   js: string
@@ -32,6 +53,7 @@ class FragmentEditor extends PortletBase {
 	 */
 	getContent() {
 		return {
+			configuration: this._configuration,
 			css: this._css,
 			html: this._html,
 			js: this._js
@@ -57,6 +79,17 @@ class FragmentEditor extends PortletBase {
 	 */
 	_handleContentChanged() {
 		this.emit('contentChanged', this.getContent());
+	}
+
+	/**
+	 * Callback executed when the Configuration editor changes.
+	 *
+	 * @param {!Event} event
+	 * @private
+	 */
+	_handleConfigurationChanged(event) {
+		this._configuration = event.content;
+		this._handleContentChanged();
 	}
 
 	/**
@@ -108,6 +141,7 @@ class FragmentEditor extends PortletBase {
 			this._saving = true;
 
 			this.fetch(this.urls.edit, {
+				configurationContent: content.configuration,
 				cssContent: content.css,
 				fragmentCollectionId: this.fragmentCollectionId,
 				fragmentEntryId: this.fragmentEntryId,
@@ -157,64 +191,18 @@ class FragmentEditor extends PortletBase {
  */
 FragmentEditor.STATE = {
 	/**
-	 * List of tags for custom autocompletion in the HTML editor.
+	 * Updated Configuration content of the editor. This value is propagated to the
+	 * preview pane.
 	 *
-	 * @default []
+	 * @default ''
 	 * @instance
 	 * @memberOf FragmentEditor
-	 * @type Array
+	 * @private
+	 * @type {string}
 	 */
-	autocompleteTags: Config.arrayOf(
-		Config.shapeOf({
-			content: Config.string(),
-			name: Config.string()
-		})
-	),
-
-	/**
-	 * Fragment collection ID.
-	 *
-	 * @default undefined
-	 * @instance
-	 * @memberOf FragmentEditor
-	 * @type {!string}
-	 */
-	fragmentCollectionId: Config.string().required(),
-
-	/**
-	 * Fragment entry ID.
-	 *
-	 * @default undefined
-	 * @instance
-	 * @memberOf FragmentEditor
-	 * @type {!string}
-	 */
-	fragmentEntryId: Config.string().required(),
-
-	/**
-	 * Fragment name.
-	 *
-	 * @default undefined
-	 * @instance
-	 * @memberOf FragmentEditor
-	 * @type {!string}
-	 */
-	name: Config.string().required(),
-
-	/**
-	 * URLs used for communicating with back-end logic.
-	 *
-	 * @instance
-	 * @memberOf FragmentEditor
-	 * @type {{
-	 *  edit: !string,
-	 *	redirect: !string
-	 * }}
-	 */
-	urls: Config.shapeOf({
-		edit: Config.string().required(),
-		redirect: Config.string().required()
-	}).required(),
+	_configuration: Config.string()
+		.internal()
+		.value(''),
 
 	/**
 	 * Updated CSS content of the editor. This value is propagated to the
@@ -282,7 +270,67 @@ FragmentEditor.STATE = {
 	 */
 	_saving: Config.bool()
 		.internal()
-		.value(false)
+		.value(false),
+
+	/**
+	 * List of tags for custom autocompletion in the HTML editor.
+	 *
+	 * @default []
+	 * @instance
+	 * @memberOf FragmentEditor
+	 * @type Array
+	 */
+	autocompleteTags: Config.arrayOf(
+		Config.shapeOf({
+			content: Config.string(),
+			name: Config.string()
+		})
+	),
+
+	/**
+	 * Fragment collection ID.
+	 *
+	 * @default undefined
+	 * @instance
+	 * @memberOf FragmentEditor
+	 * @type {!string}
+	 */
+	fragmentCollectionId: Config.string().required(),
+
+	/**
+	 * Fragment entry ID.
+	 *
+	 * @default undefined
+	 * @instance
+	 * @memberOf FragmentEditor
+	 * @type {!string}
+	 */
+	fragmentEntryId: Config.string().required(),
+
+	/**
+	 * Fragment name.
+	 *
+	 * @default undefined
+	 * @instance
+	 * @memberOf FragmentEditor
+	 * @type {!string}
+	 */
+	name: Config.string().required(),
+
+	/**
+	 * URLs used for communicating with back-end logic.
+	 *
+	 * @instance
+	 * @memberOf FragmentEditor
+	 * @type {{
+	 *  edit: !string,
+	 *	redirect: !string
+	 * }}
+	 */
+	urls: Config.shapeOf({
+		edit: Config.string().required(),
+		redirect: Config.string().required()
+	}).required()
 };
 
 Soy.register(FragmentEditor, templates);

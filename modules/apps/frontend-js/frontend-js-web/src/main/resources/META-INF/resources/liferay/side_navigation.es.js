@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import EventEmitter from 'metal-events';
 
 /**
@@ -55,14 +69,14 @@ function getUniqueSelector(element) {
 		return `#${element.id}`;
 	}
 
-	let ancestorWithId = element.parentElement;
+	let ancestorWithId = element.parentNode;
 
 	while (ancestorWithId) {
 		if (ancestorWithId.id) {
 			break;
 		}
 
-		ancestorWithId = ancestorWithId.parentElement;
+		ancestorWithId = ancestorWithId.parentNode;
 	}
 
 	const attributes = Array.from(element.attributes)
@@ -174,13 +188,19 @@ function handleEvent(eventName, event) {
 		let target = event.target;
 
 		while (target) {
-			matches = target.matches(selector);
+			// In IE11 SVG elements have no `parentElement`, only a
+			// `parentNode`, so we have to search up the DOM using
+			// the latter. This in turn requires us to check for the
+			// existence of `target.matches` before using it.
+			//
+			// See: https://stackoverflow.com/a/36270354/2103996
+			matches = target.matches && target.matches(selector);
 
 			if (matches) {
 				break;
 			}
 
-			target = target.parentElement;
+			target = target.parentNode;
 		}
 
 		if (matches) {
@@ -191,10 +211,11 @@ function handleEvent(eventName, event) {
 }
 
 /**
- * Creates a delegated event listener for `eventName` events on `element`.
+ * Creates a delegated event listener for `eventName` events on
+ * `elementOrSelector`.
  */
-function subscribe(element, eventName, handler) {
-	if (element) {
+function subscribe(elementOrSelector, eventName, handler) {
+	if (elementOrSelector) {
 		// Add only one listener per `eventName`.
 		if (!eventNamesToSelectors[eventName]) {
 			eventNamesToSelectors[eventName] = {};
@@ -205,14 +226,21 @@ function subscribe(element, eventName, handler) {
 		}
 
 		const emitters = eventNamesToSelectors[eventName];
-		const selector = getUniqueSelector(element);
+		const selector =
+			typeof elementOrSelector === 'string'
+				? elementOrSelector
+				: getUniqueSelector(elementOrSelector);
 
 		if (!emitters[selector]) {
 			emitters[selector] = new EventEmitter();
 		}
 
 		const emitter = emitters[selector];
-		const subscription = emitter.on(eventName, handler);
+		const subscription = emitter.on(eventName, event => {
+			if (!event.defaultPrevented) {
+				handler(event);
+			}
+		});
 
 		return {
 			dispose() {
@@ -236,7 +264,381 @@ function SideNavigation(toggler, options) {
 SideNavigation.TRANSITION_DURATION = 500;
 
 SideNavigation.prototype = {
-	init: function(toggler, options) {
+	_bindUI() {
+		const instance = this;
+
+		instance._subscribeClickTrigger();
+
+		instance._subscribeClickSidenavClose();
+	},
+
+	_emit(event) {
+		this._emitter.emit(event, this);
+	},
+
+	_getSidenavWidth() {
+		const instance = this;
+
+		const options = instance.options;
+
+		const widthOriginal = options.widthOriginal;
+
+		let width = widthOriginal;
+		const winWidth = window.innerWidth;
+
+		if (winWidth < widthOriginal + 40) {
+			width = winWidth - 40;
+		}
+
+		return width;
+	},
+
+	_getSimpleSidenavType() {
+		const instance = this;
+
+		const options = instance.options;
+
+		const desktop = instance._isDesktop();
+		const type = options.type;
+		const typeMobile = options.typeMobile;
+
+		if (desktop && type === 'fixed-push') {
+			return 'desktop-fixed-push';
+		} else if (!desktop && typeMobile === 'fixed-push') {
+			return 'mobile-fixed-push';
+		}
+
+		return 'fixed';
+	},
+
+	_isDesktop() {
+		return window.innerWidth >= this.options.breakpoint;
+	},
+
+	_isSidenavRight() {
+		const instance = this;
+		const options = instance.options;
+
+		const container = document.querySelector(options.container);
+		const isSidenavRight = hasClass(container, 'sidenav-right');
+
+		return isSidenavRight;
+	},
+
+	_isSimpleSidenavClosed() {
+		const instance = this;
+		const options = instance.options;
+
+		const openClass = options.openClass;
+
+		const container = document.querySelector(options.container);
+
+		return !hasClass(container, openClass);
+	},
+
+	_loadUrl(element, url) {
+		const instance = this;
+
+		const sidebar = element.querySelector('.sidebar-body');
+
+		if (!instance._fetchPromise && sidebar) {
+			const loading = document.createElement('div');
+			addClass(loading, 'sidenav-loading');
+			loading.innerHTML = instance.options.loadingIndicatorTPL;
+
+			sidebar.appendChild(loading);
+			instance._fetchPromise = Liferay.Util.fetch(url);
+
+			instance._fetchPromise
+				.then(response => {
+					if (!response.ok) {
+						throw new Error(`Failed to fetch ${url}`);
+					}
+					return response.text();
+				})
+				.then(text => {
+					const range = document.createRange();
+
+					range.selectNode(sidebar);
+
+					// Unlike `.innerHTML`, this will eval scripts.
+					const fragment = range.createContextualFragment(text);
+
+					sidebar.removeChild(loading);
+
+					sidebar.appendChild(fragment);
+
+					instance.setHeight();
+				})
+				.catch(err => {
+					// eslint-disable-next-line no-console
+					console.log(err);
+				});
+		}
+	},
+
+	_renderNav() {
+		const instance = this;
+		const options = instance.options;
+
+		const container = document.querySelector(options.container);
+		const navigation = container.querySelector(options.navigation);
+		const menu = navigation.querySelector('.sidenav-menu');
+
+		const closed = hasClass(container, 'closed');
+		const sidenavRight = instance._isSidenavRight();
+		const width = instance._getSidenavWidth();
+
+		if (closed) {
+			setStyles(menu, {
+				width: px(width)
+			});
+
+			if (sidenavRight) {
+				const positionDirection = options.rtl ? 'left' : 'right';
+
+				setStyles(menu, {
+					[positionDirection]: px(width)
+				});
+			}
+		} else {
+			instance.showSidenav();
+			instance.setHeight();
+		}
+	},
+
+	_renderUI() {
+		const instance = this;
+		const options = instance.options;
+
+		const container = document.querySelector(options.container);
+		const toggler = instance.toggler;
+
+		const mobile = instance.mobile;
+		const type = mobile ? options.typeMobile : options.type;
+
+		if (!instance.useDataAttribute) {
+			if (mobile) {
+				setClasses(container, {
+					closed: true,
+					open: false
+				});
+
+				setClasses(toggler, {
+					active: false,
+					open: false
+				});
+			}
+
+			if (options.position === 'right') {
+				addClass(container, 'sidenav-right');
+			}
+
+			if (type !== 'relative') {
+				addClass(container, 'sidenav-fixed');
+			}
+
+			instance._renderNav();
+		}
+
+		// Force Reflow for IE11 Browser Bug
+		setStyles(container, {
+			display: ''
+		});
+	},
+
+	_subscribeClickSidenavClose() {
+		const instance = this;
+
+		const options = instance.options;
+
+		const containerSelector = options.container;
+
+		if (!instance._sidenavCloseSubscription) {
+			const closeButtonSelector = `${containerSelector} .sidenav-close`;
+			instance._sidenavCloseSubscription = subscribe(
+				closeButtonSelector,
+				'click',
+				function handleSidenavClose(event) {
+					event.preventDefault();
+					instance.toggle();
+				}
+			);
+		}
+	},
+
+	_subscribeClickTrigger() {
+		const instance = this;
+
+		if (!instance._togglerSubscription) {
+			const toggler = instance.toggler;
+
+			instance._togglerSubscription = subscribe(
+				toggler,
+				'click',
+				function handleTogglerClick(event) {
+					instance.toggle();
+
+					event.preventDefault();
+				}
+			);
+		}
+	},
+
+	_subscribeSidenavTransitionEnd(element, fn) {
+		setTimeout(() => {
+			removeClass(element, 'sidenav-transition');
+
+			fn();
+		}, SideNavigation.TRANSITION_DURATION);
+	},
+
+	clearHeight() {
+		const instance = this;
+
+		const options = instance.options;
+		const container = document.querySelector(options.container);
+
+		if (container) {
+			const content = container.querySelector(options.content);
+			const navigation = container.querySelector(options.navigation);
+			const menu = container.querySelector('.sidenav-menu');
+
+			[content, navigation, menu].forEach(element => {
+				setStyles(element, {
+					height: '',
+					'min-height': ''
+				});
+			});
+		}
+	},
+
+	destroy() {
+		const instance = this;
+
+		if (instance._sidenavCloseSubscription) {
+			instance._sidenavCloseSubscription.dispose();
+			instance._sidenavCloseSubscription = null;
+		}
+
+		if (instance._togglerSubscription) {
+			instance._togglerSubscription.dispose();
+			instance._togglerSubscription = null;
+		}
+
+		INSTANCE_MAP.delete(instance.toggler);
+	},
+
+	hide() {
+		const instance = this;
+
+		if (instance.useDataAttribute) {
+			instance.hideSimpleSidenav();
+		} else {
+			instance.toggleNavigation(false);
+		}
+	},
+
+	hideSidenav() {
+		const instance = this;
+		const options = instance.options;
+
+		const container = document.querySelector(options.container);
+
+		if (container) {
+			const content = container.querySelector(options.content);
+			const navigation = container.querySelector(options.navigation);
+			const menu = navigation.querySelector('.sidenav-menu');
+
+			const sidenavRight = instance._isSidenavRight();
+
+			let positionDirection = options.rtl ? 'right' : 'left';
+
+			if (sidenavRight) {
+				positionDirection = options.rtl ? 'left' : 'right';
+			}
+
+			const paddingDirection = 'padding-' + positionDirection;
+
+			setStyles(content, {
+				[paddingDirection]: '',
+				[positionDirection]: ''
+			});
+
+			setStyles(navigation, {
+				width: ''
+			});
+
+			if (sidenavRight) {
+				setStyles(menu, {
+					[positionDirection]: px(instance._getSidenavWidth())
+				});
+			}
+		}
+	},
+
+	hideSimpleSidenav() {
+		const instance = this;
+
+		const options = instance.options;
+
+		const simpleSidenavClosed = instance._isSimpleSidenavClosed();
+
+		if (!simpleSidenavClosed) {
+			const content = document.querySelector(options.content);
+			const container = document.querySelector(options.container);
+
+			const closedClass = options.closedClass;
+			const openClass = options.openClass;
+
+			const toggler = instance.toggler;
+
+			const target =
+				toggler.dataset.target || toggler.getAttribute('href');
+
+			instance._emit('closedStart.lexicon.sidenav');
+
+			instance._subscribeSidenavTransitionEnd(content, function() {
+				removeClass(container, 'sidenav-transition');
+				removeClass(toggler, 'sidenav-transition');
+
+				instance._emit('closed.lexicon.sidenav');
+			});
+
+			if (hasClass(content, openClass)) {
+				setClasses(content, {
+					[closedClass]: true,
+					[openClass]: false,
+					'sidenav-transition': true
+				});
+			}
+
+			addClass(container, 'sidenav-transition');
+			addClass(toggler, 'sidenav-transition');
+
+			setClasses(container, {
+				[closedClass]: true,
+				[openClass]: false
+			});
+
+			const nodes = document.querySelectorAll(
+				`[data-target="${target}"], [href="${target}"]`
+			);
+
+			Array.from(nodes).forEach(node => {
+				setClasses(node, {
+					active: false,
+					[openClass]: false
+				});
+				setClasses(node, {
+					active: false,
+					[openClass]: false
+				});
+			});
+		}
+	},
+
+	init(toggler, options) {
 		const instance = this;
 
 		/**
@@ -284,162 +686,11 @@ SideNavigation.prototype = {
 		instance._renderUI();
 	},
 
-	on: function(event, listener) {
+	on(event, listener) {
 		return this._emitter.on(event, listener);
 	},
 
-	_emit: function(event) {
-		this._emitter.emit(event, this);
-	},
-
-	clearHeight: function() {
-		const instance = this;
-
-		const options = instance.options;
-		const container = document.querySelector(options.container);
-
-		if (container) {
-			const content = container.querySelector(options.content);
-			const navigation = container.querySelector(options.navigation);
-			const menu = container.querySelector('.sidenav-menu');
-
-			[content, navigation, menu].forEach(element => {
-				setStyles(element, {
-					height: '',
-					'min-height': ''
-				});
-			});
-		}
-	},
-
-	destroy: function() {
-		const instance = this;
-
-		const options = instance.options;
-
-		if (instance._sidenavCloseSubscription) {
-			instance._sidenavCloseSubscription.dispose();
-			instance._sidenavCloseSubscription = null;
-		}
-
-		if (instance._togglerSubscription) {
-			instance._togglerSubscription.dispose();
-			instance._togglerSubscription = null;
-		}
-
-		INSTANCE_MAP.delete(instance.toggler);
-	},
-
-	hide: function() {
-		const instance = this;
-
-		if (instance.useDataAttribute) {
-			instance.hideSimpleSidenav();
-		} else {
-			instance.toggleNavigation(false);
-		}
-	},
-
-	hideSidenav: function() {
-		const instance = this;
-		const options = instance.options;
-
-		const container = document.querySelector(options.container);
-
-		if (container) {
-			const content = container.querySelector(options.content);
-			const navigation = container.querySelector(options.navigation);
-			const menu = navigation.querySelector('.sidenav-menu');
-
-			const sidenavRight = instance._isSidenavRight();
-
-			let positionDirection = options.rtl ? 'right' : 'left';
-
-			if (sidenavRight) {
-				positionDirection = options.rtl ? 'left' : 'right';
-			}
-
-			const paddingDirection = 'padding-' + positionDirection;
-
-			setStyles(content, {
-				[paddingDirection]: '',
-				[positionDirection]: ''
-			});
-
-			setStyles(navigation, {
-				width: ''
-			});
-
-			if (sidenavRight) {
-				setStyles(menu, {
-					[positionDirection]: px(instance._getSidenavWidth())
-				});
-			}
-		}
-	},
-
-	hideSimpleSidenav: function() {
-		const instance = this;
-
-		const options = instance.options;
-
-		const simpleSidenavClosed = instance._isSimpleSidenavClosed();
-
-		if (!simpleSidenavClosed) {
-			const content = document.querySelector(options.content);
-			const container = document.querySelector(options.container);
-
-			const closedClass = options.closedClass;
-			const openClass = options.openClass;
-
-			const toggler = instance.toggler;
-
-			const target =
-				toggler.dataset.target || toggler.getAttribute('href');
-
-			instance._emit('closedStart.lexicon.sidenav');
-
-			instance._subscribeSidenavTransitionEnd(content, function() {
-				removeClass(container, 'sidenav-transition');
-				removeClass(toggler, 'sidenav-transition');
-
-				instance._emit('closed.lexicon.sidenav');
-			});
-
-			if (hasClass(content, openClass)) {
-				setClasses(content, {
-					'sidenav-transition': true,
-					[closedClass]: true,
-					[openClass]: false
-				});
-			}
-
-			addClass(container, 'sidenav-transition');
-			addClass(toggler, 'sidenav-transition');
-
-			setClasses(container, {
-				[closedClass]: true,
-				[openClass]: false
-			});
-
-			const nodes = document.querySelectorAll(
-				`[data-target="${target}"], [href="${target}"]`
-			);
-
-			Array.from(nodes).forEach(node => {
-				setClasses(node, {
-					[openClass]: false,
-					active: false
-				});
-				setClasses(node, {
-					[openClass]: false,
-					active: false
-				});
-			});
-		}
-	},
-
-	setHeight: function() {
+	setHeight() {
 		const instance = this;
 
 		const options = instance.options;
@@ -474,7 +725,7 @@ SideNavigation.prototype = {
 		}
 	},
 
-	show: function() {
+	show() {
 		const instance = this;
 
 		if (instance.useDataAttribute) {
@@ -484,7 +735,7 @@ SideNavigation.prototype = {
 		}
 	},
 
-	showSidenav: function() {
+	showSidenav() {
 		const instance = this;
 		const mobile = instance.mobile;
 		const options = instance.options;
@@ -527,7 +778,7 @@ SideNavigation.prototype = {
 		const type = mobile ? options.typeMobile : options.type;
 
 		if (type !== 'fixed') {
-			const navigationStartX = hasClass(container, 'open')
+			let navigationStartX = hasClass(container, 'open')
 				? offsetLeft(navigation) - options.gutter
 				: offsetLeft(navigation) - offset;
 
@@ -564,7 +815,7 @@ SideNavigation.prototype = {
 		}
 	},
 
-	showSimpleSidenav: function() {
+	showSimpleSidenav() {
 		const instance = this;
 
 		const options = instance.options;
@@ -596,24 +847,24 @@ SideNavigation.prototype = {
 			});
 
 			setClasses(content, {
-				'sidenav-transition': true,
+				[closedClass]: false,
 				[openClass]: true,
-				[closedClass]: false
+				'sidenav-transition': true
 			});
 			setClasses(container, {
-				'sidenav-transition': true,
+				[closedClass]: false,
 				[openClass]: true,
-				[closedClass]: false
+				'sidenav-transition': true
 			});
 			setClasses(toggler, {
-				'sidenav-transition': true,
 				active: true,
-				[openClass]: true
+				[openClass]: true,
+				'sidenav-transition': true
 			});
 		}
 	},
 
-	toggle: function() {
+	toggle() {
 		const instance = this;
 
 		if (instance.useDataAttribute) {
@@ -623,7 +874,7 @@ SideNavigation.prototype = {
 		}
 	},
 
-	toggleNavigation: function(force) {
+	toggleNavigation(force) {
 		const instance = this;
 		const options = instance.options;
 
@@ -706,7 +957,7 @@ SideNavigation.prototype = {
 		});
 	},
 
-	toggleSimpleSidenav: function() {
+	toggleSimpleSidenav() {
 		const instance = this;
 
 		const simpleSidenavClosed = instance._isSimpleSidenavClosed();
@@ -718,7 +969,7 @@ SideNavigation.prototype = {
 		}
 	},
 
-	visible: function() {
+	visible() {
 		const instance = this;
 
 		let closed;
@@ -736,233 +987,6 @@ SideNavigation.prototype = {
 		}
 
 		return !closed;
-	},
-
-	_bindUI: function() {
-		const instance = this;
-
-		instance._subscribeClickTrigger();
-
-		instance._subscribeClickSidenavClose();
-	},
-
-	_getSidenavWidth: function() {
-		const instance = this;
-
-		const options = instance.options;
-
-		const widthOriginal = options.widthOriginal;
-
-		let width = widthOriginal;
-		const winWidth = window.innerWidth;
-
-		if (winWidth < widthOriginal + 40) {
-			width = winWidth - 40;
-		}
-
-		return width;
-	},
-
-	_getSimpleSidenavType: function() {
-		const instance = this;
-
-		const options = instance.options;
-
-		const desktop = instance._isDesktop();
-		const type = options.type;
-		const typeMobile = options.typeMobile;
-
-		if (desktop && type === 'fixed-push') {
-			return 'desktop-fixed-push';
-		} else if (!desktop && typeMobile === 'fixed-push') {
-			return 'mobile-fixed-push';
-		}
-
-		return 'fixed';
-	},
-
-	_isDesktop: function() {
-		return window.innerWidth >= this.options.breakpoint;
-	},
-
-	_isSidenavRight: function() {
-		const instance = this;
-		const options = instance.options;
-
-		const container = document.querySelector(options.container);
-		const isSidenavRight = hasClass(container, 'sidenav-right');
-
-		return isSidenavRight;
-	},
-
-	_isSimpleSidenavClosed: function() {
-		const instance = this;
-		const options = instance.options;
-
-		const openClass = options.openClass;
-
-		const container = document.querySelector(options.container);
-
-		return !hasClass(container, openClass);
-	},
-
-	_loadUrl: function(element, url) {
-		const instance = this;
-
-		const sidebar = element.querySelector('.sidebar-body');
-
-		if (!instance._fetchPromise && sidebar) {
-			const loading = document.createElement('div');
-			addClass(loading, 'sidenav-loading');
-			loading.innerHTML = instance.options.loadingIndicatorTPL;
-
-			sidebar.appendChild(loading);
-			instance._fetchPromise = Liferay.Util.fetch(url);
-
-			instance._fetchPromise
-				.then(response => {
-					if (!response.ok) {
-						throw new Error(`Failed to fetch ${url}`);
-					}
-					return response.text();
-				})
-				.then(text => {
-					const range = document.createRange();
-
-					range.selectNode(sidebar);
-
-					// Unlike `.innerHTML`, this will eval scripts.
-					const fragment = range.createContextualFragment(text);
-
-					sidebar.removeChild(loading);
-
-					sidebar.appendChild(fragment);
-
-					instance.setHeight();
-				})
-				.catch(err => {
-					console.log(err);
-				});
-		}
-	},
-
-	_subscribeClickSidenavClose: function() {
-		const instance = this;
-
-		const options = instance.options;
-
-		const containerSelector = options.container;
-
-		if (!instance._sidenavCloseSubscription) {
-			const closeButton = document.querySelector(
-				`${containerSelector} .sidenav-close`
-			);
-
-			instance._sidenavCloseSubscription = subscribe(
-				closeButton,
-				'click',
-				function handleSidenavClose(event) {
-					event.preventDefault();
-					instance.toggle();
-				}
-			);
-		}
-	},
-
-	_subscribeClickTrigger: function() {
-		const instance = this;
-
-		if (!instance._togglerSubscription) {
-			const toggler = instance.toggler;
-
-			instance._togglerSubscription = subscribe(
-				toggler,
-				'click',
-				function handleTogglerClick(event) {
-					instance.toggle();
-
-					event.preventDefault();
-				}
-			);
-		}
-	},
-
-	_subscribeSidenavTransitionEnd: function(element, fn) {
-		setTimeout(() => {
-			removeClass(element, 'sidenav-transition');
-
-			fn();
-		}, SideNavigation.TRANSITION_DURATION);
-	},
-
-	_renderNav: function() {
-		const instance = this;
-		const options = instance.options;
-
-		const container = document.querySelector(options.container);
-		const navigation = container.querySelector(options.navigation);
-		const menu = navigation.querySelector('.sidenav-menu');
-
-		const closed = hasClass(container, 'closed');
-		const sidenavRight = instance._isSidenavRight();
-		const width = instance._getSidenavWidth();
-
-		if (closed) {
-			setStyles(menu, {
-				width: px(width)
-			});
-
-			if (sidenavRight) {
-				const positionDirection = options.rtl ? 'left' : 'right';
-
-				setStyles(menu, {
-					[positionDirection]: px(width)
-				});
-			}
-		} else {
-			instance.showSidenav();
-			instance.setHeight();
-		}
-	},
-
-	_renderUI: function() {
-		const instance = this;
-		const options = instance.options;
-
-		const container = document.querySelector(options.container);
-		const toggler = instance.toggler;
-
-		const mobile = instance.mobile;
-		const type = mobile ? options.typeMobile : options.type;
-
-		if (!instance.useDataAttribute) {
-			if (mobile) {
-				setClasses(container, {
-					closed: true,
-					open: false
-				});
-
-				setClasses(toggler, {
-					active: false,
-					open: false
-				});
-			}
-
-			if (options.position === 'right') {
-				addClass(container, 'sidenav-right');
-			}
-
-			if (type !== 'relative') {
-				addClass(container, 'sidenav-fixed');
-			}
-
-			instance._renderNav();
-		}
-
-		// Force Reflow for IE11 Browser Bug
-		setStyles(container, {
-			display: ''
-		});
 	}
 };
 

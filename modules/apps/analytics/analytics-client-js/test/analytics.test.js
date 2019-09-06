@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import AnalyticsClient from '../src/analytics';
 import {expect} from 'chai';
 import fetchMock from 'fetch-mock';
@@ -53,15 +67,15 @@ describe('Analytics Client', () => {
 		localStorage.removeItem(STORAGE_KEY_USER_ID);
 	});
 
-	it('should be exposed in the global scope', () => {
+	it('is exposed in the global scope', () => {
 		expect(Analytics).to.be.a('object');
 	});
 
-	it('expose a "create" instantiation method', () => {
+	it('exposes a "create" instantiation method', () => {
 		Analytics.create.should.be.a('function');
 	});
 
-	it('should accept a configuration object', () => {
+	it('accepts a configuration object', () => {
 		const config = {a: 1, b: 2, c: 3};
 
 		Analytics.reset();
@@ -72,11 +86,11 @@ describe('Analytics Client', () => {
 	});
 
 	describe('.flush', () => {
-		it('should be exposed as an Analytics static method', () => {
+		it('is exposed as an Analytics static method', () => {
 			Analytics.flush.should.be.a('function');
 		});
 
-		it('should prevent overlapping requests', done => {
+		it('prevents overlapping requests', done => {
 			fetchMock.restore();
 
 			let fetchCalled = 0;
@@ -116,7 +130,7 @@ describe('Analytics Client', () => {
 			}, FLUSH_INTERVAL * 3);
 		});
 
-		it('should regenerate the stored identity if the identity changed', () => {
+		it('regenerates the stored identity if the identity changed', () => {
 			fetchMock.mock(/identity$/gi, () => Promise.resolve(200));
 
 			Analytics.reset();
@@ -142,7 +156,7 @@ describe('Analytics Client', () => {
 			});
 		});
 
-		it('should report identity changes to the Identity Service', () => {
+		it('reports identity changes to the Identity Service', () => {
 			fetchMock.mock('*', () => Promise.resolve(200));
 
 			Analytics.reset();
@@ -164,7 +178,7 @@ describe('Analytics Client', () => {
 				.then(() => expect(identityCalled).to.equal(1));
 		});
 
-		it("should not request the Identity Service when identity hasn't changed", () => {
+		it("does not request the Identity Service when identity hasn't changed", () => {
 			fetchMock.mock(/identity$/, () => Promise.resolve(200));
 
 			Analytics.reset();
@@ -186,7 +200,7 @@ describe('Analytics Client', () => {
 				.then(() => expect(identityCalled).to.equal(0));
 		});
 
-		it('should only clear the persisted events when done', () => {
+		it('only clears the persisted events when done', () => {
 			fetchMock.restore();
 			Analytics.reset();
 			Analytics.dispose();
@@ -214,7 +228,7 @@ describe('Analytics Client', () => {
 			});
 		});
 
-		it('should preserve the user id whenever the set identity is called after a anonymous navigation', () => {
+		it('preserves the user id whenever the set identity is called after a anonymous navigation', () => {
 			fetchMock.mock(/ac-server/gi, () => Promise.resolve(200));
 			fetchMock.mock(/identity$/, () => Promise.resolve(200));
 
@@ -234,7 +248,7 @@ describe('Analytics Client', () => {
 			});
 		});
 
-		it('should regenerate the user id on logouts or session expirations ', () => {
+		it('regenerates the user id on logouts or session expirations ', () => {
 			fetchMock.mock(/ac-server/gi, () => Promise.resolve(200));
 			fetchMock.mock(/identity$/, () => Promise.resolve(200));
 
@@ -263,11 +277,11 @@ describe('Analytics Client', () => {
 	});
 
 	describe('.send', () => {
-		it('should be exposed as an Analytics static method', () => {
+		it('is exposed as an Analytics static method', () => {
 			Analytics.send.should.be.a('function');
 		});
 
-		it('should add the given event to the event queue', () => {
+		it('adds the given event to the event queue', () => {
 			const eventId = 'eventId';
 			const applicationId = 'applicationId';
 			const properties = {a: 1, b: 2, c: 3};
@@ -285,7 +299,7 @@ describe('Analytics Client', () => {
 			});
 		});
 
-		it('should persist the given events to the LocalStorage', () => {
+		it('persists the given events to the LocalStorage', () => {
 			const eventsNumber = 5;
 
 			sendDummyEvents(Analytics, eventsNumber);

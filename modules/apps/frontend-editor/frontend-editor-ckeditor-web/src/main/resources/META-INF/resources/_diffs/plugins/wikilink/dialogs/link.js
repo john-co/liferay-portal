@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 CKEDITOR.dialog.add('link', function(editor) {
 	var LANG_COMMON = editor.lang.common;
 
@@ -38,7 +52,7 @@ CKEDITOR.dialog.add('link', function(editor) {
 					{
 						children: [
 							{
-								commit: function(data) {
+								commit(data) {
 									var instance = this;
 
 									if (!data) {
@@ -53,7 +67,7 @@ CKEDITOR.dialog.add('link', function(editor) {
 								id: 'linkAddress',
 								label: LANG_COMMON.url,
 								required: true,
-								setup: function(data) {
+								setup(data) {
 									var instance = this;
 
 									if (data) {
@@ -69,7 +83,7 @@ CKEDITOR.dialog.add('link', function(editor) {
 									}
 								},
 								type: 'text',
-								validate: function() {
+								validate() {
 									var instance = this;
 
 									var func = CKEDITOR.dialog.validate.notEmpty(
@@ -82,9 +96,7 @@ CKEDITOR.dialog.add('link', function(editor) {
 							{
 								id: 'linkBrowse',
 								label: LANG_COMMON.browseServer,
-								required: true,
-								type: 'button',
-								onClick: function(event) {
+								onClick(event) {
 									var dialog = event.data.dialog;
 
 									var editor = dialog.getParentEditor();
@@ -111,7 +123,9 @@ CKEDITOR.dialog.add('link', function(editor) {
 											);
 										}
 									});
-								}
+								},
+								required: true,
+								type: 'button'
 							}
 						],
 						id: 'linkOptions',
@@ -124,11 +138,11 @@ CKEDITOR.dialog.add('link', function(editor) {
 				title: LANG_LINK.info
 			}
 		],
+
 		minHeight: 100,
 		minWidth: 250,
-		title: LANG_LINK.title,
 
-		onFocus: function() {
+		onFocus() {
 			var instance = this;
 
 			var urlField = instance.getContentElement('info', 'linkAddress');
@@ -136,9 +150,9 @@ CKEDITOR.dialog.add('link', function(editor) {
 			urlField.select();
 		},
 
-		onLoad: function() {},
+		onLoad() {},
 
-		onOk: function() {
+		onOk() {
 			var instance = this;
 
 			var attributes = {};
@@ -170,7 +184,7 @@ CKEDITOR.dialog.add('link', function(editor) {
 				}
 
 				var style = new CKEDITOR.style({
-					attributes: attributes,
+					attributes,
 					element: 'a'
 				});
 
@@ -190,7 +204,7 @@ CKEDITOR.dialog.add('link', function(editor) {
 			}
 		},
 
-		onShow: function() {
+		onShow() {
 			var instance = this;
 
 			instance.fakeObj = false;
@@ -206,6 +220,8 @@ CKEDITOR.dialog.add('link', function(editor) {
 			}
 
 			instance.setupContent(parseLink.apply(instance, [editor, element]));
-		}
+		},
+
+		title: LANG_LINK.title
 	};
 });

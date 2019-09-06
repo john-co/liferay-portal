@@ -77,7 +77,7 @@ String navigation = ParamUtil.getString(request, "navigation");
 
 		<soy:component-renderer
 			context="<%= context %>"
-			module="document_library/bulk/BulkStatus.es"
+			module="document_library/js/bulk/BulkStatus.es"
 			templateNamespace="com.liferay.document.library.web.BulkStatus.render"
 		/>
 
@@ -125,9 +125,12 @@ String navigation = ParamUtil.getString(request, "navigation");
 						<aui:input name="versionIncrease" type="hidden" />
 						<aui:input name="selectAll" type="hidden" value="<%= false %>" />
 
+						<liferay-util:dynamic-include key="com.liferay.document.library.web#/document_library/view.jsp#errors" />
+
 						<liferay-ui:error exception="<%= AuthenticationRepositoryException.class %>" message="you-cannot-access-the-repository-because-you-are-not-allowed-to-or-it-is-unavailable" />
 						<liferay-ui:error exception="<%= DuplicateFileEntryException.class %>" message="the-folder-you-selected-already-has-an-entry-with-this-name.-please-select-a-different-folder" />
 						<liferay-ui:error exception="<%= FileEntryLockException.MustOwnLock.class %>" message="you-can-only-checkin-documents-you-have-checked-out-yourself" />
+						<liferay-ui:error key="externalServiceFailed" message="you-cannot-access-external-service-because-you-are-not-allowed-to-or-it-is-unavailable" />
 
 						<div class="document-container">
 							<c:choose>
@@ -308,14 +311,14 @@ String navigation = ParamUtil.getString(request, "navigation");
 			componentId='<%= liferayPortletResponse.getNamespace() + "EditTagsComponent" %>'
 			containerId='<%= "#" + liferayPortletResponse.getNamespace() + "documentLibraryModal" %>'
 			context="<%= tagsContext %>"
-			module="document_library/categorization/EditTags.es"
+			module="document_library/js/categorization/EditTags.es"
 		/>
 
 		<liferay-frontend:component
 			componentId='<%= liferayPortletResponse.getNamespace() + "EditCategoriesComponent" %>'
 			containerId='<%= "#" + liferayPortletResponse.getNamespace() + "documentLibraryModal" %>'
 			context="<%= categoriesContext %>"
-			module="document_library/categorization/EditCategories.es"
+			module="document_library/js/categorization/EditCategories.es"
 		/>
 
 		<liferay-util:dynamic-include key="com.liferay.document.library.web#/document_library/view.jsp#post" />

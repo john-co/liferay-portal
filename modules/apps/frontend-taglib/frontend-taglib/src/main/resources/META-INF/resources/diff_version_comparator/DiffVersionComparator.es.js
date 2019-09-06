@@ -1,7 +1,21 @@
-import Ajax from 'metal-ajax';
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import Component from 'metal-component';
 import Soy from 'metal-soy';
 import {Config} from 'metal-state';
+import {fetch} from 'frontend-js-web';
 import {isObject} from 'metal';
 
 import templates from './DiffVersionComparator.soy';
@@ -29,11 +43,10 @@ class DiffVersionComparator extends Component {
 
 	/**
 	 * Handles click event of close button on version filter header.
-	 * @param {Event} event
 	 * @protected
 	 * @review
 	 */
-	handleCloseFilterClick_(event) {
+	handleCloseFilterClick_() {
 		this.selectedVersion = null;
 
 		this.loadDiffHtmlResults_(this.targetVersion);
@@ -106,14 +119,20 @@ class DiffVersionComparator extends Component {
 	loadDiffHtmlResults_(targetVersion) {
 		const {portletNamespace} = this;
 
-		const params = {
-			[`${portletNamespace}filterSourceVersion`]: this.sourceVersion,
-			[`${portletNamespace}filterTargetVersion`]: targetVersion
-		};
+		const url = new URL(this.resourceURL);
+		url.searchParams.append(
+			`${portletNamespace}filterSourceVersion`,
+			`${this.sourceVersion}`
+		);
+		url.searchParams.append(
+			`${portletNamespace}filterTargetVersion`,
+			`${targetVersion}`
+		);
 
-		Ajax.request(this.resourceURL, 'get', null, null, params)
-			.then(xhrResponse => {
-				this.diffHtmlResults = xhrResponse.response;
+		fetch(url)
+			.then(res => res.text())
+			.then(text => {
+				this.diffHtmlResults = text;
 			})
 			.catch(() => {
 				this.diffHtmlResults = Liferay.Language.get(
@@ -214,15 +233,6 @@ DiffVersionComparator.STATE = {
 	selectedVersion: Config.object(),
 
 	/**
-	 * Currently selected source version.
-	 * @instance
-	 * @memberof DiffVersionComparator
-	 * @review
-	 * @type {String}
-	 */
-	sourceVersion: Config.string(),
-
-	/**
 	 * Determines if version filter should display.
 	 * @default false
 	 * @instance
@@ -231,6 +241,15 @@ DiffVersionComparator.STATE = {
 	 * @type {boolean}
 	 */
 	showVersionFilter: Config.bool().value(false),
+
+	/**
+	 * Currently selected source version.
+	 * @instance
+	 * @memberof DiffVersionComparator
+	 * @review
+	 * @type {String}
+	 */
+	sourceVersion: Config.string(),
 
 	/**
 	 * Currently selected target version.

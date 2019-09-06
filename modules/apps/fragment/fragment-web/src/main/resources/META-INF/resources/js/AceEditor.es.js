@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import Component from 'metal-component';
 import Soy from 'metal-soy';
 import {Config} from 'metal-state';
@@ -40,6 +54,8 @@ class AceEditor extends Component {
 					mode: this.syntax,
 					tabSize: 2
 				});
+
+				this._editor.set('readOnly', this.readOnly);
 
 				this._editorDocument = this._editor.getSession().getDocument();
 				this._editorSession = this._editor.getSession();
@@ -190,10 +206,8 @@ class AceEditor extends Component {
 	_overrideSetAnnotations(session) {
 		const setAnnotations = session.setAnnotations.bind(session);
 
-		session.setAnnotations = annotations => {
-			setAnnotations(
-				annotations.filter(annotation => annotation.type !== 'info')
-			);
+		session.setAnnotations = () => {
+			setAnnotations([]);
 		};
 	}
 }
@@ -207,7 +221,8 @@ class AceEditor extends Component {
 AceEditor.SYNTAX = {
 	css: 'css',
 	html: 'html',
-	javascript: 'javascript'
+	javascript: 'javascript',
+	json: 'json'
 };
 
 /**
@@ -274,6 +289,16 @@ AceEditor.STATE = {
 	 * @type {string}
 	 */
 	initialContent: Config.string().value(''),
+
+	/**
+	 * Sets the editor in readOnly mode preventing any input from the user.
+	 *
+	 * @default undefined
+	 * @instance
+	 * @memberOf AceEditor
+	 * @type {boolean}
+	 */
+	readOnly: Config.bool().required(),
 
 	/**
 	 * Syntax used for the Ace Editor that is rendered on the interface.

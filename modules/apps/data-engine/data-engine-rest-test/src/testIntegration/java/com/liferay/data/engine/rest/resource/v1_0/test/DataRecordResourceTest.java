@@ -27,6 +27,7 @@ import com.liferay.portal.test.rule.Inject;
 import java.util.HashMap;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -46,6 +47,25 @@ public class DataRecordResourceTest extends BaseDataRecordResourceTestCase {
 			_ddmStructure, testGroup, _resourceLocalService);
 		_irrelevantDDLRecordSet = DataRecordCollectionTestUtil.addRecordSet(
 			_ddmStructure, irrelevantGroup, _resourceLocalService);
+	}
+
+	@Ignore
+	@Override
+	@Test
+	public void testGetDataRecordCollectionDataRecordExport() throws Exception {
+		super.testGetDataRecordCollectionDataRecordExport();
+	}
+
+	@Ignore
+	@Override
+	@Test
+	public void testGraphQLDeleteDataRecord() {
+	}
+
+	@Ignore
+	@Override
+	@Test
+	public void testGraphQLGetDataRecord() {
 	}
 
 	@Override
@@ -73,13 +93,14 @@ public class DataRecordResourceTest extends BaseDataRecordResourceTestCase {
 	}
 
 	@Override
-	protected DataRecord randomDataRecord() throws Exception {
+	protected DataRecord randomDataRecord() {
 		return _createDataRecord("MyText");
 	}
 
 	@Override
 	protected DataRecord randomIrrelevantDataRecord() throws Exception {
-		DataRecord randomIrrelevantDataRecord = randomDataRecord();
+		DataRecord randomIrrelevantDataRecord =
+			super.randomIrrelevantDataRecord();
 
 		randomIrrelevantDataRecord.setDataRecordCollectionId(
 			_irrelevantDDLRecordSet.getRecordSetId());
@@ -94,6 +115,13 @@ public class DataRecordResourceTest extends BaseDataRecordResourceTestCase {
 	}
 
 	@Override
+	protected Long testGetDataDefinitionDataRecordsPage_getDataDefinitionId()
+		throws Exception {
+
+		return _ddmStructure.getStructureId();
+	}
+
+	@Override
 	protected DataRecord testGetDataRecord_addDataRecord() throws Exception {
 		return dataRecordResource.postDataRecordCollectionDataRecord(
 			_ddlRecordSet.getRecordSetId(), randomDataRecord());
@@ -105,14 +133,8 @@ public class DataRecordResourceTest extends BaseDataRecordResourceTestCase {
 				Long dataLayoutId, DataRecord dataRecord)
 		throws Exception {
 
-		long dataRecordCollectionId = _ddlRecordSet.getRecordSetId();
-
-		if (dataLayoutId == _irrelevantDDLRecordSet.getDDMStructureId()) {
-			dataRecordCollectionId = _irrelevantDDLRecordSet.getRecordSetId();
-		}
-
 		return dataRecordResource.postDataRecordCollectionDataRecord(
-			dataRecordCollectionId, randomDataRecord());
+			dataRecord.getDataRecordCollectionId(), dataRecord);
 	}
 
 	@Override

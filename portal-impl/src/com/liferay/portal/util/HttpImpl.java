@@ -487,10 +487,8 @@ public class HttpImpl implements Http {
 				completeURL, sessionId);
 		}
 
-		if (_log.isWarnEnabled()) {
-			if (completeURL.contains("?&")) {
-				_log.warn("Invalid url " + completeURL);
-			}
+		if (_log.isWarnEnabled() && completeURL.contains("?&")) {
+			_log.warn("Invalid url " + completeURL);
 		}
 
 		return completeURL;
@@ -736,9 +734,7 @@ public class HttpImpl implements Http {
 
 	@Override
 	public boolean isSecure(String url) {
-		String protocol = getProtocol(url);
-
-		return StringUtil.equalsIgnoreCase(protocol, Http.HTTPS);
+		return StringUtil.equalsIgnoreCase(getProtocol(url), Http.HTTPS);
 	}
 
 	@Override
@@ -1347,9 +1343,7 @@ public class HttpImpl implements Http {
 	protected void addProxyCredentials(
 		URI uri, HttpClientContext httpClientContext) {
 
-		String host = uri.getHost();
-
-		if (!isProxyHost(host) || (_proxyCredentials == null)) {
+		if (!isProxyHost(uri.getHost()) || (_proxyCredentials == null)) {
 			return;
 		}
 
@@ -1438,9 +1432,7 @@ public class HttpImpl implements Http {
 	protected boolean hasRequestHeader(
 		RequestBuilder requestBuilder, String name) {
 
-		Header[] headers = requestBuilder.getHeaders(name);
-
-		if (ArrayUtil.isEmpty(headers)) {
+		if (ArrayUtil.isEmpty(requestBuilder.getHeaders(name))) {
 			return false;
 		}
 

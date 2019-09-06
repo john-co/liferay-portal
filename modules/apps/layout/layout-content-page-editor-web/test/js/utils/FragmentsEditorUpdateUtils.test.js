@@ -1,4 +1,17 @@
-/* globals expect */
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import {
 	decodeId,
 	encodeAssetId
@@ -6,7 +19,7 @@ import {
 
 describe('FragmentsEditorIdUtils', () => {
 	describe('#decodeId', () => {
-		it('should decode a given base64 encoded object', () => {
+		it('decodes a given base64 encoded object', () => {
 			const obj = {
 				a: 'a',
 				b: 2
@@ -16,13 +29,13 @@ describe('FragmentsEditorIdUtils', () => {
 			expect(decodeId(str)).toEqual(obj);
 		});
 
-		it('should throw an error when string is not base64 encoded', () => {
+		it('throws an error when string is not base64 encoded', () => {
 			const str = 'not base64 encoded';
 
 			expect(() => decodeId(str)).toThrow();
 		});
 
-		it('should throw an error when string is not an object', () => {
+		it('throws an error when string is not an object', () => {
 			const str = btoa('not an object');
 
 			expect(() => decodeId(str)).toThrow();
@@ -30,7 +43,7 @@ describe('FragmentsEditorIdUtils', () => {
 	});
 
 	describe('#encodeAssetId', () => {
-		it('should add an encoded id to a given asset object', () => {
+		it('adds an encoded id to a given asset object', () => {
 			const asset = {
 				assetEntryTitle: 'My asset',
 				classNameId: 11111,
@@ -40,13 +53,13 @@ describe('FragmentsEditorIdUtils', () => {
 			expect(encodeAssetId(asset)).toMatchSnapshot();
 		});
 
-		it('should throw an error when input is not an object', () => {
+		it('throws an error when input is not an object', () => {
 			const input = 'not an object';
 
 			expect(() => encodeAssetId(input)).toThrowError();
 		});
 
-		it('should throw an error when input is not an asset', () => {
+		it('throws an error when input is not an asset', () => {
 			const input = {
 				a: 'a',
 				b: 2

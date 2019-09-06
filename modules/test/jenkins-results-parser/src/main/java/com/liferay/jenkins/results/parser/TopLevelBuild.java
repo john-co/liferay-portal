@@ -22,6 +22,7 @@ import com.liferay.jenkins.results.parser.failure.message.generator.FailureMessa
 import com.liferay.jenkins.results.parser.failure.message.generator.GenericFailureMessageGenerator;
 import com.liferay.jenkins.results.parser.failure.message.generator.GitLPushFailureMessageGenerator;
 import com.liferay.jenkins.results.parser.failure.message.generator.GradleTaskFailureMessageGenerator;
+import com.liferay.jenkins.results.parser.failure.message.generator.InvalidGitCommitSHAFailureMessageGenerator;
 import com.liferay.jenkins.results.parser.failure.message.generator.InvalidSenderSHAFailureMessageGenerator;
 import com.liferay.jenkins.results.parser.failure.message.generator.JenkinsRegenFailureMessageGenerator;
 import com.liferay.jenkins.results.parser.failure.message.generator.JenkinsSourceFormatFailureMessageGenerator;
@@ -57,7 +58,7 @@ import org.json.JSONObject;
 /**
  * @author Kevin Yen
  */
-public class TopLevelBuild extends BaseBuild {
+public abstract class TopLevelBuild extends BaseBuild {
 
 	@Override
 	public void addDownstreamBuilds(String... urls) {
@@ -246,31 +247,6 @@ public class TopLevelBuild extends BaseBuild {
 		metricLabels.put("top_level_job_name", getJobName());
 
 		return metricLabels;
-	}
-
-	@Override
-	public String getResult() {
-		for (Build downstreamBuild : downstreamBuilds) {
-			String downstreamBuildResult = downstreamBuild.getResult();
-
-			if (downstreamBuildResult == null) {
-				setResult(null);
-
-				return null;
-			}
-
-			if (!downstreamBuildResult.equals("SUCCESS")) {
-				return "FAILURE";
-			}
-		}
-
-		String result = super.getResult();
-
-		if (result != null) {
-			return result;
-		}
-
-		return "SUCCESS";
 	}
 
 	@Override
@@ -1483,11 +1459,10 @@ public class TopLevelBuild extends BaseBuild {
 				continue;
 			}
 
-			long duration = modifiedCompletedBuild.getDuration();
-
 			sendBuildMetrics(
 				StatsDMetricsUtil.generateTimerMetric(
-					"jenkins_job_build_duration", duration,
+					"jenkins_job_build_duration",
+					modifiedCompletedBuild.getDuration(),
 					modifiedCompletedBuild.getMetricLabels()));
 		}
 	}
@@ -1523,18 +1498,24 @@ public class TopLevelBuild extends BaseBuild {
 
 	private static final FailureMessageGenerator[] _FAILURE_MESSAGE_GENERATORS =
 		{
+			new CITestSuiteValidationFailureMessageGenerator(),
 			new CompileFailureMessageGenerator(),
-			new PoshiValidationFailureMessageGenerator(),
-			new PoshiTestFailureMessageGenerator(),
 			new GitLPushFailureMessageGenerator(),
-			new GradleTaskFailureMessageGenerator(),
 			new JenkinsRegenFailureMessageGenerator(),
 			new JenkinsSourceFormatFailureMessageGenerator(),
+			new InvalidGitCommitSHAFailureMessageGenerator(),
 			new InvalidSenderSHAFailureMessageGenerator(),
 			new RebaseFailureMessageGenerator(),
-			new CITestSuiteValidationFailureMessageGenerator(),
-			new CIFailureMessageGenerator(),
+			//
+			new PoshiValidationFailureMessageGenerator(),
+			new PoshiTestFailureMessageGenerator(),
+			//
+			new GradleTaskFailureMessageGenerator(),
+			//
 			new DownstreamFailureMessageGenerator(),
+			//
+			new CIFailureMessageGenerator(),
+			//
 			new GenericFailureMessageGenerator()
 		};
 

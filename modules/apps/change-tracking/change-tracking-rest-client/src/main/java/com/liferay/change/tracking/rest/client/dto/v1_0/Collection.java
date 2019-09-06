@@ -23,7 +23,7 @@ import java.util.Objects;
 import javax.annotation.Generated;
 
 /**
- * @author Mate Thurzo
+ * @author Máté Thurzó
  * @generated
  */
 @Generated("")
@@ -50,27 +50,6 @@ public class Collection {
 
 	protected Long additionCount;
 
-	public Long getCollectionId() {
-		return collectionId;
-	}
-
-	public void setCollectionId(Long collectionId) {
-		this.collectionId = collectionId;
-	}
-
-	public void setCollectionId(
-		UnsafeSupplier<Long, Exception> collectionIdUnsafeSupplier) {
-
-		try {
-			collectionId = collectionIdUnsafeSupplier.get();
-		}
-		catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	protected Long collectionId;
-
 	public Long getCompanyId() {
 		return companyId;
 	}
@@ -91,6 +70,27 @@ public class Collection {
 	}
 
 	protected Long companyId;
+
+	public Date getDateStatus() {
+		return dateStatus;
+	}
+
+	public void setDateStatus(Date dateStatus) {
+		this.dateStatus = dateStatus;
+	}
+
+	public void setDateStatus(
+		UnsafeSupplier<Date, Exception> dateStatusUnsafeSupplier) {
+
+		try {
+			dateStatus = dateStatusUnsafeSupplier.get();
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	protected Date dateStatus;
 
 	public Long getDeletionCount() {
 		return deletionCount;
@@ -133,6 +133,25 @@ public class Collection {
 	}
 
 	protected String description;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public void setId(UnsafeSupplier<Long, Exception> idUnsafeSupplier) {
+		try {
+			id = idUnsafeSupplier.get();
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	protected Long id;
 
 	public Long getModificationCount() {
 		return modificationCount;
@@ -194,27 +213,6 @@ public class Collection {
 	}
 
 	protected String statusByUserName;
-
-	public Date getStatusDate() {
-		return statusDate;
-	}
-
-	public void setStatusDate(Date statusDate) {
-		this.statusDate = statusDate;
-	}
-
-	public void setStatusDate(
-		UnsafeSupplier<Date, Exception> statusDateUnsafeSupplier) {
-
-		try {
-			statusDate = statusDateUnsafeSupplier.get();
-		}
-		catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	protected Date statusDate;
 
 	@Override
 	public boolean equals(Object object) {

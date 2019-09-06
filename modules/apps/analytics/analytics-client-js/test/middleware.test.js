@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import AnalyticsClient from '../src/analytics';
 import {assert, expect} from 'chai';
 import fetchMock from 'fetch-mock';
@@ -35,11 +49,11 @@ describe('Analytics MiddleWare Integration', () => {
 	});
 
 	describe('.registerMiddleware', () => {
-		it('should be exposed as an Analytics static method', () => {
+		it('is exposed as an Analytics static method', () => {
 			Analytics.registerMiddleware.should.be.a('function');
 		});
 
-		it('shuld process the given middleware', () => {
+		it('processes the given middleware', () => {
 			const middleware = (req, analytics) => {
 				analytics.should.be.equal(Analytics);
 				req.should.be.a('object');
@@ -58,13 +72,13 @@ describe('Analytics MiddleWare Integration', () => {
 					assert.isTrue(spy.calledOnce);
 				})
 				.catch(e => {
-					console.log('caught', e);
+					console.error('caught', e);
 				});
 		});
 	});
 
 	describe('default middlewares', () => {
-		it('should include document metadata by default', done => {
+		it('includes document metadata by default', done => {
 			let body = null;
 
 			fetchMock.restore();

@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
 
 import com.liferay.change.tracking.rest.client.dto.v1_0.Collection;
+import com.liferay.change.tracking.rest.client.dto.v1_0.Entry;
 import com.liferay.change.tracking.rest.client.http.HttpInvoker;
 import com.liferay.change.tracking.rest.client.pagination.Page;
 import com.liferay.change.tracking.rest.client.pagination.Pagination;
@@ -30,6 +31,10 @@ import com.liferay.change.tracking.rest.client.resource.v1_0.CollectionResource;
 import com.liferay.change.tracking.rest.client.serdes.v1_0.CollectionSerDes;
 import com.liferay.petra.function.UnsafeTriConsumer;
 import com.liferay.petra.string.StringBundler;
+import com.liferay.portal.kernel.json.JSONArray;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Company;
@@ -40,18 +45,25 @@ import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.DateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.odata.entity.EntityField;
 import com.liferay.portal.odata.entity.EntityModel;
+import com.liferay.portal.test.log.CaptureAppender;
+import com.liferay.portal.test.log.Log4JLoggerTestUtil;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.vulcan.resource.EntityModelResource;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 import java.text.DateFormat;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -65,6 +77,7 @@ import javax.ws.rs.core.MultivaluedHashMap;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.lang.time.DateUtils;
+import org.apache.log4j.Level;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -75,7 +88,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 /**
- * @author Mate Thurzo
+ * @author Máté Thurzó
  * @generated
  */
 @Generated("")
@@ -192,8 +205,7 @@ public abstract class BaseCollectionResourceTestCase {
 	@Test
 	public void testGetCollectionsPage() throws Exception {
 		Page<Collection> page = collectionResource.getCollectionsPage(
-			null, RandomTestUtil.randomString(), null, Pagination.of(1, 2),
-			null);
+			null, null, null, Pagination.of(1, 2), null);
 
 		Assert.assertEquals(0, page.getTotalCount());
 
@@ -212,6 +224,10 @@ public abstract class BaseCollectionResourceTestCase {
 			Arrays.asList(collection1, collection2),
 			(List<Collection>)page.getItems());
 		assertValid(page);
+
+		collectionResource.deleteCollection(collection1.getId(), null);
+
+		collectionResource.deleteCollection(collection2.getId(), null);
 	}
 
 	@Test
@@ -275,10 +291,28 @@ public abstract class BaseCollectionResourceTestCase {
 		testGetCollectionsPageWithSort(
 			EntityField.Type.STRING,
 			(entityField, collection1, collection2) -> {
-				BeanUtils.setProperty(
-					collection1, entityField.getName(), "Aaa");
-				BeanUtils.setProperty(
-					collection2, entityField.getName(), "Bbb");
+				Class<?> clazz = collection1.getClass();
+
+				Method method = clazz.getMethod(
+					"get" +
+						StringUtil.upperCaseFirstLetter(entityField.getName()));
+
+				Class<?> returnType = method.getReturnType();
+
+				if (returnType.isAssignableFrom(Map.class)) {
+					BeanUtils.setProperty(
+						collection1, entityField.getName(),
+						Collections.singletonMap("Aaa", "Aaa"));
+					BeanUtils.setProperty(
+						collection2, entityField.getName(),
+						Collections.singletonMap("Bbb", "Bbb"));
+				}
+				else {
+					BeanUtils.setProperty(
+						collection1, entityField.getName(), "Aaa");
+					BeanUtils.setProperty(
+						collection2, entityField.getName(), "Bbb");
+				}
 			});
 	}
 
@@ -333,6 +367,58 @@ public abstract class BaseCollectionResourceTestCase {
 	}
 
 	@Test
+	public void testGraphQLGetCollectionsPage() throws Exception {
+		List<GraphQLField> graphQLFields = new ArrayList<>();
+
+		List<GraphQLField> itemsGraphQLFields = getGraphQLFields();
+
+		graphQLFields.add(
+			new GraphQLField(
+				"items", itemsGraphQLFields.toArray(new GraphQLField[0])));
+
+		graphQLFields.add(new GraphQLField("page"));
+		graphQLFields.add(new GraphQLField("totalCount"));
+
+		GraphQLField graphQLField = new GraphQLField(
+			"query",
+			new GraphQLField(
+				"collections",
+				new HashMap<String, Object>() {
+					{
+						put("page", 1);
+						put("pageSize", 2);
+					}
+				},
+				graphQLFields.toArray(new GraphQLField[0])));
+
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
+			invoke(graphQLField.toString()));
+
+		JSONObject dataJSONObject = jsonObject.getJSONObject("data");
+
+		JSONObject collectionsJSONObject = dataJSONObject.getJSONObject(
+			"collections");
+
+		Assert.assertEquals(0, collectionsJSONObject.get("totalCount"));
+
+		Collection collection1 = testGraphQLCollection_addCollection();
+		Collection collection2 = testGraphQLCollection_addCollection();
+
+		jsonObject = JSONFactoryUtil.createJSONObject(
+			invoke(graphQLField.toString()));
+
+		dataJSONObject = jsonObject.getJSONObject("data");
+
+		collectionsJSONObject = dataJSONObject.getJSONObject("collections");
+
+		Assert.assertEquals(2, collectionsJSONObject.get("totalCount"));
+
+		assertEqualsJSONArray(
+			Arrays.asList(collection1, collection2),
+			collectionsJSONObject.getJSONArray("items"));
+	}
+
+	@Test
 	public void testPostCollection() throws Exception {
 		Collection randomCollection = randomCollection();
 
@@ -352,22 +438,131 @@ public abstract class BaseCollectionResourceTestCase {
 
 	@Test
 	public void testDeleteCollection() throws Exception {
-		Assert.assertTrue(true);
+		Collection collection = testDeleteCollection_addCollection();
+
+		assertHttpResponseStatusCode(
+			204,
+			collectionResource.deleteCollectionHttpResponse(
+				collection.getId(), null));
+
+		assertHttpResponseStatusCode(
+			404,
+			collectionResource.getCollectionHttpResponse(
+				collection.getId(), null));
+
+		assertHttpResponseStatusCode(
+			404, collectionResource.getCollectionHttpResponse(0L, null));
+	}
+
+	protected Collection testDeleteCollection_addCollection() throws Exception {
+		throw new UnsupportedOperationException(
+			"This method needs to be implemented");
+	}
+
+	@Test
+	public void testGraphQLDeleteCollection() throws Exception {
+		Collection collection = testGraphQLCollection_addCollection();
+
+		GraphQLField graphQLField = new GraphQLField(
+			"mutation",
+			new GraphQLField(
+				"deleteCollection",
+				new HashMap<String, Object>() {
+					{
+						put("collectionId", collection.getId());
+					}
+				}));
+
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
+			invoke(graphQLField.toString()));
+
+		JSONObject dataJSONObject = jsonObject.getJSONObject("data");
+
+		Assert.assertTrue(dataJSONObject.getBoolean("deleteCollection"));
+
+		try (CaptureAppender captureAppender =
+				Log4JLoggerTestUtil.configureLog4JLogger(
+					"graphql.execution.SimpleDataFetcherExceptionHandler",
+					Level.WARN)) {
+
+			graphQLField = new GraphQLField(
+				"query",
+				new GraphQLField(
+					"collection",
+					new HashMap<String, Object>() {
+						{
+							put("collectionId", collection.getId());
+						}
+					},
+					new GraphQLField("id")));
+
+			jsonObject = JSONFactoryUtil.createJSONObject(
+				invoke(graphQLField.toString()));
+
+			JSONArray errorsJSONArray = jsonObject.getJSONArray("errors");
+
+			Assert.assertTrue(errorsJSONArray.length() > 0);
+		}
 	}
 
 	@Test
 	public void testGetCollection() throws Exception {
-		Assert.assertTrue(true);
+		Collection postCollection = testGetCollection_addCollection();
+
+		Collection getCollection = collectionResource.getCollection(
+			postCollection.getId(), null);
+
+		assertEquals(postCollection, getCollection);
+		assertValid(getCollection);
+	}
+
+	protected Collection testGetCollection_addCollection() throws Exception {
+		throw new UnsupportedOperationException(
+			"This method needs to be implemented");
+	}
+
+	@Test
+	public void testGraphQLGetCollection() throws Exception {
+		Collection collection = testGraphQLCollection_addCollection();
+
+		List<GraphQLField> graphQLFields = getGraphQLFields();
+
+		GraphQLField graphQLField = new GraphQLField(
+			"query",
+			new GraphQLField(
+				"collection",
+				new HashMap<String, Object>() {
+					{
+						put("collectionId", collection.getId());
+					}
+				},
+				graphQLFields.toArray(new GraphQLField[0])));
+
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
+			invoke(graphQLField.toString()));
+
+		JSONObject dataJSONObject = jsonObject.getJSONObject("data");
+
+		Assert.assertTrue(
+			equalsJSONObject(
+				collection, dataJSONObject.getJSONObject("collection")));
 	}
 
 	@Test
 	public void testPostCollectionCheckout() throws Exception {
-		Assert.assertTrue(true);
+		Assert.assertTrue(false);
 	}
 
 	@Test
 	public void testPostCollectionPublish() throws Exception {
-		Assert.assertTrue(true);
+		Assert.assertTrue(false);
+	}
+
+	protected Collection testGraphQLCollection_addCollection()
+		throws Exception {
+
+		throw new UnsupportedOperationException(
+			"This method needs to be implemented");
 	}
 
 	protected void assertHttpResponseStatusCode(
@@ -420,8 +615,31 @@ public abstract class BaseCollectionResourceTestCase {
 		}
 	}
 
+	protected void assertEqualsJSONArray(
+		List<Collection> collections, JSONArray jsonArray) {
+
+		for (Collection collection : collections) {
+			boolean contains = false;
+
+			for (Object object : jsonArray) {
+				if (equalsJSONObject(collection, (JSONObject)object)) {
+					contains = true;
+
+					break;
+				}
+			}
+
+			Assert.assertTrue(
+				jsonArray + " does not contain " + collection, contains);
+		}
+	}
+
 	protected void assertValid(Collection collection) {
 		boolean valid = true;
+
+		if (collection.getId() == null) {
+			valid = false;
+		}
 
 		for (String additionalAssertFieldName :
 				getAdditionalAssertFieldNames()) {
@@ -434,16 +652,16 @@ public abstract class BaseCollectionResourceTestCase {
 				continue;
 			}
 
-			if (Objects.equals("collectionId", additionalAssertFieldName)) {
-				if (collection.getCollectionId() == null) {
+			if (Objects.equals("companyId", additionalAssertFieldName)) {
+				if (collection.getCompanyId() == null) {
 					valid = false;
 				}
 
 				continue;
 			}
 
-			if (Objects.equals("companyId", additionalAssertFieldName)) {
-				if (collection.getCompanyId() == null) {
+			if (Objects.equals("dateStatus", additionalAssertFieldName)) {
+				if (collection.getDateStatus() == null) {
 					valid = false;
 				}
 
@@ -492,14 +710,6 @@ public abstract class BaseCollectionResourceTestCase {
 				continue;
 			}
 
-			if (Objects.equals("statusDate", additionalAssertFieldName)) {
-				if (collection.getStatusDate() == null) {
-					valid = false;
-				}
-
-				continue;
-			}
-
 			throw new IllegalArgumentException(
 				"Invalid additional assert field name " +
 					additionalAssertFieldName);
@@ -529,6 +739,20 @@ public abstract class BaseCollectionResourceTestCase {
 		return new String[0];
 	}
 
+	protected List<GraphQLField> getGraphQLFields() {
+		List<GraphQLField> graphQLFields = new ArrayList<>();
+
+		graphQLFields.add(new GraphQLField("id"));
+
+		for (String additionalAssertFieldName :
+				getAdditionalAssertFieldNames()) {
+
+			graphQLFields.add(new GraphQLField(additionalAssertFieldName));
+		}
+
+		return graphQLFields;
+	}
+
 	protected String[] getIgnoredEntityFieldNames() {
 		return new String[0];
 	}
@@ -552,10 +776,10 @@ public abstract class BaseCollectionResourceTestCase {
 				continue;
 			}
 
-			if (Objects.equals("collectionId", additionalAssertFieldName)) {
+			if (Objects.equals("companyId", additionalAssertFieldName)) {
 				if (!Objects.deepEquals(
-						collection1.getCollectionId(),
-						collection2.getCollectionId())) {
+						collection1.getCompanyId(),
+						collection2.getCompanyId())) {
 
 					return false;
 				}
@@ -563,10 +787,10 @@ public abstract class BaseCollectionResourceTestCase {
 				continue;
 			}
 
-			if (Objects.equals("companyId", additionalAssertFieldName)) {
+			if (Objects.equals("dateStatus", additionalAssertFieldName)) {
 				if (!Objects.deepEquals(
-						collection1.getCompanyId(),
-						collection2.getCompanyId())) {
+						collection1.getDateStatus(),
+						collection2.getDateStatus())) {
 
 					return false;
 				}
@@ -589,6 +813,16 @@ public abstract class BaseCollectionResourceTestCase {
 				if (!Objects.deepEquals(
 						collection1.getDescription(),
 						collection2.getDescription())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("id", additionalAssertFieldName)) {
+				if (!Objects.deepEquals(
+						collection1.getId(), collection2.getId())) {
 
 					return false;
 				}
@@ -630,10 +864,98 @@ public abstract class BaseCollectionResourceTestCase {
 				continue;
 			}
 
-			if (Objects.equals("statusDate", additionalAssertFieldName)) {
-				if (!Objects.deepEquals(
-						collection1.getStatusDate(),
-						collection2.getStatusDate())) {
+			throw new IllegalArgumentException(
+				"Invalid additional assert field name " +
+					additionalAssertFieldName);
+		}
+
+		return true;
+	}
+
+	protected boolean equalsJSONObject(
+		Collection collection, JSONObject jsonObject) {
+
+		for (String fieldName : getAdditionalAssertFieldNames()) {
+			if (Objects.equals("additionCount", fieldName)) {
+				if (!Objects.equals(
+						collection.getAdditionCount(),
+						(Long)jsonObject.getLong("additionCount"))) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("companyId", fieldName)) {
+				if (!Objects.equals(
+						collection.getCompanyId(),
+						(Long)jsonObject.getLong("companyId"))) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("deletionCount", fieldName)) {
+				if (!Objects.equals(
+						collection.getDeletionCount(),
+						(Long)jsonObject.getLong("deletionCount"))) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("description", fieldName)) {
+				if (!Objects.equals(
+						collection.getDescription(),
+						(String)jsonObject.getString("description"))) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("id", fieldName)) {
+				if (!Objects.equals(
+						collection.getId(), (Long)jsonObject.getLong("id"))) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("modificationCount", fieldName)) {
+				if (!Objects.equals(
+						collection.getModificationCount(),
+						(Long)jsonObject.getLong("modificationCount"))) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("name", fieldName)) {
+				if (!Objects.equals(
+						collection.getName(),
+						(String)jsonObject.getString("name"))) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("statusByUserName", fieldName)) {
+				if (!Objects.equals(
+						collection.getStatusByUserName(),
+						(String)jsonObject.getString("statusByUserName"))) {
 
 					return false;
 				}
@@ -642,8 +964,7 @@ public abstract class BaseCollectionResourceTestCase {
 			}
 
 			throw new IllegalArgumentException(
-				"Invalid additional assert field name " +
-					additionalAssertFieldName);
+				"Invalid field name " + fieldName);
 		}
 
 		return true;
@@ -704,14 +1025,40 @@ public abstract class BaseCollectionResourceTestCase {
 				"Invalid entity field " + entityFieldName);
 		}
 
-		if (entityFieldName.equals("collectionId")) {
+		if (entityFieldName.equals("companyId")) {
 			throw new IllegalArgumentException(
 				"Invalid entity field " + entityFieldName);
 		}
 
-		if (entityFieldName.equals("companyId")) {
-			throw new IllegalArgumentException(
-				"Invalid entity field " + entityFieldName);
+		if (entityFieldName.equals("dateStatus")) {
+			if (operator.equals("between")) {
+				sb = new StringBundler();
+
+				sb.append("(");
+				sb.append(entityFieldName);
+				sb.append(" gt ");
+				sb.append(
+					_dateFormat.format(
+						DateUtils.addSeconds(collection.getDateStatus(), -2)));
+				sb.append(" and ");
+				sb.append(entityFieldName);
+				sb.append(" lt ");
+				sb.append(
+					_dateFormat.format(
+						DateUtils.addSeconds(collection.getDateStatus(), 2)));
+				sb.append(")");
+			}
+			else {
+				sb.append(entityFieldName);
+
+				sb.append(" ");
+				sb.append(operator);
+				sb.append(" ");
+
+				sb.append(_dateFormat.format(collection.getDateStatus()));
+			}
+
+			return sb.toString();
 		}
 
 		if (entityFieldName.equals("deletionCount")) {
@@ -725,6 +1072,11 @@ public abstract class BaseCollectionResourceTestCase {
 			sb.append("'");
 
 			return sb.toString();
+		}
+
+		if (entityFieldName.equals("id")) {
+			throw new IllegalArgumentException(
+				"Invalid entity field " + entityFieldName);
 		}
 
 		if (entityFieldName.equals("modificationCount")) {
@@ -748,53 +1100,39 @@ public abstract class BaseCollectionResourceTestCase {
 			return sb.toString();
 		}
 
-		if (entityFieldName.equals("statusDate")) {
-			if (operator.equals("between")) {
-				sb = new StringBundler();
-
-				sb.append("(");
-				sb.append(entityFieldName);
-				sb.append(" gt ");
-				sb.append(
-					_dateFormat.format(
-						DateUtils.addSeconds(collection.getStatusDate(), -2)));
-				sb.append(" and ");
-				sb.append(entityFieldName);
-				sb.append(" lt ");
-				sb.append(
-					_dateFormat.format(
-						DateUtils.addSeconds(collection.getStatusDate(), 2)));
-				sb.append(")");
-			}
-			else {
-				sb.append(entityFieldName);
-
-				sb.append(" ");
-				sb.append(operator);
-				sb.append(" ");
-
-				sb.append(_dateFormat.format(collection.getStatusDate()));
-			}
-
-			return sb.toString();
-		}
-
 		throw new IllegalArgumentException(
 			"Invalid entity field " + entityFieldName);
+	}
+
+	protected String invoke(String query) throws Exception {
+		HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
+
+		httpInvoker.body(
+			JSONUtil.put(
+				"query", query
+			).toString(),
+			"application/json");
+		httpInvoker.httpMethod(HttpInvoker.HttpMethod.POST);
+		httpInvoker.path("http://localhost:8080/o/graphql");
+		httpInvoker.userNameAndPassword("test@liferay.com:test");
+
+		HttpInvoker.HttpResponse httpResponse = httpInvoker.invoke();
+
+		return httpResponse.getContent();
 	}
 
 	protected Collection randomCollection() throws Exception {
 		return new Collection() {
 			{
 				additionCount = RandomTestUtil.randomLong();
-				collectionId = RandomTestUtil.randomLong();
 				companyId = RandomTestUtil.randomLong();
+				dateStatus = RandomTestUtil.nextDate();
 				deletionCount = RandomTestUtil.randomLong();
 				description = RandomTestUtil.randomString();
+				id = RandomTestUtil.randomLong();
 				modificationCount = RandomTestUtil.randomLong();
 				name = RandomTestUtil.randomString();
 				statusByUserName = RandomTestUtil.randomString();
-				statusDate = RandomTestUtil.nextDate();
 			}
 		};
 	}
@@ -813,6 +1151,60 @@ public abstract class BaseCollectionResourceTestCase {
 	protected Group irrelevantGroup;
 	protected Company testCompany;
 	protected Group testGroup;
+
+	protected class GraphQLField {
+
+		public GraphQLField(String key, GraphQLField... graphQLFields) {
+			this(key, new HashMap<>(), graphQLFields);
+		}
+
+		public GraphQLField(
+			String key, Map<String, Object> parameterMap,
+			GraphQLField... graphQLFields) {
+
+			_key = key;
+			_parameterMap = parameterMap;
+			_graphQLFields = graphQLFields;
+		}
+
+		@Override
+		public String toString() {
+			StringBuilder sb = new StringBuilder(_key);
+
+			if (!_parameterMap.isEmpty()) {
+				sb.append("(");
+
+				for (Map.Entry<String, Object> entry :
+						_parameterMap.entrySet()) {
+
+					sb.append(entry.getKey());
+					sb.append(":");
+					sb.append(entry.getValue());
+					sb.append(",");
+				}
+
+				sb.append(")");
+			}
+
+			if (_graphQLFields.length > 0) {
+				sb.append("{");
+
+				for (GraphQLField graphQLField : _graphQLFields) {
+					sb.append(graphQLField.toString());
+					sb.append(",");
+				}
+
+				sb.append("}");
+			}
+
+			return sb.toString();
+		}
+
+		private final GraphQLField[] _graphQLFields;
+		private final String _key;
+		private final Map<String, Object> _parameterMap;
+
+	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		BaseCollectionResourceTestCase.class);

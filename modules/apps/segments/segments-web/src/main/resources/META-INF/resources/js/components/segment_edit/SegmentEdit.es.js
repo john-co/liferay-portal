@@ -1,4 +1,18 @@
-import ClayButton from '../shared/ClayButton.es';
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
+import ClayButton from '@clayui/button';
 import ClayToggle from '../shared/ClayToggle.es';
 import ContributorInputs from '../criteria_builder/ContributorInputs.es';
 import ContributorsBuilder from '../criteria_builder/ContributorsBuilder.es';
@@ -11,7 +25,7 @@ import {
 	applyCriteriaChangeToContributors,
 	initialContributorsToContributors
 } from '../../utils/contributors.es';
-import {debounce} from 'metal-debounce';
+import {debounce} from 'frontend-js-web';
 import {FieldArray, withFormik} from 'formik';
 import {initialContributorShape} from '../../utils/types.es';
 import {
@@ -80,6 +94,7 @@ class SegmentEdit extends Component {
 			contributors,
 			disabledSave: this._isQueryEmpty(contributors),
 			editing: showInEditMode,
+			hasChanged: false,
 			membersCount: initialMembersCount,
 			validTitle: !!values.name[props.defaultLanguageId]
 		};
@@ -99,6 +114,7 @@ class SegmentEdit extends Component {
 	_handleLocalizedInputChange = (event, newValues, invalid) => {
 		this.props.setFieldValue('name', newValues);
 		this.setState({
+			hasChanged: true,
 			validTitle: !invalid
 		});
 	};
@@ -145,6 +161,7 @@ class SegmentEdit extends Component {
 			return {
 				contributors,
 				disabledSave: this._isQueryEmpty(contributors),
+				hasChanged: true,
 				membersCountLoading: true
 			};
 		}, this._debouncedFetchMembersCount);
@@ -173,6 +190,7 @@ class SegmentEdit extends Component {
 
 			return {
 				contributors,
+				hasChanged: true,
 				membersCountLoading: true
 			};
 		}, this._debouncedFetchMembersCount);
@@ -222,6 +240,36 @@ class SegmentEdit extends Component {
 				supportedPropertyTypes={SUPPORTED_PROPERTY_TYPES}
 			/>
 		) : null;
+	};
+
+	/**
+	 * Decides wether to redirect the user or warn
+	 *
+	 * @memberof SegmentEdit
+	 */
+	_handleCancelButton = () => {
+		const {hasChanged} = this.state;
+
+		if (hasChanged) {
+			const confirmed = confirm(
+				Liferay.Language.get('criteria-cancel-confirmation-message')
+			);
+
+			if (confirmed) {
+				this._redirect();
+			}
+		} else {
+			this._redirect();
+		}
+	};
+
+	/**
+	 * This redirects to the `redirect` prop.
+	 *
+	 * @memberof SegmentEdit
+	 */
+	_redirect = () => {
+		Liferay.Util.navigate(this.props.redirect);
 	};
 
 	/**
@@ -294,19 +342,19 @@ class SegmentEdit extends Component {
 						<input
 							name={`${portletNamespace}name_${key}`}
 							readOnly
-							type='hidden'
+							type="hidden"
 							value={value}
 						/>
 						<input
 							name={`${portletNamespace}key`}
 							readOnly
-							type='hidden'
+							type="hidden"
 							value={value}
 						/>
 						<input
 							name={`${portletNamespace}name`}
 							readOnly
-							type='hidden'
+							type="hidden"
 							value={value}
 						/>
 					</React.Fragment>
@@ -317,7 +365,7 @@ class SegmentEdit extends Component {
 						<input
 							name={`${portletNamespace}name_${key}`}
 							readOnly
-							type='hidden'
+							type="hidden"
 							value={value}
 						/>
 					</React.Fragment>
@@ -333,7 +381,6 @@ class SegmentEdit extends Component {
 			defaultLanguageId,
 			hasUpdatePermission,
 			portletNamespace,
-			redirect,
 			source,
 			values
 		} = this.props;
@@ -347,18 +394,18 @@ class SegmentEdit extends Component {
 		const placeholder = Liferay.Language.get('untitled-segment');
 
 		return (
-			<div className='segment-edit-page-root'>
+			<div className="segment-edit-page-root">
 				<input
 					name={`${portletNamespace}active`}
-					type='hidden'
+					type="hidden"
 					value={values.active}
 				/>
 
-				<div className='form-header'>
-					<div className='container-fluid container-fluid-max-xl form-header-container'>
-						<div className='form-header-section-left'>
+				<div className="form-header">
+					<div className="container-fluid container-fluid-max-xl form-header-container">
+						<div className="form-header-section-left">
 							<FieldArray
-								name='values.name'
+								name="values.name"
 								render={this._renderLocalizedInputs}
 							/>
 
@@ -375,8 +422,8 @@ class SegmentEdit extends Component {
 							/>
 
 							<img
-								className='source-icon'
-								data-testid='source-icon'
+								className="source-icon"
+								data-testid="source-icon"
 								onMouseOver={this._handleSourceIconMouseOver}
 								src={
 									source === SOURCES.ASAH_FARO_BACKEND.name
@@ -387,41 +434,42 @@ class SegmentEdit extends Component {
 						</div>
 
 						{hasUpdatePermission && (
-							<div className='form-header-section-right'>
-								<div className='btn-group'>
-									<div className='btn-group-item mr-2'>
+							<div className="form-header-section-right">
+								<div className="btn-group">
+									<div className="btn-group-item mr-2">
 										<ClayToggle
 											checked={editing}
-											className='toggle-editing'
-											iconOff='pencil'
-											iconOn='pencil'
+											className="toggle-editing"
+											iconOff="pencil"
+											iconOn="pencil"
 											onChange={this._handleCriteriaEdit}
 										/>
 									</div>
 								</div>
 
-								<div className='btn-group'>
-									<div className='btn-group-item'>
+								<div className="btn-group">
+									<div className="btn-group-item">
 										<ClayButton
-											className='text-capitalize'
-											href={redirect}
-											label={Liferay.Language.get(
-												'cancel'
-											)}
-											size='sm'
-										/>
+											className="text-capitalize"
+											displayType="secondary"
+											onClick={this._handleCancelButton}
+											small
+										>
+											{Liferay.Language.get('cancel')}
+										</ClayButton>
 									</div>
 
-									<div className='btn-group-item'>
+									<div className="btn-group-item">
 										<ClayButton
-											className='text-capitalize'
+											className="text-capitalize"
 											disabled={disabledSaveButton}
-											label={Liferay.Language.get('save')}
+											displayType="primary"
 											onClick={this._handleValidate}
-											size='sm'
-											style='primary'
-											type='submit'
-										/>
+											small={true}
+											type="submit"
+										>
+											{Liferay.Language.get('save')}
+										</ClayButton>
 									</div>
 								</div>
 							</div>
@@ -429,9 +477,9 @@ class SegmentEdit extends Component {
 					</div>
 				</div>
 
-				<div className='form-body'>
+				<div className="form-body">
 					<FieldArray
-						name='contributors'
+						name="contributors"
 						render={this._renderContributors}
 					/>
 					<ContributorInputs contributors={contributors} />

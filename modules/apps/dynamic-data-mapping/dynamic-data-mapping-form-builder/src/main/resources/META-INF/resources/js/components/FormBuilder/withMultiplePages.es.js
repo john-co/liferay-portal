@@ -1,35 +1,50 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import '../SuccessPage/SuccessPagePaginationItem.soy.js';
 import '../SuccessPage/SuccessPageRenderer.soy.js';
 import '../SuccessPage/SuccessPageWizardItem.soy.js';
 import Component from 'metal-jsx';
 import {ClayActionsDropdown} from 'clay-dropdown';
 import {Config} from 'metal-state';
-import {
-	focusedFieldStructure,
-	pageStructure,
-	ruleStructure
-} from '../../util/config.es';
+import {focusedFieldStructure, pageStructure} from '../../util/config.es';
 import {setValue} from '../../util/i18n.es';
 
 const withMultiplePages = ChildComponent => {
 	class MultiplePages extends Component {
 		getPages() {
 			let {pages} = this.props;
-			const {successPageSettings} = this.props;
+			const {paginationMode, successPageSettings} = this.props;
 
 			if (successPageSettings.enabled) {
 				pages = [
 					...pages,
 					{
 						contentRenderer: 'success',
-						paginationItemRenderer: 'success',
+						paginationItemRenderer: `${paginationMode}_success`,
 						rows: [],
 						successPageSettings
 					}
 				];
 			}
 
-			return pages;
+			return pages.map(page => {
+				return {
+					...page,
+					enabled: true
+				};
+			});
 		}
 
 		getPaginationPosition() {
@@ -248,9 +263,27 @@ const withMultiplePages = ChildComponent => {
 		editingLanguageId: Config.string(),
 
 		/**
+		 * @default undefined
+		 * @instance
+		 * @memberof FormBuilder
+		 * @type {?string}
+		 */
+
+		fieldSetDefinitionURL: Config.string(),
+
+		/**
 		 * @default []
 		 * @instance
-		 * @memberof Sidebar
+		 * @memberof FormBuilder
+		 * @type {?(array|undefined)}
+		 */
+
+		fieldSets: Config.array().value([]),
+
+		/**
+		 * @default []
+		 * @instance
+		 * @memberof FormBuilder
 		 * @type {?(array|undefined)}
 		 */
 
@@ -288,12 +321,12 @@ const withMultiplePages = ChildComponent => {
 		 * @type {string}
 		 */
 
-		rules: Config.arrayOf(ruleStructure).required(),
+		portletNamespace: Config.string().required(),
 
 		/**
 		 * @default undefined
 		 * @instance
-		 * @memberof FormRenderer
+		 * @memberof FormBuilder
 		 * @type {!string}
 		 */
 
@@ -301,7 +334,7 @@ const withMultiplePages = ChildComponent => {
 
 		/**
 		 * @instance
-		 * @memberof MultiplePages
+		 * @memberof FormBuilder
 		 * @type {object}
 		 */
 
@@ -309,7 +342,16 @@ const withMultiplePages = ChildComponent => {
 			body: Config.object(),
 			enabled: Config.bool(),
 			title: Config.object()
-		}).value({})
+		}).value({}),
+
+		/**
+		 * @default undefined
+		 * @instance
+		 * @memberof FormBuilder
+		 * @type {?string}
+		 */
+
+		view: Config.string()
 	};
 
 	MultiplePages.STATE = {

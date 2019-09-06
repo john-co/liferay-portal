@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 AUI.add(
 	'liferay-export-import-management-bar-button',
 	function(A) {
@@ -33,27 +47,7 @@ AUI.add(
 			NAME: 'exportImportManagementBarButton',
 
 			prototype: {
-				initializer: function(config) {
-					var instance = this;
-
-					var namespace = instance.NS;
-
-					var searchContainer = Liferay.SearchContainer.get(
-						namespace + instance.get('searchContainerId')
-					);
-
-					instance._searchContainer = searchContainer;
-
-					instance._bindUI();
-				},
-
-				destructor: function() {
-					var instance = this;
-
-					new A.EventHandle(instance._eventHandles).detach();
-				},
-
-				_bindUI: function() {
+				_bindUI() {
 					var instance = this;
 
 					instance._eventHandles = [
@@ -65,7 +59,7 @@ AUI.add(
 					];
 				},
 
-				_exportImportEntity: function() {
+				_exportImportEntity() {
 					var instance = this;
 
 					var searchContainer = instance._searchContainer.plug(
@@ -90,28 +84,47 @@ AUI.add(
 								'div[data-rowpk=' + selectedElement.value + ']'
 							);
 
-							var input = $('<input>')
-								.attr('type', 'hidden')
-								.attr(
-									'name',
-									instance.get('actionNamespace') +
-										'exportingEntities'
-								)
-								.val(
-									node.attr('data-classNameId') +
-										'#' +
-										node.attr('data-groupId') +
-										'#' +
-										node.attr('data-uuid')
-								);
+							var input = document.createElement('input');
+							input.setAttribute('type', 'hidden');
+							input.setAttribute(
+								'name',
+								instance.get('actionNamespace') +
+									'exportingEntities'
+							);
+							input.value =
+								node.attr('data-classNameId') +
+								'#' +
+								node.attr('data-groupId') +
+								'#' +
+								node.attr('data-uuid');
 
-							form.append(input);
+							form.appendChild(input);
 						});
 
 						form.setAttribute('method', 'POST');
 
 						submitForm(form, instance.get('exportImportEntityUrl'));
 					}
+				},
+
+				destructor() {
+					var instance = this;
+
+					new A.EventHandle(instance._eventHandles).detach();
+				},
+
+				initializer() {
+					var instance = this;
+
+					var namespace = instance.NS;
+
+					var searchContainer = Liferay.SearchContainer.get(
+						namespace + instance.get('searchContainerId')
+					);
+
+					instance._searchContainer = searchContainer;
+
+					instance._bindUI();
 				}
 			}
 		});

@@ -1,4 +1,18 @@
 /**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
+/**
  * The Form Placeholders Component.
  *
  * @deprecated since 7.2, unused
@@ -44,57 +58,14 @@ AUI.add(
 			NS: STR_PLACEHOLDER,
 
 			prototype: {
-				initializer: function(config) {
-					var instance = this;
-
-					var host = instance.get('host');
-
-					var formNode = host.formNode;
-
-					if (formNode) {
-						var placeholderInputs = formNode.all(
-							SELECTOR_PLACEHOLDER_INPUTS
-						);
-
-						placeholderInputs.each(function(item, index) {
-							if (!item.val()) {
-								if (item.attr(STR_TYPE) === STR_PASSWORD) {
-									instance._initializePasswordNode(item);
-								} else {
-									item.addClass(CSS_PLACEHOLDER);
-
-									item.val(item.attr(STR_PLACEHOLDER));
-								}
-							}
-						});
-
-						instance.host = host;
-
-						instance.beforeHostMethod(
-							'_onValidatorSubmit',
-							instance._removePlaceholders,
-							instance
-						);
-						instance.beforeHostMethod(
-							'_onFieldFocusChange',
-							instance._togglePlaceholders,
-							instance
-						);
-					}
-				},
-
-				_initializePasswordNode: function(field) {
+				_initializePasswordNode(field) {
 					var placeholder = ANode.create(
 						'<input name="' +
 							field.attr('name') +
 							'_pass_placeholder" type="text" />'
 					);
 
-					Liferay.Util.getAttributes(field, function(
-						value,
-						name,
-						attrs
-					) {
+					Liferay.Util.getAttributes(field, function(value, name) {
 						var result = false;
 
 						if (!MAP_IGNORE_ATTRS[name]) {
@@ -117,7 +88,7 @@ AUI.add(
 					field.hide();
 				},
 
-				_removePlaceholders: function() {
+				_removePlaceholders() {
 					var instance = this;
 
 					var formNode = instance.host.formNode;
@@ -126,14 +97,14 @@ AUI.add(
 						SELECTOR_PLACEHOLDER_INPUTS
 					);
 
-					placeholderInputs.each(function(item, index) {
+					placeholderInputs.each(function(item) {
 						if (item.val() == item.attr(STR_PLACEHOLDER)) {
 							item.val(STR_BLANK);
 						}
 					});
 				},
 
-				_toggleLocalizedPlaceholders: function(event, currentTarget) {
+				_toggleLocalizedPlaceholders(event, currentTarget) {
 					var placeholder = currentTarget.attr(STR_PLACEHOLDER);
 
 					if (placeholder) {
@@ -151,7 +122,7 @@ AUI.add(
 					}
 				},
 
-				_togglePasswordPlaceholders: function(event, currentTarget) {
+				_togglePasswordPlaceholders(event, currentTarget) {
 					var placeholder = currentTarget.attr(STR_PLACEHOLDER);
 
 					if (placeholder) {
@@ -185,7 +156,7 @@ AUI.add(
 					}
 				},
 
-				_togglePlaceholders: function(event) {
+				_togglePlaceholders(event) {
 					var instance = this;
 
 					var currentTarget = event.currentTarget;
@@ -223,6 +194,45 @@ AUI.add(
 								currentTarget.addClass(CSS_PLACEHOLDER);
 							}
 						}
+					}
+				},
+
+				initializer() {
+					var instance = this;
+
+					var host = instance.get('host');
+
+					var formNode = host.formNode;
+
+					if (formNode) {
+						var placeholderInputs = formNode.all(
+							SELECTOR_PLACEHOLDER_INPUTS
+						);
+
+						placeholderInputs.each(function(item) {
+							if (!item.val()) {
+								if (item.attr(STR_TYPE) === STR_PASSWORD) {
+									instance._initializePasswordNode(item);
+								} else {
+									item.addClass(CSS_PLACEHOLDER);
+
+									item.val(item.attr(STR_PLACEHOLDER));
+								}
+							}
+						});
+
+						instance.host = host;
+
+						instance.beforeHostMethod(
+							'_onValidatorSubmit',
+							instance._removePlaceholders,
+							instance
+						);
+						instance.beforeHostMethod(
+							'_onFieldFocusChange',
+							instance._togglePlaceholders,
+							instance
+						);
 					}
 				}
 			}

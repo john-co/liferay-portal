@@ -15,21 +15,22 @@
 package com.liferay.change.tracking.rest.client.serdes.v1_0;
 
 import com.liferay.change.tracking.rest.client.dto.v1_0.Collection;
+import com.liferay.change.tracking.rest.client.dto.v1_0.Entry;
 import com.liferay.change.tracking.rest.client.json.BaseJSONParser;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.TreeMap;
 
 import javax.annotation.Generated;
 
 /**
- * @author Mate Thurzo
+ * @author Máté Thurzó
  * @generated
  */
 @Generated("")
@@ -69,16 +70,6 @@ public class CollectionSerDes {
 			sb.append(collection.getAdditionCount());
 		}
 
-		if (collection.getCollectionId() != null) {
-			if (sb.length() > 1) {
-				sb.append(", ");
-			}
-
-			sb.append("\"collectionId\": ");
-
-			sb.append(collection.getCollectionId());
-		}
-
 		if (collection.getCompanyId() != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
@@ -87,6 +78,21 @@ public class CollectionSerDes {
 			sb.append("\"companyId\": ");
 
 			sb.append(collection.getCompanyId());
+		}
+
+		if (collection.getDateStatus() != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"dateStatus\": ");
+
+			sb.append("\"");
+
+			sb.append(
+				liferayToJSONDateFormat.format(collection.getDateStatus()));
+
+			sb.append("\"");
 		}
 
 		if (collection.getDeletionCount() != null) {
@@ -111,6 +117,16 @@ public class CollectionSerDes {
 			sb.append(_escape(collection.getDescription()));
 
 			sb.append("\"");
+		}
+
+		if (collection.getId() != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"id\": ");
+
+			sb.append(collection.getId());
 		}
 
 		if (collection.getModificationCount() != null) {
@@ -151,21 +167,6 @@ public class CollectionSerDes {
 			sb.append("\"");
 		}
 
-		if (collection.getStatusDate() != null) {
-			if (sb.length() > 1) {
-				sb.append(", ");
-			}
-
-			sb.append("\"statusDate\": ");
-
-			sb.append("\"");
-
-			sb.append(
-				liferayToJSONDateFormat.format(collection.getStatusDate()));
-
-			sb.append("\"");
-		}
-
 		sb.append("}");
 
 		return sb.toString();
@@ -182,7 +183,7 @@ public class CollectionSerDes {
 			return null;
 		}
 
-		Map<String, String> map = new HashMap<>();
+		Map<String, String> map = new TreeMap<>();
 
 		DateFormat liferayToJSONDateFormat = new SimpleDateFormat(
 			"yyyy-MM-dd'T'HH:mm:ss'Z'");
@@ -195,20 +196,16 @@ public class CollectionSerDes {
 				"additionCount", String.valueOf(collection.getAdditionCount()));
 		}
 
-		if (collection.getCollectionId() == null) {
-			map.put("collectionId", null);
-		}
-		else {
-			map.put(
-				"collectionId", String.valueOf(collection.getCollectionId()));
-		}
-
 		if (collection.getCompanyId() == null) {
 			map.put("companyId", null);
 		}
 		else {
 			map.put("companyId", String.valueOf(collection.getCompanyId()));
 		}
+
+		map.put(
+			"dateStatus",
+			liferayToJSONDateFormat.format(collection.getDateStatus()));
 
 		if (collection.getDeletionCount() == null) {
 			map.put("deletionCount", null);
@@ -223,6 +220,13 @@ public class CollectionSerDes {
 		}
 		else {
 			map.put("description", String.valueOf(collection.getDescription()));
+		}
+
+		if (collection.getId() == null) {
+			map.put("id", null);
+		}
+		else {
+			map.put("id", String.valueOf(collection.getId()));
 		}
 
 		if (collection.getModificationCount() == null) {
@@ -250,11 +254,85 @@ public class CollectionSerDes {
 				String.valueOf(collection.getStatusByUserName()));
 		}
 
-		map.put(
-			"statusDate",
-			liferayToJSONDateFormat.format(collection.getStatusDate()));
-
 		return map;
+	}
+
+	public static class CollectionJSONParser
+		extends BaseJSONParser<Collection> {
+
+		@Override
+		protected Collection createDTO() {
+			return new Collection();
+		}
+
+		@Override
+		protected Collection[] createDTOArray(int size) {
+			return new Collection[size];
+		}
+
+		@Override
+		protected void setField(
+			Collection collection, String jsonParserFieldName,
+			Object jsonParserFieldValue) {
+
+			if (Objects.equals(jsonParserFieldName, "additionCount")) {
+				if (jsonParserFieldValue != null) {
+					collection.setAdditionCount(
+						Long.valueOf((String)jsonParserFieldValue));
+				}
+			}
+			else if (Objects.equals(jsonParserFieldName, "companyId")) {
+				if (jsonParserFieldValue != null) {
+					collection.setCompanyId(
+						Long.valueOf((String)jsonParserFieldValue));
+				}
+			}
+			else if (Objects.equals(jsonParserFieldName, "dateStatus")) {
+				if (jsonParserFieldValue != null) {
+					collection.setDateStatus(
+						toDate((String)jsonParserFieldValue));
+				}
+			}
+			else if (Objects.equals(jsonParserFieldName, "deletionCount")) {
+				if (jsonParserFieldValue != null) {
+					collection.setDeletionCount(
+						Long.valueOf((String)jsonParserFieldValue));
+				}
+			}
+			else if (Objects.equals(jsonParserFieldName, "description")) {
+				if (jsonParserFieldValue != null) {
+					collection.setDescription((String)jsonParserFieldValue);
+				}
+			}
+			else if (Objects.equals(jsonParserFieldName, "id")) {
+				if (jsonParserFieldValue != null) {
+					collection.setId(
+						Long.valueOf((String)jsonParserFieldValue));
+				}
+			}
+			else if (Objects.equals(jsonParserFieldName, "modificationCount")) {
+				if (jsonParserFieldValue != null) {
+					collection.setModificationCount(
+						Long.valueOf((String)jsonParserFieldValue));
+				}
+			}
+			else if (Objects.equals(jsonParserFieldName, "name")) {
+				if (jsonParserFieldValue != null) {
+					collection.setName((String)jsonParserFieldValue);
+				}
+			}
+			else if (Objects.equals(jsonParserFieldName, "statusByUserName")) {
+				if (jsonParserFieldValue != null) {
+					collection.setStatusByUserName(
+						(String)jsonParserFieldValue);
+				}
+			}
+			else {
+				throw new IllegalArgumentException(
+					"Unsupported field name " + jsonParserFieldName);
+			}
+		}
+
 	}
 
 	private static String _escape(Object object) {
@@ -280,9 +358,36 @@ public class CollectionSerDes {
 			sb.append("\"");
 			sb.append(entry.getKey());
 			sb.append("\":");
-			sb.append("\"");
-			sb.append(entry.getValue());
-			sb.append("\"");
+
+			Object value = entry.getValue();
+
+			Class<?> valueClass = value.getClass();
+
+			if (value instanceof Map) {
+				sb.append(_toJSON((Map)value));
+			}
+			else if (valueClass.isArray()) {
+				Object[] values = (Object[])value;
+
+				sb.append("[");
+
+				for (int i = 0; i < values.length; i++) {
+					sb.append("\"");
+					sb.append(_escape(values[i]));
+					sb.append("\"");
+
+					if ((i + 1) < values.length) {
+						sb.append(", ");
+					}
+				}
+
+				sb.append("]");
+			}
+			else {
+				sb.append("\"");
+				sb.append(_escape(entry.getValue()));
+				sb.append("\"");
+			}
 
 			if (iterator.hasNext()) {
 				sb.append(",");
@@ -292,84 +397,6 @@ public class CollectionSerDes {
 		sb.append("}");
 
 		return sb.toString();
-	}
-
-	private static class CollectionJSONParser
-		extends BaseJSONParser<Collection> {
-
-		@Override
-		protected Collection createDTO() {
-			return new Collection();
-		}
-
-		@Override
-		protected Collection[] createDTOArray(int size) {
-			return new Collection[size];
-		}
-
-		@Override
-		protected void setField(
-			Collection collection, String jsonParserFieldName,
-			Object jsonParserFieldValue) {
-
-			if (Objects.equals(jsonParserFieldName, "additionCount")) {
-				if (jsonParserFieldValue != null) {
-					collection.setAdditionCount(
-						Long.valueOf((String)jsonParserFieldValue));
-				}
-			}
-			else if (Objects.equals(jsonParserFieldName, "collectionId")) {
-				if (jsonParserFieldValue != null) {
-					collection.setCollectionId(
-						Long.valueOf((String)jsonParserFieldValue));
-				}
-			}
-			else if (Objects.equals(jsonParserFieldName, "companyId")) {
-				if (jsonParserFieldValue != null) {
-					collection.setCompanyId(
-						Long.valueOf((String)jsonParserFieldValue));
-				}
-			}
-			else if (Objects.equals(jsonParserFieldName, "deletionCount")) {
-				if (jsonParserFieldValue != null) {
-					collection.setDeletionCount(
-						Long.valueOf((String)jsonParserFieldValue));
-				}
-			}
-			else if (Objects.equals(jsonParserFieldName, "description")) {
-				if (jsonParserFieldValue != null) {
-					collection.setDescription((String)jsonParserFieldValue);
-				}
-			}
-			else if (Objects.equals(jsonParserFieldName, "modificationCount")) {
-				if (jsonParserFieldValue != null) {
-					collection.setModificationCount(
-						Long.valueOf((String)jsonParserFieldValue));
-				}
-			}
-			else if (Objects.equals(jsonParserFieldName, "name")) {
-				if (jsonParserFieldValue != null) {
-					collection.setName((String)jsonParserFieldValue);
-				}
-			}
-			else if (Objects.equals(jsonParserFieldName, "statusByUserName")) {
-				if (jsonParserFieldValue != null) {
-					collection.setStatusByUserName(
-						(String)jsonParserFieldValue);
-				}
-			}
-			else if (Objects.equals(jsonParserFieldName, "statusDate")) {
-				if (jsonParserFieldValue != null) {
-					collection.setStatusDate(
-						toDate((String)jsonParserFieldValue));
-				}
-			}
-			else {
-				throw new IllegalArgumentException(
-					"Unsupported field name " + jsonParserFieldName);
-			}
-		}
-
 	}
 
 }

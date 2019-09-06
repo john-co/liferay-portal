@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 AUI.add(
 	'liferay-product-navigation-control-menu-add-content-drag-drop',
 	function(A) {
@@ -13,13 +27,7 @@ AUI.add(
 		var AddContentDragDrop = function() {};
 
 		AddContentDragDrop.prototype = {
-			initializer: function() {
-				var instance = this;
-
-				instance._bindUIDragDrop();
-			},
-
-			_bindUIDragDrop: function() {
+			_bindUIDragDrop() {
 				var instance = this;
 
 				var portletItemOptions = {
@@ -33,7 +41,7 @@ AUI.add(
 						target: false
 					},
 					dragNodes: '[data-draggable]',
-					dropContainer: function(dropNode) {
+					dropContainer(dropNode) {
 						return dropNode.one(Layout.options.dropContainer);
 					}
 				};
@@ -55,7 +63,7 @@ AUI.add(
 				Liferay.fire('initLayout');
 			},
 
-			_onDragEnd: function(event) {
+			_onDragEnd(event) {
 				var instance = this;
 
 				var portletItem = event.currentTarget;
@@ -69,6 +77,12 @@ AUI.add(
 						item: appendNode
 					});
 				}
+			},
+
+			initializer() {
+				var instance = this;
+
+				instance._bindUIDragDrop();
 			}
 		};
 
@@ -88,20 +102,7 @@ AUI.add(
 			NAME: 'PortletItem',
 
 			prototype: {
-				PROXY_TITLE: PROXY_NODE_ITEM.one('.portlet-title'),
-
-				bindUI: function() {
-					var instance = this;
-
-					PortletItem.superclass.bindUI.apply(this, arguments);
-
-					instance.on(
-						'placeholderAlign',
-						instance._onPlaceholderAlign
-					);
-				},
-
-				_getAppendNode: function() {
+				_getAppendNode() {
 					var instance = this;
 
 					instance.appendNode = DDM.activeDrag.get(STR_NODE).clone();
@@ -109,7 +110,7 @@ AUI.add(
 					return instance.appendNode;
 				},
 
-				_onDragStart: function() {
+				_onDragStart() {
 					var instance = this;
 
 					PortletItem.superclass._onDragStart.apply(this, arguments);
@@ -119,9 +120,7 @@ AUI.add(
 					instance.lazyEvents = false;
 				},
 
-				_onPlaceholderAlign: function(event) {
-					var instance = this;
-
+				_onPlaceholderAlign(event) {
 					var drop = event.drop;
 					var portletItem = event.currentTarget;
 
@@ -136,9 +135,7 @@ AUI.add(
 					}
 				},
 
-				_positionNode: function(event) {
-					var instance = this;
-
+				_positionNode(event) {
 					var portalLayout = event.currentTarget;
 
 					var activeDrop =
@@ -179,13 +176,26 @@ AUI.add(
 					}
 				},
 
-				_syncProxyTitle: function() {
+				_syncProxyTitle() {
 					var instance = this;
 
 					var node = DDM.activeDrag.get(STR_NODE);
 					var title = node.attr('data-title');
 
 					instance.PROXY_TITLE.html(title);
+				},
+
+				PROXY_TITLE: PROXY_NODE_ITEM.one('.portlet-title'),
+
+				bindUI() {
+					var instance = this;
+
+					PortletItem.superclass.bindUI.apply(this, arguments);
+
+					instance.on(
+						'placeholderAlign',
+						instance._onPlaceholderAlign
+					);
 				}
 			}
 		});

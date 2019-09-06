@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import AnalyticsClient from '../../src/analytics';
 import dom from 'metal-dom';
 import {expect} from 'chai';
@@ -38,7 +52,7 @@ describe('WebContent Plugin', () => {
 	});
 
 	describe('webContentViewed event', () => {
-		it('should be fired for every webContent on the page', () => {
+		it('is fired for every webContent on the page', () => {
 			const webContentElement = createWebContentElement();
 
 			const domContentLoaded = new Event('DOMContentLoaded');
@@ -65,7 +79,7 @@ describe('WebContent Plugin', () => {
 	});
 
 	describe('webContentClicked event', () => {
-		it('should be fired when clicking an image inside a webContent', () => {
+		it('is fired when clicking an image inside a webContent', () => {
 			const webContentElement = createWebContentElement();
 
 			const imageInsideWebContent = document.createElement('img');
@@ -89,7 +103,7 @@ describe('WebContent Plugin', () => {
 			document.body.removeChild(webContentElement);
 		});
 
-		it('should be fired when clicking a link inside a webContent', () => {
+		it('is fired when clicking a link inside a webContent', () => {
 			const webContentElement = createWebContentElement();
 			const text = 'Link inside a WebContent';
 
@@ -116,7 +130,7 @@ describe('WebContent Plugin', () => {
 			document.body.removeChild(webContentElement);
 		});
 
-		it('should be fired when clicking any other element inside a webContent', () => {
+		it('is fired when clicking any other element inside a webContent', () => {
 			const webContentElement = createWebContentElement();
 
 			const paragraphInsideWebContent = document.createElement('p');

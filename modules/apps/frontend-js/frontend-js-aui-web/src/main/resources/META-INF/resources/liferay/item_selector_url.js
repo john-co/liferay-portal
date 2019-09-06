@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 AUI.add(
 	'liferay-item-selector-url',
 	function(A) {
@@ -27,33 +41,7 @@ AUI.add(
 			NAME: 'itemselectorurl',
 
 			prototype: {
-				initializer: function() {
-					var instance = this;
-
-					instance._itemViewer = new A.LiferayItemViewer({
-						btnCloseCaption: instance.get('closeCaption'),
-						caption: '',
-						links: '',
-						renderControls: false,
-						renderSidebar: false
-					});
-
-					instance._inputNode = instance.one('#urlInput');
-					instance._buttonNode = instance.one('#previewBtn');
-
-					instance._bindUI();
-					instance._renderUI();
-				},
-
-				destructor: function() {
-					var instance = this;
-
-					instance._itemViewer.destroy();
-
-					new A.EventHandle(instance._eventHandles).detach();
-				},
-
-				_afterVisibleChange: function(event) {
+				_afterVisibleChange(event) {
 					var instance = this;
 
 					if (!event.newVal) {
@@ -61,7 +49,7 @@ AUI.add(
 					}
 				},
 
-				_bindUI: function() {
+				_bindUI() {
 					var instance = this;
 
 					var itemViewer = instance._itemViewer;
@@ -90,7 +78,7 @@ AUI.add(
 					];
 				},
 
-				_onInput: function(event) {
+				_onInput(event) {
 					var instance = this;
 
 					Liferay.Util.toggleDisabled(
@@ -99,7 +87,7 @@ AUI.add(
 					);
 				},
 
-				_onItemSelected: function() {
+				_onItemSelected() {
 					var instance = this;
 
 					var itemViewer = instance._itemViewer;
@@ -116,7 +104,7 @@ AUI.add(
 					});
 				},
 
-				_previewItem: function() {
+				_previewItem() {
 					var instance = this;
 
 					var url = instance._inputNode.val();
@@ -137,12 +125,38 @@ AUI.add(
 					}
 				},
 
-				_renderUI: function() {
+				_renderUI() {
 					var instance = this;
 
 					var rootNode = instance.rootNode;
 
 					instance._itemViewer.render(rootNode);
+				},
+
+				destructor() {
+					var instance = this;
+
+					instance._itemViewer.destroy();
+
+					new A.EventHandle(instance._eventHandles).detach();
+				},
+
+				initializer() {
+					var instance = this;
+
+					instance._itemViewer = new A.LiferayItemViewer({
+						btnCloseCaption: instance.get('closeCaption'),
+						caption: '',
+						links: '',
+						renderControls: false,
+						renderSidebar: false
+					});
+
+					instance._inputNode = instance.one('#urlInput');
+					instance._buttonNode = instance.one('#previewBtn');
+
+					instance._bindUI();
+					instance._renderUI();
 				}
 			}
 		});

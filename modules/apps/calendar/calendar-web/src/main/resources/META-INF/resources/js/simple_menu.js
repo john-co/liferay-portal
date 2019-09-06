@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 AUI.add(
 	'liferay-calendar-simple-menu',
 	function(A) {
@@ -41,7 +55,7 @@ AUI.add(
 		var getItemHandler = A.cached(function(id, items) {
 			var found = null;
 
-			items.some(function(item, index) {
+			items.some(function(item) {
 				if (item.id === id) {
 					found = item;
 				}
@@ -92,49 +106,7 @@ AUI.add(
 			UI_ATTRS: ['hiddenItems', 'items'],
 
 			prototype: {
-				CONTENT_TEMPLATE: '<ul></ul>',
-
-				renderUI: function() {
-					var instance = this;
-
-					instance.get('boundingBox').unselectable();
-
-					instance._renderItems(instance.get('items'));
-				},
-
-				bindUI: function() {
-					var instance = this;
-
-					A.Event.defineOutside('touchend');
-
-					var contentBox = instance.get('contentBox');
-
-					instance._eventHandlers = [
-						A.getWin().on(
-							'resize',
-							A.debounce(instance._positionMenu, 200, instance)
-						),
-						contentBox.delegate(
-							'click',
-							instance._onClickItems,
-							STR_DOT + CSS_SIMPLE_MENU_ITEM,
-							instance
-						),
-						instance.after(
-							'visibleChange',
-							instance._onVisibleChange,
-							instance
-						)
-					];
-				},
-
-				destructor: function() {
-					var instance = this;
-
-					new A.EventHandle(instance._eventHandlers).detach();
-				},
-
-				_closeMenu: function() {
+				_closeMenu() {
 					var instance = this;
 
 					instance.hide();
@@ -144,7 +116,7 @@ AUI.add(
 					instance._outsideHandler = null;
 				},
 
-				_onClickItems: function(event) {
+				_onClickItems(event) {
 					var instance = this;
 
 					var items = instance.get('items');
@@ -160,7 +132,7 @@ AUI.add(
 					}
 				},
 
-				_onClickOutside: function(event) {
+				_onClickOutside(event) {
 					var instance = this;
 
 					var toggler = instance.get('toggler');
@@ -170,7 +142,7 @@ AUI.add(
 					}
 				},
 
-				_onVisibleChange: function(event) {
+				_onVisibleChange(event) {
 					var instance = this;
 
 					if (event.newVal) {
@@ -186,7 +158,7 @@ AUI.add(
 					}
 				},
 
-				_positionMenu: function() {
+				_positionMenu() {
 					var instance = this;
 
 					if (instance.items.size()) {
@@ -209,15 +181,15 @@ AUI.add(
 						}
 
 						instance.setAttrs({
-							align: align,
-							centered: centered,
-							modal: modal,
-							width: width
+							align,
+							centered,
+							modal,
+							width
 						});
 					}
 				},
 
-				_renderItems: function(items) {
+				_renderItems(items) {
 					var instance = this;
 
 					var contentBox = instance.get('contentBox');
@@ -225,10 +197,10 @@ AUI.add(
 
 					instance.items = A.NodeList.create();
 
-					items.forEach(function(item, index) {
+					items.forEach(function(item) {
 						var caption = item.caption;
 
-						if (!item.hasOwnProperty('id')) {
+						if (!Object.prototype.hasOwnProperty.call(item, 'id')) {
 							item.id = A.guid();
 						}
 
@@ -260,9 +232,9 @@ AUI.add(
 
 						var li = A.Node.create(
 							Lang.sub(TPL_SIMPLE_MENU_ITEM, {
-								cssClass: cssClass,
-								icon: icon,
-								id: id
+								cssClass,
+								icon,
+								id
 							})
 						);
 
@@ -274,11 +246,11 @@ AUI.add(
 					contentBox.setContent(instance.items);
 				},
 
-				_uiSetHiddenItems: function(val) {
+				_uiSetHiddenItems(val) {
 					var instance = this;
 
 					if (instance.get('rendered')) {
-						instance.items.each(function(item, index) {
+						instance.items.each(function(item) {
 							var id = item.attr('data-id');
 
 							item.toggleClass(
@@ -289,12 +261,54 @@ AUI.add(
 					}
 				},
 
-				_uiSetItems: function(val) {
+				_uiSetItems(val) {
 					var instance = this;
 
 					if (instance.get('rendered')) {
 						instance._renderItems(val);
 					}
+				},
+
+				CONTENT_TEMPLATE: '<ul></ul>',
+
+				bindUI() {
+					var instance = this;
+
+					A.Event.defineOutside('touchend');
+
+					var contentBox = instance.get('contentBox');
+
+					instance._eventHandlers = [
+						A.getWin().on(
+							'resize',
+							A.debounce(instance._positionMenu, 200, instance)
+						),
+						contentBox.delegate(
+							'click',
+							instance._onClickItems,
+							STR_DOT + CSS_SIMPLE_MENU_ITEM,
+							instance
+						),
+						instance.after(
+							'visibleChange',
+							instance._onVisibleChange,
+							instance
+						)
+					];
+				},
+
+				destructor() {
+					var instance = this;
+
+					new A.EventHandle(instance._eventHandlers).detach();
+				},
+
+				renderUI() {
+					var instance = this;
+
+					instance.get('boundingBox').unselectable();
+
+					instance._renderItems(instance.get('items'));
 				}
 			}
 		});

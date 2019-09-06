@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 AUI.add(
 	'liferay-calendar-util',
 	function(A) {
@@ -25,11 +39,10 @@ AUI.add(
 			SECOND: 1000,
 			WEEK: 604800000,
 
+			// eslint-disable-next-line
 			TIME_DESC: ['weeks', 'days', 'hours', 'minutes'],
 
-			getDescription: function(milliseconds) {
-				var instance = this;
-
+			getDescription(milliseconds) {
 				var desc = 'minutes';
 				var value = 0;
 
@@ -50,8 +63,8 @@ AUI.add(
 				}
 
 				return {
-					desc: desc,
-					value: value
+					desc,
+					value
 				};
 			}
 		};
@@ -61,9 +74,7 @@ AUI.add(
 		var CalendarUtil = {
 			NOTIFICATION_DEFAULT_TYPE: 'email',
 
-			createSchedulerEvent: function(calendarBooking) {
-				var instance = this;
-
+			createSchedulerEvent(calendarBooking) {
 				var endDate = new Date(
 					calendarBooking.endTimeYear,
 					calendarBooking.endTimeMonth,
@@ -108,9 +119,7 @@ AUI.add(
 				return schedulerEvent;
 			},
 
-			destroyEvent: function(schedulerEvent) {
-				var instance = this;
-
+			destroyEvent(schedulerEvent) {
 				var scheduler = schedulerEvent.get('scheduler');
 
 				scheduler.removeEvents(schedulerEvent);
@@ -118,17 +127,13 @@ AUI.add(
 				scheduler.syncEventsUI();
 			},
 
-			fillURLParameters: function(url, data) {
-				var instance = this;
-
+			fillURLParameters(url, data) {
 				url = Lang.sub(url, data);
 
 				return url.replace(REGEX_UNFILLED_PARAMETER, '');
 			},
 
-			getCalendarName: function(name, calendarResourceName) {
-				var instance = this;
-
+			getCalendarName(name, calendarResourceName) {
 				if (name !== calendarResourceName) {
 					name = [calendarResourceName, STR_DASH, name].join(
 						STR_SPACE
@@ -138,7 +143,7 @@ AUI.add(
 				return name;
 			},
 
-			getDateFromObject: function(object) {
+			getDateFromObject(object) {
 				var day = toInt(object.day);
 				var hour = toInt(object.hour);
 				var minute = toInt(object.minute);
@@ -148,9 +153,7 @@ AUI.add(
 				return new Date(year, month, day, hour, minute);
 			},
 
-			getDatesList: function(startDate, total) {
-				var instance = this;
-
+			getDatesList(startDate, total) {
 				var ADate = A.Date;
 
 				var output = [];
@@ -164,9 +167,7 @@ AUI.add(
 				return output;
 			},
 
-			getLocalizationMap: function(value) {
-				var instance = this;
-
+			getLocalizationMap(value) {
 				var map = {};
 
 				map[themeDisplay.getLanguageId()] = value;
@@ -174,9 +175,7 @@ AUI.add(
 				return JSON.stringify(map);
 			},
 
-			setEventAttrs: function(schedulerEvent, data) {
-				var instance = this;
-
+			setEventAttrs(schedulerEvent, data) {
 				var scheduler = schedulerEvent.get('scheduler');
 
 				var newCalendarId = data.calendarId;
@@ -222,9 +221,7 @@ AUI.add(
 				}
 			},
 
-			toLocalTime: function(utc) {
-				var instance = this;
-
+			toLocalTime(utc) {
 				if (!isDate(utc)) {
 					utc = new Date(utc);
 				}
@@ -236,9 +233,7 @@ AUI.add(
 				);
 			},
 
-			toUTC: function(date) {
-				var instance = this;
-
+			toUTC(date) {
 				if (!isDate(date)) {
 					date = new Date(date);
 				}
@@ -250,7 +245,7 @@ AUI.add(
 				);
 			},
 
-			updateSchedulerEvents: function(schedulerEvents, calendarBooking) {
+			updateSchedulerEvents(schedulerEvents, calendarBooking) {
 				A.each(schedulerEvents, function(schedulerEvent) {
 					if (schedulerEvent.isRecurring()) {
 						var scheduler = schedulerEvent.get('scheduler');

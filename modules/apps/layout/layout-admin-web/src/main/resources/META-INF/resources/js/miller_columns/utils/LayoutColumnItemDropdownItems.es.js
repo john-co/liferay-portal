@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 const LAYOUT_COLUMN_ITEM_DROPDOWN_ITEMS = [
 	{
 		label: Liferay.Language.get('view'),
@@ -18,10 +32,9 @@ const LAYOUT_COLUMN_ITEM_DROPDOWN_ITEMS = [
 		/**
 		 * Handle copy layout click in order to show simple input modal.
 		 * @param {Event} event
-		 * @param {LayoutColumn} layoutColumn
 		 * @private
 		 */
-		handleClick: (event, layoutColumn) => {
+		handleClick: event => {
 			event.preventDefault();
 
 			Liferay.Util.openWindow({
@@ -72,6 +85,11 @@ const LAYOUT_COLUMN_ITEM_DROPDOWN_ITEMS = [
 	{
 		label: Liferay.Language.get('orphan-widgets'),
 		name: 'orphanPortletsURL'
+	},
+
+	{
+		label: Liferay.Language.get('convert-to-content-page'),
+		name: 'convertLayoutURL'
 	},
 
 	{

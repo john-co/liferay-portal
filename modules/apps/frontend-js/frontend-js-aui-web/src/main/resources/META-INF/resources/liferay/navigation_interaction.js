@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 AUI.add(
 	'liferay-navigation-interaction',
 	function(A) {
@@ -12,59 +26,12 @@ AUI.add(
 		var NavigationInteraction = A.Component.create({
 			EXTENDS: A.Plugin.Base,
 
-			NAME: NAME,
+			NAME,
 
 			NS: NAME,
 
 			prototype: {
-				MAP_HOVER: {},
-
-				initializer: function(config) {
-					var instance = this;
-
-					var host = instance.get('host');
-
-					var navInteractionSelector =
-						Liferay.Data.NAV_INTERACTION_LIST_SELECTOR || 'ul';
-
-					var navigation = host.one(navInteractionSelector);
-
-					var hostULId = '#' + navigation.guid();
-
-					instance._directChildLi =
-						Liferay.Data.NAV_INTERACTION_ITEM_SELECTOR ||
-						hostULId + '> li';
-
-					instance._hostULId = hostULId;
-
-					instance._triggerNode = A.one('.nav-navigation-btn');
-
-					Liferay.on(
-						['hideNavigationMenu', 'showNavigationMenu'],
-						function(event) {
-							var showMenu = event.type == 'showNavigationMenu';
-
-							var menu = event.menu;
-
-							if (menu) {
-								instance._lastShownMenu = null;
-
-								if (showMenu) {
-									instance._lastShownMenu = menu;
-								}
-
-								menu.toggleClass('hover', showMenu);
-								menu.toggleClass('open', showMenu);
-							}
-						}
-					);
-
-					instance._initChildMenuHandlers(navigation);
-
-					instance._initNodeFocusManager();
-				},
-
-				_handleExit: function(event) {
+				_handleExit() {
 					var instance = this;
 
 					var focusManager = instance._focusManager;
@@ -84,7 +51,7 @@ AUI.add(
 					}
 				},
 
-				_handleKey: function(event, direction) {
+				_handleKey(event, direction) {
 					var instance = this;
 
 					if (!instance._isTriggerVisible()) {
@@ -119,13 +86,13 @@ AUI.add(
 						instance._focusManager.focus(item.one('a'));
 					} else {
 						Liferay.fire('exitNavigation', {
-							direction: direction,
+							direction,
 							navigation: instance.get('host')
 						});
 					}
 				},
 
-				_handleKeyDown: function(event) {
+				_handleKeyDown(event) {
 					var instance = this;
 
 					var handler;
@@ -143,19 +110,19 @@ AUI.add(
 					}
 				},
 
-				_handleLeft: function(event) {
+				_handleLeft(event) {
 					var instance = this;
 
 					instance._handleKey(event, DIRECTION_LEFT);
 				},
 
-				_handleRight: function(event) {
+				_handleRight(event) {
 					var instance = this;
 
 					instance._handleKey(event, DIRECTION_RIGHT);
 				},
 
-				_handleShowNavigationMenu: function(menuNew, menuOld, event) {
+				_handleShowNavigationMenu(menuNew, menuOld, event) {
 					var instance = this;
 
 					if (
@@ -214,7 +181,7 @@ AUI.add(
 					}
 				},
 
-				_hideMenu: function() {
+				_hideMenu() {
 					var instance = this;
 
 					var mapHover = instance.MAP_HOVER;
@@ -226,7 +193,7 @@ AUI.add(
 					}
 				},
 
-				_initChildMenuHandlers: function(navigation) {
+				_initChildMenuHandlers(navigation) {
 					var instance = this;
 
 					if (navigation) {
@@ -246,7 +213,7 @@ AUI.add(
 					}
 				},
 
-				_initNodeFocusManager: function() {
+				_initNodeFocusManager() {
 					var instance = this;
 
 					var host = instance.get('host');
@@ -277,7 +244,7 @@ AUI.add(
 					instance._focusManager = focusManager;
 				},
 
-				_isTriggerVisible: function() {
+				_isTriggerVisible() {
 					var instance = this;
 
 					return !!(
@@ -286,7 +253,7 @@ AUI.add(
 					);
 				},
 
-				_onMouseToggle: function(event) {
+				_onMouseToggle(event) {
 					var instance = this;
 
 					var mapHover = instance.MAP_HOVER;
@@ -302,7 +269,7 @@ AUI.add(
 					Liferay.fire(eventType, mapHover);
 				},
 
-				_showMenu: function(event) {
+				_showMenu(event) {
 					var instance = this;
 
 					event.halt();
@@ -339,6 +306,53 @@ AUI.add(
 
 						instance.MAP_HOVER = {};
 					}
+				},
+
+				MAP_HOVER: {},
+
+				initializer() {
+					var instance = this;
+
+					var host = instance.get('host');
+
+					var navInteractionSelector =
+						Liferay.Data.NAV_INTERACTION_LIST_SELECTOR || 'ul';
+
+					var navigation = host.one(navInteractionSelector);
+
+					var hostULId = '#' + navigation.guid();
+
+					instance._directChildLi =
+						Liferay.Data.NAV_INTERACTION_ITEM_SELECTOR ||
+						hostULId + '> li';
+
+					instance._hostULId = hostULId;
+
+					instance._triggerNode = A.one('.nav-navigation-btn');
+
+					Liferay.on(
+						['hideNavigationMenu', 'showNavigationMenu'],
+						function(event) {
+							var showMenu = event.type == 'showNavigationMenu';
+
+							var menu = event.menu;
+
+							if (menu) {
+								instance._lastShownMenu = null;
+
+								if (showMenu) {
+									instance._lastShownMenu = menu;
+								}
+
+								menu.toggleClass('hover', showMenu);
+								menu.toggleClass('open', showMenu);
+							}
+						}
+					);
+
+					instance._initChildMenuHandlers(navigation);
+
+					instance._initNodeFocusManager();
 				}
 			}
 		});

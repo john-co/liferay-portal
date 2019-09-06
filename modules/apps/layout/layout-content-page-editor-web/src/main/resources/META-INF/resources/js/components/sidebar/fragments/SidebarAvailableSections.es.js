@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import Component from 'metal-component';
 import {Config} from 'metal-state';
 import {DragDrop} from 'metal-drag-drop';
@@ -129,7 +143,7 @@ class SidebarAvailableSections extends Component {
 		event.preventDefault();
 
 		if (data.target) {
-			const {itemId, itemName} = data.source.dataset;
+			const {itemGroupId, itemId, itemName} = data.source.dataset;
 
 			requestAnimationFrame(() => {
 				this._initializeDragAndDrop();
@@ -142,6 +156,7 @@ class SidebarAvailableSections extends Component {
 					fragmentEntryLinkRowType:
 						FRAGMENTS_EDITOR_ROW_TYPES.sectionRow,
 					fragmentName: itemName,
+					groupId: itemGroupId,
 					type: ADD_FRAGMENT_ENTRY_LINK
 				})
 				.dispatch(updateLastSaveDateAction())
@@ -167,6 +182,7 @@ class SidebarAvailableSections extends Component {
 				fragmentEntryKey: event.itemId,
 				fragmentEntryLinkRowType: FRAGMENTS_EDITOR_ROW_TYPES.sectionRow,
 				fragmentName: event.itemName,
+				groupId: event.itemGroupId,
 				type: ADD_FRAGMENT_ENTRY_LINK
 			})
 			.dispatch(updateLastSaveDateAction())

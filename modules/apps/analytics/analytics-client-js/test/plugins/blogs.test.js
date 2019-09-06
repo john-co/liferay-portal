@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import AnalyticsClient from '../../src/analytics';
 import dom from 'metal-dom';
 import {expect} from 'chai';
@@ -38,7 +52,7 @@ describe('Blogs Plugin', () => {
 	});
 
 	describe('blogViewed event', () => {
-		it('should be fired for every blog on the page', () => {
+		it('is fired for every blog on the page', () => {
 			const blogElement = createBlogElement();
 
 			const domContentLoaded = new Event('DOMContentLoaded');
@@ -64,7 +78,7 @@ describe('Blogs Plugin', () => {
 	});
 
 	describe('blogClicked event', () => {
-		it('should be fired when clicking an image inside a blog', () => {
+		it('is fired when clicking an image inside a blog', () => {
 			const blogElement = createBlogElement();
 
 			const imageInsideBlog = document.createElement('img');
@@ -88,7 +102,7 @@ describe('Blogs Plugin', () => {
 			document.body.removeChild(blogElement);
 		});
 
-		it('should be fired when clicking a link inside a blog', () => {
+		it('is fired when clicking a link inside a blog', () => {
 			const blogElement = createBlogElement();
 			const text = 'Link inside a Blog';
 
@@ -115,7 +129,7 @@ describe('Blogs Plugin', () => {
 			document.body.removeChild(blogElement);
 		});
 
-		it('should be fired when clicking any other element inside a blog', () => {
+		it('is fired when clicking any other element inside a blog', () => {
 			const blogElement = createBlogElement();
 
 			const paragraphInsideBlog = document.createElement('p');

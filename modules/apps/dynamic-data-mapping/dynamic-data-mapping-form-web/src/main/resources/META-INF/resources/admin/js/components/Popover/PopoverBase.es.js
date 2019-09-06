@@ -1,16 +1,30 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import Component, {Config} from 'metal-jsx';
 import getCN from 'classnames';
 
 const Header = ({children}) => {
-	return <div class='popover-header'>{children}</div>;
+	return <div class="popover-header">{children}</div>;
 };
 
 const Body = ({children}) => {
-	return <div class='popover-body'>{children}</div>;
+	return <div class="popover-body">{children}</div>;
 };
 
 const Footer = ({children}) => {
-	return <div class='popover-footer'>{children}</div>;
+	return <div class="popover-footer">{children}</div>;
 };
 
 class PopoverBase extends Component {
@@ -23,7 +37,7 @@ class PopoverBase extends Component {
 
 		return (
 			<div {...this.otherProps()} class={classes}>
-				{placement !== 'none' && <div class='arrow' />}
+				{placement !== 'none' && <div class="arrow" />}
 				{children}
 			</div>
 		);

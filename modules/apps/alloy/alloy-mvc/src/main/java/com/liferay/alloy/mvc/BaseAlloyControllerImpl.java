@@ -40,7 +40,6 @@ import com.liferay.portal.kernel.model.AuditedModel;
 import com.liferay.portal.kernel.model.BaseModel;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.GroupedModel;
-import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.model.ModelHintsUtil;
 import com.liferay.portal.kernel.model.PersistedModel;
 import com.liferay.portal.kernel.model.Portlet;
@@ -100,7 +99,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.ResourceBundle;
 import java.util.Set;
 
 import javax.portlet.ActionRequest;
@@ -391,9 +389,8 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 		PortletConfig portletConfig = PortletConfigFactoryUtil.create(
 			portlet, servletContext);
 
-		ResourceBundle resourceBundle = portletConfig.getResourceBundle(locale);
-
-		return LanguageUtil.format(resourceBundle, pattern, arguments);
+		return LanguageUtil.format(
+			portletConfig.getResourceBundle(locale), pattern, arguments);
 	}
 
 	@Override
@@ -685,10 +682,8 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 			String lifecycle, WindowState windowState, Object... parameters)
 		throws Exception {
 
-		Layout layout = themeDisplay.getLayout();
-
 		PortletURL portletURL = PortletURLFactoryUtil.create(
-			request, portlet, layout, lifecycle);
+			request, portlet, themeDisplay.getLayout(), lifecycle);
 
 		portletURL.setParameter("action", action);
 		portletURL.setParameter("controller", controller);

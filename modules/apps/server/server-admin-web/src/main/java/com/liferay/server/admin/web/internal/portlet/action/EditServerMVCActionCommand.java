@@ -50,7 +50,7 @@ import com.liferay.portal.kernel.model.Portlet;
 import com.liferay.portal.kernel.model.ResourceConstants;
 import com.liferay.portal.kernel.model.ResourcePermission;
 import com.liferay.portal.kernel.model.Role;
-import com.liferay.portal.kernel.model.RoleConstants;
+import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.portlet.LiferayActionResponse;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
@@ -107,7 +107,6 @@ import java.util.Map;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletConfig;
-import javax.portlet.PortletContext;
 import javax.portlet.PortletPreferences;
 import javax.portlet.PortletSession;
 import javax.portlet.PortletURL;
@@ -436,11 +435,10 @@ public class EditServerMVCActionCommand extends BaseMVCActionCommand {
 
 		PortletConfig portletConfig = getPortletConfig(actionRequest);
 
-		PortletContext portletContext = portletConfig.getPortletContext();
-
 		Map<String, Object> portletObjects =
 			ScriptingHelperUtil.getPortletObjects(
-				portletConfig, portletContext, actionRequest, actionResponse);
+				portletConfig, portletConfig.getPortletContext(), actionRequest,
+				actionResponse);
 
 		UnsyncByteArrayOutputStream unsyncByteArrayOutputStream =
 			new UnsyncByteArrayOutputStream();

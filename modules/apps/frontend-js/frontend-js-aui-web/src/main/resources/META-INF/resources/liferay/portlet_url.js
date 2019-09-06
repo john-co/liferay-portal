@@ -1,9 +1,21 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 AUI.add(
 	'liferay-portlet-url',
 	function(A) {
 		var Lang = A.Lang;
-
-		var Util = Liferay.Util;
 
 		var PortletURL = function(lifecycle, params, basePortletURL) {
 			var instance = this;
@@ -41,18 +53,19 @@ AUI.add(
 				scroll: null
 			};
 
-			instance.options = {
-				basePortletURL: basePortletURL,
-				escapeXML: null,
-				secure: null
-			};
-
 			if (!basePortletURL) {
-				instance.options.basePortletURL =
+				basePortletURL =
+					themeDisplay.getPortalURL() +
 					themeDisplay.getPathMain() +
 					'/portal/layout?p_l_id=' +
 					themeDisplay.getPlid();
 			}
+
+			instance.options = {
+				basePortletURL,
+				escapeXML: null,
+				secure: null
+			};
 
 			A.each(params, function(item, index) {
 				if (Lang.isValue(item)) {
@@ -70,17 +83,31 @@ AUI.add(
 		};
 
 		PortletURL.prototype = {
+			_isReservedParam(paramName) {
+				var instance = this;
+
+				var result = false;
+
+				A.each(instance.reservedParams, function(item, index) {
+					if (index === paramName) {
+						result = true;
+					}
+				});
+
+				return result;
+			},
+
 			/*
 			 * @deprecated
 			 */
 
-			setCopyCurrentRenderParameters: function() {
+			setCopyCurrentRenderParameters() {
 				var instance = this;
 
 				return instance;
 			},
 
-			setDoAsGroupId: function(doAsGroupId) {
+			setDoAsGroupId(doAsGroupId) {
 				var instance = this;
 
 				instance.reservedParams.doAsGroupId = doAsGroupId;
@@ -88,7 +115,7 @@ AUI.add(
 				return instance;
 			},
 
-			setDoAsUserId: function(doAsUserId) {
+			setDoAsUserId(doAsUserId) {
 				var instance = this;
 
 				instance.reservedParams.doAsUserId = doAsUserId;
@@ -100,13 +127,13 @@ AUI.add(
 			 * @deprecated
 			 */
 
-			setEncrypt: function() {
+			setEncrypt() {
 				var instance = this;
 
 				return instance;
 			},
 
-			setEscapeXML: function(escapeXML) {
+			setEscapeXML(escapeXML) {
 				var instance = this;
 
 				instance.options.escapeXML = escapeXML;
@@ -114,7 +141,7 @@ AUI.add(
 				return instance;
 			},
 
-			setLifecycle: function(lifecycle) {
+			setLifecycle(lifecycle) {
 				var instance = this;
 
 				var reservedParams = instance.reservedParams;
@@ -132,7 +159,7 @@ AUI.add(
 				return instance;
 			},
 
-			setName: function(name) {
+			setName(name) {
 				var instance = this;
 
 				instance.setParameter('javax.portlet.action', name);
@@ -140,7 +167,7 @@ AUI.add(
 				return instance;
 			},
 
-			setParameter: function(key, value) {
+			setParameter(key, value) {
 				var instance = this;
 
 				if (instance._isReservedParam(key)) {
@@ -152,7 +179,7 @@ AUI.add(
 				return instance;
 			},
 
-			setParameters: function(parameters) {
+			setParameters(parameters) {
 				var instance = this;
 
 				A.each(parameters, function(item, index) {
@@ -162,7 +189,7 @@ AUI.add(
 				return instance;
 			},
 
-			setPlid: function(plid) {
+			setPlid(plid) {
 				var instance = this;
 
 				instance.reservedParams.p_l_id = plid;
@@ -174,13 +201,13 @@ AUI.add(
 			 * @deprecated
 			 */
 
-			setPortletConfiguration: function() {
+			setPortletConfiguration() {
 				var instance = this;
 
 				return instance;
 			},
 
-			setPortletId: function(portletId) {
+			setPortletId(portletId) {
 				var instance = this;
 
 				instance.reservedParams.p_p_id = portletId;
@@ -188,7 +215,7 @@ AUI.add(
 				return instance;
 			},
 
-			setPortletMode: function(portletMode) {
+			setPortletMode(portletMode) {
 				var instance = this;
 
 				instance.reservedParams.p_p_mode = portletMode;
@@ -196,7 +223,7 @@ AUI.add(
 				return instance;
 			},
 
-			setResourceId: function(resourceId) {
+			setResourceId(resourceId) {
 				var instance = this;
 
 				instance.reservedParams.p_p_resource_id = resourceId;
@@ -207,7 +234,7 @@ AUI.add(
 			/*
 			 * @deprecated since 7.2, unused
 			 */
-			setSecure: function(secure) {
+			setSecure(secure) {
 				var instance = this;
 
 				instance.options.secure = secure;
@@ -215,7 +242,7 @@ AUI.add(
 				return instance;
 			},
 
-			setWindowState: function(windowState) {
+			setWindowState(windowState) {
 				var instance = this;
 
 				instance.reservedParams.p_p_state = windowState;
@@ -223,60 +250,42 @@ AUI.add(
 				return instance;
 			},
 
-			toString: function() {
+			toString() {
 				var instance = this;
 
 				var options = instance.options;
 
-				var reservedParams = instance.reservedParams;
+				var reservedParameters = {};
 
-				var resultURL = new A.Url(options.basePortletURL);
-
-				var portletId = reservedParams.p_p_id;
-
-				if (!portletId) {
-					portletId = resultURL.getParameter('p_p_id');
-				}
-
-				var namespacePrefix = Util.getPortletNamespace(portletId);
-
-				A.each(reservedParams, function(item, index) {
-					if (Lang.isValue(item)) {
-						resultURL.setParameter(index, item);
+				Object.entries(instance.reservedParams).forEach(function([
+					key,
+					value
+				]) {
+					if (value != null) {
+						reservedParameters[key] = value;
 					}
 				});
 
-				A.each(instance.params, function(item, index) {
-					if (Lang.isValue(item)) {
-						resultURL.setParameter(namespacePrefix + index, item);
-					}
-				});
+				var parameters = Object.assign(
+					{},
+					instance.params,
+					reservedParameters
+				);
+
+				var portletURL = Liferay.Util.PortletURL.createPortletURL(
+					options.basePortletURL,
+					parameters
+				);
 
 				if (options.secure) {
-					resultURL.setProtocol('https');
+					portletURL.protocol = 'https:';
 				}
-
-				var value = resultURL.toString();
 
 				if (options.escapeXML) {
-					value = Lang.String.escapeHTML(value);
+					portletURL.href = Lang.String.escapeHTML(portletURL.href);
 				}
 
-				return value;
-			},
-
-			_isReservedParam: function(paramName) {
-				var instance = this;
-
-				var result = false;
-
-				A.each(instance.reservedParams, function(item, index) {
-					if (index === paramName) {
-						result = true;
-					}
-				});
-
-				return result;
+				return portletURL.toString();
 			}
 		};
 
@@ -287,19 +296,19 @@ AUI.add(
 
 			RESOURCE_PHASE: '2',
 
-			createActionURL: function() {
+			createActionURL() {
 				return new PortletURL(PortletURL.ACTION_PHASE);
 			},
 
-			createRenderURL: function() {
+			createRenderURL() {
 				return new PortletURL(PortletURL.RENDER_PHASE);
 			},
 
-			createResourceURL: function() {
+			createResourceURL() {
 				return new PortletURL(PortletURL.RESOURCE_PHASE);
 			},
 
-			createURL: function(basePortletURL, params) {
+			createURL(basePortletURL, params) {
 				return new PortletURL(null, params, basePortletURL);
 			}
 		});
@@ -308,11 +317,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: [
-			'aui-base',
-			'aui-io-request',
-			'aui-url',
-			'querystring-stringify-simple'
-		]
+		requires: ['aui-base']
 	}
 );

@@ -14,6 +14,8 @@
 
 package com.liferay.fragment.internal.renderer;
 
+import com.liferay.fragment.contributor.FragmentCollectionContributorTracker;
+import com.liferay.fragment.exception.FragmentEntryConfigurationException;
 import com.liferay.fragment.exception.FragmentEntryContentException;
 import com.liferay.fragment.model.FragmentEntryLink;
 import com.liferay.fragment.renderer.FragmentRenderer;
@@ -21,16 +23,33 @@ import com.liferay.fragment.renderer.FragmentRendererContext;
 import com.liferay.fragment.renderer.FragmentRendererController;
 import com.liferay.fragment.renderer.FragmentRendererTracker;
 import com.liferay.fragment.renderer.constants.FragmentRendererConstants;
+import com.liferay.fragment.validator.FragmentEntryValidator;
 import com.liferay.petra.string.StringBundler;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.io.unsync.UnsyncStringWriter;
+import com.liferay.portal.kernel.json.JSONArray;
+import com.liferay.portal.kernel.json.JSONException;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.AggregateResourceBundleLoader;
+import com.liferay.portal.kernel.util.ResourceBundleLoader;
+import com.liferay.portal.kernel.util.ResourceBundleLoaderUtil;
+import com.liferay.portal.kernel.util.ResourceBundleUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.taglib.servlet.PipingServletResponse;
 
 import java.io.IOException;
+
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.ResourceBundle;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -46,15 +65,52 @@ public class FragmentRendererControllerImpl
 	implements FragmentRendererController {
 
 	@Override
+	public String getConfiguration(
+		FragmentRendererContext fragmentRendererContext) {
+
+		FragmentRenderer fragmentRenderer = _getFragmentRenderer(
+			fragmentRendererContext.getFragmentEntryLink());
+
+		try {
+			JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
+				fragmentRenderer.getConfiguration(fragmentRendererContext));
+
+			return _translateConfigurationFields(
+				jsonObject, fragmentRendererContext.getLocale());
+		}
+		catch (JSONException jsone) {
+			_log.error(
+				"Unable to parse fragment entry link configuration", jsone);
+		}
+
+		return StringPool.BLANK;
+	}
+
+	@Override
 	public String render(
 		FragmentRendererContext fragmentRendererContext,
 		HttpServletRequest httpServletRequest,
 		HttpServletResponse httpServletResponse) {
 
+		FragmentEntryLink fragmentEntryLink =
+			fragmentRendererContext.getFragmentEntryLink();
+
+		try {
+			_fragmentEntryValidator.validateConfiguration(
+				fragmentEntryLink.getConfiguration());
+		}
+		catch (FragmentEntryConfigurationException fece) {
+			SessionErrors.add(
+				httpServletRequest, "fragmentEntryContentInvalid");
+
+			return _getFragmentEntryConfigurationExceptionMessage(
+				httpServletRequest, fece);
+		}
+
 		UnsyncStringWriter unsyncStringWriter = new UnsyncStringWriter();
 
 		FragmentRenderer fragmentRenderer = _getFragmentRenderer(
-			fragmentRendererContext.getFragmentEntryLink());
+			fragmentEntryLink);
 
 		try {
 			fragmentRenderer.render(
@@ -64,35 +120,78 @@ public class FragmentRendererControllerImpl
 		}
 		catch (IOException ioe) {
 			SessionErrors.add(
-				httpServletRequest, "fragmentEntryInvalidContent");
+				httpServletRequest, "fragmentEntryContentInvalid");
 
-			StringBundler sb = new StringBundler(3);
-
-			sb.append("<div class=\"alert alert-danger m-2\">");
-
-			String errorMessage = "an-unexpected-error-occurred";
-
-			Throwable cause = ioe.getCause();
-
-			if (cause instanceof FragmentEntryContentException) {
-				FragmentEntryContentException fece =
-					(FragmentEntryContentException)cause;
-
-				errorMessage = fece.getLocalizedMessage();
-			}
-
-			ThemeDisplay themeDisplay =
-				(ThemeDisplay)httpServletRequest.getAttribute(
-					WebKeys.THEME_DISPLAY);
-
-			sb.append(LanguageUtil.get(themeDisplay.getLocale(), errorMessage));
-
-			sb.append("</div>");
-
-			return sb.toString();
+			return _getFragmentEntryContentExceptionMessage(
+				httpServletRequest, ioe);
 		}
 
 		return unsyncStringWriter.toString();
+	}
+
+	private String _getFragmentEntryConfigurationExceptionMessage(
+		HttpServletRequest httpServletRequest,
+		FragmentEntryConfigurationException fece) {
+
+		StringBundler divSB = new StringBundler(3);
+
+		divSB.append("<div class=\"alert alert-danger m-2\">");
+
+		ThemeDisplay themeDisplay =
+			(ThemeDisplay)httpServletRequest.getAttribute(
+				WebKeys.THEME_DISPLAY);
+
+		ResourceBundle resourceBundle = ResourceBundleUtil.getBundle(
+			themeDisplay.getLocale(), FragmentRendererControllerImpl.class);
+
+		StringBundler detailedErrorMessageSB = new StringBundler(4);
+
+		detailedErrorMessageSB.append(
+			LanguageUtil.get(
+				resourceBundle, "fragment-configuration-is-invalid"));
+		detailedErrorMessageSB.append(StringPool.NEW_LINE);
+		detailedErrorMessageSB.append(StringPool.NEW_LINE);
+		detailedErrorMessageSB.append(fece.getLocalizedMessage());
+
+		String detailedErrorMessage = detailedErrorMessageSB.toString();
+
+		divSB.append(detailedErrorMessage.replaceAll("\\n", "<br>"));
+
+		divSB.append("</div>");
+
+		return divSB.toString();
+	}
+
+	private String _getFragmentEntryContentExceptionMessage(
+		HttpServletRequest httpServletRequest, IOException ioe) {
+
+		StringBundler sb = new StringBundler(3);
+
+		sb.append("<div class=\"alert alert-danger m-2\">");
+
+		String errorMessage = "an-unexpected-error-occurred";
+
+		Throwable cause = ioe.getCause();
+
+		if (cause instanceof FragmentEntryContentException) {
+			FragmentEntryContentException fece =
+				(FragmentEntryContentException)cause;
+
+			errorMessage = fece.getLocalizedMessage();
+		}
+
+		ThemeDisplay themeDisplay =
+			(ThemeDisplay)httpServletRequest.getAttribute(
+				WebKeys.THEME_DISPLAY);
+
+		String localizedErrorMessage = LanguageUtil.get(
+			themeDisplay.getLocale(), errorMessage);
+
+		sb.append(localizedErrorMessage.replaceAll("\\n", "<br>"));
+
+		sb.append("</div>");
+
+		return sb.toString();
 	}
 
 	private FragmentRenderer _getFragmentRenderer(
@@ -112,6 +211,95 @@ public class FragmentRendererControllerImpl
 
 		return fragmentRenderer;
 	}
+
+	private String _translateConfigurationFields(
+		JSONObject jsonObject, Locale locale) {
+
+		JSONArray fieldSetsJSONArray = jsonObject.getJSONArray("fieldSets");
+
+		if (fieldSetsJSONArray == null) {
+			return StringPool.BLANK;
+		}
+
+		ResourceBundleLoader resourceBundleLoader =
+			new AggregateResourceBundleLoader(
+				ResourceBundleLoaderUtil.getPortalResourceBundleLoader(),
+				_fragmentCollectionContributorTracker.
+					getResourceBundleLoader());
+
+		ResourceBundle resourceBundle = resourceBundleLoader.loadResourceBundle(
+			locale);
+
+		Iterator<JSONObject> iterator = fieldSetsJSONArray.iterator();
+
+		iterator.forEachRemaining(
+			fieldSetJSONObject -> {
+				String fieldSetLabel = fieldSetJSONObject.getString("label");
+
+				fieldSetJSONObject.put(
+					"label",
+					LanguageUtil.get(
+						resourceBundle, fieldSetLabel, fieldSetLabel));
+
+				JSONArray fieldsJSONArray = fieldSetJSONObject.getJSONArray(
+					"fields");
+
+				Iterator<JSONObject> fieldsIterator =
+					fieldsJSONArray.iterator();
+
+				fieldsIterator.forEachRemaining(
+					fieldJSONObject -> _translateConfigurationFields(
+						fieldJSONObject, resourceBundle));
+			});
+
+		return jsonObject.toString();
+	}
+
+	private void _translateConfigurationFields(
+		JSONObject fieldJSONObject, ResourceBundle resourceBundle) {
+
+		String fieldLabel = fieldJSONObject.getString("label");
+
+		fieldJSONObject.put(
+			"label", LanguageUtil.get(resourceBundle, fieldLabel, fieldLabel));
+
+		String type = fieldJSONObject.getString("type");
+
+		if (!Objects.equals(type, "select")) {
+			return;
+		}
+
+		JSONObject typeOptionsJSONObject = fieldJSONObject.getJSONObject(
+			"typeOptions");
+
+		JSONArray validValuesJSONArray = typeOptionsJSONObject.getJSONArray(
+			"validValues");
+
+		Iterator<JSONObject> validValuesIterator =
+			validValuesJSONArray.iterator();
+
+		validValuesIterator.forEachRemaining(
+			validValueJSONObject -> {
+				String value = validValueJSONObject.getString("value");
+
+				String key = value;
+
+				String label = validValueJSONObject.getString("label", key);
+
+				validValueJSONObject.put(
+					"label", LanguageUtil.get(resourceBundle, label, key));
+			});
+	}
+
+	private static final Log _log = LogFactoryUtil.getLog(
+		FragmentRendererControllerImpl.class);
+
+	@Reference
+	private FragmentCollectionContributorTracker
+		_fragmentCollectionContributorTracker;
+
+	@Reference
+	private FragmentEntryValidator _fragmentEntryValidator;
 
 	@Reference
 	private FragmentRendererTracker _fragmentRendererTracker;

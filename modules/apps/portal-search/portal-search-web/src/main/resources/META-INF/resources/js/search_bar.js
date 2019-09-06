@@ -1,8 +1,20 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 AUI.add(
 	'liferay-search-bar',
 	function(A) {
-		var FacetUtil = Liferay.Search.FacetUtil;
-
 		var SearchBar = function(form) {
 			var instance = this;
 
@@ -38,7 +50,21 @@ AUI.add(
 		};
 
 		A.mix(SearchBar.prototype, {
-			getKeywords: function() {
+			_onClick() {
+				var instance = this;
+
+				instance.search();
+			},
+
+			_onSubmit(event) {
+				var instance = this;
+
+				event.stopPropagation();
+
+				instance.search();
+			},
+
+			getKeywords() {
 				var instance = this;
 
 				var keywords = instance.keywordsInput.val();
@@ -46,7 +72,7 @@ AUI.add(
 				return keywords.replace(/^\s+|\s+$/, '');
 			},
 
-			isSubmitEnabled: function() {
+			isSubmitEnabled() {
 				var instance = this;
 
 				return (
@@ -54,7 +80,7 @@ AUI.add(
 				);
 			},
 
-			search: function() {
+			search() {
 				var instance = this;
 
 				if (instance.isSubmitEnabled()) {
@@ -68,83 +94,40 @@ AUI.add(
 				}
 			},
 
-			updateQueryString: function(queryString) {
+			updateQueryString(queryString) {
 				var instance = this;
 
-				var hasQuestionMark = false;
+				var searchParams = new URLSearchParams(queryString);
 
-				if (queryString[0] === '?') {
-					hasQuestionMark = true;
-				}
-
-				queryString = FacetUtil.updateQueryString(
+				searchParams.set(
 					instance.keywordsInput.get('name'),
-					[instance.getKeywords()],
-					queryString
+					instance.getKeywords()
 				);
+				searchParams.delete('p_p_id');
+				searchParams.delete('p_p_state');
 
 				if (instance.scopeSelect) {
-					queryString = FacetUtil.updateQueryString(
+					searchParams.set(
 						instance.scopeSelect.get('name'),
-						[instance.scopeSelect.val()],
-						queryString
+						instance.scopeSelect.val()
 					);
 				}
 
-				if (hasQuestionMark) {
-					var parts = queryString.split('?');
-
-					queryString = parts[1];
-
-					hasQuestionMark = false;
-				}
-
-				var parameterArray = queryString.split('&');
-
-				parameterArray = FacetUtil.removeURLParameters(
-					'start',
-					parameterArray
-				);
+				searchParams.delete('start');
 
 				if (instance.resetStartPage) {
 					var resetStartPageName = instance.resetStartPage.get(
 						'name'
 					);
 
-					parameterArray = FacetUtil.removeURLParameters(
-						resetStartPageName,
-						parameterArray
-					);
+					searchParams.delete(resetStartPageName);
 				}
 
-				queryString = parameterArray.join('&');
-
-				if (!hasQuestionMark) {
-					queryString = '?' + queryString;
-				}
-
-				return queryString;
-			},
-
-			_onClick: function(event) {
-				var instance = this;
-
-				instance.search();
-			},
-
-			_onSubmit: function(event) {
-				var instance = this;
-
-				event.stopPropagation();
-
-				instance.search();
+				return '?' + searchParams.toString();
 			}
 		});
 
 		Liferay.namespace('Search').SearchBar = SearchBar;
 	},
-	'',
-	{
-		requires: ['liferay-search-facet-util']
-	}
+	''
 );

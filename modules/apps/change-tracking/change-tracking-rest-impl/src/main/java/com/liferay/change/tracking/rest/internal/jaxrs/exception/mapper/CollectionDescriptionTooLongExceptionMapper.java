@@ -37,13 +37,16 @@ public class CollectionDescriptionTooLongExceptionMapper
 	implements ExceptionMapper<CollectionDescriptionTooLongException> {
 
 	@Override
-	public Response toResponse(CollectionDescriptionTooLongException cdtle) {
+	public Response toResponse(
+		CollectionDescriptionTooLongException
+			collectionDescriptionTooLongException) {
+
 		return Response.status(
 			Response.Status.fromStatusCode(461)
 		).type(
 			MediaType.TEXT_PLAIN
 		).entity(
-			cdtle.getMessage()
+			collectionDescriptionTooLongException.getMessage()
 		).build();
 	}
 

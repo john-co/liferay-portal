@@ -352,9 +352,7 @@ public class LayoutServiceImpl extends LayoutServiceBaseImpl {
 	public List<Layout> getAncestorLayouts(long plid) throws PortalException {
 		Layout layout = layoutLocalService.getLayout(plid);
 
-		List<Layout> ancestors = layout.getAncestors();
-
-		return filterLayouts(ancestors);
+		return filterLayouts(layout.getAncestors());
 	}
 
 	/**
@@ -642,8 +640,7 @@ public class LayoutServiceImpl extends LayoutServiceBaseImpl {
 
 	@Override
 	public List<Layout> getLayouts(long groupId, boolean privateLayout) {
-		return layoutPersistence.filterFindByG_P_Head(
-			groupId, privateLayout, false);
+		return layoutPersistence.filterFindByG_P(groupId, privateLayout);
 	}
 
 	@Override
@@ -682,29 +679,27 @@ public class LayoutServiceImpl extends LayoutServiceBaseImpl {
 
 	@Override
 	public List<Layout> getLayouts(long groupId, String type) {
-		return layoutPersistence.filterFindByG_T_Head(groupId, type, false);
+		return layoutPersistence.filterFindByG_T(groupId, type);
 	}
 
 	@Override
 	public List<Layout> getLayouts(
 		long groupId, String type, int start, int end) {
 
-		return layoutPersistence.filterFindByG_T_Head(
-			groupId, type, false, start, end);
+		return layoutPersistence.filterFindByG_T(groupId, type, start, end);
 	}
 
 	@Override
 	public int getLayoutsCount(long groupId, boolean privateLayout) {
-		return layoutPersistence.filterCountByG_P_Head(
-			groupId, privateLayout, false);
+		return layoutPersistence.filterCountByG_P(groupId, privateLayout);
 	}
 
 	@Override
 	public int getLayoutsCount(
 		long groupId, boolean privateLayout, long parentLayoutId) {
 
-		return layoutPersistence.filterCountByG_P_P_Head(
-			groupId, privateLayout, parentLayoutId, false);
+		return layoutPersistence.filterCountByG_P_P(
+			groupId, privateLayout, parentLayoutId);
 	}
 
 	@Override
@@ -712,13 +707,13 @@ public class LayoutServiceImpl extends LayoutServiceBaseImpl {
 		long groupId, boolean privateLayout, long parentLayoutId,
 		int priority) {
 
-		return layoutPersistence.filterCountByG_P_P_LtP_Head(
-			groupId, privateLayout, parentLayoutId, priority, false);
+		return layoutPersistence.filterCountByG_P_P_LtP(
+			groupId, privateLayout, parentLayoutId, priority);
 	}
 
 	@Override
 	public int getLayoutsCount(long groupId, String type) {
-		return layoutPersistence.filterCountByG_T_Head(groupId, type, false);
+		return layoutPersistence.filterCountByG_T(groupId, type);
 	}
 
 	@Override
@@ -1008,7 +1003,7 @@ public class LayoutServiceImpl extends LayoutServiceBaseImpl {
 	 *         To see how the URL is normalized when accessed see {@link
 	 *         com.liferay.portal.kernel.util.FriendlyURLNormalizerUtil#normalize(
 	 *         String)}.
-	 * @param  iconImage whether the icon image will be updated
+	 * @param  hasIconImage if the layout has a custom icon image
 	 * @param  iconBytes the byte array of the layout's new icon image
 	 * @param  serviceContext the service context to be applied. Can set the
 	 *         modification date and expando bridge attributes for the layout.
@@ -1022,7 +1017,7 @@ public class LayoutServiceImpl extends LayoutServiceBaseImpl {
 			Map<Locale, String> localeTitlesMap,
 			Map<Locale, String> descriptionMap, Map<Locale, String> keywordsMap,
 			Map<Locale, String> robotsMap, String type, boolean hidden,
-			Map<Locale, String> friendlyURLMap, boolean iconImage,
+			Map<Locale, String> friendlyURLMap, boolean hasIconImage,
 			byte[] iconBytes, ServiceContext serviceContext)
 		throws PortalException {
 
@@ -1035,7 +1030,7 @@ public class LayoutServiceImpl extends LayoutServiceBaseImpl {
 		Layout updatedLayout = layoutLocalService.updateLayout(
 			groupId, privateLayout, layoutId, parentLayoutId, localeNamesMap,
 			localeTitlesMap, descriptionMap, keywordsMap, robotsMap, type,
-			hidden, friendlyURLMap, iconImage, iconBytes, serviceContext);
+			hidden, friendlyURLMap, hasIconImage, iconBytes, serviceContext);
 
 		if (!(layout.getLayoutType() instanceof LayoutTypePortlet)) {
 			checkLayoutTypeSettings(
@@ -1287,6 +1282,15 @@ public class LayoutServiceImpl extends LayoutServiceBaseImpl {
 			getPermissionChecker(), plid, ActionKeys.UPDATE);
 
 		return layoutLocalService.updatePriority(plid, priority);
+	}
+
+	@Override
+	public Layout updateType(long plid, String type) throws PortalException {
+		LayoutPermissionUtil.check(
+			getPermissionChecker(), layoutLocalService.getLayout(plid),
+			ActionKeys.UPDATE);
+
+		return layoutLocalService.updateType(plid, type);
 	}
 
 	protected void checkLayoutTypeSettings(

@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 CKEDITOR.dialog.add('video', function(editor) {
 	var TPL_SCRIPT =
 		'boundingBox: "#" + mediaId,' +
@@ -77,11 +91,11 @@ CKEDITOR.dialog.add('video', function(editor) {
 				scriptTPL = new CKEDITOR.template(TPL_SCRIPT);
 
 				textScript = scriptTPL.output({
-					height: height,
+					height,
 					ogvUrl: videoOgvUrl,
 					poster: videoPoster,
 					url: videoUrl,
-					width: width
+					width
 				});
 
 				editor.plugins.media.applyMediaScript(
@@ -116,9 +130,6 @@ CKEDITOR.dialog.add('video', function(editor) {
 	}
 
 	return {
-		minHeight: 200,
-		minWidth: 400,
-
 		contents: [
 			{
 				elements: [
@@ -184,18 +195,21 @@ CKEDITOR.dialog.add('video', function(editor) {
 			}
 		],
 
-		title: Liferay.Language.get('video-properties'),
+		minHeight: 200,
+		minWidth: 400,
 
-		onOk: function() {
+		onOk() {
 			var instance = this;
 
 			editor.plugins.media.onOkCallback(instance, editor, 'video');
 		},
 
-		onShow: function() {
+		onShow() {
 			var instance = this;
 
 			editor.plugins.media.onShowCallback(instance, editor, 'video');
-		}
+		},
+
+		title: Liferay.Language.get('video-properties')
 	};
 });

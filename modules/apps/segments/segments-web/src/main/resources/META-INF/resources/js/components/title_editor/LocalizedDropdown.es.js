@@ -1,4 +1,18 @@
-import ClayIcon from '../shared/ClayIcon.es';
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
+import ClayIcon from '@clayui/icon';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {ENTER} from '../../utils/key-constants.es';
@@ -74,24 +88,27 @@ class LocalizedDropdown extends React.Component {
 				}`}
 			>
 				<button
-					aria-expanded='false'
-					aria-haspopup='true'
-					className='btn btn-monospaced btn-secondary dropdown-toggle'
-					data-testid='localized-dropdown-button'
+					aria-expanded="false"
+					aria-haspopup="true"
+					className="btn btn-monospaced btn-secondary dropdown-toggle"
+					data-testid="localized-dropdown-button"
 					onBlur={this._handleButtonBlur}
 					onClick={this._handleButtonClick}
-					role='button'
-					title=''
-					type='button'
+					role="button"
+					title=""
+					type="button"
 				>
-					<span className='inline-item'>
-						<ClayIcon iconName={currentLangKey} />
+					<span className="inline-item">
+						<ClayIcon
+							key={currentLangKey}
+							symbol={currentLangKey}
+						/>
 					</span>
-					<span className='btn-section'>{currentLangTag}</span>
+					<span className="btn-section">{currentLangTag}</span>
 				</button>
 
 				{open && (
-					<ul className='dropdown-menu d-block' role='menu'>
+					<ul className="dropdown-menu d-block" role="menu">
 						{availableLanguages.map(entry => {
 							const {hasValue, key} = entry;
 
@@ -104,25 +121,25 @@ class LocalizedDropdown extends React.Component {
 									onKeyDown={this._handleLanguageKeyboard(
 										key
 									)}
-									role='presentation'
+									role="presentation"
 								>
 									<span
-										className='dropdown-item palette-item lfr-icon-item taglib-icon'
-										role='menuitem'
-										tabIndex='0'
-										target='_self'
+										className="dropdown-item palette-item lfr-icon-item taglib-icon"
+										role="menuitem"
+										tabIndex="0"
+										target="_self"
 									>
-										<span className='inline-item inline-item-before'>
+										<span className="inline-item inline-item-before">
 											<ClayIcon
-												iconName={keyLangToLanguageTag(
+												symbol={keyLangToLanguageTag(
 													key
 												)}
 											/>
 										</span>
-										<span className='taglib-text-icon'>
+										<span className="taglib-text-icon">
 											{keyLangToLanguageTag(key, false)}
 											{defaultLang === key && (
-												<span className='ml-1 label label-info'>
+												<span className="ml-1 label label-info">
 													{Liferay.Language.get(
 														'default-value'
 													)}
@@ -130,13 +147,13 @@ class LocalizedDropdown extends React.Component {
 											)}
 											{defaultLang !== key &&
 												(hasValue ? (
-													<span className='ml-1 label label-success'>
+													<span className="ml-1 label label-success">
 														{Liferay.Language.get(
 															'translated'
 														)}
 													</span>
 												) : (
-													<span className='ml-1 label label-warning'>
+													<span className="ml-1 label label-warning">
 														{Liferay.Language.get(
 															'untranslated'
 														)}

@@ -242,6 +242,14 @@ public class ExportImportHelperUtil {
 		return _exportImportHelper.getLayoutIds(portletRequest, targetGroupId);
 	}
 
+	public static long getLayoutModelDeletionCount(
+			final PortletDataContext portletDataContext, boolean privateLayout)
+		throws PortalException {
+
+		return _exportImportHelper.getLayoutModelDeletionCount(
+			portletDataContext, privateLayout);
+	}
+
 	public static Layout getLayoutOrCreateDummyRootLayout(long plid)
 		throws PortalException {
 
@@ -334,6 +342,16 @@ public class ExportImportHelperUtil {
 
 		return _exportImportHelper.isAlwaysIncludeReference(
 			portletDataContext, referenceStagedModel);
+	}
+
+	public static boolean isExportPortletData(
+		PortletDataContext portletDataContext) {
+
+		return _exportImportHelper.isExportPortletData(portletDataContext);
+	}
+
+	public static boolean isLayoutRevisionInReview(Layout layout) {
+		return _exportImportHelper.isLayoutRevisionInReview(layout);
 	}
 
 	public static boolean isReferenceWithinExportScope(

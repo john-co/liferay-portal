@@ -1,5 +1,19 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 _.mixin({
-	bindKeyRight: function(context, key) {
+	bindKeyRight(context, key) {
 		var args = _.toArray(arguments).slice(2);
 
 		args.unshift(_.bindKey(context, key));
@@ -7,7 +21,7 @@ _.mixin({
 		return _.partialRight.apply(_, args);
 	},
 
-	bindRight: function(fn, context) {
+	bindRight(fn, context) {
 		var args = _.toArray(arguments).slice(2);
 
 		args.unshift(_.bind(fn, context));
@@ -15,7 +29,7 @@ _.mixin({
 		return _.partialRight.apply(_, args);
 	},
 
-	cached: function(fn) {
+	cached(fn) {
 		return _.memoize(fn, function() {
 			return arguments.length > 1
 				? Array.prototype.join.call(arguments, '_')
@@ -26,7 +40,7 @@ _.mixin({
 
 _.mixin(
 	{
-		namespace: function(obj, path) {
+		namespace(obj, path) {
 			if (arguments.length === 1) {
 				path = obj;
 				obj = this;

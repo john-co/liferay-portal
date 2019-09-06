@@ -1,10 +1,22 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import Component from 'metal-jsx';
-import dom from 'metal-dom';
 import RuleEditor from '../../components/RuleEditor/RuleEditor.es';
 import RuleList from '../../components/RuleList/RuleList.es';
 import {Config} from 'metal-state';
-import {EventHandler} from 'metal-events';
-import {makeFetch} from '../../util/fetch.es';
+import {makeFetch} from 'dynamic-data-mapping-form-renderer/js/util/fetch.es';
 
 /**
  * Builder.
@@ -13,16 +25,8 @@ import {makeFetch} from '../../util/fetch.es';
 
 class RuleBuilder extends Component {
 	created() {
-		this._eventHandler = new EventHandler();
-
 		this._fetchDataProvider();
 		this._fetchRoles();
-	}
-
-	disposeInternal() {
-		super.disposeInternal();
-
-		this._eventHandler.removeAllListeners();
 	}
 
 	render() {
@@ -38,7 +42,7 @@ class RuleBuilder extends Component {
 		const {dataProvider, index, mode, roles, rules} = this.state;
 
 		return (
-			<div class='container'>
+			<div class="container">
 				{mode === 'create' && (
 					<RuleEditor
 						actions={[]}
@@ -50,7 +54,7 @@ class RuleBuilder extends Component {
 						dataProviderInstancesURL={dataProviderInstancesURL}
 						events={{
 							ruleAdded: this._handleRuleAdded.bind(this),
-							ruleCancel: this._handleRuleCanceled.bind(this),
+							ruleCancelled: this._handleRuleCancelled.bind(this),
 							ruleDeleted: this._handleRuleDeleted.bind(this),
 							ruleEdited: this._handleRuleEdited.bind(this)
 						}}
@@ -58,7 +62,7 @@ class RuleBuilder extends Component {
 						functionsURL={functionsURL}
 						key={'create'}
 						pages={pages}
-						ref='RuleEditor'
+						ref="RuleEditor"
 						roles={roles}
 						spritemap={spritemap}
 					/>
@@ -72,13 +76,13 @@ class RuleBuilder extends Component {
 						dataProviderInstancesURL={dataProviderInstancesURL}
 						events={{
 							ruleAdded: this._handleRuleSaved.bind(this),
-							ruleCancel: this._handleRuleCanceled.bind(this)
+							ruleCancelled: this._handleRuleCancelled.bind(this)
 						}}
 						functionsMetadata={functionsMetadata}
 						functionsURL={functionsURL}
 						key={'edit'}
 						pages={pages}
-						ref='RuleEditor'
+						ref="RuleEditor"
 						roles={roles}
 						rule={rules[index]}
 						ruleEditedIndex={index}
@@ -90,12 +94,12 @@ class RuleBuilder extends Component {
 						dataProvider={dataProvider}
 						events={{
 							ruleAdded: this._handleRuleAdded.bind(this),
-							ruleCancel: this._handleRuleCanceled.bind(this),
+							ruleCancelled: this._handleRuleCancelled.bind(this),
 							ruleDeleted: this._handleRuleDeleted.bind(this),
 							ruleEdited: this._handleRuleEdited.bind(this)
 						}}
 						pages={pages}
-						ref='RuleList'
+						ref="RuleList"
 						roles={roles}
 						rules={rules}
 						spritemap={spritemap}
@@ -105,35 +109,16 @@ class RuleBuilder extends Component {
 		);
 	}
 
-	rendered() {
-		const {mode} = this.state;
-		const {visible} = this.props;
-
-		if (visible) {
-			const addButton = document.querySelector('#addFieldButton');
-
-			if (mode === 'create' || mode === 'edit') {
-				addButton.classList.add('hide');
-			} else {
-				addButton.classList.remove('hide');
-			}
-		}
+	showRuleCreation() {
+		this.setState({
+			mode: 'create'
+		});
 	}
 
-	syncVisible(visible) {
-		super.syncVisible(visible);
-
-		if (visible) {
-			this._eventHandler.add(
-				dom.on(
-					'#addFieldButton',
-					'click',
-					this._handleAddRuleClick.bind(this)
-				)
-			);
-		} else {
-			this._eventHandler.removeAllListeners();
-		}
+	showRuleList() {
+		this.setState({
+			mode: 'view'
+		});
 	}
 
 	willReceiveProps({rules}) {
@@ -194,21 +179,16 @@ class RuleBuilder extends Component {
 			});
 	}
 
-	_handleAddRuleClick(event) {
-		this._showRuleCreation();
-
-		this._hideAddRuleButton(event.delegateTarget);
-	}
-
 	_handleRuleAdded(event) {
-		this.emit('ruleAdded', {
-			...event
-		});
+		const {dispatch} = this.context;
 
-		this._showRuleList();
+		dispatch('ruleAdded', event);
+
+		this.showRuleList();
 	}
 
-	_handleRuleCanceled(event) {
+	_handleRuleCancelled() {
+		const {dispatch} = this.context;
 		const {index} = this.state;
 		const rules = this.state.rules.map((rule, ruleIndex) => {
 			return index === ruleIndex ? this.state.originalRule : rule;
@@ -218,10 +198,14 @@ class RuleBuilder extends Component {
 			mode: 'view',
 			rules
 		});
+
+		dispatch('ruleCancelled');
 	}
 
 	_handleRuleDeleted({ruleId}) {
-		this.emit('ruleDeleted', {
+		const {dispatch} = this.context;
+
+		dispatch('ruleDeleted', {
 			ruleId
 		});
 	}
@@ -239,32 +223,18 @@ class RuleBuilder extends Component {
 	}
 
 	_handleRuleSaved(event) {
-		this.emit('ruleSaved', {
+		const {dispatch} = this.context;
+
+		dispatch('ruleSaved', {
 			...event,
 			ruleId: event.ruleEditedIndex
 		});
 
-		this._showRuleList();
-	}
-
-	_hideAddRuleButton(element) {
-		dom.addClasses(element, 'hide');
+		this.showRuleList();
 	}
 
 	_setRulesValueFn() {
 		return this.props.rules;
-	}
-
-	_showRuleCreation() {
-		this.setState({
-			mode: 'create'
-		});
-	}
-
-	_showRuleList() {
-		this.setState({
-			mode: 'view'
-		});
 	}
 }
 

@@ -103,11 +103,11 @@ public class DefaultAssetDisplayPageFriendlyURLResolver
 		HttpServletRequest httpServletRequest =
 			(HttpServletRequest)requestContext.get("request");
 
-		Locale locale = _portal.getLocale(httpServletRequest);
-
 		return _getBasicLayoutURL(
 			groupId, privateLayout, mainPath, friendlyURL, params,
-			requestContext, journalArticle.getUrlTitle(locale), journalArticle);
+			requestContext,
+			journalArticle.getUrlTitle(_portal.getLocale(httpServletRequest)),
+			journalArticle);
 	}
 
 	@Override
@@ -221,10 +221,17 @@ public class DefaultAssetDisplayPageFriendlyURLResolver
 		AssetEntry assetEntry = Optional.ofNullable(
 			_assetEntryLocalService.fetchEntry(
 				JournalArticle.class.getName(), journalArticle.getPrimaryKey())
-		).orElse(
-			assetRendererFactory.getAssetEntry(
-				JournalArticle.class.getName(),
-				journalArticle.getResourcePrimKey())
+		).orElseGet(
+			() -> {
+				try {
+					return assetRendererFactory.getAssetEntry(
+						JournalArticle.class.getName(),
+						journalArticle.getResourcePrimKey());
+				}
+				catch (PortalException pe) {
+					throw new RuntimeException(pe);
+				}
+			}
 		);
 
 		actualParams.put(

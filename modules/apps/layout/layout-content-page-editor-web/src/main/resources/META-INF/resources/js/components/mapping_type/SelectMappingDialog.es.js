@@ -1,12 +1,30 @@
-import {Config} from 'metal-state';
-import {Modal, PortletBase} from 'frontend-js-web';
-import Soy from 'metal-soy';
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
 
-import {COMPATIBLE_TYPES} from '../../utils/constants';
+import {PortletBase} from 'frontend-js-web';
+import 'frontend-js-web/liferay/compat/modal/Modal.es';
+import Soy from 'metal-soy';
+import {Config} from 'metal-state';
+
 import {HIDE_MAPPING_DIALOG} from '../../actions/actions.es';
-import {setIn} from '../../utils/FragmentsEditorUpdateUtils.es';
-import {Store} from '../../store/store.es';
 import {updateEditableValueAction} from '../../actions/updateEditableValue.es';
+import {Store} from '../../store/store.es';
+import {setIn} from '../../utils/FragmentsEditorUpdateUtils.es';
+import {
+	COMPATIBLE_TYPES,
+	EDITABLE_FRAGMENT_ENTRY_PROCESSOR
+} from '../../utils/constants';
 import templates from './SelectMappingDialog.soy';
 
 /**
@@ -58,12 +76,13 @@ class SelectMappingDialog extends PortletBase {
 	_handleMappeableFieldSelected(key = '') {
 		this.store
 			.dispatch(
-				updateEditableValueAction(
-					this.fragmentEntryLinkId,
-					this.editableId,
-					'mappedField',
-					key
-				)
+				updateEditableValueAction({
+					editableId: this.editableId,
+					editableValueContent: key,
+					editableValueId: 'mappedField',
+					fragmentEntryLinkId: this.fragmentEntryLinkId,
+					processor: EDITABLE_FRAGMENT_ENTRY_PROCESSOR
+				})
 			)
 			.dispatch({
 				type: HIDE_MAPPING_DIALOG
@@ -137,6 +156,37 @@ class SelectMappingDialog extends PortletBase {
  * @type {!Object}
  */
 SelectMappingDialog.STATE = {
+	/**
+	 * Flag indicating if mappeable fields are being loaded
+	 * @default false
+	 * @instance
+	 * @memberOf SelectMappingDialog
+	 * @private
+	 * @review
+	 * @type {boolean}
+	 */
+	_loadingMappeableFields: Config.bool().value(false),
+
+	/**
+	 * List of mappeable fields being shown as options
+	 * @default null
+	 * @instance
+	 * @memberOf SelectMappingDialog
+	 * @review
+	 * @private
+	 * @type {null|Array<{
+	 *   key: !string,
+	 *   label: !string
+	 * }>}
+	 */
+	_mappeableFields: Config.arrayOf(
+		Config.shapeOf({
+			key: Config.string().required(),
+			label: Config.string().required(),
+			type: Config.string().required()
+		})
+	).value(null),
+
 	/**
 	 * EditableId of the field that is being mapped
 	 * @default ''
@@ -236,38 +286,7 @@ SelectMappingDialog.STATE = {
 	 * @review
 	 * @type {Store}
 	 */
-	store: Config.instanceOf(Store),
-
-	/**
-	 * Flag indicating if mappeable fields are being loaded
-	 * @default false
-	 * @instance
-	 * @memberOf SelectMappingDialog
-	 * @private
-	 * @review
-	 * @type {boolean}
-	 */
-	_loadingMappeableFields: Config.bool().value(false),
-
-	/**
-	 * List of mappeable fields being shown as options
-	 * @default null
-	 * @instance
-	 * @memberOf SelectMappingDialog
-	 * @review
-	 * @private
-	 * @type {null|Array<{
-	 *   key: !string,
-	 *   label: !string
-	 * }>}
-	 */
-	_mappeableFields: Config.arrayOf(
-		Config.shapeOf({
-			key: Config.string().required(),
-			label: Config.string().required(),
-			type: Config.string().required()
-		})
-	).value(null)
+	store: Config.instanceOf(Store)
 };
 
 Soy.register(SelectMappingDialog, templates);

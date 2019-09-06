@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import Component from 'metal-component';
 import Soy, {Config} from 'metal-soy';
 
@@ -43,14 +57,25 @@ class FloatingToolbarImagePropertiesPanel extends Component {
 	}
 
 	/**
+	 * Handle alt text change
+	 * @private
+	 * @review
+	 */
+	_handleAltTextInputChange() {
+		this._updateFragmentConfig({
+			[EDITABLE_FIELD_CONFIG_KEYS.alt]: event.delegateTarget.value
+		});
+	}
+
+	/**
 	 * Handle select image button change
 	 * @private
 	 * @review
 	 */
 	_handleClearImageButtonClick() {
 		this.store.dispatch({
-			itemId: this.itemId,
-			type: CLEAR_FRAGMENT_EDITOR
+			type: CLEAR_FRAGMENT_EDITOR,
+			value: this.itemId
 		});
 	}
 
@@ -85,8 +110,8 @@ class FloatingToolbarImagePropertiesPanel extends Component {
 	 */
 	_handleSelectImageButtonClick() {
 		this.store.dispatch({
-			itemId: this.itemId,
-			type: ENABLE_FRAGMENT_EDITOR
+			type: ENABLE_FRAGMENT_EDITOR,
+			value: this.itemId
 		});
 	}
 }

@@ -84,22 +84,24 @@ public class DDMStructureModelImpl
 	public static final String TABLE_NAME = "DDMStructure";
 
 	public static final Object[][] TABLE_COLUMNS = {
-		{"uuid_", Types.VARCHAR}, {"structureId", Types.BIGINT},
-		{"groupId", Types.BIGINT}, {"companyId", Types.BIGINT},
-		{"userId", Types.BIGINT}, {"userName", Types.VARCHAR},
-		{"versionUserId", Types.BIGINT}, {"versionUserName", Types.VARCHAR},
-		{"createDate", Types.TIMESTAMP}, {"modifiedDate", Types.TIMESTAMP},
-		{"parentStructureId", Types.BIGINT}, {"classNameId", Types.BIGINT},
-		{"structureKey", Types.VARCHAR}, {"version", Types.VARCHAR},
-		{"name", Types.VARCHAR}, {"description", Types.CLOB},
-		{"definition", Types.CLOB}, {"storageType", Types.VARCHAR},
-		{"type_", Types.INTEGER}, {"lastPublishDate", Types.TIMESTAMP}
+		{"mvccVersion", Types.BIGINT}, {"uuid_", Types.VARCHAR},
+		{"structureId", Types.BIGINT}, {"groupId", Types.BIGINT},
+		{"companyId", Types.BIGINT}, {"userId", Types.BIGINT},
+		{"userName", Types.VARCHAR}, {"versionUserId", Types.BIGINT},
+		{"versionUserName", Types.VARCHAR}, {"createDate", Types.TIMESTAMP},
+		{"modifiedDate", Types.TIMESTAMP}, {"parentStructureId", Types.BIGINT},
+		{"classNameId", Types.BIGINT}, {"structureKey", Types.VARCHAR},
+		{"version", Types.VARCHAR}, {"name", Types.VARCHAR},
+		{"description", Types.CLOB}, {"definition", Types.CLOB},
+		{"storageType", Types.VARCHAR}, {"type_", Types.INTEGER},
+		{"lastPublishDate", Types.TIMESTAMP}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
 		new HashMap<String, Integer>();
 
 	static {
+		TABLE_COLUMNS_MAP.put("mvccVersion", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("uuid_", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("structureId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("groupId", Types.BIGINT);
@@ -123,7 +125,7 @@ public class DDMStructureModelImpl
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table DDMStructure (uuid_ VARCHAR(75) null,structureId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,versionUserId LONG,versionUserName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,parentStructureId LONG,classNameId LONG,structureKey VARCHAR(75) null,version VARCHAR(75) null,name STRING null,description TEXT null,definition TEXT null,storageType VARCHAR(75) null,type_ INTEGER,lastPublishDate DATE null)";
+		"create table DDMStructure (mvccVersion LONG default 0 not null,uuid_ VARCHAR(75) null,structureId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,versionUserId LONG,versionUserName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,parentStructureId LONG,classNameId LONG,structureKey VARCHAR(75) null,version VARCHAR(75) null,name STRING null,description TEXT null,definition TEXT null,storageType VARCHAR(75) null,type_ INTEGER,lastPublishDate DATE null)";
 
 	public static final String TABLE_SQL_DROP = "drop table DDMStructure";
 
@@ -138,21 +140,6 @@ public class DDMStructureModelImpl
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 
 	public static final String TX_MANAGER = "liferayTransactionManager";
-
-	public static final boolean ENTITY_CACHE_ENABLED = GetterUtil.getBoolean(
-		com.liferay.dynamic.data.mapping.service.util.ServiceProps.get(
-			"value.object.entity.cache.enabled.com.liferay.dynamic.data.mapping.model.DDMStructure"),
-		true);
-
-	public static final boolean FINDER_CACHE_ENABLED = GetterUtil.getBoolean(
-		com.liferay.dynamic.data.mapping.service.util.ServiceProps.get(
-			"value.object.finder.cache.enabled.com.liferay.dynamic.data.mapping.model.DDMStructure"),
-		true);
-
-	public static final boolean COLUMN_BITMASK_ENABLED = GetterUtil.getBoolean(
-		com.liferay.dynamic.data.mapping.service.util.ServiceProps.get(
-			"value.object.column.bitmask.enabled.com.liferay.dynamic.data.mapping.model.DDMStructure"),
-		true);
 
 	public static final long CLASSNAMEID_COLUMN_BITMASK = 1L;
 
@@ -172,6 +159,14 @@ public class DDMStructureModelImpl
 
 	public static final long STRUCTUREID_COLUMN_BITMASK = 256L;
 
+	public static void setEntityCacheEnabled(boolean entityCacheEnabled) {
+		_entityCacheEnabled = entityCacheEnabled;
+	}
+
+	public static void setFinderCacheEnabled(boolean finderCacheEnabled) {
+		_finderCacheEnabled = finderCacheEnabled;
+	}
+
 	/**
 	 * Converts the soap model instance into a normal model instance.
 	 *
@@ -185,6 +180,7 @@ public class DDMStructureModelImpl
 
 		DDMStructure model = new DDMStructureImpl();
 
+		model.setMvccVersion(soapModel.getMvccVersion());
 		model.setUuid(soapModel.getUuid());
 		model.setStructureId(soapModel.getStructureId());
 		model.setGroupId(soapModel.getGroupId());
@@ -229,10 +225,6 @@ public class DDMStructureModelImpl
 
 		return models;
 	}
-
-	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(
-		com.liferay.dynamic.data.mapping.service.util.ServiceProps.get(
-			"lock.expiration.time.com.liferay.dynamic.data.mapping.model.DDMStructure"));
 
 	public DDMStructureModelImpl() {
 	}
@@ -359,6 +351,11 @@ public class DDMStructureModelImpl
 		Map<String, BiConsumer<DDMStructure, ?>> attributeSetterBiConsumers =
 			new LinkedHashMap<String, BiConsumer<DDMStructure, ?>>();
 
+		attributeGetterFunctions.put(
+			"mvccVersion", DDMStructure::getMvccVersion);
+		attributeSetterBiConsumers.put(
+			"mvccVersion",
+			(BiConsumer<DDMStructure, Long>)DDMStructure::setMvccVersion);
 		attributeGetterFunctions.put("uuid", DDMStructure::getUuid);
 		attributeSetterBiConsumers.put(
 			"uuid", (BiConsumer<DDMStructure, String>)DDMStructure::setUuid);
@@ -450,6 +447,17 @@ public class DDMStructureModelImpl
 			attributeGetterFunctions);
 		_attributeSetterBiConsumers = Collections.unmodifiableMap(
 			(Map)attributeSetterBiConsumers);
+	}
+
+	@JSON
+	@Override
+	public long getMvccVersion() {
+		return _mvccVersion;
+	}
+
+	@Override
+	public void setMvccVersion(long mvccVersion) {
+		_mvccVersion = mvccVersion;
 	}
 
 	@JSON
@@ -1168,6 +1176,7 @@ public class DDMStructureModelImpl
 	public Object clone() {
 		DDMStructureImpl ddmStructureImpl = new DDMStructureImpl();
 
+		ddmStructureImpl.setMvccVersion(getMvccVersion());
 		ddmStructureImpl.setUuid(getUuid());
 		ddmStructureImpl.setStructureId(getStructureId());
 		ddmStructureImpl.setGroupId(getGroupId());
@@ -1238,12 +1247,12 @@ public class DDMStructureModelImpl
 
 	@Override
 	public boolean isEntityCacheEnabled() {
-		return ENTITY_CACHE_ENABLED;
+		return _entityCacheEnabled;
 	}
 
 	@Override
 	public boolean isFinderCacheEnabled() {
-		return FINDER_CACHE_ENABLED;
+		return _finderCacheEnabled;
 	}
 
 	@Override
@@ -1292,6 +1301,8 @@ public class DDMStructureModelImpl
 	public CacheModel<DDMStructure> toCacheModel() {
 		DDMStructureCacheModel ddmStructureCacheModel =
 			new DDMStructureCacheModel();
+
+		ddmStructureCacheModel.mvccVersion = getMvccVersion();
 
 		ddmStructureCacheModel.uuid = getUuid();
 
@@ -1485,6 +1496,10 @@ public class DDMStructureModelImpl
 
 	}
 
+	private static boolean _entityCacheEnabled;
+	private static boolean _finderCacheEnabled;
+
+	private long _mvccVersion;
 	private String _uuid;
 	private String _originalUuid;
 	private long _structureId;

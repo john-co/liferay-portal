@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 AUI.add(
 	'liferay-search-custom-filter',
 	function(A) {
@@ -20,7 +34,21 @@ AUI.add(
 		};
 
 		A.mix(CustomFilter.prototype, {
-			getFilterValue: function() {
+			_onClick() {
+				var instance = this;
+
+				instance.search();
+			},
+
+			_onSubmit(event) {
+				var instance = this;
+
+				event.stopPropagation();
+
+				instance.search();
+			},
+
+			getFilterValue() {
 				var instance = this;
 
 				var filterValue = instance.filterValueInput.val();
@@ -28,7 +56,7 @@ AUI.add(
 				return filterValue;
 			},
 
-			search: function() {
+			search() {
 				var instance = this;
 
 				var searchURL = instance.form.get('action');
@@ -40,7 +68,7 @@ AUI.add(
 				document.location.href = searchURL + queryString;
 			},
 
-			updateQueryString: function(queryString) {
+			updateQueryString(queryString) {
 				var instance = this;
 
 				var hasQuestionMark = false;
@@ -60,20 +88,6 @@ AUI.add(
 				}
 
 				return queryString;
-			},
-
-			_onClick: function(event) {
-				var instance = this;
-
-				instance.search();
-			},
-
-			_onSubmit: function(event) {
-				var instance = this;
-
-				event.stopPropagation();
-
-				instance.search();
 			}
 		});
 

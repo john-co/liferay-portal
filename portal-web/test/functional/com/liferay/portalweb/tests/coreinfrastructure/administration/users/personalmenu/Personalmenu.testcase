@@ -75,16 +75,21 @@ definition {
 
 	@priority = "4"
 	test EnableStaging {
+		property test.name.skip.portal.instance = "Personalmenu#EnableStaging";
+
+		var siteName = TestCase.getSiteName(siteName = "${siteName}");
+
 		ProductMenu.gotoPortlet(
 			category = "Publishing",
 			panel = "Site Administration",
 			portlet = "Staging");
 
-		Staging.activateStagingCP(siteName = "Liferay");
+		Staging.activateStagingCP(siteName = "${siteName}");
 
 		Navigator.gotoStagedSitePage(
+			defaultSite = "true",
 			pageName = "Home",
-			siteName = "Liferay");
+			siteName = "${siteName}");
 
 		UserBar.gotoDropdownItem(dropdownItem = "My Workflow Tasks");
 
@@ -106,9 +111,13 @@ definition {
 
 	@priority = "4"
 	test NavigateToMySites {
+		var siteName = TestCase.getSiteName(siteName = "${siteName}");
+
+		ProductMenu.gotoSiteViaLink();
+
 		UserBar.gotoDropdownItem(dropdownItem = "My Sites");
 
-		Site.viewSelectSiteViaPersonalMenuMySites(siteName = "Liferay");
+		Site.viewSelectSiteViaPersonalMenuMySites(siteName = "${siteName}");
 	}
 
 }

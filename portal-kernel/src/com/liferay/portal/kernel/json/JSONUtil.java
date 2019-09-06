@@ -24,9 +24,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collector;
@@ -255,6 +257,23 @@ public class JSONUtil {
 	}
 
 	public static <T> JSONArray toJSONArray(
+			Set<T> set, UnsafeFunction<T, Object, Exception> unsafeFunction)
+		throws Exception {
+
+		JSONArray jsonArray = _createJSONArray();
+
+		if (set == null) {
+			return jsonArray;
+		}
+
+		for (T t : set) {
+			jsonArray.put(unsafeFunction.apply(t));
+		}
+
+		return jsonArray;
+	}
+
+	public static <T> JSONArray toJSONArray(
 			T[] array, UnsafeFunction<T, Object, Exception> unsafeFunction)
 		throws Exception {
 
@@ -271,6 +290,20 @@ public class JSONUtil {
 		return jsonArray;
 	}
 
+	public static Map<String, JSONObject> toJSONObjectMap(
+		JSONArray jsonArray, String jsonObjectKey) {
+
+		Map<String, JSONObject> values = new HashMap<>();
+
+		for (int i = 0; i < jsonArray.length(); i++) {
+			JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+			values.put(jsonObject.getString(jsonObjectKey), jsonObject);
+		}
+
+		return values;
+	}
+
 	public static <T> List<T> toList(
 			JSONArray jsonArray,
 			UnsafeFunction<JSONObject, T, Exception> unsafeFunction)
@@ -283,9 +316,7 @@ public class JSONUtil {
 		List<T> values = new ArrayList<>(jsonArray.length());
 
 		for (int i = 0; i < jsonArray.length(); i++) {
-			JSONObject jsonObject = jsonArray.getJSONObject(i);
-
-			values.add(unsafeFunction.apply(jsonObject));
+			values.add(unsafeFunction.apply(jsonArray.getJSONObject(i)));
 		}
 
 		return values;

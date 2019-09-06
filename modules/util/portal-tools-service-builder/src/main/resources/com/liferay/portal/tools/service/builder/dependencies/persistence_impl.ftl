@@ -65,13 +65,12 @@ import com.liferay.portal.kernel.model.MVCCModel;
 import com.liferay.portal.kernel.sanitizer.Sanitizer;
 import com.liferay.portal.kernel.sanitizer.SanitizerException;
 import com.liferay.portal.kernel.sanitizer.SanitizerUtil;
+import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.security.auth.PrincipalThreadLocal;
 import com.liferay.portal.kernel.security.permission.InlineSQLHelperUtil;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
 import com.liferay.portal.kernel.service.persistence.BasePersistence;
-import com.liferay.portal.kernel.service.persistence.CompanyProvider;
-import com.liferay.portal.kernel.service.persistence.CompanyProviderWrapper;
 import com.liferay.portal.kernel.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.portal.kernel.service.persistence.impl.NestedSetsTreeManager;
 import com.liferay.portal.kernel.service.persistence.impl.PersistenceNestedSetsTreeManager;
@@ -441,7 +440,7 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 		</#if>
 
 		<#if entity.isShardedModel()>
-			${entity.varName}.setCompanyId(companyProvider.getCompanyId());
+			${entity.varName}.setCompanyId(CompanyThreadLocal.getCompanyId());
 		</#if>
 
 		return ${entity.varName};
@@ -1093,28 +1092,31 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 	 * @param start the lower bound of the range of ${entity.humanNames}
 	 * @param end the upper bound of the range of ${entity.humanNames} (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @param retrieveFromCache whether to retrieve from the finder cache
+	 * @param useFinderCache whether to use the finder cache
 	 * @return the ordered range of ${entity.humanNames}
 	 */
 	@Override
-	public List<${entity.name}> findAll(int start, int end, OrderByComparator<${entity.name}> orderByComparator, boolean retrieveFromCache) {
+	public List<${entity.name}> findAll(int start, int end, OrderByComparator<${entity.name}> orderByComparator, boolean useFinderCache) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) && (orderByComparator == null)) {
 			pagination = false;
-			finderPath = _finderPathWithoutPaginationFindAll;
-			finderArgs = FINDER_ARGS_EMPTY;
+
+			if (useFinderCache) {
+				finderPath = _finderPathWithoutPaginationFindAll;
+				finderArgs = FINDER_ARGS_EMPTY;
+			}
 		}
-		else {
+		else if (useFinderCache) {
 			finderPath = _finderPathWithPaginationFindAll;
 			finderArgs = new Object[] {start, end, orderByComparator};
 		}
 
 		List<${entity.name}> list = null;
 
-		if (retrieveFromCache) {
+		if (useFinderCache) {
 			list = (List<${entity.name}>)${finderCache}.getResult(finderPath, finderArgs, this);
 		}
 
@@ -1159,10 +1161,14 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 
 				cacheResult(list);
 
-				${finderCache}.putResult(finderPath, finderArgs, list);
+				if (useFinderCache) {
+					${finderCache}.putResult(finderPath, finderArgs, list);
+				}
 			}
 			catch (Exception e) {
-				${finderCache}.removeResult(finderPath, finderArgs);
+				if (useFinderCache) {
+					${finderCache}.removeResult(finderPath, finderArgs);
+				}
 
 				throw processException(e);
 			}
@@ -1385,7 +1391,7 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 					${entity.name} ${entity.varName} = fetchByPrimaryKey(pk);
 
 					if (${entity.varName} == null) {
-						${entity.varName}To${referenceEntity.name}TableMapper.addTableMapping(companyProvider.getCompanyId(), pk, ${referenceEntity.varName}PK);
+						${entity.varName}To${referenceEntity.name}TableMapper.addTableMapping(CompanyThreadLocal.getCompanyId(), pk, ${referenceEntity.varName}PK);
 					}
 					else {
 						${entity.varName}To${referenceEntity.name}TableMapper.addTableMapping(${entity.varName}.getCompanyId(), pk, ${referenceEntity.varName}PK);
@@ -1403,7 +1409,7 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 					${entity.name} ${entity.varName} = fetchByPrimaryKey(pk);
 
 					if (${entity.varName} == null) {
-						${entity.varName}To${referenceEntity.name}TableMapper.addTableMapping(companyProvider.getCompanyId(), pk, ${referenceEntity.varName}.getPrimaryKey());
+						${entity.varName}To${referenceEntity.name}TableMapper.addTableMapping(CompanyThreadLocal.getCompanyId(), pk, ${referenceEntity.varName}.getPrimaryKey());
 					}
 					else {
 						${entity.varName}To${referenceEntity.name}TableMapper.addTableMapping(${entity.varName}.getCompanyId(), pk, ${referenceEntity.varName}.getPrimaryKey());
@@ -1423,7 +1429,7 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 					${entity.name} ${entity.varName} = fetchByPrimaryKey(pk);
 
 					if (${entity.varName} == null) {
-						companyId = companyProvider.getCompanyId();
+						companyId = CompanyThreadLocal.getCompanyId();
 					}
 					else {
 						companyId = ${entity.varName}.getCompanyId();
@@ -1521,7 +1527,7 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 					${entity.name} ${entity.varName} = fetchByPrimaryKey(pk);
 
 					if (${entity.varName} == null) {
-						companyId = companyProvider.getCompanyId();
+						companyId = CompanyThreadLocal.getCompanyId();
 					}
 					else {
 						companyId = ${entity.varName}.getCompanyId();
@@ -2056,32 +2062,6 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 		private boolean _columnBitmaskEnabled;
 	</#if>
 
-	<#if entity.isShardedModel()>
-		<#if dependencyInjectorDS>
-			@Reference(service = CompanyProviderWrapper.class)
-		<#elseif osgiModule>
-			@ServiceReference(type = CompanyProviderWrapper.class)
-		<#else>
-			@BeanReference(type = CompanyProviderWrapper.class)
-		</#if>
-		protected CompanyProvider companyProvider;
-	<#else>
-		<#list entity.entityColumns as entityColumn>
-			<#if entityColumn.isCollection() && entityColumn.isMappingManyToMany()>
-				<#if dependencyInjectorDS>
-					@Reference(service = CompanyProviderWrapper.class)
-				<#elseif osgiModule>
-					@ServiceReference(type = CompanyProvider.class)
-				<#else>
-					@BeanReference(type = CompanyProvider.class)
-				</#if>
-				protected CompanyProvider companyProvider;
-
-				<#break>
-			</#if>
-		</#list>
-	</#if>
-
 	<#if osgiModule>
 		<#if dependencyInjectorDS>
 			@Reference
@@ -2218,6 +2198,17 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 					</#if>
 				</#list>
 			});
+	</#if>
+
+	<#if dependencyInjectorDS>
+		static {
+			try {
+				Class.forName(${portletShortName}PersistenceConstants.class.getName());
+			}
+			catch (ClassNotFoundException cnfe) {
+				throw new ExceptionInInitializerError(cnfe);
+			}
+		}
 	</#if>
 
 }

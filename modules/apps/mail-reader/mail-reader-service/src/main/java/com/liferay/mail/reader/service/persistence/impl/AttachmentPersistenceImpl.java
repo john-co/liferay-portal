@@ -19,7 +19,9 @@ import com.liferay.mail.reader.model.Attachment;
 import com.liferay.mail.reader.model.impl.AttachmentImpl;
 import com.liferay.mail.reader.model.impl.AttachmentModelImpl;
 import com.liferay.mail.reader.service.persistence.AttachmentPersistence;
+import com.liferay.mail.reader.service.persistence.impl.constants.MailPersistenceConstants;
 import com.liferay.petra.string.StringBundler;
+import com.liferay.portal.kernel.configuration.Configuration;
 import com.liferay.portal.kernel.dao.orm.EntityCache;
 import com.liferay.portal.kernel.dao.orm.FinderCache;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
@@ -27,15 +29,15 @@ import com.liferay.portal.kernel.dao.orm.Query;
 import com.liferay.portal.kernel.dao.orm.QueryPos;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
+import com.liferay.portal.kernel.dao.orm.SessionFactory;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.service.persistence.CompanyProvider;
-import com.liferay.portal.kernel.service.persistence.CompanyProviderWrapper;
+import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.service.persistence.impl.BasePersistenceImpl;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.SetUtil;
-import com.liferay.portal.spring.extender.service.ServiceReference;
 
 import java.io.Serializable;
 
@@ -47,7 +49,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.sql.DataSource;
+
 import org.osgi.annotation.versioning.ProviderType;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * The persistence implementation for the attachment service.
@@ -59,6 +67,7 @@ import org.osgi.annotation.versioning.ProviderType;
  * @author Brian Wing Shun Chan
  * @generated
  */
+@Component(service = AttachmentPersistence.class)
 @ProviderType
 public class AttachmentPersistenceImpl
 	extends BasePersistenceImpl<Attachment> implements AttachmentPersistence {
@@ -147,14 +156,14 @@ public class AttachmentPersistenceImpl
 	 * @param start the lower bound of the range of attachments
 	 * @param end the upper bound of the range of attachments (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @param retrieveFromCache whether to retrieve from the finder cache
+	 * @param useFinderCache whether to use the finder cache
 	 * @return the ordered range of matching attachments
 	 */
 	@Override
 	public List<Attachment> findByMessageId(
 		long messageId, int start, int end,
 		OrderByComparator<Attachment> orderByComparator,
-		boolean retrieveFromCache) {
+		boolean useFinderCache) {
 
 		boolean pagination = true;
 		FinderPath finderPath = null;
@@ -164,10 +173,13 @@ public class AttachmentPersistenceImpl
 			(orderByComparator == null)) {
 
 			pagination = false;
-			finderPath = _finderPathWithoutPaginationFindByMessageId;
-			finderArgs = new Object[] {messageId};
+
+			if (useFinderCache) {
+				finderPath = _finderPathWithoutPaginationFindByMessageId;
+				finderArgs = new Object[] {messageId};
+			}
 		}
-		else {
+		else if (useFinderCache) {
 			finderPath = _finderPathWithPaginationFindByMessageId;
 			finderArgs = new Object[] {
 				messageId, start, end, orderByComparator
@@ -176,7 +188,7 @@ public class AttachmentPersistenceImpl
 
 		List<Attachment> list = null;
 
-		if (retrieveFromCache) {
+		if (useFinderCache) {
 			list = (List<Attachment>)finderCache.getResult(
 				finderPath, finderArgs, this);
 
@@ -242,10 +254,14 @@ public class AttachmentPersistenceImpl
 
 				cacheResult(list);
 
-				finderCache.putResult(finderPath, finderArgs, list);
+				if (useFinderCache) {
+					finderCache.putResult(finderPath, finderArgs, list);
+				}
 			}
 			catch (Exception e) {
-				finderCache.removeResult(finderPath, finderArgs);
+				if (useFinderCache) {
+					finderCache.removeResult(finderPath, finderArgs);
+				}
 
 				throw processException(e);
 			}
@@ -593,7 +609,6 @@ public class AttachmentPersistenceImpl
 
 		setModelImplClass(AttachmentImpl.class);
 		setModelPKClass(long.class);
-		setEntityCacheEnabled(AttachmentModelImpl.ENTITY_CACHE_ENABLED);
 
 		Map<String, String> dbColumnNames = new HashMap<String, String>();
 
@@ -610,7 +625,7 @@ public class AttachmentPersistenceImpl
 	@Override
 	public void cacheResult(Attachment attachment) {
 		entityCache.putResult(
-			AttachmentModelImpl.ENTITY_CACHE_ENABLED, AttachmentImpl.class,
+			entityCacheEnabled, AttachmentImpl.class,
 			attachment.getPrimaryKey(), attachment);
 
 		attachment.resetOriginalValues();
@@ -625,8 +640,8 @@ public class AttachmentPersistenceImpl
 	public void cacheResult(List<Attachment> attachments) {
 		for (Attachment attachment : attachments) {
 			if (entityCache.getResult(
-					AttachmentModelImpl.ENTITY_CACHE_ENABLED,
-					AttachmentImpl.class, attachment.getPrimaryKey()) == null) {
+					entityCacheEnabled, AttachmentImpl.class,
+					attachment.getPrimaryKey()) == null) {
 
 				cacheResult(attachment);
 			}
@@ -662,7 +677,7 @@ public class AttachmentPersistenceImpl
 	@Override
 	public void clearCache(Attachment attachment) {
 		entityCache.removeResult(
-			AttachmentModelImpl.ENTITY_CACHE_ENABLED, AttachmentImpl.class,
+			entityCacheEnabled, AttachmentImpl.class,
 			attachment.getPrimaryKey());
 
 		finderCache.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
@@ -676,7 +691,7 @@ public class AttachmentPersistenceImpl
 
 		for (Attachment attachment : attachments) {
 			entityCache.removeResult(
-				AttachmentModelImpl.ENTITY_CACHE_ENABLED, AttachmentImpl.class,
+				entityCacheEnabled, AttachmentImpl.class,
 				attachment.getPrimaryKey());
 		}
 	}
@@ -694,7 +709,7 @@ public class AttachmentPersistenceImpl
 		attachment.setNew(true);
 		attachment.setPrimaryKey(attachmentId);
 
-		attachment.setCompanyId(companyProvider.getCompanyId());
+		attachment.setCompanyId(CompanyThreadLocal.getCompanyId());
 
 		return attachment;
 	}
@@ -830,7 +845,7 @@ public class AttachmentPersistenceImpl
 
 		finderCache.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 
-		if (!AttachmentModelImpl.COLUMN_BITMASK_ENABLED) {
+		if (!_columnBitmaskEnabled) {
 			finderCache.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
 		else if (isNew) {
@@ -866,7 +881,7 @@ public class AttachmentPersistenceImpl
 		}
 
 		entityCache.putResult(
-			AttachmentModelImpl.ENTITY_CACHE_ENABLED, AttachmentImpl.class,
+			entityCacheEnabled, AttachmentImpl.class,
 			attachment.getPrimaryKey(), attachment, false);
 
 		attachment.resetOriginalValues();
@@ -979,13 +994,13 @@ public class AttachmentPersistenceImpl
 	 * @param start the lower bound of the range of attachments
 	 * @param end the upper bound of the range of attachments (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @param retrieveFromCache whether to retrieve from the finder cache
+	 * @param useFinderCache whether to use the finder cache
 	 * @return the ordered range of attachments
 	 */
 	@Override
 	public List<Attachment> findAll(
 		int start, int end, OrderByComparator<Attachment> orderByComparator,
-		boolean retrieveFromCache) {
+		boolean useFinderCache) {
 
 		boolean pagination = true;
 		FinderPath finderPath = null;
@@ -995,17 +1010,20 @@ public class AttachmentPersistenceImpl
 			(orderByComparator == null)) {
 
 			pagination = false;
-			finderPath = _finderPathWithoutPaginationFindAll;
-			finderArgs = FINDER_ARGS_EMPTY;
+
+			if (useFinderCache) {
+				finderPath = _finderPathWithoutPaginationFindAll;
+				finderArgs = FINDER_ARGS_EMPTY;
+			}
 		}
-		else {
+		else if (useFinderCache) {
 			finderPath = _finderPathWithPaginationFindAll;
 			finderArgs = new Object[] {start, end, orderByComparator};
 		}
 
 		List<Attachment> list = null;
 
-		if (retrieveFromCache) {
+		if (useFinderCache) {
 			list = (List<Attachment>)finderCache.getResult(
 				finderPath, finderArgs, this);
 		}
@@ -1055,10 +1073,14 @@ public class AttachmentPersistenceImpl
 
 				cacheResult(list);
 
-				finderCache.putResult(finderPath, finderArgs, list);
+				if (useFinderCache) {
+					finderCache.putResult(finderPath, finderArgs, list);
+				}
 			}
 			catch (Exception e) {
-				finderCache.removeResult(finderPath, finderArgs);
+				if (useFinderCache) {
+					finderCache.removeResult(finderPath, finderArgs);
+				}
 
 				throw processException(e);
 			}
@@ -1146,27 +1168,27 @@ public class AttachmentPersistenceImpl
 	/**
 	 * Initializes the attachment persistence.
 	 */
-	public void afterPropertiesSet() {
+	@Activate
+	public void activate() {
+		AttachmentModelImpl.setEntityCacheEnabled(entityCacheEnabled);
+		AttachmentModelImpl.setFinderCacheEnabled(finderCacheEnabled);
+
 		_finderPathWithPaginationFindAll = new FinderPath(
-			AttachmentModelImpl.ENTITY_CACHE_ENABLED,
-			AttachmentModelImpl.FINDER_CACHE_ENABLED, AttachmentImpl.class,
+			entityCacheEnabled, finderCacheEnabled, AttachmentImpl.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
 
 		_finderPathWithoutPaginationFindAll = new FinderPath(
-			AttachmentModelImpl.ENTITY_CACHE_ENABLED,
-			AttachmentModelImpl.FINDER_CACHE_ENABLED, AttachmentImpl.class,
+			entityCacheEnabled, finderCacheEnabled, AttachmentImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll",
 			new String[0]);
 
 		_finderPathCountAll = new FinderPath(
-			AttachmentModelImpl.ENTITY_CACHE_ENABLED,
-			AttachmentModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			entityCacheEnabled, finderCacheEnabled, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll",
 			new String[0]);
 
 		_finderPathWithPaginationFindByMessageId = new FinderPath(
-			AttachmentModelImpl.ENTITY_CACHE_ENABLED,
-			AttachmentModelImpl.FINDER_CACHE_ENABLED, AttachmentImpl.class,
+			entityCacheEnabled, finderCacheEnabled, AttachmentImpl.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByMessageId",
 			new String[] {
 				Long.class.getName(), Integer.class.getName(),
@@ -1174,33 +1196,63 @@ public class AttachmentPersistenceImpl
 			});
 
 		_finderPathWithoutPaginationFindByMessageId = new FinderPath(
-			AttachmentModelImpl.ENTITY_CACHE_ENABLED,
-			AttachmentModelImpl.FINDER_CACHE_ENABLED, AttachmentImpl.class,
+			entityCacheEnabled, finderCacheEnabled, AttachmentImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByMessageId",
 			new String[] {Long.class.getName()},
 			AttachmentModelImpl.MESSAGEID_COLUMN_BITMASK);
 
 		_finderPathCountByMessageId = new FinderPath(
-			AttachmentModelImpl.ENTITY_CACHE_ENABLED,
-			AttachmentModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			entityCacheEnabled, finderCacheEnabled, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByMessageId",
 			new String[] {Long.class.getName()});
 	}
 
-	public void destroy() {
+	@Deactivate
+	public void deactivate() {
 		entityCache.removeCache(AttachmentImpl.class.getName());
 		finderCache.removeCache(FINDER_CLASS_NAME_ENTITY);
 		finderCache.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		finderCache.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
-	@ServiceReference(type = CompanyProviderWrapper.class)
-	protected CompanyProvider companyProvider;
+	@Override
+	@Reference(
+		target = MailPersistenceConstants.SERVICE_CONFIGURATION_FILTER,
+		unbind = "-"
+	)
+	public void setConfiguration(Configuration configuration) {
+		super.setConfiguration(configuration);
 
-	@ServiceReference(type = EntityCache.class)
+		_columnBitmaskEnabled = GetterUtil.getBoolean(
+			configuration.get(
+				"value.object.column.bitmask.enabled.com.liferay.mail.reader.model.Attachment"),
+			true);
+	}
+
+	@Override
+	@Reference(
+		target = MailPersistenceConstants.ORIGIN_BUNDLE_SYMBOLIC_NAME_FILTER,
+		unbind = "-"
+	)
+	public void setDataSource(DataSource dataSource) {
+		super.setDataSource(dataSource);
+	}
+
+	@Override
+	@Reference(
+		target = MailPersistenceConstants.ORIGIN_BUNDLE_SYMBOLIC_NAME_FILTER,
+		unbind = "-"
+	)
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		super.setSessionFactory(sessionFactory);
+	}
+
+	private boolean _columnBitmaskEnabled;
+
+	@Reference
 	protected EntityCache entityCache;
 
-	@ServiceReference(type = FinderCache.class)
+	@Reference
 	protected FinderCache finderCache;
 
 	private static final String _SQL_SELECT_ATTACHMENT =
@@ -1228,5 +1280,14 @@ public class AttachmentPersistenceImpl
 
 	private static final Set<String> _badColumnNames = SetUtil.fromArray(
 		new String[] {"size"});
+
+	static {
+		try {
+			Class.forName(MailPersistenceConstants.class.getName());
+		}
+		catch (ClassNotFoundException cnfe) {
+			throw new ExceptionInInitializerError(cnfe);
+		}
+	}
 
 }

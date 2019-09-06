@@ -76,9 +76,7 @@ public class DDMFormFieldFactoryHelper {
 				value = getPropertyValue(value);
 			}
 
-			String key = entry.getKey();
-
-			ddmFormField.setProperty(key, value);
+			ddmFormField.setProperty(entry.getKey(), value);
 		}
 
 		ddmFormField.setDataType(getDDMFormFieldDataType());
@@ -295,7 +293,8 @@ public class DDMFormFieldFactoryHelper {
 					_defaultLocale, languageKey);
 			}
 
-			ddmFormFieldValidation.setErrorMessage(validationErrorMessage);
+			ddmFormFieldValidation.setErrorMessageLocalizedValue(
+				createLocalizedValue(validationErrorMessage));
 		}
 
 		return ddmFormFieldValidation;
@@ -310,10 +309,8 @@ public class DDMFormFieldFactoryHelper {
 	}
 
 	protected String getLocalizedValue(Locale locale, String value) {
-		ResourceBundle resourceBundle = _ddmFormFactoryHelper.getResourceBundle(
-			locale);
-
-		return LanguageUtil.get(resourceBundle, value);
+		return LanguageUtil.get(
+			_ddmFormFactoryHelper.getResourceBundle(locale), value);
 	}
 
 	protected Map<String, Object> getProperties() {

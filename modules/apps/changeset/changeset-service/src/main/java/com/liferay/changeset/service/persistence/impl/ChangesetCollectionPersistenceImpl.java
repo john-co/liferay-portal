@@ -32,10 +32,9 @@ import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.dao.orm.SessionFactory;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
-import com.liferay.portal.kernel.service.persistence.CompanyProvider;
-import com.liferay.portal.kernel.service.persistence.CompanyProviderWrapper;
 import com.liferay.portal.kernel.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
@@ -159,14 +158,14 @@ public class ChangesetCollectionPersistenceImpl
 	 * @param start the lower bound of the range of changeset collections
 	 * @param end the upper bound of the range of changeset collections (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @param retrieveFromCache whether to retrieve from the finder cache
+	 * @param useFinderCache whether to use the finder cache
 	 * @return the ordered range of matching changeset collections
 	 */
 	@Override
 	public List<ChangesetCollection> findByGroupId(
 		long groupId, int start, int end,
 		OrderByComparator<ChangesetCollection> orderByComparator,
-		boolean retrieveFromCache) {
+		boolean useFinderCache) {
 
 		boolean pagination = true;
 		FinderPath finderPath = null;
@@ -176,17 +175,20 @@ public class ChangesetCollectionPersistenceImpl
 			(orderByComparator == null)) {
 
 			pagination = false;
-			finderPath = _finderPathWithoutPaginationFindByGroupId;
-			finderArgs = new Object[] {groupId};
+
+			if (useFinderCache) {
+				finderPath = _finderPathWithoutPaginationFindByGroupId;
+				finderArgs = new Object[] {groupId};
+			}
 		}
-		else {
+		else if (useFinderCache) {
 			finderPath = _finderPathWithPaginationFindByGroupId;
 			finderArgs = new Object[] {groupId, start, end, orderByComparator};
 		}
 
 		List<ChangesetCollection> list = null;
 
-		if (retrieveFromCache) {
+		if (useFinderCache) {
 			list = (List<ChangesetCollection>)finderCache.getResult(
 				finderPath, finderArgs, this);
 
@@ -252,10 +254,14 @@ public class ChangesetCollectionPersistenceImpl
 
 				cacheResult(list);
 
-				finderCache.putResult(finderPath, finderArgs, list);
+				if (useFinderCache) {
+					finderCache.putResult(finderPath, finderArgs, list);
+				}
 			}
 			catch (Exception e) {
-				finderCache.removeResult(finderPath, finderArgs);
+				if (useFinderCache) {
+					finderCache.removeResult(finderPath, finderArgs);
+				}
 
 				throw processException(e);
 			}
@@ -673,14 +679,14 @@ public class ChangesetCollectionPersistenceImpl
 	 * @param start the lower bound of the range of changeset collections
 	 * @param end the upper bound of the range of changeset collections (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @param retrieveFromCache whether to retrieve from the finder cache
+	 * @param useFinderCache whether to use the finder cache
 	 * @return the ordered range of matching changeset collections
 	 */
 	@Override
 	public List<ChangesetCollection> findByCompanyId(
 		long companyId, int start, int end,
 		OrderByComparator<ChangesetCollection> orderByComparator,
-		boolean retrieveFromCache) {
+		boolean useFinderCache) {
 
 		boolean pagination = true;
 		FinderPath finderPath = null;
@@ -690,10 +696,13 @@ public class ChangesetCollectionPersistenceImpl
 			(orderByComparator == null)) {
 
 			pagination = false;
-			finderPath = _finderPathWithoutPaginationFindByCompanyId;
-			finderArgs = new Object[] {companyId};
+
+			if (useFinderCache) {
+				finderPath = _finderPathWithoutPaginationFindByCompanyId;
+				finderArgs = new Object[] {companyId};
+			}
 		}
-		else {
+		else if (useFinderCache) {
 			finderPath = _finderPathWithPaginationFindByCompanyId;
 			finderArgs = new Object[] {
 				companyId, start, end, orderByComparator
@@ -702,7 +711,7 @@ public class ChangesetCollectionPersistenceImpl
 
 		List<ChangesetCollection> list = null;
 
-		if (retrieveFromCache) {
+		if (useFinderCache) {
 			list = (List<ChangesetCollection>)finderCache.getResult(
 				finderPath, finderArgs, this);
 
@@ -768,10 +777,14 @@ public class ChangesetCollectionPersistenceImpl
 
 				cacheResult(list);
 
-				finderCache.putResult(finderPath, finderArgs, list);
+				if (useFinderCache) {
+					finderCache.putResult(finderPath, finderArgs, list);
+				}
 			}
 			catch (Exception e) {
-				finderCache.removeResult(finderPath, finderArgs);
+				if (useFinderCache) {
+					finderCache.removeResult(finderPath, finderArgs);
+				}
 
 				throw processException(e);
 			}
@@ -1195,14 +1208,14 @@ public class ChangesetCollectionPersistenceImpl
 	 * @param start the lower bound of the range of changeset collections
 	 * @param end the upper bound of the range of changeset collections (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @param retrieveFromCache whether to retrieve from the finder cache
+	 * @param useFinderCache whether to use the finder cache
 	 * @return the ordered range of matching changeset collections
 	 */
 	@Override
 	public List<ChangesetCollection> findByG_U(
 		long groupId, long userId, int start, int end,
 		OrderByComparator<ChangesetCollection> orderByComparator,
-		boolean retrieveFromCache) {
+		boolean useFinderCache) {
 
 		boolean pagination = true;
 		FinderPath finderPath = null;
@@ -1212,10 +1225,13 @@ public class ChangesetCollectionPersistenceImpl
 			(orderByComparator == null)) {
 
 			pagination = false;
-			finderPath = _finderPathWithoutPaginationFindByG_U;
-			finderArgs = new Object[] {groupId, userId};
+
+			if (useFinderCache) {
+				finderPath = _finderPathWithoutPaginationFindByG_U;
+				finderArgs = new Object[] {groupId, userId};
+			}
 		}
-		else {
+		else if (useFinderCache) {
 			finderPath = _finderPathWithPaginationFindByG_U;
 			finderArgs = new Object[] {
 				groupId, userId, start, end, orderByComparator
@@ -1224,7 +1240,7 @@ public class ChangesetCollectionPersistenceImpl
 
 		List<ChangesetCollection> list = null;
 
-		if (retrieveFromCache) {
+		if (useFinderCache) {
 			list = (List<ChangesetCollection>)finderCache.getResult(
 				finderPath, finderArgs, this);
 
@@ -1296,10 +1312,14 @@ public class ChangesetCollectionPersistenceImpl
 
 				cacheResult(list);
 
-				finderCache.putResult(finderPath, finderArgs, list);
+				if (useFinderCache) {
+					finderCache.putResult(finderPath, finderArgs, list);
+				}
 			}
 			catch (Exception e) {
-				finderCache.removeResult(finderPath, finderArgs);
+				if (useFinderCache) {
+					finderCache.removeResult(finderPath, finderArgs);
+				}
 
 				throw processException(e);
 			}
@@ -1733,20 +1753,24 @@ public class ChangesetCollectionPersistenceImpl
 	 *
 	 * @param groupId the group ID
 	 * @param name the name
-	 * @param retrieveFromCache whether to retrieve from the finder cache
+	 * @param useFinderCache whether to use the finder cache
 	 * @return the matching changeset collection, or <code>null</code> if a matching changeset collection could not be found
 	 */
 	@Override
 	public ChangesetCollection fetchByG_N(
-		long groupId, String name, boolean retrieveFromCache) {
+		long groupId, String name, boolean useFinderCache) {
 
 		name = Objects.toString(name, "");
 
-		Object[] finderArgs = new Object[] {groupId, name};
+		Object[] finderArgs = null;
+
+		if (useFinderCache) {
+			finderArgs = new Object[] {groupId, name};
+		}
 
 		Object result = null;
 
-		if (retrieveFromCache) {
+		if (useFinderCache) {
 			result = finderCache.getResult(
 				_finderPathFetchByG_N, finderArgs, this);
 		}
@@ -1800,8 +1824,10 @@ public class ChangesetCollectionPersistenceImpl
 				List<ChangesetCollection> list = q.list();
 
 				if (list.isEmpty()) {
-					finderCache.putResult(
-						_finderPathFetchByG_N, finderArgs, list);
+					if (useFinderCache) {
+						finderCache.putResult(
+							_finderPathFetchByG_N, finderArgs, list);
+					}
 				}
 				else {
 					ChangesetCollection changesetCollection = list.get(0);
@@ -1812,7 +1838,9 @@ public class ChangesetCollectionPersistenceImpl
 				}
 			}
 			catch (Exception e) {
-				finderCache.removeResult(_finderPathFetchByG_N, finderArgs);
+				if (useFinderCache) {
+					finderCache.removeResult(_finderPathFetchByG_N, finderArgs);
+				}
 
 				throw processException(e);
 			}
@@ -1994,14 +2022,14 @@ public class ChangesetCollectionPersistenceImpl
 	 * @param start the lower bound of the range of changeset collections
 	 * @param end the upper bound of the range of changeset collections (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @param retrieveFromCache whether to retrieve from the finder cache
+	 * @param useFinderCache whether to use the finder cache
 	 * @return the ordered range of matching changeset collections
 	 */
 	@Override
 	public List<ChangesetCollection> findByC_N(
 		long companyId, String name, int start, int end,
 		OrderByComparator<ChangesetCollection> orderByComparator,
-		boolean retrieveFromCache) {
+		boolean useFinderCache) {
 
 		name = Objects.toString(name, "");
 
@@ -2013,10 +2041,13 @@ public class ChangesetCollectionPersistenceImpl
 			(orderByComparator == null)) {
 
 			pagination = false;
-			finderPath = _finderPathWithoutPaginationFindByC_N;
-			finderArgs = new Object[] {companyId, name};
+
+			if (useFinderCache) {
+				finderPath = _finderPathWithoutPaginationFindByC_N;
+				finderArgs = new Object[] {companyId, name};
+			}
 		}
-		else {
+		else if (useFinderCache) {
 			finderPath = _finderPathWithPaginationFindByC_N;
 			finderArgs = new Object[] {
 				companyId, name, start, end, orderByComparator
@@ -2025,7 +2056,7 @@ public class ChangesetCollectionPersistenceImpl
 
 		List<ChangesetCollection> list = null;
 
-		if (retrieveFromCache) {
+		if (useFinderCache) {
 			list = (List<ChangesetCollection>)finderCache.getResult(
 				finderPath, finderArgs, this);
 
@@ -2108,10 +2139,14 @@ public class ChangesetCollectionPersistenceImpl
 
 				cacheResult(list);
 
-				finderCache.putResult(finderPath, finderArgs, list);
+				if (useFinderCache) {
+					finderCache.putResult(finderPath, finderArgs, list);
+				}
 			}
 			catch (Exception e) {
-				finderCache.removeResult(finderPath, finderArgs);
+				if (useFinderCache) {
+					finderCache.removeResult(finderPath, finderArgs);
+				}
 
 				throw processException(e);
 			}
@@ -2671,7 +2706,7 @@ public class ChangesetCollectionPersistenceImpl
 		changesetCollection.setNew(true);
 		changesetCollection.setPrimaryKey(changesetCollectionId);
 
-		changesetCollection.setCompanyId(companyProvider.getCompanyId());
+		changesetCollection.setCompanyId(CompanyThreadLocal.getCompanyId());
 
 		return changesetCollection;
 	}
@@ -3086,14 +3121,14 @@ public class ChangesetCollectionPersistenceImpl
 	 * @param start the lower bound of the range of changeset collections
 	 * @param end the upper bound of the range of changeset collections (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @param retrieveFromCache whether to retrieve from the finder cache
+	 * @param useFinderCache whether to use the finder cache
 	 * @return the ordered range of changeset collections
 	 */
 	@Override
 	public List<ChangesetCollection> findAll(
 		int start, int end,
 		OrderByComparator<ChangesetCollection> orderByComparator,
-		boolean retrieveFromCache) {
+		boolean useFinderCache) {
 
 		boolean pagination = true;
 		FinderPath finderPath = null;
@@ -3103,17 +3138,20 @@ public class ChangesetCollectionPersistenceImpl
 			(orderByComparator == null)) {
 
 			pagination = false;
-			finderPath = _finderPathWithoutPaginationFindAll;
-			finderArgs = FINDER_ARGS_EMPTY;
+
+			if (useFinderCache) {
+				finderPath = _finderPathWithoutPaginationFindAll;
+				finderArgs = FINDER_ARGS_EMPTY;
+			}
 		}
-		else {
+		else if (useFinderCache) {
 			finderPath = _finderPathWithPaginationFindAll;
 			finderArgs = new Object[] {start, end, orderByComparator};
 		}
 
 		List<ChangesetCollection> list = null;
 
-		if (retrieveFromCache) {
+		if (useFinderCache) {
 			list = (List<ChangesetCollection>)finderCache.getResult(
 				finderPath, finderArgs, this);
 		}
@@ -3164,10 +3202,14 @@ public class ChangesetCollectionPersistenceImpl
 
 				cacheResult(list);
 
-				finderCache.putResult(finderPath, finderArgs, list);
+				if (useFinderCache) {
+					finderCache.putResult(finderPath, finderArgs, list);
+				}
 			}
 			catch (Exception e) {
-				finderCache.removeResult(finderPath, finderArgs);
+				if (useFinderCache) {
+					finderCache.removeResult(finderPath, finderArgs);
+				}
 
 				throw processException(e);
 			}
@@ -3383,7 +3425,7 @@ public class ChangesetCollectionPersistenceImpl
 
 	@Override
 	@Reference(
-		target = ChangesetPersistenceConstants.ORIGIN_BUNDLE_SYMBOLIC_NAME_FILTER,
+		target = ChangesetPersistenceConstants.SERVICE_CONFIGURATION_FILTER,
 		unbind = "-"
 	)
 	public void setConfiguration(Configuration configuration) {
@@ -3415,9 +3457,6 @@ public class ChangesetCollectionPersistenceImpl
 
 	private boolean _columnBitmaskEnabled;
 
-	@Reference(service = CompanyProviderWrapper.class)
-	protected CompanyProvider companyProvider;
-
 	@Reference
 	protected EntityCache entityCache;
 
@@ -3446,5 +3485,14 @@ public class ChangesetCollectionPersistenceImpl
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		ChangesetCollectionPersistenceImpl.class);
+
+	static {
+		try {
+			Class.forName(ChangesetPersistenceConstants.class.getName());
+		}
+		catch (ClassNotFoundException cnfe) {
+			throw new ExceptionInInitializerError(cnfe);
+		}
+	}
 
 }

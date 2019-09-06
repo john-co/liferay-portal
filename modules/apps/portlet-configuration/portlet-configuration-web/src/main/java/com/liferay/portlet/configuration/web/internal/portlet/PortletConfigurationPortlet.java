@@ -36,7 +36,6 @@ import com.liferay.portal.kernel.portlet.PortletLayoutListener;
 import com.liferay.portal.kernel.portlet.PortletQNameUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
-import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.security.permission.propagator.PermissionPropagator;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.LayoutLocalService;
@@ -120,7 +119,6 @@ import org.osgi.service.component.annotations.Reference;
 		"javax.portlet.init-param.view-template=/edit_configuration.jsp",
 		"javax.portlet.name=" + PortletConfigurationPortletKeys.PORTLET_CONFIGURATION,
 		"javax.portlet.resource-bundle=content.Language",
-		"javax.portlet.supports.mime-type=text/html",
 		"javax.portlet.version=3.0"
 	},
 	service = javax.portlet.Portlet.class
@@ -309,10 +307,9 @@ public class PortletConfigurationPortlet extends MVCPortlet {
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
-		Portlet portlet = ActionUtil.getPortlet(actionRequest);
-
 		PortletPreferences portletPreferences =
-			ActionUtil.getLayoutPortletSetup(actionRequest, portlet);
+			ActionUtil.getLayoutPortletSetup(
+				actionRequest, ActionUtil.getPortlet(actionRequest));
 
 		actionRequest = ActionUtil.getWrappedActionRequest(
 			actionRequest, portletPreferences);
@@ -572,10 +569,9 @@ public class PortletConfigurationPortlet extends MVCPortlet {
 
 			// Force update of layout modified date. See LPS-59246.
 
-			Portlet portlet = ActionUtil.getPortlet(actionRequest);
-
 			PortletPreferences portletPreferences =
-				ActionUtil.getLayoutPortletSetup(actionRequest, portlet);
+				ActionUtil.getLayoutPortletSetup(
+					actionRequest, ActionUtil.getPortlet(actionRequest));
 
 			portletPreferences.store();
 		}
@@ -605,14 +601,10 @@ public class PortletConfigurationPortlet extends MVCPortlet {
 		String portletResource = ParamUtil.getString(
 			request, "portletResource");
 
-		PermissionChecker permissionChecker =
-			themeDisplay.getPermissionChecker();
-
-		Layout layout = PortletConfigurationLayoutUtil.getLayout(themeDisplay);
-
 		_portletPermission.check(
-			permissionChecker, resourceGroupId, layout, portletResource,
-			ActionKeys.PERMISSIONS);
+			themeDisplay.getPermissionChecker(), resourceGroupId,
+			PortletConfigurationLayoutUtil.getLayout(themeDisplay),
+			portletResource, ActionKeys.PERMISSIONS);
 	}
 
 	@Override

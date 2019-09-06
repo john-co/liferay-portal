@@ -14,6 +14,7 @@
 
 package com.liferay.talend.runtime.reader;
 
+import com.liferay.talend.common.oas.constants.OASConstants;
 import com.liferay.talend.connection.LiferayConnectionResourceBaseProperties;
 import com.liferay.talend.runtime.LiferaySource;
 import com.liferay.talend.tliferayinput.TLiferayInputProperties;
@@ -21,8 +22,6 @@ import com.liferay.talend.tliferayinput.TLiferayInputProperties;
 import java.io.IOException;
 
 import java.util.Map;
-
-import javax.ws.rs.HttpMethod;
 
 import org.apache.avro.Schema;
 
@@ -65,29 +64,26 @@ public abstract class LiferayBaseReader<T> extends AbstractBoundedReader<T> {
 
 		schema = liferayConnectionResourceBaseProperties.getSchema();
 
-		if (AvroUtils.isIncludeAllFields(schema)) {
-			String endpoint = null;
-
-			if (liferayConnectionResourceBaseProperties instanceof
-					TLiferayInputProperties) {
-
-				endpoint =
-					liferayConnectionResourceBaseProperties.resource.endpoint.
-						getValue();
-			}
-			else {
-				Class<? extends LiferayConnectionResourceBaseProperties> clazz =
-					liferayConnectionResourceBaseProperties.getClass();
-
-				throw TalendRuntimeException.createUnexpectedException(
-					"Wrong instance of Input component properties: " +
-						clazz.getName());
-			}
-
-			LiferaySource boundedSource = (LiferaySource)getCurrentSource();
-
-			schema = boundedSource.getEndpointSchema(endpoint, HttpMethod.GET);
+		if (!AvroUtils.isIncludeAllFields(schema)) {
+			return schema;
 		}
+
+		if (!(liferayConnectionResourceBaseProperties instanceof
+				TLiferayInputProperties)) {
+
+			Class<? extends LiferayConnectionResourceBaseProperties> clazz =
+				liferayConnectionResourceBaseProperties.getClass();
+
+			throw TalendRuntimeException.createUnexpectedException(
+				"Wrong instance of Input component properties: " +
+					clazz.getName());
+		}
+
+		LiferaySource boundedSource = (LiferaySource)getCurrentSource();
+
+		schema = boundedSource.getEndpointSchema(
+			liferayConnectionResourceBaseProperties.getEndpoint(),
+			OASConstants.OPERATION_GET);
 
 		return schema;
 	}

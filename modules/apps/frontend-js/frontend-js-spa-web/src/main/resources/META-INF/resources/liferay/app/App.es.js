@@ -1,9 +1,21 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import {App} from 'senna';
-import {CancellablePromise} from 'metal-promise';
 import {openToast} from 'frontend-js-web';
 import core from 'metal';
 import dom from 'metal-dom';
-import Uri from 'metal-uri';
 
 import LiferaySurface from '../surface/Surface.es';
 import Utils from '../util/Utils.es';
@@ -78,9 +90,9 @@ class LiferayApp extends App {
 	 */
 	createScreenInstance(path, route) {
 		if (path === this.activePath) {
-			const uri = new Uri(path);
+			const uri = new URL(path, window.location.origin);
 
-			if (uri.getParameterValue('p_p_lifecycle') === '1') {
+			if (uri.searchParams.get('p_p_lifecycle') === '1') {
 				this.activePath = this.activePath + `__${core.getUid()}`;
 
 				this.screens[this.activePath] = this.screens[path];
@@ -199,7 +211,7 @@ class LiferayApp extends App {
 	 * @param  {!Event} event The event object
 	 */
 
-	onDataLayoutConfigReady_(event) {
+	onDataLayoutConfigReady_() {
 		if (Liferay.Layout) {
 			Liferay.Layout.init(Liferay.Data.layoutConfig);
 		}
@@ -295,6 +307,7 @@ class LiferayApp extends App {
 			);
 
 			if (Liferay.SPA.debugEnabled) {
+				// eslint-disable-next-line no-console
 				console.error(event.error);
 
 				if (event.error.invalidStatus) {
@@ -315,7 +328,7 @@ class LiferayApp extends App {
 			Liferay.Data.layoutConfig = this.dataLayoutConfig_;
 
 			this._createNotification({
-				message: message,
+				message,
 				title: Liferay.Language.get('error'),
 				type: 'danger'
 			});
@@ -386,12 +399,12 @@ class LiferayApp extends App {
 	/**
 	 * Creates a user notification
 	 * @param  {!Object} configuration object that's passed to `Liferay.Notification`
-	 * @return {!CancellablePromise} A promise that renders a notification when
+	 * @return {!Promise} A promise that renders a notification when
 	 * resolved
 	 */
 
 	_createNotification(config) {
-		return new CancellablePromise(resolve => {
+		return new Promise(resolve => {
 			resolve(
 				openToast(
 					Object.assign(
@@ -416,21 +429,23 @@ class LiferayApp extends App {
 	}
 
 	_propagateParams(data) {
-		const activeUri = new Uri(this.activePath || window.location.href);
+		const activeUri = this.activePath
+			? new URL(this.activePath, window.location.origin)
+			: new URL(window.location.href);
 
-		const activePpid = activeUri.getParameterValue('p_p_id');
+		const activePpid = activeUri.searchParams.get('p_p_id');
 
-		const nextUri = new Uri(data.path);
+		const nextUri = new URL(data.path, window.location.origin);
 
-		const nextPpid = nextUri.getParameterValue('p_p_id');
+		const nextPpid = nextUri.searchParams.get('p_p_id');
 
 		if (nextPpid && nextPpid === activePpid) {
 			PROPAGATED_PARAMS.forEach(paramKey => {
 				const paramName = `_${nextPpid}_${paramKey}`;
-				const paramValue = activeUri.getParameterValue(paramName);
+				const paramValue = activeUri.searchParams.get(paramName);
 
 				if (paramValue) {
-					nextUri.addParameterValue(paramName, paramValue);
+					nextUri.searchParams.set(paramName, paramValue);
 				}
 			});
 		}
@@ -451,7 +466,7 @@ class LiferayApp extends App {
 		if (Liferay.SPA.userNotification.timeout > 0) {
 			this.requestTimer = setTimeout(() => {
 				Liferay.fire('spaRequestTimeout', {
-					path: path
+					path
 				});
 
 				this._hideTimeoutAlert();

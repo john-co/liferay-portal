@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 AUI.add(
 	'liferay-image-selector',
 	function(A) {
@@ -87,46 +101,14 @@ AUI.add(
 				}
 			},
 
-			AUGMENTS: [Liferay.PortletBase, Liferay.StorageFormatter],
+			AUGMENTS: [Liferay.PortletBase],
 
 			EXTENDS: A.Base,
 
 			NAME: 'imageselector',
 
 			prototype: {
-				initializer: function() {
-					var instance = this;
-
-					instance._fileEntryImageNode = instance.one('#image');
-
-					var rootNode = instance.rootNode;
-
-					instance._fileNameNode = rootNode.one(
-						instance.get('fileNameNode')
-					);
-					instance._progressDataNode = rootNode.one(
-						instance.get('progressDataNode')
-					);
-
-					var errorNode = rootNode.one(instance.get('errorNode'));
-
-					instance._errorNodeAlert = A.Widget.getByNode(errorNode);
-
-					instance.set('addSpaceBeforeSuffix', true);
-
-					instance._bindUI();
-					instance._renderUploader();
-				},
-
-				destructor: function() {
-					var instance = this;
-
-					instance._uploader.destroy();
-
-					new A.EventHandle(instance._eventHandles).detach();
-				},
-
-				_bindUI: function() {
+				_bindUI() {
 					var instance = this;
 
 					instance._updateImageDataFn = A.bind(
@@ -175,7 +157,7 @@ AUI.add(
 					];
 				},
 
-				_cancelTimer: function() {
+				_cancelTimer() {
 					var instance = this;
 
 					if (instance._timer) {
@@ -185,7 +167,7 @@ AUI.add(
 					}
 				},
 
-				_cancelUpload: function() {
+				_cancelUpload() {
 					var instance = this;
 
 					instance._uploader.queue.cancelUpload();
@@ -193,7 +175,7 @@ AUI.add(
 					instance._stopProgress();
 				},
 
-				_createProgressBar: function() {
+				_createProgressBar() {
 					var instance = this;
 
 					var progressBar = new A.ProgressBar({
@@ -204,7 +186,7 @@ AUI.add(
 					instance._progressBar = progressBar;
 				},
 
-				_defImageDataFn: function(event) {
+				_defImageDataFn(event) {
 					var instance = this;
 
 					var fileEntryId = event.imageData.fileEntryId;
@@ -245,12 +227,12 @@ AUI.add(
 					}
 				},
 
-				_onBrowseClick: function() {
+				_onBrowseClick() {
 					var instance = this;
 
 					var itemSelectorDialog = new A.LiferayItemSelectorDialog({
 						after: {
-							selectedItemChange: function(event) {
+							selectedItemChange(event) {
 								var selectedItem = event.newVal;
 
 								if (selectedItem) {
@@ -271,11 +253,11 @@ AUI.add(
 					instance._cancelTimer();
 				},
 
-				_onContentDragStart: function(event) {
+				_onContentDragStart(event) {
 					event.preventDefault();
 				},
 
-				_onDeleteClick: function(event) {
+				_onDeleteClick(event) {
 					var instance = this;
 
 					Liferay.fire(STR_IMAGE_DELETED, {
@@ -285,7 +267,7 @@ AUI.add(
 					instance._updateImageData(event);
 				},
 
-				_onFileSelect: function(event) {
+				_onFileSelect(event) {
 					var instance = this;
 
 					instance._cancelTimer();
@@ -326,7 +308,7 @@ AUI.add(
 					instance._uploader.uploadThese(event.fileList);
 				},
 
-				_onImageLoaded: function(event) {
+				_onImageLoaded(event) {
 					var instance = this;
 
 					event.preventDefault();
@@ -354,7 +336,7 @@ AUI.add(
 					}
 				},
 
-				_onUploadComplete: function(event) {
+				_onUploadComplete(event) {
 					var instance = this;
 
 					instance._uploadCompleted = true;
@@ -383,11 +365,11 @@ AUI.add(
 					}
 
 					Liferay.fire(fireEvent, {
-						imageData: imageData
+						imageData
 					});
 				},
 
-				_onUploadProgress: function(event) {
+				_onUploadProgress(event) {
 					var instance = this;
 
 					var progressBar = instance._progressBar;
@@ -401,10 +383,10 @@ AUI.add(
 					var progressDataNode = instance._progressDataNode;
 
 					if (progressDataNode) {
-						var bytesLoaded = instance.formatStorage(
+						var bytesLoaded = Liferay.Util.formatStorage(
 							event.bytesLoaded
 						);
-						var bytesTotal = instance.formatStorage(
+						var bytesTotal = Liferay.Util.formatStorage(
 							event.bytesTotal
 						);
 
@@ -439,7 +421,7 @@ AUI.add(
 					}
 				},
 
-				_onUploadStart: function() {
+				_onUploadStart() {
 					var instance = this;
 
 					instance.rootNode.addClass(CSS_PROGRESS_ACTIVE);
@@ -449,7 +431,7 @@ AUI.add(
 					instance._uploadCompleted = false;
 				},
 
-				_renderUploader: function() {
+				_renderUploader() {
 					var instance = this;
 
 					instance._uploader = new A.Uploader({
@@ -484,7 +466,7 @@ AUI.add(
 					instance._createProgressBar();
 				},
 
-				_showErrorMessage: function(event) {
+				_showErrorMessage(event) {
 					var instance = this;
 
 					instance._cancelTimer();
@@ -497,7 +479,10 @@ AUI.add(
 						'an-unexpected-error-occurred-while-uploading-your-file'
 					);
 
-					if (errorType === STATUS_CODE.SC_FILE_ANTIVIRUS_EXCEPTION) {
+					if (
+						errorType === STATUS_CODE.SC_FILE_ANTIVIRUS_EXCEPTION ||
+						errorType === STATUS_CODE.SC_FILE_CUSTOM_EXCEPTION
+					) {
 						message = error.message;
 					} else if (
 						errorType === STATUS_CODE.SC_FILE_EXTENSION_EXCEPTION
@@ -530,7 +515,7 @@ AUI.add(
 								'please-enter-a-file-with-a-valid-file-size-no-larger-than-x'
 							),
 							[
-								instance.formatStorage(
+								Liferay.Util.formatStorage(
 									instance.get('maxFileSize')
 								)
 							]
@@ -547,7 +532,7 @@ AUI.add(
 							Liferay.Language.get(
 								'request-is-larger-than-x-and-could-not-be-processed'
 							),
-							[instance.formatStorage(maxUploadRequestSize)]
+							[Liferay.Util.formatStorage(maxUploadRequestSize)]
 						);
 					}
 
@@ -580,7 +565,7 @@ AUI.add(
 					browseImageControls.hide();
 				},
 
-				_showImagePreview: function(file) {
+				_showImagePreview(file) {
 					var instance = this;
 
 					if (A.config.win.FileReader) {
@@ -599,7 +584,7 @@ AUI.add(
 					}
 				},
 
-				_stopProgress: function(event) {
+				_stopProgress(event) {
 					var instance = this;
 
 					instance.rootNode.removeClass(CSS_PROGRESS_ACTIVE);
@@ -611,7 +596,7 @@ AUI.add(
 					}
 				},
 
-				_updateImageData: function(imageData) {
+				_updateImageData(imageData) {
 					var instance = this;
 
 					instance._errorNodeAlert.hide();
@@ -622,6 +607,38 @@ AUI.add(
 							url: imageData.url || ''
 						}
 					});
+				},
+
+				destructor() {
+					var instance = this;
+
+					instance._uploader.destroy();
+
+					new A.EventHandle(instance._eventHandles).detach();
+				},
+
+				initializer() {
+					var instance = this;
+
+					instance._fileEntryImageNode = instance.one('#image');
+
+					var rootNode = instance.rootNode;
+
+					instance._fileNameNode = rootNode.one(
+						instance.get('fileNameNode')
+					);
+					instance._progressDataNode = rootNode.one(
+						instance.get('progressDataNode')
+					);
+
+					var errorNode = rootNode.one(instance.get('errorNode'));
+
+					instance._errorNodeAlert = A.Widget.getByNode(errorNode);
+
+					instance.set('addSpaceBeforeSuffix', true);
+
+					instance._bindUI();
+					instance._renderUploader();
 				}
 			}
 		});
@@ -635,7 +652,6 @@ AUI.add(
 			'aui-progressbar',
 			'liferay-item-selector-dialog',
 			'liferay-portlet-base',
-			'liferay-storage-formatter',
 			'uploader'
 		]
 	}

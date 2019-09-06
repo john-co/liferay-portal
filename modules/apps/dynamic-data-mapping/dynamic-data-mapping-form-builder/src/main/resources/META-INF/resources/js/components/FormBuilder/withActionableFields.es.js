@@ -1,32 +1,42 @@
-import * as FormSupport from '../Form/FormSupport.es';
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
+import * as FormSupport from 'dynamic-data-mapping-form-renderer/js/components/FormRenderer/FormSupport.es';
 import ClayButton from 'clay-button';
 import ClayModal from 'clay-modal';
 import Component from 'metal-jsx';
 import dom from 'metal-dom';
 import {Config} from 'metal-state';
 import {EventHandler} from 'metal-events';
-import {
-	focusedFieldStructure,
-	pageStructure,
-	ruleStructure
-} from '../../util/config.es';
+import {focusedFieldStructure, pageStructure} from '../../util/config.es';
 
 class Actions extends Component {
 	render() {
 		const {spritemap} = this.props;
 
 		return (
-			<div class='ddm-field-actions-container' ref='actionsContainer'>
+			<div class="ddm-field-actions-container" ref="actionsContainer">
 				<ClayButton
 					editable={true}
 					events={{
 						click: this._handleDuplicateButtonClicked.bind(this)
 					}}
-					icon='paste'
+					icon="paste"
 					monospaced={true}
-					size='sm'
+					size="sm"
 					spritemap={spritemap}
-					style='secondary'
+					style="secondary"
 				/>
 
 				<ClayButton
@@ -34,11 +44,11 @@ class Actions extends Component {
 					events={{
 						click: this._handleDeleteButtonClicked.bind(this)
 					}}
-					icon='trash'
+					icon="trash"
 					monospaced={true}
-					size='sm'
+					size="sm"
 					spritemap={spritemap}
-					style='secondary'
+					style="secondary"
 				/>
 			</div>
 		);
@@ -62,6 +72,17 @@ class Actions extends Component {
 		});
 	}
 }
+
+Actions.PROPS = {
+	/**
+	 * @default undefined
+	 * @instance
+	 * @memberof Actions
+	 * @type {!string}
+	 */
+
+	spritemap: Config.string().required()
+};
 
 const withActionableFields = ChildComponent => {
 	class ActionableFields extends Component {
@@ -124,8 +145,8 @@ const withActionableFields = ChildComponent => {
 								type: 'button'
 							}
 						]}
-						ref='deleteModal'
-						size='sm'
+						ref="deleteModal"
+						size="sm"
 						spritemap={spritemap}
 						title={Liferay.Language.get(
 							'delete-field-dialog-title'
@@ -138,7 +159,7 @@ const withActionableFields = ChildComponent => {
 						<Actions
 							events={this.getEvents()}
 							portalElement={this.element}
-							ref='actions'
+							ref="actions"
 							spritemap={spritemap}
 						/>
 					)}
@@ -232,9 +253,27 @@ const withActionableFields = ChildComponent => {
 		editingLanguageId: Config.string(),
 
 		/**
+		 * @default undefined
+		 * @instance
+		 * @memberof FormBuilder
+		 * @type {?string}
+		 */
+
+		fieldSetDefinitionURL: Config.string(),
+
+		/**
 		 * @default []
 		 * @instance
-		 * @memberof Sidebar
+		 * @memberof FormBuilder
+		 * @type {?(array|undefined)}
+		 */
+
+		fieldSets: Config.array().value([]),
+
+		/**
+		 * @default []
+		 * @instance
+		 * @memberof FormBuilder
 		 * @type {?(array|undefined)}
 		 */
 
@@ -272,7 +311,7 @@ const withActionableFields = ChildComponent => {
 		 * @type {string}
 		 */
 
-		rules: Config.arrayOf(ruleStructure).required(),
+		portletNamespace: Config.string().required(),
 
 		/**
 		 * @default undefined
@@ -281,7 +320,28 @@ const withActionableFields = ChildComponent => {
 		 * @type {!string}
 		 */
 
-		spritemap: Config.string().required()
+		spritemap: Config.string().required(),
+
+		/**
+		 * @instance
+		 * @memberof FormBuilder
+		 * @type {object}
+		 */
+
+		successPageSettings: Config.shapeOf({
+			body: Config.object(),
+			enabled: Config.bool(),
+			title: Config.object()
+		}).value({}),
+
+		/**
+		 * @default undefined
+		 * @instance
+		 * @memberof FormBuilder
+		 * @type {?string}
+		 */
+
+		view: Config.string()
 	};
 
 	return ActionableFields;

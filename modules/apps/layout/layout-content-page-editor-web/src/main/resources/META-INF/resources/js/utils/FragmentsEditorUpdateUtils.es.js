@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import {CLEAR_DROP_TARGET, MOVE_ROW} from '../actions/actions.es';
 import {
 	DEFAULT_COMPONENT_ROW_CONFIG,
@@ -99,19 +113,28 @@ function addRow(
  * @review
  */
 function deleteIn(object, keyPath) {
-	const lastKey = keyPath.slice(-1);
+	const [lastKey] = keyPath.slice(-1);
 	const newKeyPath = keyPath.slice(0, keyPath.length - 1);
 
-	return updateIn(object, newKeyPath, lastItem => {
-		const newLastItem =
-			lastItem instanceof Array
-				? [...lastItem]
-				: Object.assign({}, lastItem);
+	let newObject =
+		object instanceof Array ? [...object] : Object.assign({}, object);
 
-		delete newLastItem[lastKey];
+	if (keyPath.length === 1) {
+		delete newObject[lastKey];
+	} else {
+		newObject = updateIn(object, newKeyPath, lastItem => {
+			const newLastItem =
+				lastItem instanceof Array
+					? [...lastItem]
+					: Object.assign({}, lastItem);
 
-		return newLastItem;
-	});
+			delete newLastItem[lastKey];
+
+			return newLastItem;
+		});
+	}
+
+	return newObject;
 }
 
 /**
@@ -182,14 +205,10 @@ function remove(array, position) {
  * @param {!Object} removeItemPayload Data that is passed to the reducer
  * @review
  */
-function removeItem(store, removeItemAction, removeItemPayload) {
+function removeItem(store, removeAction) {
 	store
 		.dispatch(enableSavingChangesStatusAction())
-		.dispatch(
-			Object.assign({}, removeItemPayload, {
-				type: removeItemAction
-			})
-		)
+		.dispatch(removeAction)
 		.dispatch(updateLastSaveDateAction())
 		.dispatch(disableSavingChangesStatusAction());
 }
@@ -307,28 +326,65 @@ function updateRow(store, updateAction, payload) {
 }
 
 /**
+ * Sets used widgets based on the portletIds array
+ * @param {!Array} widgets
+ * @param {{!Array} portletIds
+ * @return {Array}
+ * @review
+ */
+function updateUsedWidgets(widgets, portletIds) {
+	const filteredWidgets = [...widgets];
+
+	filteredWidgets.forEach(widgetCategory => {
+		const {categories = [], portlets = []} = widgetCategory;
+
+		widgetCategory.categories = updateUsedWidgets(categories, portletIds);
+		widgetCategory.portlets = portlets.map(portlet => {
+			if (
+				portletIds.indexOf(portlet.portletId) !== -1 &&
+				!portlet.instanceable
+			) {
+				portlet.used = true;
+			} else {
+				portlet.used = false;
+			}
+
+			return portlet;
+		});
+	});
+
+	return filteredWidgets;
+}
+
+/**
  * @param {Object} state
  * @param {Object[]} state.fragmentEntryLinks
  * @param {Object[]} state.widgets
  * @param {string} fragmentEntryLinkId
- * @return {Object} Next state
+ * @return {Object}
  */
-function updateWidgets(state, fragmentEntryLinkId) {
-	const fragmentEntryLink = state.fragmentEntryLinks[fragmentEntryLinkId];
+function updateWidgets(state, fragmentEntryLinkIds = []) {
 	let nextState = state;
 
-	if (fragmentEntryLink.portletId) {
-		const widget = getWidget(state.widgets, fragmentEntryLink.portletId);
+	fragmentEntryLinkIds.forEach(fragmentEntryLinkId => {
+		const fragmentEntryLink = state.fragmentEntryLinks[fragmentEntryLinkId];
 
-		if (!widget.instanceable && widget.used) {
-			const widgetPath = getWidgetPath(
+		if (fragmentEntryLink.portletId) {
+			const widget = getWidget(
 				state.widgets,
 				fragmentEntryLink.portletId
 			);
 
-			nextState = setIn(state, [...widgetPath, 'used'], false);
+			if (!widget.instanceable && widget.used) {
+				const widgetPath = getWidgetPath(
+					state.widgets,
+					fragmentEntryLink.portletId
+				);
+
+				nextState = setIn(state, [...widgetPath, 'used'], false);
+			}
 		}
-	}
+	});
 
 	return nextState;
 }
@@ -345,5 +401,6 @@ export {
 	setIn,
 	updateIn,
 	updateRow,
+	updateUsedWidgets,
 	updateWidgets
 };

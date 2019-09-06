@@ -16,16 +16,12 @@ package com.liferay.talend.avro;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import com.liferay.talend.openapi.constants.OpenAPIConstants;
-
-import java.io.InputStream;
+import com.liferay.talend.BaseTest;
+import com.liferay.talend.common.oas.constants.OASConstants;
 
 import java.util.List;
 
-import javax.ws.rs.HttpMethod;
+import javax.json.JsonObject;
 
 import org.apache.avro.Schema;
 
@@ -38,47 +34,24 @@ import org.talend.daikon.avro.AvroUtils;
 /**
  * @author Zoltán Takács
  */
-public class EndpointSchemaInferrerTest {
+public class EndpointSchemaInferrerTest extends BaseTest {
 
 	@Before
-	public void setUp() throws Exception {
-		if (_openAPISpecJsonNode != null) {
+	public void setUp() {
+		if (_oasJsonObject != null) {
 			return;
 		}
 
-		Class<EndpointSchemaInferrerTest> endpointSchemaInferrerTestClass =
-			EndpointSchemaInferrerTest.class;
-
-		InputStream resourceAsStream =
-			endpointSchemaInferrerTestClass.getResourceAsStream("openapi.json");
-
-		_openAPISpecJsonNode = _objectMapper.readTree(resourceAsStream);
+		_oasJsonObject = readObject("openapi.json");
 	}
 
 	@Test
 	public void testBooleanSchemaFieldsForProducts() {
 		String endpoint = "/v1.0/catalogs/{siteId}/product";
 
-		Schema schema = _getSchema(endpoint, HttpMethod.POST);
+		Schema schema = _getSchema(endpoint, OASConstants.OPERATION_POST);
 
-		List<Schema.Field> fields = schema.getFields();
-
-		Assert.assertThat(fields.size(), equalTo(48));
-
-		Schema.Field field = schema.getField("active");
-
-		Schema fieldSchema = AvroUtils.unwrapIfNullable(field.schema());
-
-		Assert.assertTrue(
-			"Boolean type was expected: ",
-			AvroUtils.isSameType(fieldSchema, AvroUtils._boolean()));
-
-		field = schema.getField("subscriptionConfiguration_enable");
-		fieldSchema = AvroUtils.unwrapIfNullable(field.schema());
-
-		Assert.assertTrue(
-			"Boolean type was expected for nested field: ",
-			AvroUtils.isSameType(fieldSchema, AvroUtils._boolean()));
+		_assertValidProductSchema(schema);
 	}
 
 	@Test
@@ -86,7 +59,7 @@ public class EndpointSchemaInferrerTest {
 		String endpoint =
 			"/v1.0/products/by-externalReferenceCode/{externalReferenceCode}";
 
-		Schema schema = _getSchema(endpoint, HttpMethod.DELETE);
+		Schema schema = _getSchema(endpoint, OASConstants.OPERATION_DELETE);
 
 		Assert.assertFalse(AvroUtils.isSchemaEmpty(schema));
 	}
@@ -95,16 +68,18 @@ public class EndpointSchemaInferrerTest {
 	public void testInferSchemaForGetOperation() {
 		String endpoint = "/v1.0/catalogs/{siteId}/products";
 
-		Schema schema = _getSchema(endpoint, HttpMethod.GET);
+		Schema schema = _getSchema(endpoint, OASConstants.OPERATION_GET);
 
 		Assert.assertFalse(AvroUtils.isSchemaEmpty(schema));
+
+		_assertValidProductSchema(schema);
 	}
 
 	@Test
 	public void testInferSchemaForInsertOperation() {
 		String endpoint = "/v1.0/catalogs/{siteId}/product";
 
-		Schema schema = _getSchema(endpoint, HttpMethod.POST);
+		Schema schema = _getSchema(endpoint, OASConstants.OPERATION_POST);
 
 		Assert.assertFalse(AvroUtils.isSchemaEmpty(schema));
 	}
@@ -114,7 +89,7 @@ public class EndpointSchemaInferrerTest {
 		String endpoint =
 			"/v1.0/products/by-externalReferenceCode/{externalReferenceCode}";
 
-		Schema schema = _getSchema(endpoint, HttpMethod.PATCH);
+		Schema schema = _getSchema(endpoint, OASConstants.OPERATION_PATCH);
 
 		Assert.assertFalse(AvroUtils.isSchemaEmpty(schema));
 	}
@@ -123,7 +98,7 @@ public class EndpointSchemaInferrerTest {
 	public void testIntegerSchemaFieldsForProducts() {
 		String endpoint = "/v1.0/catalogs/{siteId}/product";
 
-		Schema schema = _getSchema(endpoint, HttpMethod.POST);
+		Schema schema = _getSchema(endpoint, OASConstants.OPERATION_POST);
 
 		List<Schema.Field> fields = schema.getFields();
 
@@ -134,7 +109,7 @@ public class EndpointSchemaInferrerTest {
 		Schema fieldSchema = AvroUtils.unwrapIfNullable(field.schema());
 
 		Assert.assertTrue(
-			"Integer type was expected for nested field: ",
+			"OAS integer in nested object maps to AVRO integer",
 			AvroUtils.isSameType(fieldSchema, AvroUtils._int()));
 	}
 
@@ -142,7 +117,7 @@ public class EndpointSchemaInferrerTest {
 	public void testLongSchemaFieldsForProducts() {
 		String endpoint = "/v1.0/catalogs/{siteId}/product";
 
-		Schema schema = _getSchema(endpoint, HttpMethod.POST);
+		Schema schema = _getSchema(endpoint, OASConstants.OPERATION_POST);
 
 		List<Schema.Field> fields = schema.getFields();
 
@@ -153,27 +128,27 @@ public class EndpointSchemaInferrerTest {
 		Schema fieldSchema = AvroUtils.unwrapIfNullable(field.schema());
 
 		Assert.assertTrue(
-			"Long type was expected: ",
+			"OAS long maps to AVRO long",
 			AvroUtils.isSameType(fieldSchema, AvroUtils._long()));
 
 		field = schema.getField("subscriptionConfiguration_numberOfLength");
 		fieldSchema = AvroUtils.unwrapIfNullable(field.schema());
 
 		Assert.assertTrue(
-			"Long type was expected for nested field: ",
+			"OAS long in nested object maps to AVRO long",
 			AvroUtils.isSameType(fieldSchema, AvroUtils._long()));
 	}
 
 	@Test
 	public void testOpenAPISpecification() {
-		Assert.assertTrue("Test", _openAPISpecJsonNode.has("openapi"));
+		Assert.assertTrue("Test", _oasJsonObject.containsKey("openapi"));
 	}
 
 	@Test
 	public void testStringSchemaFieldsForProducts() {
 		String endpoint = "/v1.0/catalogs/{siteId}/product";
 
-		Schema schema = _getSchema(endpoint, HttpMethod.POST);
+		Schema schema = _getSchema(endpoint, OASConstants.OPERATION_POST);
 
 		List<Schema.Field> fields = schema.getFields();
 
@@ -184,49 +159,71 @@ public class EndpointSchemaInferrerTest {
 		Schema fieldSchema = AvroUtils.unwrapIfNullable(field.schema());
 
 		Assert.assertTrue(
-			"String type was expected: ",
+			"OAS string maps to AVRO string",
 			AvroUtils.isSameType(fieldSchema, AvroUtils._string()));
 
 		field = schema.getField("taxConfiguration_taxCategory");
 		fieldSchema = AvroUtils.unwrapIfNullable(field.schema());
 
 		Assert.assertTrue(
-			"String type was expected for nested field: ",
+			"OAS string in nested object maps to AVRO string",
 			AvroUtils.isSameType(fieldSchema, AvroUtils._string()));
 
 		field = schema.getField("description");
 		fieldSchema = AvroUtils.unwrapIfNullable(field.schema());
 
 		Assert.assertTrue(
-			"String type was expected for dictionary field: ",
+			"OAS dictionary maps to AVRO string",
 			AvroUtils.isSameType(fieldSchema, AvroUtils._string()));
 
 		field = schema.getField("expando");
 		fieldSchema = AvroUtils.unwrapIfNullable(field.schema());
 
 		Assert.assertTrue(
-			"String type was expected for free form object field: ",
+			"OAS free form object maps to AVRO string",
 			AvroUtils.isSameType(fieldSchema, AvroUtils._string()));
 
 		field = schema.getField("categories");
 		fieldSchema = AvroUtils.unwrapIfNullable(field.schema());
 
 		Assert.assertTrue(
-			"String type was expected for arrays: ",
+			"OAS string maps to AVRO string",
 			AvroUtils.isSameType(fieldSchema, AvroUtils._string()));
 	}
 
-	private Schema _getSchema(String endpoint, String operation) {
-		JsonNode endpointsJsonNode = _openAPISpecJsonNode.path(
-			OpenAPIConstants.PATHS);
+	private void _assertValidProductSchema(Schema schema) {
+		List<Schema.Field> fields = schema.getFields();
 
-		Assert.assertTrue(endpointsJsonNode.has(endpoint));
+		Assert.assertThat(fields.size(), equalTo(48));
 
-		return EndpointSchemaInferrer.inferSchema(
-			endpoint, operation, _openAPISpecJsonNode);
+		Schema.Field field = schema.getField("active");
+
+		Schema fieldSchema = AvroUtils.unwrapIfNullable(field.schema());
+
+		Assert.assertTrue(
+			"OAS boolean maps to AVRO boolean",
+			AvroUtils.isSameType(fieldSchema, AvroUtils._boolean()));
+
+		field = schema.getField("subscriptionConfiguration_enable");
+		fieldSchema = AvroUtils.unwrapIfNullable(field.schema());
+
+		Assert.assertTrue(
+			"OAS boolean in nested object maps to AVRO boolean",
+			AvroUtils.isSameType(fieldSchema, AvroUtils._boolean()));
 	}
 
-	private final ObjectMapper _objectMapper = new ObjectMapper();
-	private JsonNode _openAPISpecJsonNode;
+	private Schema _getSchema(String endpoint, String operation) {
+		JsonObject endpointsJsonObject = _oasJsonObject.getJsonObject(
+			OASConstants.PATHS);
+
+		Assert.assertTrue(endpointsJsonObject.containsKey(endpoint));
+
+		return _endpointSchemaInferrer.inferSchema(
+			endpoint, operation, _oasJsonObject);
+	}
+
+	private final EndpointSchemaInferrer _endpointSchemaInferrer =
+		new EndpointSchemaInferrer();
+	private JsonObject _oasJsonObject;
 
 }

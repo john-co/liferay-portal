@@ -430,6 +430,15 @@ public class LayoutPageTemplateEntryLocalServiceWrapper
 	@Override
 	public java.util.List
 		<com.liferay.layout.page.template.model.LayoutPageTemplateEntry>
+			getLayoutPageTemplateEntries(long groupId) {
+
+		return _layoutPageTemplateEntryLocalService.
+			getLayoutPageTemplateEntries(groupId);
+	}
+
+	@Override
+	public java.util.List
+		<com.liferay.layout.page.template.model.LayoutPageTemplateEntry>
 			getLayoutPageTemplateEntries(
 				long groupId, long layoutPageTemplateCollectionId) {
 
@@ -535,6 +544,16 @@ public class LayoutPageTemplateEntryLocalServiceWrapper
 			getLayoutPageTemplateEntries(
 				groupId, layoutPageTemplateCollectionId, name, start, end,
 				orderByComparator);
+	}
+
+	@Override
+	public java.util.List
+		<com.liferay.layout.page.template.model.LayoutPageTemplateEntry>
+			getLayoutPageTemplateEntriesByLayoutPrototypeId(
+				long layoutPrototypeId) {
+
+		return _layoutPageTemplateEntryLocalService.
+			getLayoutPageTemplateEntriesByLayoutPrototypeId(layoutPrototypeId);
 	}
 
 	/**

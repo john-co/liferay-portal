@@ -1,4 +1,18 @@
-import ClayIcon from '../shared/ClayIcon.es';
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
+import ClayIcon from '@clayui/icon';
 import CriteriaSidebarItem from './CriteriaSidebarItem.es';
 import dateFns from 'date-fns';
 import getCN from 'classnames';
@@ -82,7 +96,7 @@ class CriteriaSidebarCollapse extends Component {
 			: properties;
 
 		return (
-			<ul className='sidebar-collapse-groups list-unstyled'>
+			<ul className="sidebar-collapse-groups list-unstyled">
 				{propertyGroups.map(propertyGroup => {
 					const active = propertyGroup.propertyKey === propertyKey;
 
@@ -103,22 +117,22 @@ class CriteriaSidebarCollapse extends Component {
 							key={key}
 						>
 							<div
-								className='sidebar-collapse-header-root'
+								className="sidebar-collapse-header-root"
 								onClick={this._handleClick(key, active)}
 							>
-								<a className='sidebar-collapse-header d-flex justify-content-between'>
+								<a className="sidebar-collapse-header d-flex justify-content-between">
 									{propertyGroup.name}
-									<span className='collapse-icon'>
+									<span className="collapse-icon">
 										<ClayIcon
 											className={activeClasses}
-											iconName='angle-right'
+											symbol="angle-right"
 										/>
 									</span>
 								</a>
 							</div>
 							<ul className={propertyListClasses}>
 								{active && filteredProperties.length === 0 && (
-									<li className='empty-message'>
+									<li className="empty-message">
 										{Liferay.Language.get(
 											'no-results-were-found'
 										)}

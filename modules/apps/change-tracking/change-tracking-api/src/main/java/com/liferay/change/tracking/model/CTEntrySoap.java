@@ -34,13 +34,13 @@ public class CTEntrySoap implements Serializable {
 	public static CTEntrySoap toSoapModel(CTEntry model) {
 		CTEntrySoap soapModel = new CTEntrySoap();
 
+		soapModel.setMvccVersion(model.getMvccVersion());
 		soapModel.setCtEntryId(model.getCtEntryId());
 		soapModel.setCompanyId(model.getCompanyId());
 		soapModel.setUserId(model.getUserId());
-		soapModel.setUserName(model.getUserName());
 		soapModel.setCreateDate(model.getCreateDate());
 		soapModel.setModifiedDate(model.getModifiedDate());
-		soapModel.setOriginalCTCollectionId(model.getOriginalCTCollectionId());
+		soapModel.setCtCollectionId(model.getCtCollectionId());
 		soapModel.setModelClassNameId(model.getModelClassNameId());
 		soapModel.setModelClassPK(model.getModelClassPK());
 		soapModel.setModelResourcePrimKey(model.getModelResourcePrimKey());
@@ -100,6 +100,14 @@ public class CTEntrySoap implements Serializable {
 		setCtEntryId(pk);
 	}
 
+	public long getMvccVersion() {
+		return _mvccVersion;
+	}
+
+	public void setMvccVersion(long mvccVersion) {
+		_mvccVersion = mvccVersion;
+	}
+
 	public long getCtEntryId() {
 		return _ctEntryId;
 	}
@@ -124,14 +132,6 @@ public class CTEntrySoap implements Serializable {
 		_userId = userId;
 	}
 
-	public String getUserName() {
-		return _userName;
-	}
-
-	public void setUserName(String userName) {
-		_userName = userName;
-	}
-
 	public Date getCreateDate() {
 		return _createDate;
 	}
@@ -148,12 +148,12 @@ public class CTEntrySoap implements Serializable {
 		_modifiedDate = modifiedDate;
 	}
 
-	public long getOriginalCTCollectionId() {
-		return _originalCTCollectionId;
+	public long getCtCollectionId() {
+		return _ctCollectionId;
 	}
 
-	public void setOriginalCTCollectionId(long originalCTCollectionId) {
-		_originalCTCollectionId = originalCTCollectionId;
+	public void setCtCollectionId(long ctCollectionId) {
+		_ctCollectionId = ctCollectionId;
 	}
 
 	public long getModelClassNameId() {
@@ -208,13 +208,13 @@ public class CTEntrySoap implements Serializable {
 		_status = status;
 	}
 
+	private long _mvccVersion;
 	private long _ctEntryId;
 	private long _companyId;
 	private long _userId;
-	private String _userName;
 	private Date _createDate;
 	private Date _modifiedDate;
-	private long _originalCTCollectionId;
+	private long _ctCollectionId;
 	private long _modelClassNameId;
 	private long _modelClassPK;
 	private long _modelResourcePrimKey;

@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import {
 	CLEAR_ACTIVE_ITEM,
 	CLEAR_DROP_TARGET,
@@ -14,6 +28,7 @@ import {setIn} from '../utils/FragmentsEditorUpdateUtils.es';
  * @param {object} action
  * @param {string} action.activeItemId
  * @param {string} action.activeItemType
+ * @param {boolean} action.appendItem
  * @param {string} action.type
  * @return {object}
  * @review
@@ -24,9 +39,29 @@ function updateActiveItemReducer(state, action) {
 	if (action.type === CLEAR_ACTIVE_ITEM) {
 		nextState = setIn(nextState, ['activeItemId'], null);
 		nextState = setIn(nextState, ['activeItemType'], null);
+		nextState = setIn(nextState, ['selectedItems'], []);
 	} else if (action.type === UPDATE_ACTIVE_ITEM) {
 		nextState = setIn(nextState, ['activeItemId'], action.activeItemId);
 		nextState = setIn(nextState, ['activeItemType'], action.activeItemType);
+
+		let selectedItems = [
+			{
+				itemId: action.activeItemId,
+				itemType: action.activeItemType
+			}
+		];
+
+		if (action.appendItem && state.contentCreationEnabled) {
+			selectedItems = nextState.selectedItems
+				.filter(
+					item =>
+						item.itemId !== action.activeItemId ||
+						item.itemType !== action.activeItemType
+				)
+				.concat(selectedItems);
+		}
+
+		nextState = setIn(nextState, ['selectedItems'], selectedItems);
 	}
 
 	return nextState;

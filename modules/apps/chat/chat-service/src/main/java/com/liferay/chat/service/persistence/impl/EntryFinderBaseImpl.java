@@ -37,7 +37,7 @@ public abstract class EntryFinderBaseImpl extends BasePersistenceImpl<Entry> {
 
 	@Override
 	@Reference(
-		target = ChatPersistenceConstants.ORIGIN_BUNDLE_SYMBOLIC_NAME_FILTER,
+		target = ChatPersistenceConstants.SERVICE_CONFIGURATION_FILTER,
 		unbind = "-"
 	)
 	public void setConfiguration(Configuration configuration) {
@@ -64,5 +64,14 @@ public abstract class EntryFinderBaseImpl extends BasePersistenceImpl<Entry> {
 
 	@Reference
 	protected EntryPersistence entryPersistence;
+
+	static {
+		try {
+			Class.forName(ChatPersistenceConstants.class.getName());
+		}
+		catch (ClassNotFoundException cnfe) {
+			throw new ExceptionInInitializerError(cnfe);
+		}
+	}
 
 }

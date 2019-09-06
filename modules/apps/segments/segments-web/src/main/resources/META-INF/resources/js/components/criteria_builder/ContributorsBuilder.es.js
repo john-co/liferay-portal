@@ -1,5 +1,19 @@
-import ClayButton from '../shared/ClayButton.es';
-import ClaySpinner from '../shared/ClaySpinner.es';
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
+import ClayButton from '@clayui/button';
+import ClayLoadingIndicator from '@clayui/loading-indicator';
 import Conjunction from './Conjunction.es';
 import CriteriaBuilder from './CriteriaBuilder.es';
 import CriteriaSidebar from '../criteria_sidebar/CriteriaSidebar.es';
@@ -38,10 +52,10 @@ class ContributorBuilder extends React.Component {
 	static defaultProps = {
 		contributors: [],
 		membersCount: 0,
+		membersCountLoading: false,
 		onConjunctionChange: () => {},
 		onPreviewMembers: () => {},
-		onQueryChange: () => {},
-		membersCountLoading: false
+		onQueryChange: () => {}
 	};
 
 	constructor(props) {
@@ -97,7 +111,7 @@ class ContributorBuilder extends React.Component {
 
 		return (
 			<div className={rootClasses}>
-				<div className='criteria-builder-section-sidebar'>
+				<div className="criteria-builder-section-sidebar">
 					<CriteriaSidebar
 						onTitleClicked={this._handleCriteriaEdit}
 						propertyGroups={propertyGroups}
@@ -105,33 +119,32 @@ class ContributorBuilder extends React.Component {
 					/>
 				</div>
 
-				<div className='criteria-builder-section-main'>
-					<div className='contributor-container'>
-						<div className='container-fluid container-fluid-max-xl'>
-							<div className='content-wrapper'>
-								<div className='sheet'>
-									<div className='d-flex flex-wrap justify-content-between mb-4'>
-										<h2 className='sheet-title mb-2'>
+				<div className="criteria-builder-section-main">
+					<div className="contributor-container">
+						<div className="container-fluid container-fluid-max-xl">
+							<div className="content-wrapper">
+								<div className="sheet">
+									<div className="d-flex flex-wrap justify-content-between mb-4">
+										<h2 className="sheet-title mb-2">
 											{Liferay.Language.get('conditions')}
 										</h2>
 
-										<div className='criterion-string'>
-											<div className='btn-group'>
-												<div className='btn-group-item inline-item'>
-													<ClaySpinner
-														className='mr-4'
-														loading={
-															membersCountLoading
-														}
-														size='sm'
-													/>
+										<div className="criterion-string">
+											<div className="btn-group">
+												<div className="btn-group-item inline-item">
+													{membersCountLoading && (
+														<ClayLoadingIndicator
+															className="mr-4"
+															small
+														/>
+													)}
 
 													{!membersCountLoading && (
-														<span className='mr-4'>
+														<span className="mr-4">
 															{Liferay.Language.get(
 																'conditions-match'
 															)}
-															<b className='ml-2 text-dark'>
+															<b className="ml-2 text-dark">
 																{getPluralMessage(
 																	Liferay.Language.get(
 																		'x-member'
@@ -146,15 +159,17 @@ class ContributorBuilder extends React.Component {
 													)}
 
 													<ClayButton
-														label={Liferay.Language.get(
-															'view-members'
-														)}
+														displayType="secondary"
 														onClick={
 															onPreviewMembers
 														}
-														size='sm'
-														type='button'
-													/>
+														small
+														type="button"
+													>
+														{Liferay.Language.get(
+															'view-members'
+														)}
+													</ClayButton>
 												</div>
 											</div>
 										</div>
@@ -182,9 +197,9 @@ class ContributorBuilder extends React.Component {
 											return (
 												<React.Fragment key={i}>
 													{i !== 0 && (
-														<React.Fragment>
+														<>
 															<Conjunction
-																className='mb-4 ml-0 mt-4'
+																className="mb-4 ml-0 mt-4"
 																conjunctionName={
 																	criteria.conjunctionId
 																}
@@ -198,7 +213,7 @@ class ContributorBuilder extends React.Component {
 																	supportedConjunctions
 																}
 															/>
-														</React.Fragment>
+														</>
 													)}
 
 													<CriteriaBuilder

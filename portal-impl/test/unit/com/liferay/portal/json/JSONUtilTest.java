@@ -22,8 +22,10 @@ import com.liferay.portal.kernel.json.JSONUtil;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import org.junit.Assert;
@@ -132,63 +134,6 @@ public class JSONUtilTest {
 		Assert.assertFalse(
 			JSONUtil.equals(
 				JSONUtil.putAll("a", "1"), JSONUtil.putAll("1", "a")));
-
-		Assert.assertFalse(
-			JSONUtil.equals(
-				JSONUtil.put(
-					JSONUtil.put(
-						"innerDouble", 0.532049
-					).put(
-						"innerFoo", "bar"
-					).put(
-						"innerJSONArray1", JSONUtil.putAll(9, 5, 3, 4)
-					).put(
-						"innerJSONArray2",
-						JSONUtil.put(
-							JSONUtil.put(
-								"integer3", 3
-							).put(
-								"integer1", 1
-							).put(
-								"integer2", 2
-							)
-						).put(
-							JSONUtil.put(
-								"double1", 1.0
-							).put(
-								"foo1", "bar1"
-							)
-						)
-					).put(
-						"innerJSONArray3", JSONUtil.putAll("9", "5", "3", "4")
-					)),
-				JSONUtil.put(
-					JSONUtil.put(
-						"innerJSONArray2",
-						JSONUtil.put(
-							JSONUtil.put(
-								"integer1", 1
-							).put(
-								"integer2", 2
-							).put(
-								"integer3", 3
-							)
-						).put(
-							JSONUtil.put(
-								"foo1", "bar1"
-							).put(
-								"double1", 1.0
-							)
-						)
-					).put(
-						"innerDouble", 0.532049
-					).put(
-						"innerJSONArray3", JSONUtil.putAll("5", "9", "4", "3")
-					).put(
-						"innerFoo", "bar"
-					).put(
-						"innerJSONArray1", JSONUtil.putAll(5, 9, 4, 3)
-					))));
 	}
 
 	@Test
@@ -213,78 +158,46 @@ public class JSONUtilTest {
 	}
 
 	@Test
-	public void testJSONObjectEqualsWithStrictChecking() {
+	public void testJSONObjectEquals() {
+		Assert.assertTrue(
+			JSONUtil.equals(
+				JSONUtil.put(
+					"double", 0.532049
+				).put(
+					"foo", "bar"
+				),
+				JSONUtil.put(
+					"double", 0.532049
+				).put(
+					"foo", "bar"
+				)));
+
+		Assert.assertTrue(
+			JSONUtil.equals(
+				JSONUtil.put(
+					"double", 0.532049
+				).put(
+					"foo", "bar"
+				),
+				JSONUtil.put(
+					"foo", "bar"
+				).put(
+					"double", 0.532049
+				)));
+
 		Assert.assertFalse(
 			JSONUtil.equals(
 				JSONUtil.put(
 					"double", 0.532049
 				).put(
 					"foo", "bar"
-				).put(
-					"innerJSONObject",
-					JSONUtil.put(
-						"innerDouble", 0.532049
-					).put(
-						"innerFoo", "bar"
-					).put(
-						"innerJSONArray1", JSONUtil.putAll(9, 5, 3, 4)
-					).put(
-						"innerJSONArray2",
-						JSONUtil.put(
-							JSONUtil.put(
-								"integer1", 1
-							).put(
-								"integer2", 2
-							).put(
-								"integer3", 3
-							)
-						).put(
-							JSONUtil.put(
-								"double1", 1.0
-							).put(
-								"foo1", "bar1"
-							)
-						)
-					).put(
-						"innerJSONArray3", JSONUtil.putAll("9", "5", "3", "4")
-					)
-				).put(
-					"integer", 5
 				),
 				JSONUtil.put(
-					"integer", 5
-				).put(
-					"innerJSONObject",
-					JSONUtil.put(
-						"innerJSONArray1", JSONUtil.putAll(5, 9, 4, 3)
-					).put(
-						"innerJSONArray3", JSONUtil.putAll("5", "9", "4", "3")
-					).put(
-						"innerFoo", "bar"
-					).put(
-						"innerDouble", 0.532049
-					).put(
-						"innerJSONArray2",
-						JSONUtil.put(
-							JSONUtil.put(
-								"integer3", 3
-							).put(
-								"integer1", 1
-							).put(
-								"integer2", 2
-							)
-						).put(
-							JSONUtil.put(
-								"foo1", "bar1"
-							).put(
-								"double1", 1.0
-							)
-						)
-					)
+					"double", 0.532049
 				).put(
 					"foo", "bar"
 				).put(
-					"double", 0.532049
+					"integer", 5
 				)));
 	}
 
@@ -460,6 +373,62 @@ public class JSONUtilTest {
 
 		Assert.assertEquals(
 			expectedJSONArray2.toString(), actualJSONArray2.toString());
+	}
+
+	@Test
+	public void testToJSONObjectMap() {
+		Assert.assertEquals(
+			Collections.emptyMap(),
+			JSONUtil.toJSONObjectMap(_createJSONArray(), null));
+
+		Map<String, JSONObject> expectedJSONObjects =
+			new HashMap<String, JSONObject>() {
+				{
+					put(
+						"1",
+						JSONUtil.put(
+							"alpha", 1
+						).put(
+							"key", "1"
+						));
+					put(
+						"2",
+						JSONUtil.put(
+							"beta", 1
+						).put(
+							"key", "2"
+						));
+					put(
+						"3",
+						JSONUtil.put(
+							"gamma", 1
+						).put(
+							"key", "3"
+						));
+				}
+			};
+
+		Map<String, JSONObject> actualJSONObjects = JSONUtil.toJSONObjectMap(
+			JSONUtil.putAll(
+				JSONUtil.put(
+					"alpha", 1
+				).put(
+					"key", "1"
+				),
+				JSONUtil.put(
+					"beta", 1
+				).put(
+					"key", "2"
+				),
+				JSONUtil.put(
+					"gamma", 1
+				).put(
+					"key", "3"
+				)),
+			"key");
+
+		Assert.assertEquals(
+			expectedJSONObjects.toString(), actualJSONObjects.toString());
 	}
 
 	@Test

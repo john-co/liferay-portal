@@ -26,14 +26,14 @@ Boolean showPermanentLink = (Boolean)request.getAttribute("edit-message.jsp-show
 Boolean showRecentPosts = (Boolean)request.getAttribute("edit-message.jsp-showRecentPosts");
 MBThread thread = (MBThread)request.getAttribute("edit_message.jsp-thread");
 
-if (message.isAnonymous()) {
+if (message.isAnonymous() || thread.isInTrash()) {
 	showRecentPosts = false;
 }
 %>
 
 <a id="<portlet:namespace />message_<%= message.getMessageId() %>"></a>
 
-<div class="card list-group-card panel">
+<div class="card panel">
 	<div class="panel-heading">
 		<div class="card-row card-row-padded">
 			<div class="card-col-field">
@@ -138,8 +138,9 @@ if (message.isAnonymous()) {
 
 						<span class="h5">
 							<liferay-ui:icon
-								iconCssClass="icon-search"
+								icon="search"
 								label="<%= true %>"
+								markupView="lexicon"
 								message="recent-posts"
 								method="get"
 								url="<%= recentPostsURL.toString() %>"
@@ -271,18 +272,7 @@ if (message.isAnonymous()) {
 								</portlet:renderURL>
 
 								<%
-								String quoteText = null;
-
-								if (messageFormat.equals("bbcode")) {
-									quoteText = MBUtil.getBBCodeQuoteBody(request, message);
-								}
-								else {
-									quoteText = MBUtil.getHtmlQuoteBody(request, message);
-								}
-
-								quoteText = HtmlUtil.escapeJS(quoteText);
-
-								String taglibReplyWithQuoteToMessageURL = "javascript:" + liferayPortletResponse.getNamespace() + "addReplyToMessage('" + message.getMessageId() + "', '" + quoteText + "');";
+								String taglibReplyWithQuoteToMessageURL = "javascript:" + liferayPortletResponse.getNamespace() + "addReplyToMessage('" + message.getMessageId() + "', true);";
 								%>
 
 								<liferay-ui:icon

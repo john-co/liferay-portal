@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 AUI.add(
 	'liferay-uad-export',
 	function(A) {
@@ -27,30 +41,7 @@ AUI.add(
 			NAME: 'uadexport',
 
 			prototype: {
-				initializer: function() {
-					var instance = this;
-
-					instance._renderTimer = A.later(
-						RENDER_INTERVAL_IN_PROGRESS,
-						instance,
-						instance._renderExportProcesses
-					);
-
-					Liferay.once(
-						'beforeNavigate',
-						instance.destroy.bind(instance)
-					);
-				},
-
-				destructor: function() {
-					var instance = this;
-
-					if (instance._renderTimer) {
-						instance._renderTimer.cancel();
-					}
-				},
-
-				_isBackgroundTaskInProgress: function() {
+				_isBackgroundTaskInProgress() {
 					var instance = this;
 
 					var exportProcessesNode = instance.get(
@@ -62,7 +53,7 @@ AUI.add(
 					);
 				},
 
-				_renderExportProcesses: function() {
+				_renderExportProcesses() {
 					var instance = this;
 
 					var exportProcessesNode = instance.get(
@@ -73,32 +64,23 @@ AUI.add(
 					);
 
 					if (exportProcessesNode && exportProcessesResourceURL) {
-						A.io.request(exportProcessesResourceURL, {
-							method: 'GET',
-							on: {
-								success: function(event, id, obj) {
-									var responseData = this.get('responseData');
+						Liferay.Util.fetch(exportProcessesResourceURL)
+							.then(function(response) {
+								return response.text();
+							})
+							.then(function(response) {
+								exportProcessesNode.plug(A.Plugin.ParseContent);
 
-									if (responseData) {
-										exportProcessesNode.plug(
-											A.Plugin.ParseContent
-										);
+								exportProcessesNode.empty();
 
-										exportProcessesNode.empty();
+								exportProcessesNode.setContent(response);
 
-										exportProcessesNode.setContent(
-											responseData
-										);
-
-										instance._scheduleRenderProcess();
-									}
-								}
-							}
-						});
+								instance._scheduleRenderProcess();
+							});
 					}
 				},
 
-				_scheduleRenderProcess: function() {
+				_scheduleRenderProcess() {
 					var instance = this;
 
 					var renderInterval = RENDER_INTERVAL_IDLE;
@@ -114,7 +96,7 @@ AUI.add(
 					);
 				},
 
-				_setNode: function(val) {
+				_setNode(val) {
 					var instance = this;
 
 					if (isString(val)) {
@@ -124,6 +106,29 @@ AUI.add(
 					}
 
 					return val;
+				},
+
+				destructor() {
+					var instance = this;
+
+					if (instance._renderTimer) {
+						instance._renderTimer.cancel();
+					}
+				},
+
+				initializer() {
+					var instance = this;
+
+					instance._renderTimer = A.later(
+						RENDER_INTERVAL_IN_PROGRESS,
+						instance,
+						instance._renderExportProcesses
+					);
+
+					Liferay.once(
+						'beforeNavigate',
+						instance.destroy.bind(instance)
+					);
 				}
 			}
 		});
@@ -132,10 +137,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: [
-			'aui-io-request',
-			'aui-parse-content',
-			'liferay-portlet-base'
-		]
+		requires: ['aui-parse-content', 'liferay-portlet-base']
 	}
 );

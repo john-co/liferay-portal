@@ -1,10 +1,28 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 AUI.add(
 	'liferay-marketplace-messenger',
 	function(A) {
 		var NATIVE_MSG = !!window.postMessage;
 
 		var MarketplaceMessenger = {
-			init: function(options, initMessage) {
+			_messages: [],
+			_targetFrame: null,
+			_targetURI: null,
+
+			init(options, initMessage) {
 				var instance = this;
 
 				if (A.Lang.isString(options)) {
@@ -22,7 +40,7 @@ AUI.add(
 				}
 			},
 
-			postMessage: function(message) {
+			postMessage(message) {
 				var instance = this;
 
 				if (NATIVE_MSG) {
@@ -44,7 +62,7 @@ AUI.add(
 				}
 			},
 
-			receiveMessage: function(callback, validator) {
+			receiveMessage(callback, validator) {
 				var instance = this;
 
 				validator = validator || instance._targetURI;
@@ -82,17 +100,13 @@ AUI.add(
 				}
 			},
 
-			setTargetFrame: function(targetFrame) {
+			setTargetFrame(targetFrame) {
 				this._targetFrame = targetFrame;
 			},
 
-			setTargetURI: function(targetURI) {
+			setTargetURI(targetURI) {
 				this._targetURI = targetURI;
-			},
-
-			_messages: [],
-			_targetFrame: null,
-			_targetURI: null
+			}
 		};
 
 		Liferay.MarketplaceMessenger = MarketplaceMessenger;
@@ -107,7 +121,7 @@ AUI.add(
 	'liferay-marketplace-util',
 	function(A) {
 		var MarketplaceUtil = {
-			namespaceObject: function(namespace, object) {
+			namespaceObject(namespace, object) {
 				var returnObject = {};
 
 				var keys = A.Object.keys(object);

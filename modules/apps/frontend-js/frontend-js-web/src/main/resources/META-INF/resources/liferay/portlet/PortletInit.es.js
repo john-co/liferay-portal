@@ -1,3 +1,18 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
+import fetch from './../util/fetch.es';
 import {isDefAndNotNull, isFunction, isObject, isString} from 'metal';
 
 import uuidv1 from 'uuid/v1';
@@ -227,14 +242,14 @@ class PortletInit {
 
 		const parameterKeys = Object.keys(publicRenderParameters);
 
-		for (let parameterKey of parameterKeys) {
+		parameterKeys.forEach(parameterKey => {
 			const newValue = publicRenderParameters[parameterKey];
 
 			const groupMap = pageRenderState.prpMap[parameterKey];
 
 			const groupKeys = Object.keys(groupMap);
 
-			for (let groupKey of groupKeys) {
+			groupKeys.forEach(groupKey => {
 				if (groupKey !== this._portletId) {
 					const parts = groupMap[groupKey].split('|');
 
@@ -250,10 +265,11 @@ class PortletInit {
 							parameterName
 						] = [...newValue];
 					}
+
 					updatedIds.push(portletId);
 				}
-			}
-		}
+			});
+		});
 
 		const portletId = this._portletId;
 
@@ -265,9 +281,9 @@ class PortletInit {
 		// Delete render data for all affected portlets in order to avoid dispatching
 		// stale render data
 
-		for (let updatedId of updatedIds) {
+		updatedIds.forEach(updatedId => {
 			pageRenderState.portlets[updatedId].renderData.content = null;
-		}
+		});
 
 		// Update history for back-button support
 
@@ -342,7 +358,9 @@ class PortletInit {
 				} else {
 					try {
 						history.pushState(token, '', url);
-					} catch (e) {}
+					} catch (e) {
+						// Do nothing
+					}
 				}
 			});
 		}
@@ -392,15 +410,13 @@ class PortletInit {
 
 		// Update portlets and collect IDs of affected portlets.
 
-		const keys = Object.keys(portlets);
+		const entries = Object.entries(portlets);
 
-		for (let key of keys) {
-			const portletData = portlets[key];
-
+		entries.forEach(([key, portletData]) => {
 			pageRenderState.portlets[key] = portletData;
 			updatedIds.push(key);
 			stateUpdated = true;
-		}
+		});
 
 		// portletId will be null or undefined when called from onpopstate routine.
 		// In that case, don't update history.
@@ -425,14 +441,15 @@ class PortletInit {
 	 */
 
 	_updatePortletStates(updatedIds) {
-		return new Promise((resolve, reject) => {
+		return new Promise(resolve => {
 			if (updatedIds.length === 0) {
 				busy = false;
 			} else {
-				for (let updatedId of updatedIds) {
+				updatedIds.forEach(updatedId => {
 					this._updateStateForPortlet(updatedId);
-				}
+				});
 			}
+
 			resolve(updatedIds);
 		});
 	}
@@ -485,19 +502,17 @@ class PortletInit {
 	_updateStateForPortlet(portletId) {
 		const updateQueueIds = eventListenersQueue.map(item => item.handle);
 
-		const keys = Object.keys(eventListeners);
+		const entries = Object.entries(eventListeners);
 
-		for (let key of keys) {
-			const eventData = eventListeners[key];
-
+		entries.forEach(([key, eventData]) => {
 			if (eventData.type !== 'portlet.onStateChange') {
-				continue;
+				return;
 			}
 
 			if (eventData.id === portletId && !updateQueueIds.includes(key)) {
 				eventListenersQueue.push(eventData);
 			}
-		}
+		});
 
 		if (eventListenersQueue.length > 0) {
 			setTimeout(() => {
@@ -552,7 +567,7 @@ class PortletInit {
 		let argCount = 0;
 		let el = null;
 
-		for (let arg of args) {
+		args.forEach(arg => {
 			if (arg instanceof HTMLFormElement) {
 				if (el !== null) {
 					throw new TypeError(
@@ -578,7 +593,7 @@ class PortletInit {
 				);
 			}
 			argCount++;
-		}
+		});
 
 		if (el) {
 			validateForm(el);
@@ -820,7 +835,7 @@ class PortletInit {
 			if (eventListeners[handle].id === this._portletId) {
 				delete eventListeners[handle];
 
-				let l = eventListenersQueue.length;
+				const l = eventListenersQueue.length;
 
 				for (let i = 0; i < l; i++) {
 					const eventData = eventListenersQueue[i];

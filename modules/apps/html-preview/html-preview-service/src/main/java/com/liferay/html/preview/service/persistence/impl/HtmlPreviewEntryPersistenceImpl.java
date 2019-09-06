@@ -32,10 +32,9 @@ import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.dao.orm.SessionFactory;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
-import com.liferay.portal.kernel.service.persistence.CompanyProvider;
-import com.liferay.portal.kernel.service.persistence.CompanyProviderWrapper;
 import com.liferay.portal.kernel.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
@@ -159,19 +158,22 @@ public class HtmlPreviewEntryPersistenceImpl
 	 * @param groupId the group ID
 	 * @param classNameId the class name ID
 	 * @param classPK the class pk
-	 * @param retrieveFromCache whether to retrieve from the finder cache
+	 * @param useFinderCache whether to use the finder cache
 	 * @return the matching html preview entry, or <code>null</code> if a matching html preview entry could not be found
 	 */
 	@Override
 	public HtmlPreviewEntry fetchByG_C_C(
-		long groupId, long classNameId, long classPK,
-		boolean retrieveFromCache) {
+		long groupId, long classNameId, long classPK, boolean useFinderCache) {
 
-		Object[] finderArgs = new Object[] {groupId, classNameId, classPK};
+		Object[] finderArgs = null;
+
+		if (useFinderCache) {
+			finderArgs = new Object[] {groupId, classNameId, classPK};
+		}
 
 		Object result = null;
 
-		if (retrieveFromCache) {
+		if (useFinderCache) {
 			result = finderCache.getResult(
 				_finderPathFetchByG_C_C, finderArgs, this);
 		}
@@ -218,14 +220,22 @@ public class HtmlPreviewEntryPersistenceImpl
 				List<HtmlPreviewEntry> list = q.list();
 
 				if (list.isEmpty()) {
-					finderCache.putResult(
-						_finderPathFetchByG_C_C, finderArgs, list);
+					if (useFinderCache) {
+						finderCache.putResult(
+							_finderPathFetchByG_C_C, finderArgs, list);
+					}
 				}
 				else {
 					if (list.size() > 1) {
 						Collections.sort(list, Collections.reverseOrder());
 
 						if (_log.isWarnEnabled()) {
+							if (!useFinderCache) {
+								finderArgs = new Object[] {
+									groupId, classNameId, classPK
+								};
+							}
+
 							_log.warn(
 								"HtmlPreviewEntryPersistenceImpl.fetchByG_C_C(long, long, long, boolean) with parameters (" +
 									StringUtil.merge(finderArgs) +
@@ -241,7 +251,10 @@ public class HtmlPreviewEntryPersistenceImpl
 				}
 			}
 			catch (Exception e) {
-				finderCache.removeResult(_finderPathFetchByG_C_C, finderArgs);
+				if (useFinderCache) {
+					finderCache.removeResult(
+						_finderPathFetchByG_C_C, finderArgs);
+				}
 
 				throw processException(e);
 			}
@@ -504,7 +517,7 @@ public class HtmlPreviewEntryPersistenceImpl
 		htmlPreviewEntry.setNew(true);
 		htmlPreviewEntry.setPrimaryKey(htmlPreviewEntryId);
 
-		htmlPreviewEntry.setCompanyId(companyProvider.getCompanyId());
+		htmlPreviewEntry.setCompanyId(CompanyThreadLocal.getCompanyId());
 
 		return htmlPreviewEntry;
 	}
@@ -795,14 +808,14 @@ public class HtmlPreviewEntryPersistenceImpl
 	 * @param start the lower bound of the range of html preview entries
 	 * @param end the upper bound of the range of html preview entries (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @param retrieveFromCache whether to retrieve from the finder cache
+	 * @param useFinderCache whether to use the finder cache
 	 * @return the ordered range of html preview entries
 	 */
 	@Override
 	public List<HtmlPreviewEntry> findAll(
 		int start, int end,
 		OrderByComparator<HtmlPreviewEntry> orderByComparator,
-		boolean retrieveFromCache) {
+		boolean useFinderCache) {
 
 		boolean pagination = true;
 		FinderPath finderPath = null;
@@ -812,17 +825,20 @@ public class HtmlPreviewEntryPersistenceImpl
 			(orderByComparator == null)) {
 
 			pagination = false;
-			finderPath = _finderPathWithoutPaginationFindAll;
-			finderArgs = FINDER_ARGS_EMPTY;
+
+			if (useFinderCache) {
+				finderPath = _finderPathWithoutPaginationFindAll;
+				finderArgs = FINDER_ARGS_EMPTY;
+			}
 		}
-		else {
+		else if (useFinderCache) {
 			finderPath = _finderPathWithPaginationFindAll;
 			finderArgs = new Object[] {start, end, orderByComparator};
 		}
 
 		List<HtmlPreviewEntry> list = null;
 
-		if (retrieveFromCache) {
+		if (useFinderCache) {
 			list = (List<HtmlPreviewEntry>)finderCache.getResult(
 				finderPath, finderArgs, this);
 		}
@@ -872,10 +888,14 @@ public class HtmlPreviewEntryPersistenceImpl
 
 				cacheResult(list);
 
-				finderCache.putResult(finderPath, finderArgs, list);
+				if (useFinderCache) {
+					finderCache.putResult(finderPath, finderArgs, list);
+				}
 			}
 			catch (Exception e) {
-				finderCache.removeResult(finderPath, finderArgs);
+				if (useFinderCache) {
+					finderCache.removeResult(finderPath, finderArgs);
+				}
 
 				throw processException(e);
 			}
@@ -1005,7 +1025,7 @@ public class HtmlPreviewEntryPersistenceImpl
 
 	@Override
 	@Reference(
-		target = PreviewPersistenceConstants.ORIGIN_BUNDLE_SYMBOLIC_NAME_FILTER,
+		target = PreviewPersistenceConstants.SERVICE_CONFIGURATION_FILTER,
 		unbind = "-"
 	)
 	public void setConfiguration(Configuration configuration) {
@@ -1037,9 +1057,6 @@ public class HtmlPreviewEntryPersistenceImpl
 
 	private boolean _columnBitmaskEnabled;
 
-	@Reference(service = CompanyProviderWrapper.class)
-	protected CompanyProvider companyProvider;
-
 	@Reference
 	protected EntityCache entityCache;
 
@@ -1068,5 +1085,14 @@ public class HtmlPreviewEntryPersistenceImpl
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		HtmlPreviewEntryPersistenceImpl.class);
+
+	static {
+		try {
+			Class.forName(PreviewPersistenceConstants.class.getName());
+		}
+		catch (ClassNotFoundException cnfe) {
+			throw new ExceptionInInitializerError(cnfe);
+		}
+	}
 
 }

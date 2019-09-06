@@ -1,9 +1,23 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
+import {async, core} from 'metal';
 import Component from 'metal-component';
-import Position from 'metal-position';
-import Soy from 'metal-soy';
 import dom from 'metal-dom';
 import {Drag} from 'metal-drag-drop';
-import {async, core} from 'metal';
+import Position from 'metal-position';
+import Soy from 'metal-soy';
 
 import handlesTemplates from './CropHandles.soy';
 
@@ -31,7 +45,7 @@ class CropHandles extends Component {
 		this.croppedPreviewContext_ = this.croppedPreview_.getContext('2d');
 
 		async.nextTick(() => {
-			let canvas = this.getImageEditorCanvas();
+			const canvas = this.getImageEditorCanvas();
 
 			this.setSelectionInitialStyle_();
 
@@ -46,7 +60,7 @@ class CropHandles extends Component {
 	 * @inheritDoc
 	 */
 	detached() {
-		let canvas = this.getImageEditorCanvas();
+		const canvas = this.getImageEditorCanvas();
 
 		canvas.style.opacity = 1;
 	}
@@ -71,12 +85,12 @@ class CropHandles extends Component {
 	 * @protected
 	 */
 	bindSelectionDrag_() {
-		let canvas = this.getImageEditorCanvas();
+		const canvas = this.getImageEditorCanvas();
 
-		this.selectionDrag_.on(Drag.Events.DRAG, (data, event) => {
-			let left =
+		this.selectionDrag_.on(Drag.Events.DRAG, data => {
+			const left =
 				data.relativeX - canvas.offsetLeft + this.selectionBorderWidth_;
-			let top =
+			const top =
 				data.relativeY - canvas.offsetTop + this.selectionBorderWidth_;
 
 			this.element.style.left = left + 'px';
@@ -102,11 +116,11 @@ class CropHandles extends Component {
 	 * @protected
 	 */
 	bindSizeDrag_() {
-		let canvas = this.getImageEditorCanvas();
+		const canvas = this.getImageEditorCanvas();
 
-		this.sizeDrag_.on(Drag.Events.DRAG, (data, event) => {
-			let width = data.relativeX + this.resizer.offsetWidth / 2;
-			let height = data.relativeY + this.resizer.offsetHeight / 2;
+		this.sizeDrag_.on(Drag.Events.DRAG, data => {
+			const width = data.relativeX + this.resizer.offsetWidth / 2;
+			const height = data.relativeY + this.resizer.offsetHeight / 2;
 
 			this.element.style.width =
 				width + this.selectionBorderWidth_ * 2 + 'px';
@@ -142,11 +156,11 @@ class CropHandles extends Component {
 	 * @protected
 	 */
 	getSizeDragConstrain_(region) {
-		let canvas = this.getImageEditorCanvas();
+		const canvas = this.getImageEditorCanvas();
 
-		let constrain = Position.getRegion(canvas);
+		const constrain = Position.getRegion(canvas);
 
-		let selection = Position.getRegion(this.element);
+		const selection = Position.getRegion(this.element);
 
 		constrain.left =
 			selection.left +
@@ -185,7 +199,7 @@ class CropHandles extends Component {
 	 * @protected
 	 */
 	initializeDrags_() {
-		let canvas = this.getImageEditorCanvas();
+		const canvas = this.getImageEditorCanvas();
 
 		this.selectionDrag_ = new Drag({
 			constrain: canvas,
@@ -208,7 +222,7 @@ class CropHandles extends Component {
 	 * @protected
 	 */
 	setSelectionInitialStyle_() {
-		let canvas = this.getImageEditorCanvas();
+		const canvas = this.getImageEditorCanvas();
 
 		canvas.style.opacity = 0.5;
 

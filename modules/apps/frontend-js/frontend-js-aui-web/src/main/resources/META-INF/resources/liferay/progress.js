@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 AUI.add(
 	'liferay-progress',
 	function(A) {
@@ -39,21 +53,39 @@ AUI.add(
 			NAME: 'progress',
 
 			prototype: {
-				renderUI: function() {
+				_afterComplete() {
 					var instance = this;
 
-					Progress.superclass.renderUI.call(instance, arguments);
+					instance
+						.get('boundingBox')
+						.removeClass('lfr-progress-active');
 
-					var tplFrame = Lang.sub(TPL_FRAME, [instance.get('id')]);
+					instance.set('label', instance.get('strings.complete'));
 
-					var frame = A.Node.create(tplFrame);
-
-					instance.get('boundingBox').placeBefore(frame);
-
-					instance._frame = frame;
+					instance._iframeLoadHandle.detach();
 				},
 
-				bindUI: function() {
+				_afterValueChange(event) {
+					var instance = this;
+
+					var label = instance.get('message');
+
+					if (!label) {
+						label = event.newVal + '%';
+					}
+
+					instance.set('label', label);
+				},
+
+				_onIframeLoad() {
+					var instance = this;
+
+					setTimeout(function() {
+						instance._frame.get('contentWindow.location').reload();
+					}, instance.get(STR_UPDATE_PERIOD));
+				},
+
+				bindUI() {
 					var instance = this;
 
 					Progress.superclass.bindUI.call(instance, arguments);
@@ -68,7 +100,21 @@ AUI.add(
 					);
 				},
 
-				startProgress: function() {
+				renderUI() {
+					var instance = this;
+
+					Progress.superclass.renderUI.call(instance, arguments);
+
+					var tplFrame = Lang.sub(TPL_FRAME, [instance.get('id')]);
+
+					var frame = A.Node.create(tplFrame);
+
+					instance.get('boundingBox').placeBefore(frame);
+
+					instance._frame = frame;
+				},
+
+				startProgress() {
 					var instance = this;
 
 					if (!instance.get('rendered')) {
@@ -84,7 +130,7 @@ AUI.add(
 					}, instance.get(STR_UPDATE_PERIOD));
 				},
 
-				updateProgress: function() {
+				updateProgress() {
 					var instance = this;
 
 					var url = Lang.sub(TPL_URL_UPDATE, [
@@ -94,38 +140,6 @@ AUI.add(
 					]);
 
 					instance._frame.attr('src', url);
-				},
-
-				_afterComplete: function(event) {
-					var instance = this;
-
-					instance
-						.get('boundingBox')
-						.removeClass('lfr-progress-active');
-
-					instance.set('label', instance.get('strings.complete'));
-
-					instance._iframeLoadHandle.detach();
-				},
-
-				_afterValueChange: function(event) {
-					var instance = this;
-
-					var label = instance.get('message');
-
-					if (!label) {
-						label = event.newVal + '%';
-					}
-
-					instance.set('label', label);
-				},
-
-				_onIframeLoad: function(event) {
-					var instance = this;
-
-					setTimeout(function() {
-						instance._frame.get('contentWindow.location').reload();
-					}, instance.get(STR_UPDATE_PERIOD));
 				}
 			}
 		});

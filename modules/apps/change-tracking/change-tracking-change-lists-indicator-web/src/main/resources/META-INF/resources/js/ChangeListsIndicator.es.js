@@ -1,8 +1,22 @@
-import {PortletBase, openToast} from 'frontend-js-web';
-import Soy from 'metal-soy';
-import {Config} from 'metal-state';
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
+import {PortletBase, fetch, openToast} from 'frontend-js-web';
 import {dom} from 'metal-dom';
 import {EventHandler} from 'metal-events';
+import Soy from 'metal-soy';
+import {Config} from 'metal-state';
 
 import templates from './ChangeListsIndicator.soy';
 
@@ -12,7 +26,7 @@ const CHANGE_LISTS_INDICATOR_QUERY_SELECTOR = '[data-change-lists-indicator]';
 
 const GREEN_BACKGROUND_TOOLTIP_CSS_CLASS_NAME = 'tooltip-background-green';
 
-const PRODUCTION_COLLECTION_NAME = 'productionCTCollectionName';
+const PRODUCTION_COLLECTION_ID = 0;
 
 const TOOLTIP_QUERY_SELECTOR = '.yui3-widget.tooltip';
 
@@ -26,7 +40,7 @@ class ChangeListsIndicator extends PortletBase {
 	 */
 	created() {
 		this._eventHandler = new EventHandler();
-		let urlActiveCollection =
+		const urlActiveCollection =
 			this.urlCollectionsBase +
 			'?companyId=' +
 			Liferay.ThemeDisplay.getCompanyId() +
@@ -36,7 +50,7 @@ class ChangeListsIndicator extends PortletBase {
 
 		this._render(urlActiveCollection);
 
-		let instance = this;
+		const instance = this;
 
 		Liferay.on('refreshChangeTrackingIndicator', function() {
 			instance._render(urlActiveCollection);
@@ -64,7 +78,7 @@ class ChangeListsIndicator extends PortletBase {
 	 * @private
 	 */
 	_checkElement(selector) {
-		let element = document.querySelector(selector);
+		const element = document.querySelector(selector);
 
 		var result = Promise.resolve(element);
 
@@ -96,7 +110,7 @@ class ChangeListsIndicator extends PortletBase {
 	 * @private
 	 */
 	_checkElementHidden(selector) {
-		let element = document.querySelector(selector);
+		const element = document.querySelector(selector);
 
 		var result = Promise.resolve(element);
 
@@ -116,19 +130,7 @@ class ChangeListsIndicator extends PortletBase {
 	 * @private
 	 */
 	_getDataRequest(url, callback) {
-		let headers = new Headers();
-		headers.append('Content-Type', 'application/json');
-		headers.append('X-CSRF-Token', Liferay.authToken);
-
-		let type = 'GET';
-
-		let init = {
-			credentials: 'include',
-			headers,
-			method: type
-		};
-
-		fetch(url, init)
+		fetch(url)
 			.then(response => response.json())
 			.then(response => callback(response))
 			.catch(error => {
@@ -170,60 +172,54 @@ class ChangeListsIndicator extends PortletBase {
 	/**
 	 * Handles change list indicator blur event.
 	 * @memberof ChangeListsIndicator
-	 * @param {!Event} event
 	 * @private
 	 */
-	_handleChangeListIndicatorBlur(event) {
+	_handleChangeListIndicatorBlur() {
 		this._handleChangeListIndicatorMouseLeave.bind(this);
 	}
 
 	/**
 	 * Handles change list indicator focus event.
 	 * @memberof ChangeListsIndicator
-	 * @param {!Event} event
 	 * @private
 	 */
-	_handleChangeListIndicatorFocus(event) {
+	_handleChangeListIndicatorFocus() {
 		this._handleChangeListIndicatorMouseEnter.bind(this);
 	}
 
 	/**
 	 * Handles change list indicator click event.
 	 * @memberof ChangeListsIndicator
-	 * @param {!Event} event
 	 * @private
 	 */
-	_handleChangeListIndicatorMouseClick(event) {
+	_handleChangeListIndicatorMouseClick() {
 		this._handleChangeListIndicatorMouseEnter.bind(this);
 	}
 
 	/**
 	 * Handles change list indicator mouseenter event.
 	 * @memberof ChangeListsIndicator
-	 * @param {!Event} event
 	 * @private
 	 */
-	_handleChangeListIndicatorMouseEnter(event) {
+	_handleChangeListIndicatorMouseEnter() {
 		this._addTooltipCssClass(this._tooltipCssClassName);
 	}
 
 	/**
 	 * Handles change list indicator mouseleave events.
 	 * @memberof ChangeListsIndicator
-	 * @param {!Event} event
 	 * @private
 	 */
-	_handleChangeListIndicatorMouseLeave(event) {
+	_handleChangeListIndicatorMouseLeave() {
 		this._removeTooltipCssClass(this._tooltipCssClassName);
 	}
 
 	/**
 	 * Handles tooltip mouseleave events.
 	 * @memberof ChangeListsIndicator
-	 * @param {!Event} event
 	 * @private
 	 */
-	_handleTooltipMouseLeave(event) {
+	_handleTooltipMouseLeave() {
 		this._removeTooltipCssClass(this._tooltipCssClassName);
 	}
 
@@ -261,8 +257,9 @@ class ChangeListsIndicator extends PortletBase {
 	_render(urlActiveCollection) {
 		this._getDataRequest(urlActiveCollection, response => {
 			if (response) {
+				this.activeChangeListId = response[0].ctCollectionId;
 				this.activeChangeListName = response[0].name;
-				this._setTooltipCssClassName(this.activeChangeListName);
+				this._setTooltipCssClassName(this.activeChangeListId);
 				this._setEventHandlers();
 			}
 		});
@@ -328,9 +325,9 @@ class ChangeListsIndicator extends PortletBase {
 	 * @param {!Event} event
 	 * @private
 	 */
-	_setTooltipCssClassName(activeChangeListName) {
+	_setTooltipCssClassName(activeChangeListId) {
 		this._tooltipCssClassName =
-			activeChangeListName != PRODUCTION_COLLECTION_NAME
+			activeChangeListId !== PRODUCTION_COLLECTION_ID
 				? BLUE_BACKGROUND_TOOLTIP_CSS_CLASS_NAME
 				: GREEN_BACKGROUND_TOOLTIP_CSS_CLASS_NAME;
 	}
@@ -372,6 +369,17 @@ ChangeListsIndicator.STATE = {
 	_tooltipCssClassName: Config.string().value(''),
 
 	/**
+	 * Id of the active change list.
+	 * @default
+	 * @instance
+	 * @memberOf ChangeListsIndicator
+	 * @review
+	 * @type {!string}
+	 */
+
+	activeChangeListId: Config.number(),
+
+	/**
 	 * Name of the active change list.
 	 * @default
 	 * @instance
@@ -383,7 +391,7 @@ ChangeListsIndicator.STATE = {
 	activeChangeListName: Config.string().value(''),
 
 	/**
-	 * Name of production collection.
+	 * Id of production collection.
 	 * @default
 	 * @instance
 	 * @memberOf ChangeListsIndicator
@@ -391,7 +399,7 @@ ChangeListsIndicator.STATE = {
 	 * @type {!string}
 	 */
 
-	productionCollectionName: Config.string().value(PRODUCTION_COLLECTION_NAME),
+	productionCollectionId: Config.number().value(PRODUCTION_COLLECTION_ID),
 
 	/**
 	 * Path of the available icons.

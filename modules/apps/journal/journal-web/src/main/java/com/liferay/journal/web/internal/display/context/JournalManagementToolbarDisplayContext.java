@@ -25,7 +25,7 @@ import com.liferay.journal.constants.JournalPortletKeys;
 import com.liferay.journal.model.JournalArticle;
 import com.liferay.journal.model.JournalFolder;
 import com.liferay.journal.model.JournalFolderConstants;
-import com.liferay.journal.web.configuration.JournalWebConfiguration;
+import com.liferay.journal.web.internal.configuration.JournalWebConfiguration;
 import com.liferay.journal.web.internal.security.permission.resource.JournalArticlePermission;
 import com.liferay.journal.web.internal.security.permission.resource.JournalFolderPermission;
 import com.liferay.petra.function.UnsafeConsumer;
@@ -44,6 +44,7 @@ import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.service.WorkflowDefinitionLinkLocalServiceUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
@@ -217,6 +218,23 @@ public class JournalManagementToolbarDisplayContext
 			"folderId",
 			String.valueOf(JournalFolderConstants.DEFAULT_PARENT_FOLDER_ID));
 
+		PortletURL moveEntriesURL = liferayPortletResponse.createRenderURL();
+
+		moveEntriesURL.setParameter("mvcPath", "/move_entries.jsp");
+
+		String redirect = ParamUtil.getString(
+			liferayPortletRequest, "redirect", _themeDisplay.getURLCurrent());
+
+		moveEntriesURL.setParameter("redirect", redirect);
+
+		String referringPortletResource = ParamUtil.getString(
+			liferayPortletRequest, "referringPortletResource");
+
+		moveEntriesURL.setParameter(
+			"referringPortletResource", referringPortletResource);
+
+		componentContext.put("moveEntriesURL", moveEntriesURL.toString());
+
 		PortletURL openViewMoreStructuresURL =
 			liferayPortletResponse.createRenderURL();
 
@@ -353,7 +371,7 @@ public class JournalManagementToolbarDisplayContext
 					add(
 						labelItem -> labelItem.setLabel(
 							LanguageUtil.get(request, "status") + ": " +
-								WorkflowConstants.getStatusLabel(status)));
+								_getStatusLabel(status)));
 				}
 			}
 		};
@@ -558,10 +576,8 @@ public class JournalManagementToolbarDisplayContext
 							dropdownItem.setHref(
 								getPortletURL(), "status",
 								String.valueOf(status));
-							dropdownItem.setLabel(
-								LanguageUtil.get(
-									request,
-									WorkflowConstants.getStatusLabel(status)));
+
+							dropdownItem.setLabel(_getStatusLabel(status));
 						});
 				}
 			}
@@ -591,6 +607,16 @@ public class JournalManagementToolbarDisplayContext
 		statuses.add(WorkflowConstants.STATUS_EXPIRED);
 
 		return statuses;
+	}
+
+	private String _getStatusLabel(int status) {
+		String label = WorkflowConstants.getStatusLabel(status);
+
+		if (status == WorkflowConstants.STATUS_EXPIRED) {
+			label = "with-expired-versions";
+		}
+
+		return LanguageUtil.get(request, label);
 	}
 
 	private boolean _isShowAddButton() throws PortalException {

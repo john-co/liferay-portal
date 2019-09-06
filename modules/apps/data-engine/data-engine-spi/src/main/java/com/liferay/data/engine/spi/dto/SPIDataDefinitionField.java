@@ -15,7 +15,9 @@
 package com.liferay.data.engine.spi.dto;
 
 import com.liferay.petra.lang.HashUtil;
+import com.liferay.portal.kernel.util.ArrayUtil;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -47,6 +49,9 @@ public class SPIDataDefinitionField {
 			Objects.equals(_label, spiDataDefinitionField._label) &&
 			Objects.equals(_localizable, spiDataDefinitionField._localizable) &&
 			Objects.equals(_name, spiDataDefinitionField._name) &&
+			Objects.equals(
+				_nestedSPIDataDefinitionFields,
+				spiDataDefinitionField._nestedSPIDataDefinitionFields) &&
 			Objects.equals(_repeatable, spiDataDefinitionField._repeatable) &&
 			Objects.equals(_tip, spiDataDefinitionField._tip)) {
 
@@ -88,6 +93,10 @@ public class SPIDataDefinitionField {
 		return _name;
 	}
 
+	public SPIDataDefinitionField[] getNestedSPIDataDefinitionFields() {
+		return _nestedSPIDataDefinitionFields;
+	}
+
 	public boolean getRepeatable() {
 		return _repeatable;
 	}
@@ -107,17 +116,22 @@ public class SPIDataDefinitionField {
 		hash = HashUtil.hash(hash, _label);
 		hash = HashUtil.hash(hash, _localizable);
 		hash = HashUtil.hash(hash, _name);
+		hash = HashUtil.hash(hash, _nestedSPIDataDefinitionFields);
 		hash = HashUtil.hash(hash, _repeatable);
 
 		return HashUtil.hash(hash, _tip);
 	}
 
 	public void setCustomProperties(Map<String, Object> customProperties) {
-		_customProperties = customProperties;
+		if (customProperties != null) {
+			_customProperties.putAll(customProperties);
+		}
 	}
 
 	public void setDefaultValue(Map<String, Object> defaultValue) {
-		_defaultValue = defaultValue;
+		if (defaultValue != null) {
+			_defaultValue.putAll(defaultValue);
+		}
 	}
 
 	public void setFieldType(String fieldType) {
@@ -133,7 +147,9 @@ public class SPIDataDefinitionField {
 	}
 
 	public void setLabel(Map<String, Object> label) {
-		_label = label;
+		if (label != null) {
+			_label.putAll(label);
+		}
 	}
 
 	public void setLocalizable(boolean localizable) {
@@ -144,23 +160,35 @@ public class SPIDataDefinitionField {
 		_name = name;
 	}
 
+	public void setNestedSPIDataDefinitionFields(
+		SPIDataDefinitionField[] nestedSPIDataDefinitionFields) {
+
+		if (!ArrayUtil.isEmpty(nestedSPIDataDefinitionFields)) {
+			_nestedSPIDataDefinitionFields = nestedSPIDataDefinitionFields;
+		}
+	}
+
 	public void setRepeatable(boolean repeatable) {
 		_repeatable = repeatable;
 	}
 
 	public void setTip(Map<String, Object> tip) {
-		_tip = tip;
+		if (tip != null) {
+			_tip.putAll(tip);
+		}
 	}
 
-	private Map<String, Object> _customProperties;
-	private Map<String, Object> _defaultValue;
+	private final Map<String, Object> _customProperties = new HashMap<>();
+	private final Map<String, Object> _defaultValue = new HashMap<>();
 	private String _fieldType;
 	private long _id;
 	private boolean _indexable;
-	private Map<String, Object> _label;
+	private final Map<String, Object> _label = new HashMap<>();
 	private boolean _localizable;
 	private String _name;
+	private SPIDataDefinitionField[] _nestedSPIDataDefinitionFields =
+		new SPIDataDefinitionField[0];
 	private boolean _repeatable;
-	private Map<String, Object> _tip;
+	private final Map<String, Object> _tip = new HashMap<>();
 
 }

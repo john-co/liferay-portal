@@ -14,29 +14,27 @@
 
 package com.liferay.talend.runtime.client;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-
+import com.liferay.talend.common.exception.MalformedURLException;
 import com.liferay.talend.connection.LiferayConnectionProperties;
-import com.liferay.talend.exception.MalformedURLException;
-import com.liferay.talend.runtime.client.exception.ConnectionException;
-import com.liferay.talend.runtime.client.exception.OAuth2Exception;
-import com.liferay.talend.utils.URIUtils;
+import com.liferay.talend.runtime.client.exception.ClientException;
+import com.liferay.talend.runtime.client.exception.ConnectionClientException;
+import com.liferay.talend.runtime.client.exception.OAuth2AuthorizationClientException;
+import com.liferay.talend.runtime.client.exception.RemoteExecutionClientException;
+
+import java.io.StringWriter;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import java.util.ArrayList;
 import java.util.Base64;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonWriter;
 
 import javax.ws.rs.HttpMethod;
 import javax.ws.rs.client.Client;
@@ -53,12 +51,10 @@ import org.apache.commons.lang3.StringUtils;
 
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
+import org.glassfish.jersey.client.HttpUrlConnectorProvider;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.talend.daikon.exception.TalendRuntimeException;
-import org.talend.daikon.properties.property.Property;
 
 /**
  * @author Zoltán Takács
@@ -86,38 +82,43 @@ public class RESTClient {
 
 		_client = ClientBuilder.newClient(_getClientConfig());
 
-		if (_log.isDebugEnabled()) {
-			_log.debug("Created new REST Client for endpoint {}", target);
+		_client.property(HttpUrlConnectorProvider.SET_METHOD_WORKAROUND, true);
+
+		if (_logger.isDebugEnabled()) {
+			_logger.debug("Created new REST Client for endpoint {}", target);
 		}
 	}
 
-	public Response executeDeleteRequest() {
+	public Response executeDeleteRequest() throws ClientException {
 		return _execute(HttpMethod.DELETE, _createBuilder(_getTargetURI()));
 	}
 
-	public Response executeGetRequest() {
-		URI decoratedURI = URIUtils.updateWithQueryParameters(
-			_getTargetURI(), _getQueryParametersMap());
-
-		return _execute(HttpMethod.GET, _createBuilder(decoratedURI));
+	public Response executeGetRequest() throws ClientException {
+		return _execute(HttpMethod.GET, _createBuilder(_getTargetURI()));
 	}
 
-	public Response executePatchRequest(JsonNode jsonNode) {
+	public Response executePatchRequest(JsonObject jsonObject)
+		throws ClientException {
+
 		return _execute(
 			HttpMethod.PATCH, _createBuilder(_getTargetURI()),
-			Entity.json(_jsonNodeToPrettyString(jsonNode)));
+			Entity.json(_jsonObjectToPrettyString(jsonObject)));
 	}
 
-	public Response executePostRequest(JsonNode jsonNode) {
+	public Response executePostRequest(JsonObject jsonObject)
+		throws ClientException {
+
 		return _execute(
 			HttpMethod.POST, _createBuilder(_getTargetURI()),
-			Entity.json(_jsonNodeToPrettyString(jsonNode)));
+			Entity.json(_jsonObjectToPrettyString(jsonObject)));
 	}
 
-	public Response executePutRequest(JsonNode jsonNode) {
+	public Response executePutRequest(JsonObject jsonObject)
+		throws ClientException {
+
 		return _execute(
 			HttpMethod.PUT, _createBuilder(_getTargetURI()),
-			Entity.json(_jsonNodeToPrettyString(jsonNode)));
+			Entity.json(_jsonObjectToPrettyString(jsonObject)));
 	}
 
 	public boolean matches(String target) {
@@ -133,22 +134,13 @@ public class RESTClient {
 		return String.format("REST API Client [%s].", _getTarget());
 	}
 
-	private JsonNode _asJsonNode(Response response) {
-		try {
-			String entity = response.readEntity(String.class);
+	private Invocation.Builder _createBuilder(URI targetURI)
+		throws ConnectionClientException, OAuth2AuthorizationClientException {
 
-			return _objectMapper.readTree(entity);
-		}
-		catch (Throwable t) {
-			throw TalendRuntimeException.createUnexpectedException(t);
-		}
-	}
-
-	private Invocation.Builder _createBuilder(URI targetURI) {
 		WebTarget webTarget = _client.target(targetURI);
 
-		if (_log.isDebugEnabled()) {
-			_log.debug("Target: {}", targetURI);
+		if (_logger.isDebugEnabled()) {
+			_logger.debug("Target: {}", targetURI);
 		}
 
 		Invocation.Builder builder = webTarget.request(
@@ -166,29 +158,32 @@ public class RESTClient {
 	}
 
 	private Response _execute(
-		String httpMethod, Invocation.Builder builder, Entity<?> entity) {
+			String httpMethod, Invocation.Builder builder, Entity<?> entity)
+		throws ConnectionClientException {
 
 		Response response = _processRedirects(
 			builder.method(httpMethod, entity));
 
-		if (_isSuccess(response)) {
+		if (_responseHandler.isSuccess(response)) {
 			return response;
 		}
 
 		String responseBody = "No response body available";
 
 		if (response.hasEntity()) {
-			responseBody = response.readEntity(String.class);
+			responseBody = _responseHandler.asText(response);
 		}
 
-		throw TalendRuntimeException.createUnexpectedException(
+		throw new RemoteExecutionClientException(
 			String.format(
 				"Request failed with HTTP status %d and response %s",
-				response.getStatus(), responseBody));
+				response.getStatus(), responseBody),
+			response.getStatus());
 	}
 
 	private Response _executeAccessTokenPostRequest(
-		LiferayConnectionProperties liferayConnectionProperties) {
+			LiferayConnectionProperties liferayConnectionProperties)
+		throws ConnectionClientException {
 
 		String serverInstanceURL = _extractServerInstanceURL(_getTarget());
 
@@ -224,7 +219,8 @@ public class RESTClient {
 	}
 
 	private String _getAuthorizationHeader(
-		LiferayConnectionProperties liferayConnectionProperties) {
+			LiferayConnectionProperties liferayConnectionProperties)
+		throws ConnectionClientException, OAuth2AuthorizationClientException {
 
 		if (liferayConnectionProperties.isOAuth2Authorization()) {
 			return "Bearer " + _getBearerToken(liferayConnectionProperties);
@@ -250,24 +246,20 @@ public class RESTClient {
 	}
 
 	private String _getBearerToken(
-		LiferayConnectionProperties liferayConnectionProperties) {
+			LiferayConnectionProperties liferayConnectionProperties)
+		throws ConnectionClientException, OAuth2AuthorizationClientException {
 
-		JsonNode authorizationJsonNode = _requestAuthorizationJsonNode(
+		JsonObject authorizationJsonObject = _requestAuthorizationJsonObject(
 			liferayConnectionProperties);
 
-		JsonNode tokenTypeJsonNode = authorizationJsonNode.get("token_type");
-
-		String tokenType = tokenTypeJsonNode.asText();
+		String tokenType = authorizationJsonObject.getString("token_type");
 
 		if (!Objects.equals(tokenType, "Bearer")) {
-			throw new OAuth2Exception(
+			throw new OAuth2AuthorizationClientException(
 				"Unexpected token type received " + tokenType);
 		}
 
-		JsonNode accessTokenJsonNode = authorizationJsonNode.get(
-			"access_token");
-
-		return accessTokenJsonNode.asText();
+		return authorizationJsonObject.getString("access_token");
 	}
 
 	private ClientConfig _getClientConfig() {
@@ -275,51 +267,17 @@ public class RESTClient {
 
 		clientConfig = clientConfig.property(
 			ClientProperties.CONNECT_TIMEOUT,
-			_liferayConnectionProperties.connectTimeout.getValue() * 1000);
+			_liferayConnectionProperties.getConnectTimeout() * 1000);
 
 		clientConfig = clientConfig.property(
 			ClientProperties.READ_TIMEOUT,
-			_liferayConnectionProperties.readTimeout.getValue() * 1000);
+			_liferayConnectionProperties.getReadTimeout() * 1000);
 
 		return clientConfig;
 	}
 
-	private List<String> _getContentType(Response response) {
-		String contentTypeHeader = response.getHeaderString("Content-Type");
-
-		if ((contentTypeHeader == null) || contentTypeHeader.isEmpty()) {
-			return Collections.emptyList();
-		}
-
-		String[] headers = contentTypeHeader.split(",");
-
-		List<String> headerValues = new ArrayList<>();
-
-		for (String header : headers) {
-			headerValues.add(header);
-		}
-
-		return headerValues;
-	}
-
-	private Map<String, String> _getQueryParametersMap() {
-		Map<String, String> parameters = new HashMap<>();
-
-		parameters.put(
-			"pageSize",
-			_liferayConnectionProperties.itemsPerPage.getStringValue());
-
-		return parameters;
-	}
-
-	private Response.Status.Family _getResponseStatusFamily(Response response) {
-		Response.StatusType statusType = response.getStatusInfo();
-
-		return statusType.getFamily();
-	}
-
 	private String _getTarget() {
-		if (_getValue(_liferayConnectionProperties.forceHttps)) {
+		if (_liferayConnectionProperties.isForceHttps()) {
 			return _toHttps(_target);
 		}
 
@@ -331,18 +289,15 @@ public class RESTClient {
 			return new URI(_getTarget());
 		}
 		catch (URISyntaxException urise) {
-			_log.error("Unable to parse {} as a URI reference", _getTarget());
+			_logger.error(
+				"Unable to parse {} as a URI reference", _getTarget());
 		}
 
 		return null;
 	}
 
-	private <T> T _getValue(Property<T> property) {
-		return property.getValue();
-	}
-
 	private boolean _isApplicationJsonContentType(Response response) {
-		List<String> strings = _getContentType(response);
+		List<String> strings = _responseHandler.getContentType(response);
 
 		if (strings.contains("application/json")) {
 			return true;
@@ -351,56 +306,29 @@ public class RESTClient {
 		return false;
 	}
 
-	private boolean _isRedirect(Response response) {
-		if (_getResponseStatusFamily(response) ==
-				Response.Status.Family.REDIRECTION) {
+	private String _jsonObjectToPrettyString(JsonObject jsonObject) {
+		StringWriter stringWriter = new StringWriter();
 
-			return true;
-		}
+		JsonWriter jsonWriter = Json.createWriter(stringWriter);
 
-		return false;
+		jsonWriter.writeObject(jsonObject);
+
+		stringWriter.flush();
+
+		return stringWriter.toString();
 	}
 
-	private boolean _isSuccess(Response response) {
-		if (_getResponseStatusFamily(response) ==
-				Response.Status.Family.SUCCESSFUL) {
+	private Response _processRedirects(Response response)
+		throws ConnectionClientException {
 
-			return true;
-		}
-
-		return false;
-	}
-
-	private String _jsonNodeToPrettyString(JsonNode jsonNode) {
-		String json;
-
-		try {
-			ObjectWriter objectWriter =
-				_objectMapper.writerWithDefaultPrettyPrinter();
-
-			json = objectWriter.writeValueAsString(jsonNode);
-		}
-		catch (JsonProcessingException jpe) {
-			if (_log.isDebugEnabled()) {
-				_log.debug(
-					"Unable to convert JsonNode to a String representation");
-			}
-
-			throw TalendRuntimeException.createUnexpectedException(jpe);
-		}
-
-		return json;
-	}
-
-	private Response _processRedirects(Response response) {
-		if (!_getValue(_liferayConnectionProperties.followRedirects)) {
+		if (!_liferayConnectionProperties.isFollowRedirects()) {
 			return response;
 		}
 
 		int count = 0;
 		Response currentResponse = response;
 
-		while (_isRedirect(currentResponse) && (count < 3)) {
+		while (_responseHandler.isRedirect(currentResponse) && (count < 3)) {
 			String location = currentResponse.getHeaderString(
 				HttpHeaders.LOCATION);
 
@@ -408,8 +336,8 @@ public class RESTClient {
 				return currentResponse;
 			}
 
-			if (_log.isDebugEnabled()) {
-				_log.debug("Redirect {}# to {}", count, location);
+			if (_logger.isDebugEnabled()) {
+				_logger.debug("Redirect {}# to {}", count, location);
 			}
 
 			currentResponse.close();
@@ -420,44 +348,49 @@ public class RESTClient {
 				currentResponse = builder.get();
 			}
 			catch (URISyntaxException urise) {
-				throw TalendRuntimeException.createUnexpectedException(urise);
+				throw new ConnectionClientException(
+					"Unable to redirect to location " + location,
+					response.getStatus(), urise);
 			}
 		}
 
 		return currentResponse;
 	}
 
-	private JsonNode _requestAuthorizationJsonNode(
+	private JsonObject _requestAuthorizationJsonObject(
 			LiferayConnectionProperties liferayConnectionProperties)
-		throws ConnectionException {
+		throws ConnectionClientException, OAuth2AuthorizationClientException {
 
 		Response response = _executeAccessTokenPostRequest(
 			liferayConnectionProperties);
 
 		if (response == null) {
-			throw new OAuth2Exception(
+			throw new OAuth2AuthorizationClientException(
 				"Authorization request failed for unresponsive OAuth 2.0 " +
 					"endpoint");
 		}
 
 		if (response.getStatus() != 200) {
-			throw new OAuth2Exception(
+			throw new OAuth2AuthorizationClientException(
 				String.format(
 					"OAuth 2.0 check failed with response status {%s}",
-					response.getStatus()));
+					response.getStatus()),
+				response.getStatus());
 		}
 
-		if (!_isApplicationJsonContentType(response)) {
-			List<String> contentTypeValues = _getContentType(response);
-
-			throw new OAuth2Exception(
-				String.format(
-					"OAuth 2.0 check failed with response status and {%s} " +
-						"content type {%s}",
-					response.getStatus(), contentTypeValues.get(0)));
+		if (_isApplicationJsonContentType(response)) {
+			return _responseHandler.asJsonObject(response);
 		}
 
-		return _asJsonNode(response);
+		List<String> contentTypeValues = _responseHandler.getContentType(
+			response);
+
+		throw new OAuth2AuthorizationClientException(
+			String.format(
+				"Unable to extract OAuth 2.0 credentials from response " +
+					"content type {%s}",
+				contentTypeValues.get(0)),
+			response.getStatus());
 	}
 
 	private String _toHttps(String url) {
@@ -477,7 +410,7 @@ public class RESTClient {
 	private static final String _LIFERAY_OAUTH2_ACCESS_TOKEN_ENDPOINT =
 		"/o/oauth2/token";
 
-	private static final Logger _log = LoggerFactory.getLogger(
+	private static final Logger _logger = LoggerFactory.getLogger(
 		RESTClient.class);
 
 	private static final Pattern _openAPISpecURLPattern = Pattern.compile(
@@ -485,7 +418,7 @@ public class RESTClient {
 
 	private final Client _client;
 	private final LiferayConnectionProperties _liferayConnectionProperties;
-	private final ObjectMapper _objectMapper = new ObjectMapper();
+	private final ResponseHandler _responseHandler = new ResponseHandler();
 	private final String _target;
 
 }

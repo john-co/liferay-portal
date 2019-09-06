@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 AUI().use(
 	'aui-base',
 	'aui-io-plugin-deprecated',
@@ -64,17 +78,13 @@ AUI().use(
 			updateMicroblogs: function(form, url, updateContainer) {
 				var instance = this;
 
-				A.io.request(form.getAttribute('action'), {
-					form: {
-						id: form.getDOM()
-					},
-					on: {
-						success: function() {
-							instance.updateMicroblogsList(url, updateContainer);
+				Liferay.Util.fetch(form.getAttribute('action'), {
+					body: new FormData(form.getDOM()),
+					method: 'POST'
+				}).then(function() {
+					instance.updateMicroblogsList(url, updateContainer);
 
-							Liferay.fire('microblogPosted');
-						}
-					}
+					Liferay.fire('microblogPosted');
 				});
 			},
 
@@ -112,7 +122,9 @@ AUI().use(
 				portletURL.setParameter('microblogsEntryId', microblogsEntryId);
 				portletURL.setWindowState('normal');
 
-				A.io.request(portletURL.toString());
+				Liferay.Util.fetch(portletURL.toString(), {
+					method: 'POST'
+				});
 			}
 		};
 

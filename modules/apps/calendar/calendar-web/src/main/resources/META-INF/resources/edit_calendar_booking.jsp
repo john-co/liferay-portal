@@ -528,7 +528,7 @@ while (manageableCalendarsIterator.hasNext()) {
 
 		<aui:button name="saveButton" primary="<%= false %>" type="submit" value="save-as-draft" />
 
-		<c:if test="<%= calendarBooking != null %>">
+		<c:if test="<%= (calendarBooking != null) && CalendarBookingPermission.contains(themeDisplay.getPermissionChecker(), calendarBooking, ActionKeys.PERMISSIONS) %>">
 			<liferay-security:permissionsURL
 				modelResource="<%= CalendarBooking.class.getName() %>"
 				modelResourceDescription="<%= calendarBooking.getTitle(locale) %>"
@@ -935,6 +935,11 @@ while (manageableCalendarsIterator.hasNext()) {
 
 	defaultEndTimeJCalendar.add(java.util.Calendar.MINUTE, defaultDuration);
 	%>
+
+	var maxLength = Liferay.AUI.getDateFormat().replace(/%[mdY]/gm,'').length + 8;
+
+	A.one('#<portlet:namespace />endTime').set('maxLength', maxLength);
+	A.one('#<portlet:namespace />startTime').set('maxLength', maxLength);
 
 	allDayCheckbox.after(
 		'click',

@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 AUI.add(
 	'liferay-management-bar',
 	function(A) {
@@ -46,25 +60,7 @@ AUI.add(
 			NAME: 'liferay-management-bar',
 
 			prototype: {
-				initializer: function() {
-					var instance = this;
-
-					instance._searchContainerRegisterHandle = Liferay.on(
-						'search-container:registered',
-						instance._onSearchContainerRegistered,
-						instance
-					);
-				},
-
-				destructor: function() {
-					var instance = this;
-
-					instance._detachSearchContainerRegisterHandle();
-
-					new A.EventHandle(instance._eventHandles).detach();
-				},
-
-				_bindUI: function() {
+				_bindUI() {
 					var instance = this;
 
 					instance._eventHandles = [
@@ -91,7 +87,7 @@ AUI.add(
 					];
 				},
 
-				_detachSearchContainerRegisterHandle: function() {
+				_detachSearchContainerRegisterHandle() {
 					var instance = this;
 
 					var searchContainerRegisterHandle =
@@ -104,7 +100,7 @@ AUI.add(
 					}
 				},
 
-				_getSelectAllCheckBox: function() {
+				_getSelectAllCheckBox() {
 					var instance = this;
 
 					var selectAllCheckBox = instance._selectAllCheckBox;
@@ -122,7 +118,7 @@ AUI.add(
 					return selectAllCheckBox;
 				},
 
-				_onSearchContainerRegistered: function(event) {
+				_onSearchContainerRegistered(event) {
 					var instance = this;
 
 					var searchContainer = event.searchContainer;
@@ -139,7 +135,7 @@ AUI.add(
 					}
 				},
 
-				_onSearchContainerRowToggled: function(event) {
+				_onSearchContainerRowToggled(event) {
 					var instance = this;
 
 					var elements = event.elements;
@@ -167,7 +163,7 @@ AUI.add(
 					instance._toggleSecondaryBar(numberAllSelectedElements > 0);
 				},
 
-				_onSurfaceStartNavigate: function(event) {
+				_onSurfaceStartNavigate() {
 					var instance = this;
 
 					Liferay.DOMTaskRunner.addTask({
@@ -193,7 +189,7 @@ AUI.add(
 					});
 				},
 
-				_toggleSecondaryBar: function(show) {
+				_toggleSecondaryBar(show) {
 					var instance = this;
 
 					var managementBarContainer = instance
@@ -206,7 +202,7 @@ AUI.add(
 					);
 				},
 
-				_toggleSelectAll: function(event) {
+				_toggleSelectAll(event) {
 					var instance = this;
 
 					if (
@@ -226,7 +222,7 @@ AUI.add(
 					}
 				},
 
-				_toggleSelectAllCheckBox: function(checked, partial) {
+				_toggleSelectAllCheckBox(checked, partial) {
 					var instance = this;
 
 					var selectAllCheckBox = instance._getSelectAllCheckBox();
@@ -240,14 +236,32 @@ AUI.add(
 					}
 				},
 
-				_updateItemsCount: function(itemsCount) {
+				_updateItemsCount(itemsCount) {
 					var instance = this;
 
 					instance.get('itemsCountContainer').html(itemsCount);
+				},
+
+				destructor() {
+					var instance = this;
+
+					instance._detachSearchContainerRegisterHandle();
+
+					new A.EventHandle(instance._eventHandles).detach();
+				},
+
+				initializer() {
+					var instance = this;
+
+					instance._searchContainerRegisterHandle = Liferay.on(
+						'search-container:registered',
+						instance._onSearchContainerRegistered,
+						instance
+					);
 				}
 			},
 
-			restoreTask: function(state, params, node) {
+			restoreTask(state, params, node) {
 				var totalSelectedItems = state.data.elements.length;
 
 				node = A.one(node);
@@ -320,7 +334,7 @@ AUI.add(
 				}
 			},
 
-			testRestoreTask: function(state, params, node) {
+			testRestoreTask(state, params, node) {
 				var returnNode;
 
 				var currentNode = A.one(node);

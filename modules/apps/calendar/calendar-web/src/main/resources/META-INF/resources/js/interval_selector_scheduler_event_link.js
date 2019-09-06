@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 AUI.add(
 	'liferay-calendar-interval-selector-scheduler-event-link',
 	function(A) {
@@ -15,15 +29,106 @@ AUI.add(
 			NAME: 'interval-selector-scheduler-event-link',
 
 			prototype: {
-				initializer: function(config) {
+				_updateEndDate() {
 					var instance = this;
+
+					var intervalSelector = instance.get('intervalSelector');
+
+					var endDatePicker = intervalSelector.get('endDatePicker');
+
+					var endTimePicker = intervalSelector.get('endTimePicker');
+
+					var endDate = endDatePicker.getDate();
+
+					var endTime = endTimePicker.getTime();
+
+					endDate.setHours(endTime.getHours());
+
+					endDate.setMinutes(endTime.getMinutes());
+
+					instance._updateSchedulerEvent('endDate', endDate);
+				},
+
+				_updateIntervalSelector(event) {
+					var instance = this;
+
+					var prevDate = event.prevVal;
+
+					var newDate = event.newVal;
+
+					if (
+						!instance._intervalSelectorUpdated &&
+						prevDate.getTime() !== newDate.getTime()
+					) {
+						var intervalSelector = instance.get('intervalSelector');
+
+						var schedulerEvent = instance.get('schedulerEvent');
+
+						var attribute = event.attrName;
+
+						var prefix = attribute.replace('Date', '');
+
+						var date = schedulerEvent.get(attribute);
+
+						var datePicker = intervalSelector.get(
+							prefix + 'DatePicker'
+						);
+
+						var timePicker = intervalSelector.get(
+							prefix + 'TimePicker'
+						);
+
+						intervalSelector.stopDurationPreservation();
+
+						datePicker.deselectDates();
+						datePicker.selectDates([date]);
+						timePicker.selectDates([date]);
+
+						intervalSelector.startDurationPreservation();
+					}
+				},
+
+				_updateSchedulerEvent(eventDateType, eventDate) {
+					var instance = this;
+
+					var schedulerEvent = instance.get('schedulerEvent');
+
+					var scheduler = schedulerEvent.get('scheduler');
+
+					instance._intervalSelectorUpdated = true;
+
+					schedulerEvent.set(eventDateType, eventDate);
 
 					instance._intervalSelectorUpdated = false;
 
-					instance.bindUI();
+					scheduler.syncEventsUI();
 				},
 
-				bindUI: function() {
+				_updateStartDate() {
+					var instance = this;
+
+					var intervalSelector = instance.get('intervalSelector');
+
+					var startDatePicker = intervalSelector.get(
+						'startDatePicker'
+					);
+
+					var startTimePicker = intervalSelector.get(
+						'startTimePicker'
+					);
+
+					var startDate = startDatePicker.getDate();
+
+					var startTime = startTimePicker.getTime();
+
+					startDate.setHours(startTime.getHours());
+
+					startDate.setMinutes(startTime.getMinutes());
+
+					instance._updateSchedulerEvent('startDate', startDate);
+				},
+
+				bindUI() {
 					var instance = this;
 
 					var intervalSelector = instance.get('intervalSelector');
@@ -70,7 +175,7 @@ AUI.add(
 					];
 				},
 
-				destructor: function() {
+				destructor() {
 					var instance = this;
 
 					instance.unlink();
@@ -78,109 +183,18 @@ AUI.add(
 					instance.eventHandlers = null;
 				},
 
-				unlink: function() {
+				initializer() {
 					var instance = this;
-
-					AArray.invoke(instance.eventHandlers, 'detach');
-				},
-
-				_updateEndDate: function() {
-					var instance = this;
-
-					var intervalSelector = instance.get('intervalSelector');
-
-					var endDatePicker = intervalSelector.get('endDatePicker');
-
-					var endTimePicker = intervalSelector.get('endTimePicker');
-
-					var endDate = endDatePicker.getDate();
-
-					var endTime = endTimePicker.getTime();
-
-					endDate.setHours(endTime.getHours());
-
-					endDate.setMinutes(endTime.getMinutes());
-
-					instance._updateSchedulerEvent('endDate', endDate);
-				},
-
-				_updateIntervalSelector: function(event) {
-					var instance = this;
-
-					var prevDate = event.prevVal;
-
-					var newDate = event.newVal;
-
-					if (
-						!instance._intervalSelectorUpdated &&
-						prevDate.getTime() !== newDate.getTime()
-					) {
-						var intervalSelector = instance.get('intervalSelector');
-
-						var schedulerEvent = instance.get('schedulerEvent');
-
-						var attribute = event.attrName;
-
-						var prefix = attribute.replace('Date', '');
-
-						var date = schedulerEvent.get(attribute);
-
-						var datePicker = intervalSelector.get(
-							prefix + 'DatePicker'
-						);
-
-						var timePicker = intervalSelector.get(
-							prefix + 'TimePicker'
-						);
-
-						intervalSelector.stopDurationPreservation();
-
-						datePicker.deselectDates();
-						datePicker.selectDates([date]);
-						timePicker.selectDates([date]);
-
-						intervalSelector.startDurationPreservation();
-					}
-				},
-
-				_updateSchedulerEvent: function(eventDateType, eventDate) {
-					var instance = this;
-
-					var schedulerEvent = instance.get('schedulerEvent');
-
-					var scheduler = schedulerEvent.get('scheduler');
-
-					instance._intervalSelectorUpdated = true;
-
-					schedulerEvent.set(eventDateType, eventDate);
 
 					instance._intervalSelectorUpdated = false;
 
-					scheduler.syncEventsUI();
+					instance.bindUI();
 				},
 
-				_updateStartDate: function() {
+				unlink() {
 					var instance = this;
 
-					var intervalSelector = instance.get('intervalSelector');
-
-					var startDatePicker = intervalSelector.get(
-						'startDatePicker'
-					);
-
-					var startTimePicker = intervalSelector.get(
-						'startTimePicker'
-					);
-
-					var startDate = startDatePicker.getDate();
-
-					var startTime = startTimePicker.getTime();
-
-					startDate.setHours(startTime.getHours());
-
-					startDate.setMinutes(startTime.getMinutes());
-
-					instance._updateSchedulerEvent('startDate', startDate);
+					AArray.invoke(instance.eventHandlers, 'detach');
 				}
 			}
 		});

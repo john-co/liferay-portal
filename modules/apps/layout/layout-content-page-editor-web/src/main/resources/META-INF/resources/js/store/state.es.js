@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import {Config} from 'metal-state';
 
 import {
@@ -52,6 +66,14 @@ const INITIAL_STATE = {
 	activeItemType: Config.string().value(''),
 
 	/**
+	 * URL for adding a comment to a FragmentEntryLink
+	 * @default ''
+	 * @review
+	 * @type {string}
+	 */
+	addFragmentEntryLinkCommentURL: Config.string().value(''),
+
+	/**
 	 * URL for associating fragment entries to the underlying model.
 	 * @default ''
 	 * @review
@@ -68,6 +90,14 @@ const INITIAL_STATE = {
 	addPortletURL: Config.string().value(''),
 
 	/**
+	 * URL for adding structured content
+	 * @default ''
+	 * @review
+	 * @type {string}
+	 */
+	addStructuredContentURL: Config.string().value(''),
+
+	/**
 	 * List of asset browser links that can be used
 	 * for selecting an asset
 	 * @default []
@@ -78,6 +108,21 @@ const INITIAL_STATE = {
 		Config.shapeOf({
 			href: Config.string(),
 			typeName: Config.string()
+		})
+	).value([]),
+
+	availableAssets: Config.arrayOf(
+		Config.shapeOf({
+			availableTemplates: Config.arrayOf(
+				Config.shapeOf({
+					key: Config.string(),
+					label: Config.string()
+				})
+			),
+			className: Config.string(),
+			classNameId: Config.string(),
+			href: Config.string(),
+			name: Config.string()
 		})
 	).value([]),
 
@@ -138,6 +183,22 @@ const INITIAL_STATE = {
 	 * @type {string}
 	 */
 	classPK: Config.string().value(''),
+
+	/**
+	 * Flag indicating if the content creation is enabled
+	 * @default false
+	 * @review
+	 * @type {boolean}
+	 */
+	contentCreationEnabled: Config.bool().value(false),
+
+	/**
+	 * Flag indicating if the Create Content dialog should be shown
+	 * @default false
+	 * @review
+	 * @type {boolean}
+	 */
+	createContentDialogVisible: Config.bool().value(false),
 
 	/**
 	 * Default configurations for AlloyEditor instances.
@@ -232,17 +293,20 @@ const INITIAL_STATE = {
 	dropTargetItemType: Config.string().value(''),
 
 	/**
-	 * List of layoutData related to segmentsExperiences
+	 * URL for duplicating a FragmentEntryLink
 	 * @default ''
 	 * @review
-	 * @type {!Array}
+	 * @type {string}
 	 */
-	layoutDataList: Config.arrayOf(
-		Config.shapeOf({
-			layoutData: LayoutDataShape.required(),
-			segmentsExperienceId: Config.string().required()
-		})
-	).value([]),
+	duplicateFragmentEntryLinkURL: Config.string().value(''),
+
+	/**
+	 * URL for editing a comment to a FragmentEntryLink
+	 * @default ''
+	 * @review
+	 * @type {string}
+	 */
+	editFragmentEntryLinkCommentURL: Config.string().value(''),
 
 	/**
 	 * URL for updating a distinct fragment entries of the editor.
@@ -254,6 +318,15 @@ const INITIAL_STATE = {
 	editFragmentEntryLinkURL: Config.string().value(''),
 
 	/**
+	 * URL for updating a distinct fragment entries of the editor.
+	 * @default ''
+	 * @instance
+	 * @review
+	 * @type {string}
+	 */
+	editFragmentEntryLinksURL: Config.string().value(''),
+
+	/**
 	 * Available elements that can be dragged inside the existing Page Template,
 	 * organized by fragment categories.
 	 * @default []
@@ -263,6 +336,7 @@ const INITIAL_STATE = {
 	 *   fragmentEntries: Array<{
 	 *     fragmentEntryKey: !string,
 	 *     imagePreviewURL: string,
+	 *     groupId: string,
 	 *     name: !string
 	 *   }>,
 	 *   name: !string
@@ -274,6 +348,7 @@ const INITIAL_STATE = {
 			fragmentEntries: Config.arrayOf(
 				Config.shapeOf({
 					fragmentEntryKey: Config.string().required(),
+					groupId: Config.string().value(''),
 					imagePreviewURL: Config.string(),
 					name: Config.string().required()
 				})
@@ -307,6 +382,7 @@ const INITIAL_STATE = {
 	fragmentEntryLinks: Config.objectOf(
 		Config.shapeOf({
 			config: Config.object().value({}),
+			configuration: Config.object().value({}),
 			content: Config.any().value(''),
 			editableValues: Config.shapeOf({
 				[EDITABLE_FRAGMENT_ENTRY_PROCESSOR]: Config.objectOf(
@@ -347,6 +423,32 @@ const INITIAL_STATE = {
 	getAssetMappingFieldsURL: Config.string().value(''),
 
 	/**
+	 * URL for obtaining the content structure mapping fields
+	 * created.
+	 * @default '''
+	 * @review
+	 * @type {string}
+	 */
+	getContentStructureMappingFieldsURL: Config.string().value(''),
+
+	/**
+	 * URL for obtaining the content structures
+	 * created.
+	 * @default '''
+	 * @review
+	 * @type {string}
+	 */
+	getContentStructuresURL: Config.string().value(''),
+
+	/**
+	 * Get portlets used in a particular experience
+	 * @default undefined
+	 * @review
+	 * @type {string}
+	 */
+	getExperienceUsedPortletsURL: Config.string().value(''),
+
+	/**
 	 * URL for obtaining the asset types for which info display pages can be
 	 * created.
 	 * @default '''
@@ -363,6 +465,14 @@ const INITIAL_STATE = {
 	 * @type {string}
 	 */
 	getInfoDisplayContributorsURL: Config.string().value(''),
+
+	/**
+	 * Get page content url
+	 * @default undefined
+	 * @review
+	 * @type {string}
+	 */
+	getPageContentsURL: Config.string().value(''),
 
 	/**
 	 * Id of the last element that was hovered
@@ -413,6 +523,19 @@ const INITIAL_STATE = {
 	layoutData: LayoutDataShape.value(getEmptyLayoutData()),
 
 	/**
+	 * List of layoutData related to segmentsExperiences
+	 * @default ''
+	 * @review
+	 * @type {!Array}
+	 */
+	layoutDataList: Config.arrayOf(
+		Config.shapeOf({
+			layoutData: LayoutDataShape.required(),
+			segmentsExperienceId: Config.string().required()
+		})
+	).value([]),
+
+	/**
 	 * Current layout look&feel url
 	 * @default undefined
 	 * @review
@@ -434,6 +557,23 @@ const INITIAL_STATE = {
 	 * @type {string}
 	 */
 	mappingFieldsURL: Config.string().value(''),
+
+	/**
+	 * @default []
+	 * @review
+	 * @type {Array<{name: string, status: { label: string, style: string }, title: string, usagesCount: number}>}
+	 */
+	pageContents: Config.arrayOf(
+		Config.shapeOf({
+			name: Config.string(),
+			status: Config.shapeOf({
+				label: Config.string(),
+				style: Config.string()
+			}),
+			title: Config.string(),
+			usagesCount: Config.number()
+		})
+	).value([]),
 
 	/**
 	 * Portlet namespace needed for prefixing form inputs
@@ -483,6 +623,7 @@ const INITIAL_STATE = {
 	 *   fragmentEntries: Array<{
 	 *     fragmentEntryKey: !string,
 	 *     imagePreviewURL: string,
+	 *     groupId: string,
 	 *     name: !string
 	 *   }>,
 	 *   name: !string
@@ -494,6 +635,7 @@ const INITIAL_STATE = {
 			fragmentEntries: Config.arrayOf(
 				Config.shapeOf({
 					fragmentEntryKey: Config.string().required(),
+					groupId: Config.string().value(''),
 					imagePreviewURL: Config.string(),
 					name: Config.string().required()
 				}).required()
@@ -559,6 +701,19 @@ const INITIAL_STATE = {
 	selectMappingTypeDialogVisible: Config.bool().value(false),
 
 	/**
+	 * Selected items
+	 * @default []
+	 * @review
+	 * @type {Array<string>}
+	 */
+	selectedItems: Config.arrayOf(
+		Config.shapeOf({
+			itemId: Config.string(),
+			itemType: Config.string()
+		})
+	).value([]),
+
+	/**
 	 * Selected mapping type label
 	 * @default {}
 	 * @review
@@ -592,6 +747,14 @@ const INITIAL_STATE = {
 	 * @type {string}
 	 */
 	selectedSidebarPanelId: Config.string().value('sections'),
+
+	/**
+	 * Flag indicating if resolved comments should be shown
+	 * @default false
+	 * @review
+	 * @type {boolean}
+	 */
+	showResolvedComments: Config.bool().value(false),
 
 	/**
 	 * List of sidebar panels

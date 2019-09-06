@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import CriteriaSidebarCollapse from './CriteriaSidebarCollapse.es';
 import CriteriaSidebarSearchBar from './CriteriaSidebarSearchBar.es';
 import PropTypes from 'prop-types';
@@ -25,19 +39,19 @@ class CriteriaSidebar extends Component {
 		const {searchValue} = this.state;
 
 		return (
-			<div className='criteria-sidebar-root'>
-				<div className='sidebar-header'>
+			<div className="criteria-sidebar-root">
+				<div className="sidebar-header">
 					{Liferay.Language.get('properties')}
 				</div>
 
-				<div className='sidebar-search'>
+				<div className="sidebar-search">
 					<CriteriaSidebarSearchBar
 						onChange={this._handleOnSearchChange}
 						searchValue={searchValue}
 					/>
 				</div>
 
-				<div className='sidebar-collapse'>
+				<div className="sidebar-collapse">
 					<CriteriaSidebarCollapse
 						onCollapseClick={onTitleClicked}
 						propertyGroups={propertyGroups}

@@ -1,4 +1,18 @@
 /**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
+/**
  * The History HTML5 Component.
  *
  * @deprecated since 7.2, unused
@@ -25,25 +39,7 @@ AUI.add(
 		A.mix(
 			History.prototype,
 			{
-				PROTECTED_HASH_KEYS: [/^liferay$/, /^tab$/, /^_\d+_tab$/],
-
-				add: function(state, options) {
-					var instance = this;
-
-					options = options || {};
-
-					options.url = options.url || instance._updateURI(state);
-
-					state.liferay = true;
-
-					return History.superclass.add.call(
-						instance,
-						state,
-						options
-					);
-				},
-
-				_init: function(config) {
+				_init(config) {
 					var instance = this;
 
 					var hash = LOCATION.hash;
@@ -57,7 +53,12 @@ AUI.add(
 
 					config = config || {};
 
-					if (!config.hasOwnProperty('initialState')) {
+					if (
+						!Object.prototype.hasOwnProperty.call(
+							config,
+							'initialState'
+						)
+					) {
 						if (locationHashValid) {
 							config.initialState = instance._parse(
 								hash.substr(1)
@@ -68,7 +69,7 @@ AUI.add(
 					}
 				},
 
-				_updateURI: function(state) {
+				_updateURI(state) {
 					var instance = this;
 
 					var uriData = [
@@ -95,8 +96,7 @@ AUI.add(
 
 							A.each(state, function(value1, key1) {
 								instance.PROTECTED_HASH_KEYS.forEach(function(
-									value2,
-									key2
+									value2
 								) {
 									if (value2.test(key1)) {
 										delete state[key1];
@@ -136,6 +136,24 @@ AUI.add(
 					);
 
 					return uriData.join('');
+				},
+
+				PROTECTED_HASH_KEYS: [/^liferay$/, /^tab$/, /^_\d+_tab$/],
+
+				add(state, options) {
+					var instance = this;
+
+					options = options || {};
+
+					options.url = options.url || instance._updateURI(state);
+
+					state.liferay = true;
+
+					return History.superclass.add.call(
+						instance,
+						state,
+						options
+					);
 				}
 			},
 			true

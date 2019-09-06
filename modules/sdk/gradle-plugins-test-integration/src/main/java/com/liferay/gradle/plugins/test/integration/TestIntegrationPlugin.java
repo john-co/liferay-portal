@@ -200,6 +200,9 @@ public class TestIntegrationPlugin implements Plugin<Project> {
 		GradleUtil.addDependency(
 			project, TEST_MODULES_CONFIGURATION_NAME, "com.liferay.portal",
 			"com.liferay.portal.test.integration", "3.0.0");
+		GradleUtil.addDependency(
+			project, TEST_MODULES_CONFIGURATION_NAME, "org.apache.aries.jmx",
+			"org.apache.aries.jmx.core", "1.1.7");
 	}
 
 	private Copy _addTaskCopyTestModules(
@@ -349,8 +352,6 @@ public class TestIntegrationPlugin implements Plugin<Project> {
 
 			});
 
-		_configureJmxRemotePortSpec(
-			setUpTestableTomcatTask, testIntegrationTomcatExtension);
 		_configureManagerSpec(
 			setUpTestableTomcatTask, testIntegrationTomcatExtension);
 		_configureModuleFrameworkBaseDirSpec(
@@ -470,6 +471,7 @@ public class TestIntegrationPlugin implements Plugin<Project> {
 		return startTestableTomcatTask;
 	}
 
+	@SuppressWarnings("serial")
 	private StopTestableTomcatTask _addTaskStopTestableTomcat(
 		Project project, Test testIntegrationTask,
 		TestIntegrationTomcatExtension testIntegrationTomcatExtension) {
@@ -700,6 +702,7 @@ public class TestIntegrationPlugin implements Plugin<Project> {
 		}
 	}
 
+	@SuppressWarnings("serial")
 	private void _configureTaskTestIntegration(
 		final Test test, final SourceSet testIntegrationSourceSet,
 		final TestIntegrationTomcatExtension testIntegrationTomcatExtension,

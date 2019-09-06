@@ -64,8 +64,8 @@ import com.liferay.portal.kernel.model.ResourceAction;
 import com.liferay.portal.kernel.model.ResourceConstants;
 import com.liferay.portal.kernel.model.ResourcePermission;
 import com.liferay.portal.kernel.model.Role;
-import com.liferay.portal.kernel.model.RoleConstants;
 import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.security.permission.ResourceActionsUtil;
 import com.liferay.portal.kernel.service.ClassNameLocalService;
 import com.liferay.portal.kernel.service.GroupLocalService;
@@ -425,9 +425,8 @@ public class CalEventImporterVerifyProcess extends VerifyProcess {
 		RatingsStats ratingsStats =
 			_ratingsStatsLocalService.createRatingsStats(statsId);
 
-		long classNameId = _classNameLocalService.getClassNameId(className);
-
-		ratingsStats.setClassNameId(classNameId);
+		ratingsStats.setClassNameId(
+			_classNameLocalService.getClassNameId(className));
 
 		ratingsStats.setClassPK(classPK);
 		ratingsStats.setTotalEntries(totalEntries);
@@ -1117,10 +1116,9 @@ public class CalEventImporterVerifyProcess extends VerifyProcess {
 			Map<Long, Long> mbMessageIds)
 		throws PortalException {
 
-		MBMessage mbMessage = _mbMessageLocalService.getMBMessage(messageId);
-
 		return _importMBMessage(
-			mbMessage, threadId, calendarBookingId, mbMessageIds);
+			_mbMessageLocalService.getMBMessage(messageId), threadId,
+			calendarBookingId, mbMessageIds);
 	}
 
 	private long _importMBMessage(

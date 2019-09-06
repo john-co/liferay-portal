@@ -79,6 +79,7 @@ import java.util.TreeSet;
  * @author Brian Wing Shun Chan
  * @author Wesley Gong
  */
+@JSON(strict = true)
 public class JournalArticleImpl extends JournalArticleBaseImpl {
 
 	public static String getContentByLocale(
@@ -117,7 +118,8 @@ public class JournalArticleImpl extends JournalArticleBaseImpl {
 			getGroupId(), JournalConstants.SERVICE_NAME, serviceContext);
 
 		Folder folder = PortletFileRepositoryUtil.addPortletFolder(
-			getUserId(), repository.getRepositoryId(),
+			PortalUtil.getValidUserId(getCompanyId(), getUserId()),
+			repository.getRepositoryId(),
 			DLFolderConstants.DEFAULT_PARENT_FOLDER_ID,
 			String.valueOf(getResourcePrimKey()), serviceContext);
 
@@ -228,7 +230,6 @@ public class JournalArticleImpl extends JournalArticleBaseImpl {
 			getDDMTemplateKey(), true);
 	}
 
-	@JSON
 	@Override
 	public String getDescription() {
 		String description =
@@ -285,6 +286,14 @@ public class JournalArticleImpl extends JournalArticleBaseImpl {
 		return StringPool.BLANK;
 	}
 
+	@JSON
+	@Override
+	public String getDescriptionCurrentValue() {
+		Locale locale = LocaleThreadLocal.getThemeDisplayLocale();
+
+		return getDescription(locale, true);
+	}
+
 	@Override
 	public Map<Locale, String> getDescriptionMap() {
 		if (_descriptionMap != null) {
@@ -297,6 +306,7 @@ public class JournalArticleImpl extends JournalArticleBaseImpl {
 		return _descriptionMap;
 	}
 
+	@JSON(name = "description")
 	@Override
 	public String getDescriptionMapAsXML() {
 		return LocalizationUtil.updateLocalization(
@@ -398,10 +408,8 @@ public class JournalArticleImpl extends JournalArticleBaseImpl {
 
 	@Override
 	public String getFriendlyURLsXML() throws PortalException {
-		Map<Locale, String> friendlyURLMap = getFriendlyURLMap();
-
 		return LocalizationUtil.updateLocalization(
-			friendlyURLMap, StringPool.BLANK, "FriendlyURL",
+			getFriendlyURLMap(), StringPool.BLANK, "FriendlyURL",
 			LocaleUtil.toLanguageId(LocaleUtil.getSiteDefault()));
 	}
 
@@ -546,7 +554,6 @@ public class JournalArticleImpl extends JournalArticleBaseImpl {
 		return getDDMTemplateKey();
 	}
 
-	@JSON
 	@Override
 	public String getTitle() {
 		String title = JournalArticleLocalServiceUtil.getArticleTitle(
@@ -619,6 +626,7 @@ public class JournalArticleImpl extends JournalArticleBaseImpl {
 		return _titleMap;
 	}
 
+	@JSON(name = "title")
 	@Override
 	public String getTitleMapAsXML() {
 		return LocalizationUtil.updateLocalization(

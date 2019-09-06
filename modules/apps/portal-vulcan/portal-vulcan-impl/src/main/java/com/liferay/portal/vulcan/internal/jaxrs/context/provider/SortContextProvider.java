@@ -54,24 +54,9 @@ public class SortContextProvider implements ContextProvider<Sort[]> {
 		_sortParserProvider = sortParserProvider;
 	}
 
-	@Override
-	public Sort[] createContext(Message message) {
-		try {
-			return _createContext(message);
-		}
-		catch (InvalidSortException ise) {
-			throw ise;
-		}
-		catch (Exception e) {
-			throw new ServerErrorException(500, e);
-		}
-	}
-
-	private Sort[] _createContext(Message message) throws Exception {
-		HttpServletRequest httpServletRequest =
-			ContextProviderUtil.getHttpServletRequest(message);
-
-		String sortString = ParamUtil.getString(httpServletRequest, "sort");
+	public Sort[] createContext(
+		AcceptLanguage acceptLanguage, EntityModel entityModel,
+		String sortString) {
 
 		if (_log.isDebugEnabled()) {
 			_log.debug("Sort parameter value: " + sortString);
@@ -81,12 +66,8 @@ public class SortContextProvider implements ContextProvider<Sort[]> {
 			return null;
 		}
 
-		EntityModel entityModel = ContextProviderUtil.getEntityModel(message);
-
-		if (_log.isDebugEnabled()) {
-			if (entityModel != null) {
-				_log.debug("OData entity model name: " + entityModel.getName());
-			}
+		if (_log.isDebugEnabled() && (entityModel != null)) {
+			_log.debug("OData entity model name: " + entityModel.getName());
 		}
 
 		SortParser sortParser = _sortParserProvider.provide(entityModel);
@@ -107,9 +88,6 @@ public class SortContextProvider implements ContextProvider<Sort[]> {
 			_log.debug("OData sort: " + oDataSort);
 		}
 
-		AcceptLanguage acceptLanguage = new AcceptLanguageImpl(
-			httpServletRequest, _language, _portal);
-
 		List<SortField> sortFields = oDataSort.getSortFields();
 
 		Sort[] sorts = new Sort[sortFields.size()];
@@ -124,6 +102,25 @@ public class SortContextProvider implements ContextProvider<Sort[]> {
 		}
 
 		return sorts;
+	}
+
+	@Override
+	public Sort[] createContext(Message message) {
+		try {
+			HttpServletRequest httpServletRequest =
+				ContextProviderUtil.getHttpServletRequest(message);
+
+			return createContext(
+				new AcceptLanguageImpl(httpServletRequest, _language, _portal),
+				ContextProviderUtil.getEntityModel(message),
+				ParamUtil.getString(httpServletRequest, "sort"));
+		}
+		catch (InvalidSortException ise) {
+			throw ise;
+		}
+		catch (Exception e) {
+			throw new ServerErrorException(500, e);
+		}
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
