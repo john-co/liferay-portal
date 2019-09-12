@@ -3993,7 +3993,7 @@ log.sanitizer.enabled=false</echo>
 		<run-batch-test>
 			<test-action>
 				<trycatch property="failure.message">
-					<gradle-execute dir="modules/private" task="packageRunTest">
+					<gradle-execute dir="modules" task="packageRunTest">
 						<arg value="--continue" />
 						<arg value="--parallel" />
 					</gradle-execute>
