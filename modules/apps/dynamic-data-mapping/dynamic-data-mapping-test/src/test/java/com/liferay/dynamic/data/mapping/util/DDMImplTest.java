@@ -108,7 +108,7 @@ public class DDMImplTest extends BaseDDMTestCase {
 			ddmFormLayout.getDDMFormLayoutPages();
 
 		Assert.assertEquals(
-			ddmFormLayoutPages.toString(), 1, ddmFormLayoutPages.size());
+			ddmFormLayoutPages.toString(), 2, ddmFormLayoutPages.size());
 
 		DDMFormLayoutPage ddmFormLayoutPage = ddmFormLayoutPages.get(0);
 

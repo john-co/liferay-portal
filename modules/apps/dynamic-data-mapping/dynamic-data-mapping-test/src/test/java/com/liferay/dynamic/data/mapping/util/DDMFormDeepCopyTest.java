@@ -230,7 +230,7 @@ public class DDMFormDeepCopyTest extends BaseDDMTestCase {
 		copyDDMFormField = copyDDMFormFields.get(1);
 
 		Assert.assertEquals("Phone", copyDDMFormField.getName());
-		Assert.assertEquals("text", copyDDMFormField.getType());
+		Assert.assertEquals("test", copyDDMFormField.getType());
 	}
 
 	@Test
