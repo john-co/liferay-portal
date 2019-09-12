@@ -3910,69 +3910,77 @@ log.sanitizer.enabled=false</echo>
 	<target name="js-unit-jdk8">
 		<run-batch-test>
 			<test-action>
-				<for keepgoing="true" param="js.test.dir">
-					<path>
-						<dirset
-							dir="modules"
-							excludes="private/**,node_modules/**,**/node_modules/**,${base.dir}/**/test/stories/**"
-							includes="**/test"
-						/>
-					</path>
-					<sequential>
-						<if>
-							<resourcecontains
-								resource="@{js.test.dir}/../package.json"
-								substring="&quot;test&quot;:"
+				<trycatch property="failure.message">
+					<for keepgoing="true" param="js.test.dir">
+						<path>
+							<dirset
+								dir="modules"
+								excludes="private/**,node_modules/**,**/node_modules/**,${base.dir}/**/test/stories/**"
+								includes="**/test"
 							/>
-							<then>
-								<var name="js.project.dir.native" unset="true" />
-								<var name="js.project.dir.unix" unset="true" />
-
-								<dirname file="@{js.test.dir}" property="js.project.dir.native" />
-
-								<pathconvert property="js.project.dir.unix" targetos="unix">
-									<path location="${js.project.dir.native}" />
-								</pathconvert>
-
-								<propertyregex
-									global="false"
-									input="${js.project.dir.unix}"
-									override="yes"
-									property="js.project.path"
-									regexp="^.*/modules(/.*)"
-									select="\1"
+						</path>
+						<sequential>
+							<if>
+								<resourcecontains
+									resource="@{js.test.dir}/../package.json"
+									substring="&quot;test&quot;:"
 								/>
+								<then>
+									<var name="js.project.dir.native" unset="true" />
+									<var name="js.project.dir.unix" unset="true" />
 
-								<propertyregex
-									global="true"
-									input="${js.project.path}"
-									override="yes"
-									property="js.project.path"
-									regexp="/"
-									replace=":"
-								/>
+									<dirname file="@{js.test.dir}" property="js.project.dir.native" />
 
-								<echo message="Executing Gradle task: ${js.project.path}:packageRunTest" />
+									<pathconvert property="js.project.dir.unix" targetos="unix">
+										<path location="${js.project.dir.native}" />
+									</pathconvert>
 
-								<gradle-execute dir="modules" task="${js.project.path}:packageRunTest" />
-							</then>
-						</if>
-					</sequential>
-				</for>
+									<propertyregex
+										global="false"
+										input="${js.project.dir.unix}"
+										override="yes"
+										property="js.project.path"
+										regexp="^.*/modules(/.*)"
+										select="\1"
+									/>
 
-				<replace
-					dir="modules"
-					includes="**/TEST-frontend-js.xml"
-				>
-					<replacefilter>
-						<replacetoken><![CDATA[<testsuites>]]></replacetoken>
-						<replacevalue><![CDATA[]]></replacevalue>
-					</replacefilter>
-					<replacefilter>
-						<replacetoken><![CDATA[</testsuites>]]></replacetoken>
-						<replacevalue><![CDATA[]]></replacevalue>
-					</replacefilter>
-				</replace>
+									<propertyregex
+										global="true"
+										input="${js.project.path}"
+										override="yes"
+										property="js.project.path"
+										regexp="/"
+										replace=":"
+									/>
+
+									<echo message="Executing Gradle task: ${js.project.path}:packageRunTest" />
+
+									<gradle-execute dir="modules" task="${js.project.path}:packageRunTest" />
+
+									<catch>
+										<echo>${failure.message}</echo>
+									</catch>
+								</then>
+							</if>
+						</sequential>
+					</for>
+
+					<finally>
+						<replace
+							dir="modules"
+							includes="**/TEST-frontend-js.xml"
+						>
+							<replacefilter>
+								<replacetoken><![CDATA[<testsuites>]]></replacetoken>
+								<replacevalue><![CDATA[]]></replacevalue>
+							</replacefilter>
+							<replacefilter>
+								<replacetoken><![CDATA[</testsuites>]]></replacetoken>
+								<replacevalue><![CDATA[]]></replacevalue>
+							</replacefilter>
+						</replace>
+					</finally>
+				</trycatch>
 			</test-action>
 
 			<test-set-up>
@@ -3984,24 +3992,32 @@ log.sanitizer.enabled=false</echo>
 	<target name="js-unit-private-jdk8">
 		<run-batch-test>
 			<test-action>
-				<gradle-execute dir="modules/private" task="packageRunTest">
-					<arg value="--continue" />
-					<arg value="--parallel" />
-				</gradle-execute>
+				<trycatch property="failure.message">
+					<gradle-execute dir="modules/private" task="packageRunTest">
+						<arg value="--continue" />
+						<arg value="--parallel" />
+					</gradle-execute>
 
-				<replace
-					dir="modules"
-					includes="**/TEST-frontend-js.xml"
-				>
-					<replacefilter>
-						<replacetoken><![CDATA[<testsuites>]]></replacetoken>
-						<replacevalue><![CDATA[]]></replacevalue>
-					</replacefilter>
-					<replacefilter>
-						<replacetoken><![CDATA[</testsuites>]]></replacetoken>
-						<replacevalue><![CDATA[]]></replacevalue>
-					</replacefilter>
-				</replace>
+					<catch>
+						<echo>${failure.message}</echo>
+					</catch>
+
+					<finally>
+						<replace
+							dir="modules"
+							includes="**/TEST-frontend-js.xml"
+						>
+							<replacefilter>
+								<replacetoken><![CDATA[<testsuites>]]></replacetoken>
+								<replacevalue><![CDATA[]]></replacevalue>
+							</replacefilter>
+							<replacefilter>
+								<replacetoken><![CDATA[</testsuites>]]></replacetoken>
+								<replacevalue><![CDATA[]]></replacevalue>
+							</replacefilter>
+						</replace>
+					</finally>
+				</trycatch>
 			</test-action>
 
 			<test-set-up>
