@@ -66,7 +66,7 @@ public class DDMFormFactoryTest {
 		Assert.assertNotNull(ddmForm);
 
 		assertRequiredDDMFormFieldTypeSettings(
-			ddmForm.getDDMFormFieldsMap(false));
+			ddmForm.getDDMFormFieldsMap(true));
 	}
 
 	@Test

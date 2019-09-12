@@ -64,7 +64,7 @@ describe('ManagementToolbar', () => {
 		managementToolbar._handleClearSelectionButtonClicked();
 
 		expect(searchContainer.select.toggleAllRows).toHaveBeenCalledWith(
-			false,
+			true,
 			true
 		);
 	});
@@ -73,7 +73,7 @@ describe('ManagementToolbar', () => {
 		managementToolbar._handleSelectAllButtonClicked();
 
 		expect(searchContainer.select.toggleAllRows).toHaveBeenCalledWith(
-			true,
+			false,
 			true
 		);
 	});
