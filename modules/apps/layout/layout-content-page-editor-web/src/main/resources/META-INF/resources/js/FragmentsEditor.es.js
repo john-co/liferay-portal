@@ -25,7 +25,7 @@ import {
 	CLEAR_HOVERED_ITEM,
 	UPDATE_HOVERED_ITEM
 } from './actions/actions.es';
-import {getFragmentEntryLinkListElement} from './utils/FragmentsEditorGetUtils.es';
+import {getElement} from './utils/FragmentsEditorGetUtils.es';
 import {INITIAL_STATE} from './store/state.es';
 import {
 	startListeningWidgetConfigurationChange,
@@ -57,7 +57,7 @@ class FragmentsEditor extends Component {
 	 * @private
 	 * @review
 	 */
-	static _getTargetItem(event) {
+	static _getTargetItemData(event) {
 		let {targetItemId = null, targetItemType = null} =
 			event.target.dataset || {};
 
@@ -161,10 +161,6 @@ class FragmentsEditor extends Component {
 	_handleDocumentMouseOver(event) {
 		if (this.store) {
 			this._updateHoveredItem(event);
-		} else if (this.store) {
-			this.store.dispatch({
-				type: CLEAR_HOVERED_ITEM
-			});
 		}
 	}
 
@@ -174,9 +170,10 @@ class FragmentsEditor extends Component {
 	 * @review
 	 */
 	_updateActiveItem(event) {
-		const {targetItemId, targetItemType} = FragmentsEditor._getTargetItem(
-			event
-		);
+		const {
+			targetItemId,
+			targetItemType
+		} = FragmentsEditor._getTargetItemData(event);
 
 		if (targetItemId && targetItemType) {
 			this.store.dispatch(
@@ -202,44 +199,48 @@ class FragmentsEditor extends Component {
 	 * @review
 	 */
 	_updateHoveredItem(event) {
-		const {targetItemId, targetItemType} = FragmentsEditor._getTargetItem(
-			event
-		);
+		const {
+			targetItemId,
+			targetItemType
+		} = FragmentsEditor._getTargetItemData(event);
 
-		let hoveredItemId = targetItemId;
-		let hoveredItemType = targetItemType;
+		const targetItem = getElement(targetItemId, targetItemType);
 
-		const itemIsEditable =
-			targetItemType === FRAGMENTS_EDITOR_ITEM_TYPES.editable ||
-			targetItemType ===
-				FRAGMENTS_EDITOR_ITEM_TYPES.backgroundImageEditable;
+		if (targetItem) {
+			let hoveredItemId = targetItemId;
+			let hoveredItemType = targetItemType;
 
-		if (itemIsEditable) {
-			const editable = getFragmentEntryLinkListElement(
-				targetItemId,
-				targetItemType
-			);
-
-			const fragment = getFragmentEntryLinkListElement(
-				editable.dataset.fragmentEntryLinkId,
-				FRAGMENTS_EDITOR_ITEM_TYPES.fragment
-			);
+			const targetItemIsEditable =
+				targetItemType === FRAGMENTS_EDITOR_ITEM_TYPES.editable ||
+				targetItemType ===
+					FRAGMENTS_EDITOR_ITEM_TYPES.backgroundImageEditable;
 
 			if (
-				!editable.classList.contains(
+				targetItemIsEditable &&
+				!targetItem.classList.contains(
 					'fragments-editor__editable--highlighted'
-				)
+				) &&
+				!('fragmentsEditorSidebarStructureItem' in targetItem.dataset)
 			) {
+				const fragment = getElement(
+					targetItem.dataset.fragmentEntryLinkId,
+					FRAGMENTS_EDITOR_ITEM_TYPES.fragment
+				);
+
 				hoveredItemId = fragment.dataset.fragmentsEditorItemId;
 				hoveredItemType = FRAGMENTS_EDITOR_ITEM_TYPES.fragment;
 			}
-		}
 
-		this.store.dispatch({
-			hoveredItemId,
-			hoveredItemType,
-			type: UPDATE_HOVERED_ITEM
-		});
+			this.store.dispatch({
+				hoveredItemId,
+				hoveredItemType,
+				type: UPDATE_HOVERED_ITEM
+			});
+		} else {
+			this.store.dispatch({
+				type: CLEAR_HOVERED_ITEM
+			});
+		}
 	}
 }
 

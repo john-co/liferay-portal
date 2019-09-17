@@ -345,8 +345,6 @@ class FragmentEditableField extends PortletBase {
 			this.fragmentEntryLinkId === this.activeItemId &&
 			this.activeItemType === FRAGMENTS_EDITOR_ITEM_TYPES.fragment;
 
-		const isMapped = editableIsMapped(this.editableValues);
-
 		const siblingIsActive = getItemPath(
 			this.activeItemId,
 			this.activeItemType,
@@ -357,7 +355,7 @@ class FragmentEditableField extends PortletBase {
 				item.itemType === FRAGMENTS_EDITOR_ITEM_TYPES.fragment
 		);
 
-		return fragmentEntryLinkIsActive || isMapped || siblingIsActive;
+		return fragmentEntryLinkIsActive || siblingIsActive;
 	}
 
 	/**
@@ -533,7 +531,10 @@ class FragmentEditableField extends PortletBase {
 					const {fieldValue} = response;
 
 					if (fieldValue) {
-						if (this.type === 'image' && fieldValue.url) {
+						if (
+							this.type === 'image' &&
+							typeof fieldValue.url === 'string'
+						) {
 							this._mappedFieldValue = fieldValue.url;
 						} else {
 							this._mappedFieldValue = fieldValue;

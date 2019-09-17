@@ -32,6 +32,7 @@
 				'<%= segmentsExperimentRootId %>',
 				{
 					context: {
+						assetsPath: '<%= segmentsExperimentDisplayContext.getAssetsPath() %>',
 						contentPageEditorNamespace: '<%= segmentsExperimentDisplayContext.getContentPageEditorPortletNamespace() %>',
 						endpoints: {
 							createSegmentsExperimentURL: '<%= segmentsExperimentDisplayContext.getCreateSegmentsExperimentURL() %>',
@@ -85,7 +86,7 @@
 			/>
 
 			<portlet:actionURL name="/hide_segments_experiment_panel" var="hideSegmentsExperimentPanelURL">
-				<portlet:param name="redirect" value="<%= currentURL %>" />
+				<portlet:param name="redirect" value="<%= themeDisplay.getLayoutFriendlyURL(layout) %>" />
 			</portlet:actionURL>
 
 			<liferay-ui:icon

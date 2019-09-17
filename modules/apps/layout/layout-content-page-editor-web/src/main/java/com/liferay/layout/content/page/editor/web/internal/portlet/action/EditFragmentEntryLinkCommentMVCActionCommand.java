@@ -27,10 +27,10 @@ import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.service.permission.LayoutPermissionUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.WebKeys;
-import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -82,8 +82,8 @@ public class EditFragmentEntryLinkCommentMVCActionCommand
 				themeDisplay.getUserId(), FragmentEntryLink.class.getName(),
 				comment.getClassPK(), commentId, String.valueOf(Math.random()),
 				body,
-				WorkflowUtil.getServiceContextFunction(
-					_getWorkflowAction(actionRequest), actionRequest)));
+				CommentUtil.getServiceContextFunction(
+					actionRequest, themeDisplay)));
 
 		JSONPortletResponseUtil.writeJSON(
 			actionRequest, actionResponse,
@@ -92,18 +92,11 @@ public class EditFragmentEntryLinkCommentMVCActionCommand
 				_portal.getHttpServletRequest(actionRequest)));
 	}
 
-	private int _getWorkflowAction(ActionRequest actionRequest) {
-		boolean resolved = ParamUtil.getBoolean(actionRequest, "resolved");
-
-		if (resolved) {
-			return WorkflowConstants.ACTION_SAVE_DRAFT;
-		}
-
-		return WorkflowConstants.ACTION_PUBLISH;
-	}
-
 	@Reference
 	private CommentManager _commentManager;
+
+	@Reference
+	private Http _http;
 
 	@Reference
 	private Portal _portal;

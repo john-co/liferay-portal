@@ -20,6 +20,7 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.service.ClassNameLocalService;
+import com.liferay.portal.kernel.service.LayoutLocalService;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
 import com.liferay.portal.kernel.test.util.GroupTestUtil;
@@ -266,6 +267,23 @@ public class SegmentsExperimentLocalServiceTest {
 			SegmentsExperimentConstants.Goal.BOUNCE_RATE.getLabel(),
 			StringPool.BLANK,
 			ServiceContextTestUtil.getServiceContext(_group.getGroupId()));
+	}
+
+	@Test
+	public void testDeleteLayoutWithSegmentsExperiments() throws Exception {
+		SegmentsExperience segmentsExperience = _addSegmentsExperience();
+
+		SegmentsExperiment segmentsExperiment = _addSegmentsExperiment(
+			segmentsExperience);
+
+		_layoutLocalService.deleteLayout(segmentsExperiment.getClassPK());
+
+		Assert.assertTrue(
+			ListUtil.isNull(
+				_segmentsExperimentLocalService.getSegmentsExperiments(
+					segmentsExperience.getSegmentsExperienceId(),
+					segmentsExperience.getClassNameId(),
+					segmentsExperience.getClassPK())));
 	}
 
 	@Test(expected = LockedSegmentsExperimentException.class)
@@ -629,21 +647,25 @@ public class SegmentsExperimentLocalServiceTest {
 	public void testUpdateSegmentsExperimentStatusToCompletedWithWinnerSegmentsExperience()
 		throws Exception {
 
-		SegmentsExperience segmentsExperience = _addSegmentsExperience();
+		SegmentsExperience segmentsExperience1 = _addSegmentsExperience();
+
+		SegmentsExperience segmentsExperience2 =
+			SegmentsTestUtil.addSegmentsExperience(
+				segmentsExperience1.getGroupId(),
+				segmentsExperience1.getClassNameId(),
+				segmentsExperience1.getClassPK());
 
 		SegmentsExperiment segmentsExperiment = _addSegmentsExperiment(
-			segmentsExperience);
+			segmentsExperience1);
 
 		SegmentsExperience variantSegmentsExperience =
 			SegmentsTestUtil.addSegmentsExperience(
-				segmentsExperience.getGroupId(),
-				segmentsExperience.getClassNameId(),
-				segmentsExperience.getClassPK());
+				segmentsExperience1.getGroupId(),
+				segmentsExperience1.getClassNameId(),
+				segmentsExperience1.getClassPK());
 
-		variantSegmentsExperience.setActive(false);
-
-		_segmentsExperienceLocalService.updateSegmentsExperience(
-			variantSegmentsExperience);
+		_segmentsExperienceLocalService.updateSegmentsExperienceActive(
+			variantSegmentsExperience.getSegmentsExperienceId(), false);
 
 		_segmentsExperimentRelLocalService.addSegmentsExperimentRel(
 			segmentsExperiment.getSegmentsExperimentId(),
@@ -664,11 +686,16 @@ public class SegmentsExperimentLocalServiceTest {
 			variantSegmentsExperience.getSegmentsExperienceId(),
 			SegmentsExperimentConstants.STATUS_COMPLETED);
 
-		segmentsExperience =
+		segmentsExperience1 =
 			_segmentsExperienceLocalService.fetchSegmentsExperience(
-				segmentsExperience.getSegmentsExperienceId());
+				segmentsExperience1.getSegmentsExperienceId());
+		segmentsExperience2 =
+			_segmentsExperienceLocalService.fetchSegmentsExperience(
+				segmentsExperience2.getSegmentsExperienceId());
 
-		Assert.assertFalse(segmentsExperience.isActive());
+		Assert.assertFalse(segmentsExperience1.isActive());
+
+		Assert.assertTrue(segmentsExperience2.isActive());
 
 		variantSegmentsExperience =
 			_segmentsExperienceLocalService.fetchSegmentsExperience(
@@ -975,6 +1002,9 @@ public class SegmentsExperimentLocalServiceTest {
 
 	@DeleteAfterTestRun
 	private Group _group;
+
+	@Inject
+	private LayoutLocalService _layoutLocalService;
 
 	@Inject
 	private SegmentsExperienceLocalService _segmentsExperienceLocalService;

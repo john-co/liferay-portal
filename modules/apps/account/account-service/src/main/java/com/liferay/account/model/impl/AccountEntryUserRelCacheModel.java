@@ -15,7 +15,6 @@
 package com.liferay.account.model.impl;
 
 import com.liferay.account.model.AccountEntryUserRel;
-import com.liferay.account.service.persistence.AccountEntryUserRelPK;
 import com.liferay.petra.lang.HashUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.model.CacheModel;
@@ -47,8 +46,8 @@ public class AccountEntryUserRelCacheModel
 		AccountEntryUserRelCacheModel accountEntryUserRelCacheModel =
 			(AccountEntryUserRelCacheModel)obj;
 
-		if (accountEntryUserRelPK.equals(
-				accountEntryUserRelCacheModel.accountEntryUserRelPK)) {
+		if (accountEntryUserRelId ==
+				accountEntryUserRelCacheModel.accountEntryUserRelId) {
 
 			return true;
 		}
@@ -58,21 +57,19 @@ public class AccountEntryUserRelCacheModel
 
 	@Override
 	public int hashCode() {
-		return HashUtil.hash(0, accountEntryUserRelPK);
+		return HashUtil.hash(0, accountEntryUserRelId);
 	}
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(9);
+		StringBundler sb = new StringBundler(7);
 
 		sb.append("{accountEntryUserRelId=");
 		sb.append(accountEntryUserRelId);
-		sb.append(", companyId=");
-		sb.append(companyId);
-		sb.append(", userId=");
-		sb.append(userId);
 		sb.append(", accountEntryId=");
 		sb.append(accountEntryId);
+		sb.append(", accountUserId=");
+		sb.append(accountUserId);
 		sb.append("}");
 
 		return sb.toString();
@@ -84,9 +81,8 @@ public class AccountEntryUserRelCacheModel
 			new AccountEntryUserRelImpl();
 
 		accountEntryUserRelImpl.setAccountEntryUserRelId(accountEntryUserRelId);
-		accountEntryUserRelImpl.setCompanyId(companyId);
-		accountEntryUserRelImpl.setUserId(userId);
 		accountEntryUserRelImpl.setAccountEntryId(accountEntryId);
+		accountEntryUserRelImpl.setAccountUserId(accountUserId);
 
 		accountEntryUserRelImpl.resetOriginalValues();
 
@@ -97,31 +93,22 @@ public class AccountEntryUserRelCacheModel
 	public void readExternal(ObjectInput objectInput) throws IOException {
 		accountEntryUserRelId = objectInput.readLong();
 
-		companyId = objectInput.readLong();
-
-		userId = objectInput.readLong();
-
 		accountEntryId = objectInput.readLong();
 
-		accountEntryUserRelPK = new AccountEntryUserRelPK(
-			accountEntryUserRelId, userId, accountEntryId);
+		accountUserId = objectInput.readLong();
 	}
 
 	@Override
 	public void writeExternal(ObjectOutput objectOutput) throws IOException {
 		objectOutput.writeLong(accountEntryUserRelId);
 
-		objectOutput.writeLong(companyId);
-
-		objectOutput.writeLong(userId);
-
 		objectOutput.writeLong(accountEntryId);
+
+		objectOutput.writeLong(accountUserId);
 	}
 
 	public long accountEntryUserRelId;
-	public long companyId;
-	public long userId;
 	public long accountEntryId;
-	public transient AccountEntryUserRelPK accountEntryUserRelPK;
+	public long accountUserId;
 
 }

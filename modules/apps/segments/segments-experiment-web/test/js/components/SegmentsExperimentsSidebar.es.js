@@ -71,6 +71,7 @@ function _renderSegmentsExperimentsSidebarComponent({
 					editVariant,
 					publishExperience
 				},
+				assetsPath: '',
 				page: {
 					classNameId,
 					classPK,
@@ -116,21 +117,10 @@ describe('SegmentsExperimentsSidebar', () => {
 			initialSegmentsExperiences: segmentsExperiences
 		});
 
-		const defaultExperience = getByDisplayValue(
-			segmentsExperiences[0].name
-		);
-		expect(defaultExperience).not.toBe(null);
-
-		const reviewAndRunExperimentButton = getByText(
-			'no-active-tests-were-found-for-the-selected-experience'
-		);
-		expect(reviewAndRunExperimentButton).not.toBe(null);
-
-		const createTestHelpMessage = getByText('create-test-help-message');
-		expect(createTestHelpMessage).not.toBe(null);
-
-		const createTestButton = getByText('create-test');
-		expect(createTestButton).not.toBe(null);
+		getByDisplayValue(segmentsExperiences[0].name);
+		getByText('no-active-tests-were-found-for-the-selected-experience');
+		getByText('create-test-help-message');
+		getByText('create-test');
 	});
 
 	it('renders ab testing panel with experience selected and an experiment', () => {
@@ -147,41 +137,29 @@ describe('SegmentsExperimentsSidebar', () => {
 		);
 		expect(defaultExperience).not.toBe(null);
 
-		const experiment = getByText(segmentsExperiment.name);
-		expect(experiment).not.toBe(null);
+		getByText(segmentsExperiment.name);
 
 		const createTestHelpMessage = getByText('review-and-run-test');
 		expect(createTestHelpMessage).toHaveAttribute('disabled');
-		expect(createTestHelpMessage).not.toBe(null);
 
-		const createTestButton = getByText('edit');
-		expect(createTestButton).not.toBe(null);
+		getByText('edit');
 	});
 
-	it('renders modal to create experiment when the user clicks on create test button', () => {
+	it('renders modal to create experiment when the user clicks on create test button', async () => {
 		const {getByText} = _renderSegmentsExperimentsSidebarComponent({
 			initialSegmentsExperiences: segmentsExperiences
 		});
 
 		const createTestButton = getByText('create-test');
-		expect(createTestButton).not.toBe(null);
 
 		fireEvent.click(createTestButton);
 
-		const createNewTestTitle = getByText('create-new-test');
-		expect(createNewTestTitle).not.toBe(null);
+		await waitForElement(() => getByText('create-new-test'));
 
-		const testNameField = getByText('test-name');
-		expect(testNameField).not.toBe(null);
-
-		const descriptionField = getByText('description');
-		expect(descriptionField).not.toBe(null);
-
-		const saveButton = getByText('save');
-		expect(saveButton).not.toBe(null);
-
-		const cancelButton = getByText('cancel');
-		expect(cancelButton).not.toBe(null);
+		getByText('test-name');
+		getByText('description');
+		getByText('save');
+		getByText('cancel');
 	});
 
 	it('renders experiment status label', () => {
@@ -243,7 +221,7 @@ describe('Variants', () => {
 		expect(variant).not.toBe(null);
 	});
 
-	it('create variant button', async done => {
+	it('create variant button', async () => {
 		const createVariantMock = jest.fn(variant =>
 			Promise.resolve({
 				segmentsExperimentRel: {
@@ -293,10 +271,6 @@ describe('Variants', () => {
 				name: 'Variant Name'
 			})
 		);
-
-		expect(getByText('Variant Name')).not.toBe(null);
-
-		done();
 	});
 
 	it("renders variants without create variant button when it's not editable", () => {
@@ -313,7 +287,7 @@ describe('Variants', () => {
 });
 
 describe('Run and review test', () => {
-	it('can view review Experiment Modal', async done => {
+	it('can view review Experiment Modal', async () => {
 		const {
 			getByText,
 			getByDisplayValue,
@@ -338,7 +312,7 @@ describe('Run and review test', () => {
 
 		userEvent.click(createTestHelpMessage);
 
-		await waitForElement(() => getByText('review-and-run-test'));
+		await waitForElement(() => getByText('traffic-split'));
 
 		const confidenceSlider = getAllByDisplayValue(
 			INITIAL_CONFIDENCE_LEVEL.toString()
@@ -347,7 +321,6 @@ describe('Run and review test', () => {
 
 		expect(confidenceSlider.length).toBe(1);
 		expect(splitSliders.length).toBe(2);
-		done();
 	});
 });
 
@@ -379,7 +352,7 @@ describe('Winner declared', () => {
 		expect(allPublishButtons.length).toBe(segmentsVariants.length - 1);
 	});
 
-	it('variants publish action button action', async done => {
+	it('variants publish action button action', async () => {
 		const mockPublish = jest.fn(({status}) => {
 			return Promise.resolve({
 				segmentsExperiment: {
@@ -418,11 +391,9 @@ describe('Winner declared', () => {
 			winnerSegmentsExperienceId: segmentsVariants[1].segmentsExperienceId
 		});
 		await waitForElement(() => getByText('completed'));
-
-		done();
 	});
 
-	it('discard button action', async done => {
+	it('discard button action', async () => {
 		const mockDiscard = jest.fn(({status}) => {
 			return Promise.resolve({
 				segmentsExperiment: {
@@ -462,7 +433,5 @@ describe('Winner declared', () => {
 		});
 
 		await waitForElement(() => getByText('completed'));
-
-		done();
 	});
 });
