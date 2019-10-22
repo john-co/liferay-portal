@@ -1,0 +1,15 @@
+@default = "javaScriptClick"
+@summary = "Click on '${locator1}' using JavaScript"
+definition {
+
+	function javaScriptClick {
+		WaitForSPARefresh();
+
+		selenium.javaScriptClick();
+
+		selenium.assertJavaScriptErrors();
+
+		selenium.assertLiferayErrors();
+	}
+
+}
