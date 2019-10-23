@@ -1,0 +1,40 @@
+{
+  "packages": {
+    "/": {
+      "dest": {
+        "dir": "./build/node/packageRunBuild/resources",
+        "id": "/",
+        "name": "map-common",
+        "version": "5.0.0"
+      },
+      "modules": {
+        "js/GeoJSONBase.es.js": {
+          "flags": {
+            "esModule": true
+          }
+        },
+        "js/MapBase.es.js": {
+          "flags": {
+            "esModule": true
+          }
+        },
+        "js/MarkerBase.es.js": {
+          "flags": {
+            "esModule": true
+          }
+        },
+        "js/validators.es.js": {
+          "flags": {
+            "esModule": true
+          }
+        }
+      },
+      "src": {
+        "dir": ".",
+        "id": "/",
+        "name": "map-common",
+        "version": "5.0.0"
+      }
+    }
+  }
+}

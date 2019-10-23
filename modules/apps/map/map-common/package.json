@@ -4,12 +4,19 @@
 		"metal-dom": "2.16.8",
 		"metal-state": "2.16.8"
 	},
+	"jest": {
+		"coverageReporters": [
+			  "text",
+			  "text-summary",
+			  "lcov"
+		]
+	},
 	"name": "map-common",
 	"scripts": {
 		"build": "liferay-npm-scripts build",
 		"checkFormat": "liferay-npm-scripts check",
 		"format": "liferay-npm-scripts fix",
-		"test": "liferay-npm-scripts test"
+		"test": "liferay-npm-scripts test --coverage --coverageDirectory=jest-test-results"
 	},
 	"version": "5.0.0"
 }
