@@ -310,7 +310,7 @@ definition {
 
 	@priority = "5"
 	test DeleteNode {
-		property portal.acceptance = "true";
+		property portal.acceptance = "john-co";
 
 		Navigator.openURL();
 
