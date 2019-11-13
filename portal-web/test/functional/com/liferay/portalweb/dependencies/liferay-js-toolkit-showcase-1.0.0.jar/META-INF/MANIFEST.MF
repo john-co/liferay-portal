@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Tool: liferay-npm-bundler-2.13.0
+Bundle-SymbolicName: liferay-js-toolkit-showcase
+Bundle-Version: 1.0.0
+Bundle-Name: liferay-js-toolkit-showcase
+Web-ContextPath: /liferay-js-toolkit-showcase
+Provide-Capability: osgi.webresource;osgi.webresource=liferay-js-toolkit-showcase;version:Version="1.0.0"
+Require-Capability: osgi.extender;filter:="(&(osgi.extender=liferay.frontend.js.portlet)(version>=1.0.0))"

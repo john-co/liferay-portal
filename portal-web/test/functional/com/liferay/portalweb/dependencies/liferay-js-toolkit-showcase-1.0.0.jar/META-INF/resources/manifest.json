@@ -1,0 +1,205 @@
+{
+  "packages": {
+    "/": {
+      "modules": {
+        "AppComponent.js": {
+          "flags": {
+            "esModule": true
+          }
+        },
+        "Button.js": {
+          "flags": {
+            "esModule": true
+          }
+        },
+        "index.js": {
+          "flags": {
+            "esModule": true
+          }
+        }
+      },
+      "src": {
+        "id": "/",
+        "name": "liferay-js-toolkit-showcase",
+        "version": "1.0.0",
+        "dir": "."
+      },
+      "dest": {
+        "id": "/",
+        "name": "liferay-js-toolkit-showcase",
+        "version": "1.0.0",
+        "dir": "./build"
+      }
+    },
+    "js-tokens@4.0.0": {
+      "modules": {
+        "index.js": {
+          "flags": {
+            "esModule": true
+          }
+        }
+      },
+      "src": {
+        "id": "js-tokens@4.0.0",
+        "name": "js-tokens",
+        "version": "4.0.0",
+        "dir": "./node_modules/js-tokens"
+      },
+      "dest": {
+        "id": "js-tokens@4.0.0",
+        "name": "js-tokens",
+        "version": "4.0.0",
+        "dir": "./build/node_modules/liferay-js-toolkit-showcase$js-tokens@4.0.0"
+      }
+    },
+    "react-is@16.11.0": {
+      "modules": {
+        "cjs/react-is.production.min.js": {
+          "flags": {
+            "esModule": true
+          }
+        },
+        "cjs/react-is.development.js": {
+          "flags": {
+            "esModule": true
+          }
+        },
+        "umd/react-is.development.js": {
+          "flags": {
+            "esModule": true
+          }
+        }
+      },
+      "src": {
+        "id": "react-is@16.11.0",
+        "name": "react-is",
+        "version": "16.11.0",
+        "dir": "./node_modules/react-is"
+      },
+      "dest": {
+        "id": "react-is@16.11.0",
+        "name": "react-is",
+        "version": "16.11.0",
+        "dir": "./build/node_modules/liferay-js-toolkit-showcase$react-is@16.11.0"
+      }
+    },
+    "scheduler@0.13.6": {
+      "modules": {
+        "cjs/scheduler-tracing.production.min.js": {
+          "flags": {
+            "esModule": true
+          }
+        },
+        "cjs/scheduler-tracing.profiling.min.js": {
+          "flags": {
+            "esModule": true
+          }
+        },
+        "cjs/scheduler.production.min.js": {
+          "flags": {
+            "esModule": true
+          }
+        },
+        "cjs/scheduler-tracing.development.js": {
+          "flags": {
+            "esModule": true
+          }
+        },
+        "cjs/scheduler.development.js": {
+          "flags": {
+            "esModule": true
+          }
+        }
+      },
+      "src": {
+        "id": "scheduler@0.13.6",
+        "name": "scheduler",
+        "version": "0.13.6",
+        "dir": "./node_modules/scheduler"
+      },
+      "dest": {
+        "id": "scheduler@0.13.6",
+        "name": "scheduler",
+        "version": "0.13.6",
+        "dir": "./build/node_modules/liferay-js-toolkit-showcase$scheduler@0.13.6"
+      }
+    },
+    "prop-types@15.7.2": {
+      "modules": {
+        "prop-types.js": {
+          "flags": {
+            "esModule": true
+          }
+        }
+      },
+      "src": {
+        "id": "prop-types@15.7.2",
+        "name": "prop-types",
+        "version": "15.7.2",
+        "dir": "./node_modules/prop-types"
+      },
+      "dest": {
+        "id": "prop-types@15.7.2",
+        "name": "prop-types",
+        "version": "15.7.2",
+        "dir": "./build/node_modules/liferay-js-toolkit-showcase$prop-types@15.7.2"
+      }
+    },
+    "object-assign@4.1.1": {
+      "src": {
+        "id": "object-assign@4.1.1",
+        "name": "object-assign",
+        "version": "4.1.1",
+        "dir": "./node_modules/object-assign"
+      },
+      "dest": {
+        "id": "object-assign@4.1.1",
+        "name": "object-assign",
+        "version": "4.1.1",
+        "dir": "./build/node_modules/liferay-js-toolkit-showcase$object-assign@4.1.1"
+      }
+    },
+    "loose-envify@1.4.0": {
+      "src": {
+        "id": "loose-envify@1.4.0",
+        "name": "loose-envify",
+        "version": "1.4.0",
+        "dir": "./node_modules/loose-envify"
+      },
+      "dest": {
+        "id": "loose-envify@1.4.0",
+        "name": "loose-envify",
+        "version": "1.4.0",
+        "dir": "./build/node_modules/liferay-js-toolkit-showcase$loose-envify@1.4.0"
+      }
+    },
+    "react@16.8.6": {
+      "src": {
+        "id": "react@16.8.6",
+        "name": "react",
+        "version": "16.8.6",
+        "dir": "./node_modules/react"
+      },
+      "dest": {
+        "id": "react@16.8.6",
+        "name": "react",
+        "version": "16.8.6",
+        "dir": "./build/node_modules/liferay-js-toolkit-showcase$react@16.8.6"
+      }
+    },
+    "react-dom@16.8.6": {
+      "src": {
+        "id": "react-dom@16.8.6",
+        "name": "react-dom",
+        "version": "16.8.6",
+        "dir": "./node_modules/react-dom"
+      },
+      "dest": {
+        "id": "react-dom@16.8.6",
+        "name": "react-dom",
+        "version": "16.8.6",
+        "dir": "./build/node_modules/liferay-js-toolkit-showcase$react-dom@16.8.6"
+      }
+    }
+  }
+}
