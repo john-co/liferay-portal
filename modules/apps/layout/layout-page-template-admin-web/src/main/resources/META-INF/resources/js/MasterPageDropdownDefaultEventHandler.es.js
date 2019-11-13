@@ -69,7 +69,8 @@ class MasterPageDropdownDefaultEventHandler extends DefaultEventHandler {
 
 				this.one('#layoutPageTemplateEntryId').value =
 					itemData.layoutPageTemplateEntryId;
-				this.one('#fileEntryId').value = itemValue.fileEntryId;
+				this.one('#fileEntryId').value =
+					itemValue.fileEntryId;
 
 				submitForm(this.one('#masterPagePreviewFm'));
 			}
