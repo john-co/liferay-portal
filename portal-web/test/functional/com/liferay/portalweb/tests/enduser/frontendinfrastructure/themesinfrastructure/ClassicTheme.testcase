@@ -43,6 +43,8 @@ definition {
 
 		PortletEntry.save();
 
+		Click(locator1 = "Button#BACK");
+
 		SitePages.gotoPageMenuItem(
 			menuItem = "Configure",
 			pageName = "Classic Theme Page");
