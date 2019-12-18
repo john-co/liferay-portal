@@ -4103,7 +4103,7 @@ log.sanitizer.enabled=false</echo>
 					<path>
 						<dirset
 							dir="modules"
-							excludes="dxp/**,node_modules/**,**/node_modules/**,${base.dir}/**/test/stories/**"
+							excludes="node_modules/**,**/node_modules/**,${base.dir}/**/test/stories/**"
 							includes="**/test"
 						/>
 					</path>
@@ -4175,7 +4175,7 @@ log.sanitizer.enabled=false</echo>
 	<target name="js-unit-private-jdk8">
 		<run-batch-test>
 			<test-action>
-				<gradle-execute dir="modules/dxp" task="packageRunTest">
+				<gradle-execute dir="modules" task="packageRunTest">
 					<arg value="--continue" />
 					<arg value="--parallel" />
 					<arg value="-DpackageRunTest.ignore.failures=true" />
