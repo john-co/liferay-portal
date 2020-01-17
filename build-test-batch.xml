@@ -4215,25 +4215,32 @@ log.sanitizer.enabled=false</echo>
 	<target name="js-unit-jdk8">
 		<run-batch-test>
 			<test-action>
-				<gradle-execute dir="modules" task="packageRunTest">
-					<arg value="--continue" />
-					<arg value="--parallel" />
-					<arg value="-DpackageRunTest.ignore.failures=true" />
-				</gradle-execute>
-
-				<replace
-					dir="modules"
-					includes="**/TEST-frontend-js.xml"
-				>
-					<replacefilter>
-						<replacetoken><![CDATA[<testsuites>]]></replacetoken>
-						<replacevalue><![CDATA[]]></replacevalue>
-					</replacefilter>
-					<replacefilter>
-						<replacetoken><![CDATA[</testsuites>]]></replacetoken>
-						<replacevalue><![CDATA[]]></replacevalue>
-					</replacefilter>
-				</replace>
+				<trycatch property="failure.message">
+					<try>
+						<gradle-execute dir="modules" task="packageRunTest">
+							<arg value="--continue" />
+							<arg value="--parallel" />
+						</gradle-execute>
+					</try>
+					<catch>
+						<echo>${failure.message}</echo>
+					</catch>
+					<finally>
+						<replace
+							dir="modules"
+							includes="**/TEST-frontend-js.xml"
+						>
+							<replacefilter>
+								<replacetoken><![CDATA[<testsuites>]]></replacetoken>
+								<replacevalue><![CDATA[]]></replacevalue>
+							</replacefilter>
+							<replacefilter>
+								<replacetoken><![CDATA[</testsuites>]]></replacetoken>
+								<replacevalue><![CDATA[]]></replacevalue>
+							</replacefilter>
+						</replace>
+					</finally>
+				</trycatch>
 			</test-action>
 
 			<test-set-up>
