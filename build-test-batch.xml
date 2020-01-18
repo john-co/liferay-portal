@@ -4220,6 +4220,7 @@ log.sanitizer.enabled=false</echo>
 						<gradle-execute dir="modules" task="packageRunTest">
 							<arg value="--continue" />
 							<arg value="--parallel" />
+							<arg value="-DpackageRunTest.ignore.failures=false" />
 						</gradle-execute>
 					</try>
 					<catch>
