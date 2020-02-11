@@ -76,6 +76,8 @@ definition {
 
 	@priority = "4"
 	test AddWebContentArticleCopyPasteContent {
+		property portal.acceptance = "summer";
+
 		Navigator.openSpecificURL(url = "http://www.standards-schmandards.com/exhibits/wysiwyg/sampledoc.htm");
 
 		SelectFieldText(locator1 = "//body");
