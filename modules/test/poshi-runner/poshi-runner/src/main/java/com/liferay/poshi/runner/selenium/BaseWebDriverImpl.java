@@ -2334,6 +2334,16 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 	}
 
 	@Override
+	public void selectFieldTextCopy() {
+		LiferaySeleniumHelper.selectFieldTextCopy();
+	}
+
+	@Override
+	public void selectFieldTextPaste() {
+		LiferaySeleniumHelper.selectFieldTextPaste();
+	}
+
+	@Override
 	public void selectFrame(String locator) {
 		WebDriver.TargetLocator targetLocator = switchTo();
 

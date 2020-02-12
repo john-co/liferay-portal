@@ -82,17 +82,7 @@ definition {
 
 		SelectFieldText(locator1 = "//body");
 
-		KeyPress.keyDown(
-  			locator1 = "//body",
-  			value1 = "\CONTROL");
-
-		KeyPress(
-  			locator1 = "//body",
-  			value1 = "c");
-
-		KeyPress.keyUp(
-  			locator1 = "//body",
-  			value1 = "\CONTROL");
+		SelectFieldText.selectFieldTextCopy(locator1 = "//body");
 
 		Navigator.openURL();
 
@@ -105,24 +95,9 @@ definition {
 
 		PortletEntry.inputTitle(title = "Web Content Title");
 
-		Click(
+		SelectFieldText.selectFieldTextPaste(
 			key_editor = "content",
 			locator1 = "AlloyEditor#EDITOR");
-
-		KeyPress.keyDown(
-			key_editor = "content",
-  			locator1 = "AlloyEditor#EDITOR",
-  			value1 = "\CONTROL");
-
-		KeyPress(
-			key_editor = "content",
-  			locator1 = "AlloyEditor#EDITOR",
-  			value1 = "v");
-
-		KeyPress.keyUp(
-  			key_editor = "content",
-  			locator1 = "AlloyEditor#EDITOR",
-  			value1 = "\CONTROL");
 
 		takeScreenshot();
 
