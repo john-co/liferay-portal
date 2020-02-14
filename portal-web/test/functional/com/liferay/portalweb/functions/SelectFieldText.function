@@ -15,10 +15,6 @@ definition {
 	}
 
 	function selectFieldTextCopy {
-		WaitForSPARefresh();
-
-		Click();
-
 		selenium.selectFieldTextCopy();
 
 		selenium.assertJavaScriptErrors();
@@ -28,8 +24,6 @@ definition {
 
 	function selectFieldTextPaste {
 		WaitForSPARefresh();
-
-		Click();
 
 		selenium.selectFieldTextPaste();
 

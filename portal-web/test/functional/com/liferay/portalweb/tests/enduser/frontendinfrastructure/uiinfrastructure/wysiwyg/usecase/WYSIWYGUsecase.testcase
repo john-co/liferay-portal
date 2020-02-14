@@ -82,7 +82,7 @@ definition {
 
 		SelectFieldText(locator1 = "//body");
 
-		SelectFieldText.selectFieldTextCopy(locator1 = "//body");
+		SelectFieldText.selectFieldTextCopy();
 
 		Navigator.openURL();
 
@@ -95,9 +95,11 @@ definition {
 
 		PortletEntry.inputTitle(title = "Web Content Title");
 
-		SelectFieldText.selectFieldTextPaste(
+		Click(
 			key_editor = "content",
 			locator1 = "AlloyEditor#EDITOR");
+
+		SelectFieldText.selectFieldTextPaste();
 
 		takeScreenshot();
 
