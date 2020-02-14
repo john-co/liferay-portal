@@ -22,6 +22,8 @@ definition {
 	@description = "This is a use case for LPS-95157."
 	@priority = "5"
 	test RefreshWebContentAndHomePage {
+		property portal.acceptance = "john-co";
+
 		ProductMenu.gotoPortlet(
 			category = "Content &amp; Data",
 			panel = "Site Administration",
