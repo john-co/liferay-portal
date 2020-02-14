@@ -1168,6 +1168,8 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 
 		File dir = new File(dirPath);
 
+		dir = dir.getCanonicalFile();
+
 		for (File file :
 				dir.listFiles((folder, name) -> name.endsWith(".jar"))) {
 
@@ -1252,6 +1254,8 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 			null);
 
 		File dir = new File(PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR);
+
+		dir = dir.getCanonicalFile();
 
 		for (File file : dir.listFiles()) {
 			method.invoke(configInstaller, file);
@@ -1595,6 +1599,8 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 			try (InputStream inputStream = Files.newInputStream(jarPath)) {
 				File file = jarPath.toFile();
 
+				file = file.getCanonicalFile();
+
 				URI uri = file.toURI();
 
 				String uriString = uri.toString();
@@ -1619,6 +1625,8 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 				StaticLPKGResolver.getStaticLPKGFileNames()) {
 
 			File file = new File(deployDir + StringPool.SLASH + staticFileName);
+
+			file = file.getCanonicalFile();
 
 			if (file.exists()) {
 				bundles.addAll(

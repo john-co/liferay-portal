@@ -14,7 +14,7 @@
 
 import ClayButton from '@clayui/button';
 import {useIsMounted} from 'frontend-js-react-web';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import ReactDOM from 'react-dom';
 
 import useLazy from '../../core/hooks/useLazy';
@@ -42,12 +42,9 @@ function ToolbarBody() {
 	const store = useSelector(state => state);
 
 	const {masterUsed, portletNamespace} = config;
-	const {segmentsExperienceId, segmentsExperimentStatus} = store;
-
-	const {draft} = store;
+	const {layoutData, segmentsExperienceId, segmentsExperimentStatus} = store;
 
 	const {
-		classPK,
 		discardDraftRedirectURL,
 		discardDraftURL,
 		pageType,
@@ -58,6 +55,14 @@ function ToolbarBody() {
 		toolbarPlugins,
 		workflowEnabled
 	} = config;
+
+	const [enableDiscard, setEnableDiscard] = useState(false);
+
+	useEffect(() => {
+		const mainItemId = layoutData.rootItems.main;
+		const mainItem = layoutData.items[mainItemId];
+		setEnableDiscard(mainItem.children.length > 0);
+	}, [layoutData]);
 
 	const loading = useRef(() => {
 		Promise.all(
@@ -208,12 +213,6 @@ function ToolbarBody() {
 				<li className="nav-item">
 					<form action={discardDraftURL} method="POST">
 						<input
-							name={`${portletNamespace}classPK`}
-							type="hidden"
-							value={classPK ? classPK : ''}
-						/>
-
-						<input
 							name={`${portletNamespace}redirect`}
 							type="hidden"
 							value={discardDraftRedirectURL}
@@ -221,7 +220,7 @@ function ToolbarBody() {
 
 						<ClayButton
 							className="btn btn-secondary mr-3"
-							disabled={!draft}
+							disabled={!enableDiscard}
 							displayType="secondary"
 							onClick={handleDiscardDraft}
 							small
@@ -235,12 +234,6 @@ function ToolbarBody() {
 				</li>
 				<li className="nav-item">
 					<form action={publishURL} method="POST">
-						<input
-							name={`${portletNamespace}classPK`}
-							type="hidden"
-							value={classPK}
-						/>
-
 						<input
 							name={`${portletNamespace}redirect`}
 							type="hidden"

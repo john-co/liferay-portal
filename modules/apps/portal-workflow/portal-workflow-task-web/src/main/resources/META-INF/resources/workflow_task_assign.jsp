@@ -17,13 +17,13 @@
 <%@ include file="/init.jsp" %>
 
 <%
-WorkflowTask workflowTask = workflowTaskDisplayContext.getWorkflowTask();
-
-boolean hasAssignableUsers = workflowTaskDisplayContext.hasAssignableUsers(workflowTask);
+String redirect = ParamUtil.getString(request, "redirect");
 
 long assigneeUserId = ParamUtil.getLong(renderRequest, "assigneeUserId");
 
-String redirect = ParamUtil.getString(request, "redirect");
+WorkflowTask workflowTask = workflowTaskDisplayContext.getWorkflowTask();
+
+boolean hasAssignableUsers = workflowTaskDisplayContext.hasAssignableUsers(workflowTask);
 %>
 
 <liferay-portlet:resourceURL copyCurrentRenderParameters="<%= false %>" id="assignWorkflowTask" var="assignURL" />

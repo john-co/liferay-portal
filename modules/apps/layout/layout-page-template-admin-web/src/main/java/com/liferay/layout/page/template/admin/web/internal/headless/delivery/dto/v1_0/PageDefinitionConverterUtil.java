@@ -19,6 +19,7 @@ import com.liferay.fragment.renderer.FragmentRendererTracker;
 import com.liferay.fragment.util.configuration.FragmentEntryConfigurationParser;
 import com.liferay.headless.delivery.dto.v1_0.ColumnDefinition;
 import com.liferay.headless.delivery.dto.v1_0.FragmentImage;
+import com.liferay.headless.delivery.dto.v1_0.Layout;
 import com.liferay.headless.delivery.dto.v1_0.PageDefinition;
 import com.liferay.headless.delivery.dto.v1_0.PageElement;
 import com.liferay.headless.delivery.dto.v1_0.RowDefinition;
@@ -34,7 +35,6 @@ import com.liferay.layout.util.structure.LayoutStructureItem;
 import com.liferay.layout.util.structure.RootLayoutStructureItem;
 import com.liferay.layout.util.structure.RowLayoutStructureItem;
 import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 
@@ -50,16 +50,63 @@ public class PageDefinitionConverterUtil {
 		FragmentCollectionContributorTracker
 			fragmentCollectionContributorTracker,
 		FragmentEntryConfigurationParser fragmentEntryConfigurationParser,
-		FragmentRendererTracker fragmentRendererTracker, Layout layout) {
+		FragmentRendererTracker fragmentRendererTracker,
+		com.liferay.portal.kernel.model.Layout layout) {
 
 		return new PageDefinition() {
 			{
-				pageElements = _toPageElements(
+				pageElement = _toPageElement(
 					fragmentCollectionContributorTracker,
 					fragmentEntryConfigurationParser, fragmentRendererTracker,
 					layout);
 			}
 		};
+	}
+
+	private static PageElement _toPageElement(
+		FragmentCollectionContributorTracker
+			fragmentCollectionContributorTracker,
+		FragmentEntryConfigurationParser fragmentEntryConfigurationParser,
+		FragmentRendererTracker fragmentRendererTracker,
+		com.liferay.portal.kernel.model.Layout layout) {
+
+		LayoutPageTemplateStructure layoutPageTemplateStructure =
+			LayoutPageTemplateStructureLocalServiceUtil.
+				fetchLayoutPageTemplateStructure(
+					layout.getGroupId(),
+					PortalUtil.getClassNameId(
+						com.liferay.portal.kernel.model.Layout.class),
+					layout.getPlid());
+
+		LayoutStructure layoutStructure = LayoutStructure.of(
+			layoutPageTemplateStructure.getData(0L));
+
+		LayoutStructureItem mainLayoutStructureItem =
+			layoutStructure.getLayoutStructureItem(
+				layoutStructure.getMainItemId());
+
+		List<PageElement> mainPageElements = new ArrayList<>();
+
+		for (String childItemId :
+				mainLayoutStructureItem.getChildrenItemIds()) {
+
+			mainPageElements.add(
+				_toPageElement(
+					fragmentCollectionContributorTracker,
+					fragmentEntryConfigurationParser, fragmentRendererTracker,
+					layoutStructure,
+					layoutStructure.getLayoutStructureItem(childItemId)));
+		}
+
+		PageElement pageElement = _toPageElement(
+			fragmentCollectionContributorTracker,
+			fragmentEntryConfigurationParser, fragmentRendererTracker,
+			mainLayoutStructureItem);
+
+		pageElement.setPageElements(
+			mainPageElements.toArray(new PageElement[0]));
+
+		return pageElement;
 	}
 
 	private static PageElement _toPageElement(
@@ -143,13 +190,19 @@ public class PageDefinitionConverterUtil {
 								containerLayoutStructureItem.
 									getBackgroundColorCssClass(),
 								null);
-							paddingBottom =
-								containerLayoutStructureItem.getPaddingBottom();
-							paddingHorizontal =
-								containerLayoutStructureItem.
-									getPaddingHorizontal();
-							paddingTop =
-								containerLayoutStructureItem.getPaddingTop();
+							layout = new Layout() {
+								{
+									paddingBottom =
+										containerLayoutStructureItem.
+											getPaddingBottom();
+									paddingHorizontal =
+										containerLayoutStructureItem.
+											getPaddingHorizontal();
+									paddingTop =
+										containerLayoutStructureItem.
+											getPaddingTop();
+								}
+							};
 
 							setBackgroundImage(
 								() -> {
@@ -195,11 +248,12 @@ public class PageDefinitionConverterUtil {
 			return new PageElement() {
 				{
 					definition =
-						FragmentDefinitionConverterUtil.toFragmentDefinition(
-							fragmentCollectionContributorTracker,
-							fragmentEntryConfigurationParser,
-							fragmentLayoutStructureItem,
-							fragmentRendererTracker);
+						FragmentInstanceDefinitionConverterUtil.
+							toFragmentInstanceDefinition(
+								fragmentCollectionContributorTracker,
+								fragmentEntryConfigurationParser,
+								fragmentLayoutStructureItem,
+								fragmentRendererTracker);
 					type = PageElement.Type.FRAGMENT;
 				}
 			};
@@ -232,53 +286,6 @@ public class PageDefinitionConverterUtil {
 		}
 
 		return null;
-	}
-
-	private static PageElement[] _toPageElements(
-		FragmentCollectionContributorTracker
-			fragmentCollectionContributorTracker,
-		FragmentEntryConfigurationParser fragmentEntryConfigurationParser,
-		FragmentRendererTracker fragmentRendererTracker, Layout layout) {
-
-		List<PageElement> pageElements = new ArrayList<>();
-
-		LayoutPageTemplateStructure layoutPageTemplateStructure =
-			LayoutPageTemplateStructureLocalServiceUtil.
-				fetchLayoutPageTemplateStructure(
-					layout.getGroupId(),
-					PortalUtil.getClassNameId(Layout.class), layout.getPlid());
-
-		LayoutStructure layoutStructure = LayoutStructure.of(
-			layoutPageTemplateStructure.getData(0L));
-
-		LayoutStructureItem mainLayoutStructureItem =
-			layoutStructure.getLayoutStructureItem(
-				layoutStructure.getMainItemId());
-
-		List<PageElement> mainPageElements = new ArrayList<>();
-
-		for (String childItemId :
-				mainLayoutStructureItem.getChildrenItemIds()) {
-
-			mainPageElements.add(
-				_toPageElement(
-					fragmentCollectionContributorTracker,
-					fragmentEntryConfigurationParser, fragmentRendererTracker,
-					layoutStructure,
-					layoutStructure.getLayoutStructureItem(childItemId)));
-		}
-
-		PageElement pageElement = _toPageElement(
-			fragmentCollectionContributorTracker,
-			fragmentEntryConfigurationParser, fragmentRendererTracker,
-			mainLayoutStructureItem);
-
-		pageElement.setPageElements(
-			mainPageElements.toArray(new PageElement[0]));
-
-		pageElements.add(pageElement);
-
-		return pageElements.toArray(new PageElement[0]);
 	}
 
 }

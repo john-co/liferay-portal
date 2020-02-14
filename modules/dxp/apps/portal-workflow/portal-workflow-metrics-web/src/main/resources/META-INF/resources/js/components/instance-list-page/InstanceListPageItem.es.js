@@ -16,6 +16,7 @@ import React, {useCallback, useContext, useEffect, useState} from 'react';
 import Icon from '../../shared/components/Icon.es';
 import QuickActionKebab from '../../shared/components/quick-action-kebab/QuickActionKebab.es';
 import moment from '../../shared/util/moment.es';
+import {capitalize} from '../../shared/util/util.es';
 import {ModalContext} from './modal/ModalContext.es';
 import {InstanceListContext} from './store/InstanceListPageStore.es';
 
@@ -163,14 +164,23 @@ const Item = ({totalCount, ...taskItem}) => {
 			</ClayTable.Cell>
 
 			<ClayTable.Cell style={{paddingRight: '0rem'}}>
-				<QuickActionMenu disabled={completed} taskItem={taskItem} />
+				<QuickActionMenu
+					disabled={completed}
+					taskItem={taskItem}
+					transitions={taskItem.transitions}
+				/>
 			</ClayTable.Cell>
 		</ClayTable.Row>
 	);
 };
 
-const QuickActionMenu = ({disabled, taskItem}) => {
-	const {bulkModal, setBulkModal, setSingleModal} = useContext(ModalContext);
+const QuickActionMenu = ({disabled, taskItem, transitions = []}) => {
+	const {
+		bulkModal,
+		setBulkModal,
+		setSingleModal,
+		setSingleTransition
+	} = useContext(ModalContext);
 
 	const handleClickReassignTask = useCallback(
 		() => {
@@ -190,13 +200,42 @@ const QuickActionMenu = ({disabled, taskItem}) => {
 		[taskItem]
 	);
 
+	const transitionLabel = capitalize(Liferay.Language.get('transition'));
+
 	const kebabItems = [
 		{
-			action: handleClickReassignTask,
 			icon: 'change',
-			title: Liferay.Language.get('reassign-task')
+			label: Liferay.Language.get('reassign-task'),
+			onClick: handleClickReassignTask
 		}
 	];
+
+	if (transitions.length > 0) {
+		const transitionItems = [
+			{
+				type: 'divider'
+			},
+			{
+				items: transitions.map(({label, name}) => ({
+					label,
+					name,
+					onClick: () => {
+						setSingleTransition({
+							selectedItemId: taskItem.id,
+							title: label,
+							transitionName: name,
+							visible: true
+						});
+					}
+				})),
+				label: transitionLabel,
+				name: transitionLabel,
+				type: 'group'
+			}
+		];
+
+		kebabItems.push(...transitionItems);
+	}
 
 	return (
 		<div className="autofit-col">

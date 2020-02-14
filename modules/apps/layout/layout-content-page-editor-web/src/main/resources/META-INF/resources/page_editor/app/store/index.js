@@ -37,10 +37,11 @@ const INITIAL_STATE = {
 	network: {
 		error: null,
 		lastFetch: null,
-		status: SERVICE_NETWORK_STATUS_TYPES.Idle
+		status: SERVICE_NETWORK_STATUS_TYPES.draftSaved
 	},
 	reducers: {},
-	sidebarOpen: true
+	sidebarOpen: true,
+	singleSegmentsExperienceMode: false
 };
 
 /**

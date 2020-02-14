@@ -14,7 +14,7 @@
 
 import {useEventListener} from 'frontend-js-react-web';
 import {openToast} from 'frontend-js-web';
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {SERVICE_NETWORK_STATUS_TYPES} from '../config/constants/serviceNetworkStatusTypes';
 
@@ -22,7 +22,7 @@ const getStatus = (isOnline, status, lastSaveDate) => {
 	if (!isOnline) {
 		return `${Liferay.Language.get('trying-to-reconnect')}...`;
 	}
-	else if (status === SERVICE_NETWORK_STATUS_TYPES.Fetching) {
+	else if (status === SERVICE_NETWORK_STATUS_TYPES.savingDraft) {
 		return Liferay.Language.get('saving-changes');
 	}
 	else if (lastSaveDate) {
@@ -32,26 +32,29 @@ const getStatus = (isOnline, status, lastSaveDate) => {
 	return null;
 };
 
+const parseDate = date => {
+	if (!date) {
+		return null;
+	}
+
+	const lastSaveDateText = Liferay.Language.get('draft-saved-at-x');
+
+	return lastSaveDateText.replace(
+		'{0}',
+		date.toLocaleTimeString(Liferay.ThemeDisplay.getBCP47LanguageId())
+	);
+};
+
 const NetworkStatusBar = ({error, lastFetch, status}) => {
 	const [isOnline, setIsOnline] = useState(true);
+	const [lastSaveDate, setLastSaveDate] = useState(parseDate(lastFetch));
 
-	const lastSaveDate = useMemo(() => {
-		if (!lastFetch) {
-			return null;
-		}
-
-		const lastSaveDateText = Liferay.Language.get('draft-saved-at-x');
-
-		return lastSaveDateText.replace(
-			'{0}',
-			lastFetch.toLocaleTimeString(
-				Liferay.ThemeDisplay.getBCP47LanguageId()
-			)
-		);
+	useEffect(() => {
+		setLastSaveDate(parseDate(lastFetch));
 	}, [lastFetch]);
 
 	useEffect(() => {
-		if (status === SERVICE_NETWORK_STATUS_TYPES.Error) {
+		if (status === SERVICE_NETWORK_STATUS_TYPES.error) {
 			openToast({
 				message: error,
 				title: Liferay.Language.get('error'),

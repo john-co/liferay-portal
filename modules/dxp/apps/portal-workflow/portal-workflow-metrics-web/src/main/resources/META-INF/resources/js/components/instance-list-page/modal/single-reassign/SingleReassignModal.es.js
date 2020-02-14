@@ -18,6 +18,7 @@ import EmptyState from '../../../../shared/components/empty-state/EmptyState.es'
 import RetryButton from '../../../../shared/components/list/RetryButton.es';
 import LoadingState from '../../../../shared/components/loading/LoadingState.es';
 import PromisesResolver from '../../../../shared/components/promises-resolver/PromisesResolver.es';
+import {useToaster} from '../../../../shared/components/toaster/hooks/useToaster.es';
 import {useFetch} from '../../../../shared/hooks/useFetch.es';
 import {usePost} from '../../../../shared/hooks/usePost.es';
 import {InstanceListContext} from '../../store/InstanceListPageStore.es';
@@ -48,7 +49,8 @@ const SingleReassignModal = () => {
 	const [assigneeId, setAssigneeId] = useState();
 	const [retry, setRetry] = useState(0);
 	const [sendingPost, setSendingPost] = useState(false);
-	const [successToast, setSuccessToast] = useState([]);
+
+	const toaster = useToaster();
 
 	const {setSingleModal, singleModal} = useContext(ModalContext);
 	const {setSelectedItems} = useContext(InstanceListContext);
@@ -80,16 +82,14 @@ const SingleReassignModal = () => {
 
 	const reassignButtonHandler = useCallback(() => {
 		if (assigneeId && taskId) {
-			setSendingPost(true);
-			setErrorToast(false);
-
+			setErrorToast(() => false);
+			setSendingPost(() => true);
 			postData()
 				.then(() => {
 					onClose();
-					setSuccessToast([
-						...successToast,
+					toaster.success(
 						Liferay.Language.get('this-task-has-been-reassigned')
-					]);
+					);
 					setErrorToast(false);
 					setSendingPost(false);
 					setSelectedItems([]);
@@ -98,9 +98,6 @@ const SingleReassignModal = () => {
 					setErrorToast(true);
 					setSendingPost(false);
 				});
-		}
-		else {
-			onClose();
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [postData]);
@@ -122,25 +119,6 @@ const SingleReassignModal = () => {
 
 	return (
 		<>
-			<ClayAlert.ToastContainer data-testid="alertContainer">
-				{successToast.map(value => (
-					<ClayAlert
-						autoClose={5000}
-						data-testid="alertSuccess"
-						displayType={'success'}
-						key={value}
-						onClose={() => {
-							setSuccessToast(prevItems =>
-								prevItems.filter(item => item !== value)
-							);
-						}}
-						title={Liferay.Language.get('success')}
-					>
-						{value}
-					</ClayAlert>
-				))}
-			</ClayAlert.ToastContainer>
-
 			<PromisesResolver promises={promises}>
 				{singleModal.visible && (
 					<ClayModal

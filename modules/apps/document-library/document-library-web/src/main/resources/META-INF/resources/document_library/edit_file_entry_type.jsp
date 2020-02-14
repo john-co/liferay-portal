@@ -33,13 +33,20 @@ if (fileEntryType != null) {
 	ddmStructures = fileEntryType.getDDMStructures();
 
 	if (ddmStructure != null) {
-		ddmStructures = new ArrayList<>(ddmStructures);
-
-		ddmStructures.remove(ddmStructure);
+		ddmStructures = ListUtil.filter(fileEntryType.getDDMStructures(), currentDDMStructure -> currentDDMStructure.getStructureId() != ddmStructure.getStructureId());
 	}
 }
 
+String ddmStructureKey = StringPool.BLANK;
+String fileEntryTypeUuid = StringPool.BLANK;
+
 DLEditFileEntryTypeDisplayContext dlEditFileEntryTypeDisplayContext = (DLEditFileEntryTypeDisplayContext)request.getAttribute(DLWebKeys.DOCUMENT_LIBRARY_EDIT_EDIT_FILE_ENTRY_TYPE_DISPLAY_CONTEXT);
+
+if ((ddmStructure == null) && dlEditFileEntryTypeDisplayContext.useDataEngineEditor()) {
+	fileEntryTypeUuid = (fileEntryType != null) ? fileEntryType.getUuid() : PortalUUIDUtil.generate();
+
+	ddmStructureKey = DLUtil.getDDMStructureKey(fileEntryTypeUuid);
+}
 
 portletDisplay.setShowBackIcon(true);
 portletDisplay.setURLBack(redirect);
@@ -60,10 +67,11 @@ renderResponse.setTitle((fileEntryType == null) ? LanguageUtil.get(request, "new
 		<portlet:param name="mvcRenderCommandName" value="/document_library/edit_file_entry_type" />
 	</portlet:actionURL>
 
-	<aui:form action="<%= dlEditFileEntryTypeDisplayContext.useDataEngineEditor() ? StringPool.BLANK : editFileEntryTypeURL %>" method="post" name="fm" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "saveStructure();" %>'>
+	<aui:form action="<%= editFileEntryTypeURL %>" method="post" name="fm" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "saveStructure();" %>'>
 		<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= (fileEntryType == null) ? Constants.ADD : Constants.UPDATE %>" />
 		<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
 		<aui:input name="fileEntryTypeId" type="hidden" value="<%= fileEntryTypeId %>" />
+		<aui:input name="fileEntryTypeUuid" type="hidden" value="<%= fileEntryTypeUuid %>" />
 		<aui:input name="ddmStructureId" type="hidden" value="<%= ddmStructureId %>" />
 		<aui:input name="definition" type="hidden" />
 
@@ -209,6 +217,44 @@ function <portlet:namespace />openDDMStructureSelector() {
 function <portlet:namespace />saveStructure() {
 	<c:choose>
 		<c:when test="<%= dlEditFileEntryTypeDisplayContext.useDataEngineEditor() %>">
+			Liferay.componentReady(
+				'<%= renderResponse.getNamespace() + "dataLayoutBuilder" %>'
+			).then(function(dataLayoutBuilder) {
+				var name =
+					document.<portlet:namespace />fm[
+						'<portlet:namespace />name_' + themeDisplay.getLanguageId()
+					].value;
+				var description =
+					document.<portlet:namespace />fm['<portlet:namespace />description']
+						.value;
+
+				dataLayoutBuilder
+					.save({
+						dataDefinition: {
+							description: {
+								value: description
+							},
+							name: {
+								value: name
+							},
+							dataDefinitionKey: '<%= ddmStructureKey %>'
+						},
+						dataLayout: {
+							description: {
+								value: description
+							},
+							name: {
+								value: name
+							}
+						}
+					})
+					.then(function(dataLayout) {
+						document.<portlet:namespace />fm[
+							'<portlet:namespace />ddmStructureId'
+						].value = dataLayout.id;
+						submitForm(document.<portlet:namespace />fm);
+					});
+			});
 		</c:when>
 		<c:otherwise>
 			document.<portlet:namespace />fm.<portlet:namespace />definition.value = window.<portlet:namespace />formBuilder.getContentValue();

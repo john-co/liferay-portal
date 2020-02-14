@@ -29,6 +29,9 @@ import com.liferay.fragment.util.configuration.FragmentEntryConfigurationParser;
 import com.liferay.item.selector.ItemSelector;
 import com.liferay.layout.content.page.editor.constants.ContentPageEditorPortletKeys;
 import com.liferay.layout.content.page.editor.web.internal.util.FragmentEntryLinkItemSelectorUtil;
+import com.liferay.layout.content.page.editor.web.internal.util.FragmentEntryLinkUtil;
+import com.liferay.layout.content.page.editor.web.internal.util.layout.structure.LayoutStructureUtil;
+import com.liferay.layout.util.structure.LayoutStructureItem;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -51,9 +54,6 @@ import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.segments.constants.SegmentsExperienceConstants;
 
-import java.util.Locale;
-import java.util.Map;
-
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
@@ -62,7 +62,7 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * @author Jürgen Kappler
+ * @author Víctor Galán
  */
 @Component(
 	immediate = true,
@@ -84,150 +84,16 @@ public class AddFragmentEntryLinkMVCActionCommand
 		return super.processAction(actionRequest, actionResponse);
 	}
 
-	protected FragmentEntryLink addFragmentEntryLink(
-			ActionRequest actionRequest)
-		throws PortalException {
-
-		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
-			WebKeys.THEME_DISPLAY);
-
-		long groupId = ParamUtil.getLong(actionRequest, "groupId");
-		String fragmentEntryKey = ParamUtil.getString(
-			actionRequest, "fragmentKey");
-
-		ServiceContext serviceContext = ServiceContextFactory.getInstance(
-			actionRequest);
-
-		FragmentEntry fragmentEntry = _getFragmentEntry(
-			groupId, fragmentEntryKey, serviceContext);
-
-		FragmentRenderer fragmentRenderer =
-			_fragmentRendererTracker.getFragmentRenderer(fragmentEntryKey);
-
-		if ((fragmentEntry == null) && (fragmentRenderer == null)) {
-			throw new NoSuchEntryException();
-		}
-
-		FragmentEntryLink fragmentEntryLink = null;
-
-		if (fragmentEntry != null) {
-			String contributedRendererKey = null;
-
-			if (fragmentEntry.getFragmentEntryId() == 0) {
-				contributedRendererKey = fragmentEntryKey;
-			}
-
-			fragmentEntryLink = _fragmentEntryLinkService.addFragmentEntryLink(
-				serviceContext.getScopeGroupId(), 0,
-				fragmentEntry.getFragmentEntryId(),
-				_portal.getClassNameId(Layout.class), themeDisplay.getPlid(),
-				fragmentEntry.getCss(), fragmentEntry.getHtml(),
-				fragmentEntry.getJs(), fragmentEntry.getConfiguration(), null,
-				StringPool.BLANK, 0, contributedRendererKey, serviceContext);
-		}
-		else {
-			fragmentEntryLink = _fragmentEntryLinkService.addFragmentEntryLink(
-				serviceContext.getScopeGroupId(), 0, 0,
-				_portal.getClassNameId(Layout.class), themeDisplay.getPlid(),
-				StringPool.BLANK, StringPool.BLANK, StringPool.BLANK,
-				StringPool.BLANK, StringPool.BLANK, StringPool.BLANK, 0,
-				fragmentEntryKey, serviceContext);
-		}
-
-		return fragmentEntryLink;
-	}
-
 	@Override
 	protected void doProcessAction(
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
-		JSONObject jsonObject = _processAddFragmentEntryLink(
-			actionRequest, actionResponse);
-
-		hideDefaultSuccessMessage(actionRequest);
-
-		JSONPortletResponseUtil.writeJSON(
-			actionRequest, actionResponse, jsonObject);
-	}
-
-	private FragmentEntry _getContributedFragmentEntry(
-		String fragmentEntryKey, Locale locale) {
-
-		Map<String, FragmentEntry> fragmentEntries =
-			_fragmentCollectionContributorTracker.getFragmentEntries(locale);
-
-		return fragmentEntries.get(fragmentEntryKey);
-	}
-
-	private FragmentEntry _getFragmentEntry(
-		long groupId, String fragmentEntryKey, ServiceContext serviceContext) {
-
-		FragmentEntry fragmentEntry =
-			_fragmentEntryLocalService.fetchFragmentEntry(
-				groupId, fragmentEntryKey);
-
-		if (fragmentEntry != null) {
-			return fragmentEntry;
-		}
-
-		return _getContributedFragmentEntry(
-			fragmentEntryKey, serviceContext.getLocale());
-	}
-
-	private JSONObject _processAddFragmentEntryLink(
-		ActionRequest actionRequest, ActionResponse actionResponse) {
-
-		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
-			WebKeys.THEME_DISPLAY);
-
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 
 		try {
-			FragmentEntryLink fragmentEntryLink = addFragmentEntryLink(
-				actionRequest);
-
-			DefaultFragmentRendererContext defaultFragmentRendererContext =
-				new DefaultFragmentRendererContext(fragmentEntryLink);
-
-			defaultFragmentRendererContext.setLocale(themeDisplay.getLocale());
-			defaultFragmentRendererContext.setMode(
-				FragmentEntryLinkConstants.EDIT);
-			defaultFragmentRendererContext.setSegmentsExperienceIds(
-				new long[] {SegmentsExperienceConstants.ID_DEFAULT});
-
-			String configuration = _fragmentRendererController.getConfiguration(
-				defaultFragmentRendererContext);
-
-			JSONObject configurationJSONObject =
-				JSONFactoryUtil.createJSONObject(configuration);
-
-			FragmentEntryLinkItemSelectorUtil.
-				addFragmentEntryLinkFieldsSelectorURL(
-					_itemSelector, _portal.getHttpServletRequest(actionRequest),
-					_portal.getLiferayPortletResponse(actionResponse),
-					configurationJSONObject);
-
-			jsonObject.put(
-				"configuration", configurationJSONObject
-			).put(
-				"content",
-				_fragmentRendererController.render(
-					defaultFragmentRendererContext,
-					_portal.getHttpServletRequest(actionRequest),
-					_portal.getHttpServletResponse(actionResponse))
-			).put(
-				"defaultConfigurationValues",
-				_fragmentEntryConfigurationParser.
-					getConfigurationDefaultValuesJSONObject(configuration)
-			).put(
-				"editableValues",
-				JSONFactoryUtil.createJSONObject(
-					fragmentEntryLink.getEditableValues())
-			).put(
-				"fragmentEntryLinkId",
-				fragmentEntryLink.getFragmentEntryLinkId()
-			);
+			jsonObject = _processAddFragmentEntryLink(
+				actionRequest, actionResponse);
 
 			SessionMessages.add(actionRequest, "fragmentEntryLinkAdded");
 		}
@@ -244,10 +110,135 @@ public class AddFragmentEntryLinkMVCActionCommand
 
 			jsonObject.put(
 				"error",
-				LanguageUtil.get(themeDisplay.getRequest(), errorMessage));
+				LanguageUtil.get(
+					_portal.getHttpServletRequest(actionRequest),
+					errorMessage));
 		}
 
-		return jsonObject;
+		hideDefaultSuccessMessage(actionRequest);
+
+		JSONPortletResponseUtil.writeJSON(
+			actionRequest, actionResponse, jsonObject);
+	}
+
+	private FragmentEntryLink _addFragmentEntryLink(ActionRequest actionRequest)
+		throws PortalException {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		long groupId = ParamUtil.getLong(actionRequest, "groupId");
+		String fragmentEntryKey = ParamUtil.getString(
+			actionRequest, "fragmentEntryKey");
+
+		ServiceContext serviceContext = ServiceContextFactory.getInstance(
+			actionRequest);
+
+		FragmentEntry fragmentEntry = FragmentEntryLinkUtil.getFragmentEntry(
+			groupId, _fragmentCollectionContributorTracker, fragmentEntryKey,
+			serviceContext.getLocale());
+
+		FragmentRenderer fragmentRenderer =
+			_fragmentRendererTracker.getFragmentRenderer(fragmentEntryKey);
+
+		if ((fragmentEntry == null) && (fragmentRenderer == null)) {
+			throw new NoSuchEntryException();
+		}
+
+		if (fragmentEntry != null) {
+			String contributedRendererKey = null;
+
+			if (fragmentEntry.getFragmentEntryId() == 0) {
+				contributedRendererKey = fragmentEntryKey;
+			}
+
+			return _fragmentEntryLinkService.addFragmentEntryLink(
+				serviceContext.getScopeGroupId(), 0,
+				fragmentEntry.getFragmentEntryId(),
+				_portal.getClassNameId(Layout.class), themeDisplay.getPlid(),
+				fragmentEntry.getCss(), fragmentEntry.getHtml(),
+				fragmentEntry.getJs(), fragmentEntry.getConfiguration(), null,
+				StringPool.BLANK, 0, contributedRendererKey, serviceContext);
+		}
+
+		return _fragmentEntryLinkService.addFragmentEntryLink(
+			serviceContext.getScopeGroupId(), 0, 0,
+			_portal.getClassNameId(Layout.class), themeDisplay.getPlid(),
+			StringPool.BLANK, StringPool.BLANK, StringPool.BLANK,
+			StringPool.BLANK, StringPool.BLANK, StringPool.BLANK, 0,
+			fragmentEntryKey, serviceContext);
+	}
+
+	private JSONObject _addFragmentEntryLinkToLayoutDataJSONObject(
+			ActionRequest actionRequest, long fragmentEntryLinkId)
+		throws PortalException {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		long segmentsExperienceId = ParamUtil.getLong(
+			actionRequest, "segmentsExperienceId",
+			SegmentsExperienceConstants.ID_DEFAULT);
+		String parentItemId = ParamUtil.getString(
+			actionRequest, "parentItemId");
+		int position = ParamUtil.getInteger(actionRequest, "position");
+
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+
+		JSONObject layoutDataJSONObject =
+			LayoutStructureUtil.updateLayoutPageTemplateData(
+				themeDisplay.getScopeGroupId(), segmentsExperienceId,
+				themeDisplay.getPlid(),
+				layoutStructure -> {
+					LayoutStructureItem layoutStructureItem =
+						layoutStructure.addFragmentLayoutStructureItem(
+							fragmentEntryLinkId, parentItemId, position);
+
+					jsonObject.put(
+						"addedItemId", layoutStructureItem.getItemId());
+				});
+
+		return jsonObject.put("layoutData", layoutDataJSONObject);
+	}
+
+	private JSONObject _processAddFragmentEntryLink(
+			ActionRequest actionRequest, ActionResponse actionResponse)
+		throws Exception {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		FragmentEntryLink fragmentEntryLink = _addFragmentEntryLink(
+			actionRequest);
+
+		DefaultFragmentRendererContext defaultFragmentRendererContext =
+			new DefaultFragmentRendererContext(fragmentEntryLink);
+
+		defaultFragmentRendererContext.setLocale(themeDisplay.getLocale());
+		defaultFragmentRendererContext.setMode(FragmentEntryLinkConstants.EDIT);
+		defaultFragmentRendererContext.setSegmentsExperienceIds(
+			new long[] {SegmentsExperienceConstants.ID_DEFAULT});
+
+		JSONObject configurationJSONObject = JSONFactoryUtil.createJSONObject(
+			_fragmentRendererController.getConfiguration(
+				defaultFragmentRendererContext));
+
+		FragmentEntryLinkItemSelectorUtil.addFragmentEntryLinkFieldsSelectorURL(
+			_itemSelector, _portal.getHttpServletRequest(actionRequest),
+			_portal.getLiferayPortletResponse(actionResponse),
+			configurationJSONObject);
+
+		JSONObject jsonObject = _addFragmentEntryLinkToLayoutDataJSONObject(
+			actionRequest, fragmentEntryLink.getFragmentEntryLinkId());
+
+		return jsonObject.put(
+			"fragmentEntryLink",
+			FragmentEntryLinkUtil.getFragmentEntryLinkJSONObject(
+				actionRequest, actionResponse,
+				_fragmentEntryConfigurationParser, fragmentEntryLink,
+				_fragmentCollectionContributorTracker,
+				_fragmentRendererController, _fragmentRendererTracker,
+				StringPool.BLANK));
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(

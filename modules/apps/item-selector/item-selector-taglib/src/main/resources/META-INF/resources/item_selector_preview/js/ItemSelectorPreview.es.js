@@ -39,6 +39,7 @@ const ItemSelectorPreview = ({
 }) => {
 	const [currentItemIndex, setCurrentItemIndex] = useState(currentIndex);
 	const [itemList, setItemList] = useState(items);
+	const [reloadOnHide, setReloadOnHide] = useState(false);
 
 	const infoButtonRef = React.createRef();
 
@@ -81,6 +82,18 @@ const ItemSelectorPreview = ({
 	const close = useCallback(() => {
 		ReactDOM.unmountComponentAtNode(container);
 	}, [container]);
+
+	const handleClickBack = () => {
+		if (reloadOnHide) {
+			const frame = window.frameElement;
+
+			if (frame) {
+				frame.contentWindow.location.reload();
+			}
+		}
+
+		close();
+	};
 
 	const handleClickDone = () => {
 		handleSelectedItem(currentItem);
@@ -174,6 +187,11 @@ const ItemSelectorPreview = ({
 		[close, handleClickNext, handleClickPrevious, isMounted]
 	);
 
+	const updateItemList = newItemList => {
+		setItemList(newItemList);
+		setReloadOnHide(true);
+	};
+
 	const handleSaveEdit = e => {
 		const itemData = e.data.file;
 
@@ -204,7 +222,7 @@ const ItemSelectorPreview = ({
 		};
 
 		const updatedItemList = [...itemList, editedItem];
-		setItemList(updatedItemList);
+		updateItemList(updatedItemList);
 		setCurrentItemIndex(updatedItemList.length - 1);
 	};
 
@@ -215,7 +233,7 @@ const ItemSelectorPreview = ({
 
 				newItemList[currentItemIndex] = {...currentItem, url, value};
 
-				setItemList(newItemList);
+				updateItemList(newItemList);
 			}
 		},
 		[currentItem, currentItemIndex, isMounted, itemList]
@@ -228,7 +246,7 @@ const ItemSelectorPreview = ({
 			<Header
 				disabledAddButton={!currentItem.url}
 				handleClickAdd={handleClickDone}
-				handleClickClose={close}
+				handleClickBack={handleClickBack}
 				handleClickEdit={handleClickEdit}
 				headerTitle={headerTitle}
 				infoButtonRef={infoButtonRef}

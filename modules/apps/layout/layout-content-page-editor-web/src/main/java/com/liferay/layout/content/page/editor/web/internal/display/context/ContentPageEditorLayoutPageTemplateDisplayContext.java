@@ -23,11 +23,9 @@ import com.liferay.info.display.contributor.InfoDisplayContributor;
 import com.liferay.layout.content.page.editor.sidebar.panel.ContentPageEditorSidebarPanel;
 import com.liferay.layout.page.template.model.LayoutPageTemplateEntry;
 import com.liferay.layout.page.template.service.LayoutPageTemplateEntryLocalServiceUtil;
-import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.comment.CommentManager;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Layout;
-import com.liferay.portal.kernel.service.LayoutLocalServiceUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.template.soy.util.SoyContext;
 import com.liferay.portal.template.soy.util.SoyContextFactoryUtil;
@@ -68,8 +66,6 @@ public class ContentPageEditorLayoutPageTemplateDisplayContext
 
 		SoyContext soyContext = super.getEditorSoyContext();
 
-		soyContext.put("lastSaveDate", StringPool.BLANK);
-
 		if (_pageIsDisplayPage) {
 			soyContext.put(
 				"mappingFieldsURL",
@@ -102,16 +98,9 @@ public class ContentPageEditorLayoutPageTemplateDisplayContext
 
 		Layout draftLayout = themeDisplay.getLayout();
 
-		Layout layout = LayoutLocalServiceUtil.fetchLayout(
-			draftLayout.getClassPK());
-
-		if (layout == null) {
-			return null;
-		}
-
 		_layoutPageTemplateEntry =
 			LayoutPageTemplateEntryLocalServiceUtil.
-				fetchLayoutPageTemplateEntryByPlid(layout.getPlid());
+				fetchLayoutPageTemplateEntryByPlid(draftLayout.getClassPK());
 
 		return _layoutPageTemplateEntry;
 	}

@@ -43,9 +43,12 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portlet.display.template.PortletDisplayTemplate;
 
 import java.util.HashMap;
@@ -56,6 +59,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -349,6 +354,24 @@ public class JournalArticleInfoDisplayContributor
 			templateKey.replaceAll("\\W", "_");
 	}
 
+	private ThemeDisplay _getThemeDisplay() {
+		ServiceContext serviceContext =
+			ServiceContextThreadLocal.getServiceContext();
+
+		if (serviceContext == null) {
+			return null;
+		}
+
+		HttpServletRequest httpServletRequest = serviceContext.getRequest();
+
+		if (httpServletRequest == null) {
+			return null;
+		}
+
+		return (ThemeDisplay)httpServletRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+	}
+
 	private static final Log _log = LogFactoryUtil.getLog(
 		JournalArticleInfoDisplayContributor.class);
 
@@ -367,7 +390,7 @@ public class JournalArticleInfoDisplayContributor
 			return journalContent.getContent(
 				_article.getGroupId(), _article.getArticleId(),
 				_ddmTemplate.getTemplateKey(), Constants.VIEW, _languageId,
-				(ThemeDisplay)null);
+				_getThemeDisplay());
 		}
 
 		private final JournalArticle _article;

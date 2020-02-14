@@ -43,7 +43,37 @@ definition {
 
 			JSONGroup.deleteGroupByName(groupName = "App Builder Site Name");
 
+			JSONUser.tearDownNonAdminUsers();
+
 		}
+	}
+
+	@description = "Access and set permissions for a custom object"
+	@priority = "4"
+	test AccessAndSetPermissionsForCustomObject {
+
+		AppBuilderAdmin.addCustomObject(
+			customObjectName = "my custom object",
+			isCreatingFormView = "false",
+			isCreatingViaPlusIcon = "true");
+
+		AppBuilderAdmin.gotoBack();
+
+		LexiconEntry.gotoVerticalEllipsisMenuItemNoError(menuItem = "App Permissions");
+
+		Button.clickSave();
+
+		LexiconEntry.gotoVerticalEllipsisMenuItemNoError(menuItem = "App Permissions");
+
+		AppBuilderAdmin.validatePermissionsFromRolesAreNotChecked(roleList = "Account Administrator,Account Owner,Analytics Administrator,Portal Content Reviewer,Power User,User");
+
+		AppBuilderAdmin.addAllPermissionsFromRoles(roleList = "Portal Content Reviewer,User");
+		LexiconEntry.gotoVerticalEllipsisMenuItemNoError(menuItem = "App Permissions");
+		AppBuilderAdmin.validatePermissionsFromRolesAreChecked(roleList = "Portal Content Reviewer,User");
+
+		AppBuilderAdmin.removeAllPermissionsFromRoles(roleList = "Portal Content Reviewer,User");
+		LexiconEntry.gotoVerticalEllipsisMenuItemNoError(menuItem = "App Permissions");
+		AppBuilderAdmin.validatePermissionsFromRolesAreNotChecked(roleList = "Portal Content Reviewer,User");
 	}
 
 	@description = "Add a Custom Object with valid name"

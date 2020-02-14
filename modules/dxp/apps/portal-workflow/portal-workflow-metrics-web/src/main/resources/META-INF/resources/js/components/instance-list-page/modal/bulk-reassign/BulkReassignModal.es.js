@@ -14,6 +14,7 @@ import ClayButton from '@clayui/button';
 import ClayModal, {useModal} from '@clayui/modal';
 import React, {useCallback, useContext, useMemo, useState} from 'react';
 
+import {useToaster} from '../../../../shared/components/toaster/hooks/useToaster.es';
 import {useFetch} from '../../../../shared/hooks/useFetch.es';
 import {useFilter} from '../../../../shared/hooks/useFilter.es';
 import {usePatch} from '../../../../shared/hooks/usePatch.es';
@@ -52,7 +53,8 @@ const BulkReassignModal = () => {
 	const [currentStep, setCurrentStep] = useState('selectTasks');
 	const [errorToast, setErrorToast] = useState(null);
 	const [fetching, setFetching] = useState(false);
-	const [successToast, setSuccessToast] = useState([]);
+
+	const toaster = useToaster();
 
 	const {observer, onClose} = useModal({
 		onClose: () => {
@@ -106,15 +108,15 @@ const BulkReassignModal = () => {
 			taskNames
 		};
 
-		if (visible) {
-			if (selectAllInstances) {
-				params.workflowDefinitionId = processId;
-			}
-			else {
-				params.workflowInstanceIds = selectedItems.length
-					? selectedItems.map(item => item.id)
-					: singleModal.selectedItem.id;
-			}
+		if (selectAllInstances) {
+			params.workflowDefinitionId = processId;
+		}
+		else {
+			const {selectedItem = {}} = singleModal || {};
+
+			params.workflowInstanceIds = selectedItems.length
+				? selectedItems.map(item => item.id)
+				: selectedItem.id;
 		}
 
 		return params;
@@ -183,15 +185,14 @@ const BulkReassignModal = () => {
 				.then(() => {
 					onClose();
 
-					setSuccessToast([
-						...successToast,
+					toaster.success(
 						sub(
 							Liferay.Language.get(
 								'x-tasks-have-been-reassigned'
 							),
 							[reassignedTasks.length]
 						)
-					]);
+					);
 
 					setSelectedItems([]);
 					setSelectAll(false);
@@ -257,25 +258,6 @@ const BulkReassignModal = () => {
 
 	return (
 		<>
-			<ClayAlert.ToastContainer data-testid="alertContainer">
-				{successToast.map((message, index) => (
-					<ClayAlert
-						autoClose={5000}
-						data-testid="alertSuccess"
-						displayType={'success'}
-						key={index}
-						onClose={() => {
-							setSuccessToast(prevItems =>
-								prevItems.filter(item => item !== message)
-							);
-						}}
-						title={Liferay.Language.get('success')}
-					>
-						{message}
-					</ClayAlert>
-				))}
-			</ClayAlert.ToastContainer>
-
 			{visible && (
 				<ClayModal
 					data-testid="bulkReassignModal"

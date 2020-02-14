@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.dao.db.DBType;
 import com.liferay.portal.kernel.io.unsync.UnsyncBufferedReader;
 import com.liferay.portal.kernel.io.unsync.UnsyncStringReader;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.io.IOException;
 
@@ -44,6 +45,10 @@ public class SybaseDB extends BaseDB {
 	@Override
 	public String buildSQL(String template) throws IOException {
 		template = replaceTemplate(template);
+
+		if (Validator.isNull(template)) {
+			return null;
+		}
 
 		template = reword(template);
 		template = StringUtil.replace(template, ");\n", ")\ngo\n");
@@ -100,9 +105,23 @@ public class SybaseDB extends BaseDB {
 	}
 
 	@Override
-	protected String applyMaxStringIndexLengthLimitation(String template) {
+	protected int[] getSQLTypes() {
+		return _SQL_TYPES;
+	}
+
+	@Override
+	protected String[] getTemplate() {
+		return _SYBASE;
+	}
+
+	@Override
+	protected String replaceTemplate(String template) {
+		if (template == null) {
+			return null;
+		}
+
 		if (!template.contains("[$COLUMN_LENGTH:")) {
-			return template;
+			return super.replaceTemplate(template);
 		}
 
 		String[] strings = StringUtil.split(template, CharPool.NEW_LINE);
@@ -123,18 +142,8 @@ public class SybaseDB extends BaseDB {
 			}
 		}
 
-		return super.applyMaxStringIndexLengthLimitation(
+		return super.replaceTemplate(
 			StringUtil.merge(strings, StringPool.NEW_LINE));
-	}
-
-	@Override
-	protected int[] getSQLTypes() {
-		return _SQL_TYPES;
-	}
-
-	@Override
-	protected String[] getTemplate() {
-		return _SYBASE;
 	}
 
 	@Override

@@ -24,6 +24,7 @@ import com.liferay.document.library.kernel.exception.FileExtensionException;
 import com.liferay.document.library.kernel.exception.FileNameException;
 import com.liferay.document.library.kernel.exception.FileSizeException;
 import com.liferay.document.library.kernel.util.DLValidator;
+import com.liferay.exportimport.configuration.ExportImportServiceConfiguration;
 import com.liferay.exportimport.internal.util.StagingGroupServiceTunnelUtil;
 import com.liferay.exportimport.kernel.background.task.BackgroundTaskExecutorNames;
 import com.liferay.exportimport.kernel.configuration.ExportImportConfigurationConstants;
@@ -103,7 +104,9 @@ import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.WorkflowInstanceLink;
 import com.liferay.portal.kernel.model.WorkflowedModel;
 import com.liferay.portal.kernel.model.adapter.StagedTheme;
+import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
 import com.liferay.portal.kernel.scheduler.SchedulerEngineHelperUtil;
+import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.security.auth.HttpPrincipal;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.security.auth.RemoteAuthException;
@@ -143,7 +146,6 @@ import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
 import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.kernel.util.TextFormatter;
 import com.liferay.portal.kernel.util.Tuple;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.util.Validator;
@@ -1109,7 +1111,7 @@ public class StagingImpl implements Staging {
 					locale,
 					"please-enter-a-file-with-a-valid-file-size-no-larger-" +
 						"than-x",
-					TextFormatter.formatStorageSize(
+					LanguageUtil.formatStorageSize(
 						_dlValidator.getMaxAllowableSize(), locale),
 					false);
 			}
@@ -1881,12 +1883,14 @@ public class StagingImpl implements Staging {
 		try {
 			URL remoteSiteURL = new URL(groupDisplayURL);
 
-			String remoteAddress = typeSettingsProperties.getProperty(
-				"remoteAddress");
+			if (!isStagingUseVirtualHostForRemoteSite()) {
+				String remoteAddress = typeSettingsProperties.getProperty(
+					"remoteAddress");
 
-			remoteSiteURL = new URL(
-				remoteSiteURL.getProtocol(), remoteAddress,
-				remoteSiteURL.getPort(), remoteSiteURL.getFile());
+				remoteSiteURL = new URL(
+					remoteSiteURL.getProtocol(), remoteAddress,
+					remoteSiteURL.getPort(), remoteSiteURL.getFile());
+			}
 
 			return remoteSiteURL.toString();
 		}
@@ -3691,6 +3695,22 @@ public class StagingImpl implements Staging {
 		return false;
 	}
 
+	protected boolean isStagingUseVirtualHostForRemoteSite() {
+		try {
+			ExportImportServiceConfiguration configuration =
+				_configurationProvider.getCompanyConfiguration(
+					ExportImportServiceConfiguration.class,
+					CompanyThreadLocal.getCompanyId());
+
+			return configuration.stagingUseVirtualHostForRemoteSite();
+		}
+		catch (Exception exception) {
+			_log.error(exception, exception);
+		}
+
+		return false;
+	}
+
 	protected long publishPortlet(
 			long userId, long scopeGroupId, long plid, String portletId,
 			Map<String, String[]> parameterMap, boolean copyFromLive)
@@ -3777,6 +3797,13 @@ public class StagingImpl implements Staging {
 		return publishPortlet(
 			userId, stagingGroup.getGroupId(), targetGroupId,
 			sourceLayout.getPlid(), targetLayoutPlid, portletId, parameterMap);
+	}
+
+	@Reference(unbind = "-")
+	protected void setConfigurationProvider(
+		ConfigurationProvider configurationProvider) {
+
+		_configurationProvider = configurationProvider;
 	}
 
 	protected void setRecentLayoutBranchId(
@@ -3952,6 +3979,8 @@ public class StagingImpl implements Staging {
 
 	@Reference
 	private CompanyLocalService _companyLocalService;
+
+	private ConfigurationProvider _configurationProvider;
 
 	@Reference
 	private CTPreferencesLocalService _ctPreferencesLocalService;

@@ -46,7 +46,6 @@ import com.liferay.layout.content.page.editor.constants.ContentPageEditorPortlet
 import com.liferay.layout.content.page.editor.constants.ContentPageEditorWebKeys;
 import com.liferay.layout.content.page.editor.sidebar.panel.ContentPageEditorSidebarPanel;
 import com.liferay.layout.content.page.editor.web.internal.comment.CommentUtil;
-import com.liferay.layout.content.page.editor.web.internal.configuration.util.ContentCreationContentPageEditorConfigurationUtil;
 import com.liferay.layout.content.page.editor.web.internal.constants.ContentPageEditorActionKeys;
 import com.liferay.layout.content.page.editor.web.internal.util.ContentUtil;
 import com.liferay.layout.content.page.editor.web.internal.util.FragmentEntryLinkItemSelectorUtil;
@@ -185,37 +184,6 @@ public class ContentPageEditorDisplayContext {
 			ContentPageEditorWebKeys.ITEM_SELECTOR);
 	}
 
-	public String getDiscardDraftURL() throws PortalException {
-		Layout layout = _getPublishedLayout();
-
-		if (!Objects.equals(layout.getType(), LayoutConstants.TYPE_PORTLET)) {
-			return getFragmentEntryActionURL(
-				"/content_layout/discard_draft_layout");
-		}
-
-		PortletURL deleteLayoutURL = PortalUtil.getControlPanelPortletURL(
-			httpServletRequest, LayoutAdminPortletKeys.GROUP_PAGES,
-			PortletRequest.ACTION_PHASE);
-
-		deleteLayoutURL.setParameter(
-			ActionRequest.ACTION_NAME, "/layout/delete_layout");
-
-		PortletURL redirectURL = PortalUtil.getControlPanelPortletURL(
-			httpServletRequest, LayoutAdminPortletKeys.GROUP_PAGES,
-			PortletRequest.RENDER_PHASE);
-
-		redirectURL.setParameter("selPlid", String.valueOf(layout.getPlid()));
-
-		deleteLayoutURL.setParameter("redirect", redirectURL.toString());
-
-		Layout draftLayout = themeDisplay.getLayout();
-
-		deleteLayoutURL.setParameter(
-			"selPlid", String.valueOf(draftLayout.getPlid()));
-
-		return deleteLayoutURL.toString();
-	}
-
 	public Map<String, Object> getEditorReactContext(
 			String npmResolvedPackageName)
 		throws Exception {
@@ -231,13 +199,13 @@ public class ContentPageEditorDisplayContext {
 			).put(
 				"addFragmentEntryLinkURL",
 				getFragmentEntryActionURL(
-					"/content_layout/add_fragment_entry_link_react")
+					"/content_layout/add_fragment_entry_link")
 			).put(
 				"addItemURL",
-				getFragmentEntryActionURL("/content_layout/add_item_react")
+				getFragmentEntryActionURL("/content_layout/add_item")
 			).put(
 				"addPortletURL",
-				getFragmentEntryActionURL("/content_layout/add_portlet_react")
+				getFragmentEntryActionURL("/content_layout/add_portlet")
 			).put(
 				"addSegmentsExperienceURL",
 				editorSoyContext.get("addSegmentsExperienceURL")
@@ -264,7 +232,7 @@ public class ContentPageEditorDisplayContext {
 					"/content_layout/delete_fragment_entry_link_comment")
 			).put(
 				"deleteItemURL",
-				getFragmentEntryActionURL("/content_layout/delete_item_react")
+				getFragmentEntryActionURL("/content_layout/delete_item")
 			).put(
 				"deleteSegmentsExperienceURL",
 				getFragmentEntryActionURL(
@@ -276,8 +244,7 @@ public class ContentPageEditorDisplayContext {
 				"discardDraftURL", editorSoyContext.get("discardDraftURL")
 			).put(
 				"duplicateItemURL",
-				getFragmentEntryActionURL(
-					"/content_layout/duplicate_item_react")
+				getFragmentEntryActionURL("/content_layout/duplicate_item")
 			).put(
 				"editFragmentEntryLinkCommentURL",
 				getFragmentEntryActionURL(
@@ -315,7 +282,8 @@ public class ContentPageEditorDisplayContext {
 			).put(
 				"languageDirection", _getLanguageDirection()
 			).put(
-				"lookAndFeelURL", _getLookAndFeelURL()
+				"layoutConversionWarningMessages",
+				editorSoyContext.get("layoutConversionWarningMessages")
 			).put(
 				"mappingFieldsURL", editorSoyContext.get("mappingFieldsURL")
 			).put(
@@ -323,11 +291,13 @@ public class ContentPageEditorDisplayContext {
 			).put(
 				"moveItemURL",
 				getFragmentEntryActionURL(
-					"/content_layout/move_fragment_entry_link_react")
+					"/content_layout/move_fragment_entry_link")
 			).put(
 				"pageType", editorSoyContext.get("pageType")
 			).put(
 				"pending", editorSoyContext.get("pending")
+			).put(
+				"plid", editorSoyContext.get("plid")
 			).put(
 				"pluginsRootPath",
 				npmResolvedPackageName + "/page_editor/plugins"
@@ -344,23 +314,21 @@ public class ContentPageEditorDisplayContext {
 				"selectedMappingTypes",
 				editorSoyContext.get("selectedMappingTypes")
 			).put(
-				"sidebarPanels", editorSoyContext.get("sidebarPanels")
+				"selectedSegmentsEntryId",
+				editorSoyContext.get("selectedSegmentsEntryId")
 			).put(
-				"singleSegmentsExperienceMode",
-				editorSoyContext.get("singleSegmentsExperienceMode")
+				"sidebarPanels", editorSoyContext.get("sidebarPanels")
 			).put(
 				"themeColorsCssClasses", _getThemeColorsCssClasses()
 			).put(
 				"updateItemConfigURL",
-				getFragmentEntryActionURL(
-					"/content_layout/update_item_config_react")
+				getFragmentEntryActionURL("/content_layout/update_item_config")
 			).put(
 				"updateLayoutPageTemplateDataURL",
 				editorSoyContext.get("updateLayoutPageTemplateDataURL")
 			).put(
 				"updateRowColumnsURL",
-				getFragmentEntryActionURL(
-					"/content_layout/update_row_columns_react")
+				getFragmentEntryActionURL("/content_layout/update_row_columns")
 			).put(
 				"updateSegmentsExperiencePriorityURL",
 				getFragmentEntryActionURL(
@@ -427,20 +395,7 @@ public class ContentPageEditorDisplayContext {
 			getFragmentEntryActionURL(
 				"/content_layout/add_fragment_entry_link_comment")
 		).put(
-			"addFragmentEntryLinkURL",
-			getFragmentEntryActionURL("/content_layout/add_fragment_entry_link")
-		).put(
-			"addPortletURL",
-			getFragmentEntryActionURL("/content_layout/add_portlet")
-		).put(
-			"addStructuredContentURL",
-			getFragmentEntryActionURL("/content_layout/add_structured_content")
-		).put(
 			"availableLanguages", _getAvailableLanguagesSoyContext()
-		).put(
-			"contentCreationEnabled",
-			ContentCreationContentPageEditorConfigurationUtil.
-				isContentCreationEnabled(themeDisplay.getCompanyId())
 		).put(
 			"defaultEditorConfigurations", _getDefaultConfigurations()
 		).put(
@@ -451,17 +406,9 @@ public class ContentPageEditorDisplayContext {
 			getFragmentEntryActionURL(
 				"/content_layout/delete_fragment_entry_link_comment")
 		).put(
-			"deleteFragmentEntryLinkURL",
-			getFragmentEntryActionURL(
-				"/content_layout/delete_fragment_entry_link")
-		).put(
 			"discardDraftRedirectURL", themeDisplay.getURLCurrent()
 		).put(
-			"discardDraftURL", getDiscardDraftURL()
-		).put(
-			"duplicateFragmentEntryLinkURL",
-			getFragmentEntryActionURL(
-				"/content_layout/duplicate_fragment_entry_link")
+			"discardDraftURL", _getDiscardDraftURL()
 		).put(
 			"editFragmentEntryLinkCommentURL",
 			getFragmentEntryActionURL(
@@ -485,13 +432,6 @@ public class ContentPageEditorDisplayContext {
 			"getAvailableTemplatesURL",
 			_getResourceURL("/content_layout/get_available_templates")
 		).put(
-			"getContentStructureMappingFieldsURL",
-			_getResourceURL(
-				"/content_layout/get_content_structure_mapping_fields")
-		).put(
-			"getContentStructuresURL",
-			_getResourceURL("/content_layout/get_content_structures")
-		).put(
 			"getExperienceUsedPortletsURL",
 			_getResourceURL("/content_layout/get_experience_used_portlets")
 		).put(
@@ -513,8 +453,6 @@ public class ContentPageEditorDisplayContext {
 				_portletRequest, "layoutConversionWarningMessages")
 		).put(
 			"layoutData", JSONFactoryUtil.createJSONObject(_getLayoutData())
-		).put(
-			"lookAndFeelURL", _getLookAndFeelURL()
 		).put(
 			"mappedInfoItems", _getMappedInfoItemsSoyContexts()
 		).put(
@@ -539,7 +477,17 @@ public class ContentPageEditorDisplayContext {
 			"pageType", String.valueOf(_getPageType())
 		).put(
 			"pending",
-			_publishedLayout.getStatus() == WorkflowConstants.STATUS_PENDING
+			() -> {
+				Layout publishedLayout = _getPublishedLayout();
+
+				if (publishedLayout.getStatus() ==
+						WorkflowConstants.STATUS_PENDING) {
+
+					return true;
+				}
+
+				return false;
+			}
 		).put(
 			"portletNamespace", getPortletNamespace()
 		).put(
@@ -549,9 +497,6 @@ public class ContentPageEditorDisplayContext {
 		).put(
 			"renderFragmentEntryURL",
 			getFragmentEntryActionURL("/content_layout/render_fragment_entry")
-		).put(
-			"spritemap",
-			themeDisplay.getPathThemeImages() + "/lexicon/icons.svg"
 		).put(
 			"themeColorsCssClasses", _getThemeColorsCssClasses()
 		).put(
@@ -577,7 +522,7 @@ public class ContentPageEditorDisplayContext {
 		return getFragmentEntryActionURL("/content_layout/publish_layout");
 	}
 
-	public boolean isMasterLayout() throws PortalException {
+	public boolean isMasterLayout() {
 		if (_getPageType() ==
 				LayoutPageTemplateEntryTypeConstants.TYPE_MASTER_LAYOUT) {
 
@@ -592,8 +537,10 @@ public class ContentPageEditorDisplayContext {
 	}
 
 	public boolean isWorkflowEnabled() {
+		Layout publishedLayout = _getPublishedLayout();
+
 		return WorkflowDefinitionLinkLocalServiceUtil.hasWorkflowDefinitionLink(
-			_publishedLayout.getCompanyId(), _publishedLayout.getGroupId(),
+			publishedLayout.getCompanyId(), publishedLayout.getGroupId(),
 			Layout.class.getName());
 	}
 
@@ -671,6 +618,15 @@ public class ContentPageEditorDisplayContext {
 			).put(
 				"sidebarPanelId", contentPageEditorSidebarPanel.getId()
 			);
+
+			if (contentPageEditorSidebarPanel.isLink()) {
+				availableSoyContext.put(
+					"isLink", true
+				).put(
+					"url",
+					contentPageEditorSidebarPanel.getURL(httpServletRequest)
+				);
+			}
 
 			soyContexts.add(availableSoyContext);
 		}
@@ -784,6 +740,40 @@ public class ContentPageEditorDisplayContext {
 		).build();
 
 		return _defaultConfigurations;
+	}
+
+	private String _getDiscardDraftURL() {
+		Layout publishedLayout = _getPublishedLayout();
+
+		if (!Objects.equals(
+				publishedLayout.getType(), LayoutConstants.TYPE_PORTLET)) {
+
+			return getFragmentEntryActionURL(
+				"/content_layout/discard_draft_layout");
+		}
+
+		PortletURL deleteLayoutURL = PortalUtil.getControlPanelPortletURL(
+			httpServletRequest, LayoutAdminPortletKeys.GROUP_PAGES,
+			PortletRequest.ACTION_PHASE);
+
+		deleteLayoutURL.setParameter(
+			ActionRequest.ACTION_NAME, "/layout/delete_layout");
+
+		PortletURL redirectURL = PortalUtil.getControlPanelPortletURL(
+			httpServletRequest, LayoutAdminPortletKeys.GROUP_PAGES,
+			PortletRequest.RENDER_PHASE);
+
+		redirectURL.setParameter(
+			"selPlid", String.valueOf(publishedLayout.getPlid()));
+
+		deleteLayoutURL.setParameter("redirect", redirectURL.toString());
+
+		Layout draftLayout = themeDisplay.getLayout();
+
+		deleteLayoutURL.setParameter(
+			"selPlid", String.valueOf(draftLayout.getPlid()));
+
+		return deleteLayoutURL.toString();
 	}
 
 	private List<SoyContext> _getDynamicFragmentsSoyContexts() {
@@ -1361,33 +1351,6 @@ public class ContentPageEditorDisplayContext {
 		return _layoutData;
 	}
 
-	private String _getLookAndFeelURL() {
-		PortletURL lookAndFeelURL = PortalUtil.getControlPanelPortletURL(
-			httpServletRequest, LayoutAdminPortletKeys.GROUP_PAGES,
-			PortletRequest.RENDER_PHASE);
-
-		lookAndFeelURL.setParameter(
-			"mvcRenderCommandName", "/layout/edit_layout");
-
-		lookAndFeelURL.setParameter(
-			"redirect",
-			ParamUtil.getString(
-				PortalUtil.getOriginalServletRequest(httpServletRequest),
-				"p_l_back_url"));
-		lookAndFeelURL.setParameter("backURL", themeDisplay.getURLCurrent());
-
-		Layout layout = themeDisplay.getLayout();
-
-		lookAndFeelURL.setParameter(
-			"groupId", String.valueOf(layout.getGroupId()));
-		lookAndFeelURL.setParameter(
-			"selPlid", String.valueOf(layout.getPlid()));
-		lookAndFeelURL.setParameter(
-			"privateLayout", String.valueOf(layout.isPrivateLayout()));
-
-		return lookAndFeelURL.toString();
-	}
-
 	private Set<SoyContext> _getMappedInfoItemsSoyContexts()
 		throws PortalException {
 
@@ -1395,7 +1358,7 @@ public class ContentPageEditorDisplayContext {
 
 		Set<InfoDisplayObjectProvider> infoDisplayObjectProviders =
 			ContentUtil.getMappedInfoDisplayObjectProviders(
-				_groupId, themeDisplay.getPlid());
+				getGroupId(), themeDisplay.getPlid());
 
 		for (InfoDisplayObjectProvider infoDisplayObjectProvider :
 				infoDisplayObjectProviders) {
@@ -1462,7 +1425,7 @@ public class ContentPageEditorDisplayContext {
 		return _masterLayoutStructure;
 	}
 
-	private int _getPageType() throws PortalException {
+	private int _getPageType() {
 		if (_pageType != null) {
 			return _pageType;
 		}
@@ -1618,14 +1581,14 @@ public class ContentPageEditorDisplayContext {
 		);
 	}
 
-	private Layout _getPublishedLayout() throws PortalException {
+	private Layout _getPublishedLayout() {
 		if (_publishedLayout != null) {
 			return _publishedLayout;
 		}
 
 		Layout draftLayout = themeDisplay.getLayout();
 
-		_publishedLayout = LayoutLocalServiceUtil.getLayout(
+		_publishedLayout = LayoutLocalServiceUtil.fetchLayout(
 			draftLayout.getClassPK());
 
 		return _publishedLayout;
@@ -1825,17 +1788,17 @@ public class ContentPageEditorDisplayContext {
 		return _allowNewFragmentEntries;
 	}
 
-	private boolean _isMasterUsed() throws PortalException {
+	private boolean _isMasterUsed() {
 		if (_getPageType() !=
 				LayoutPageTemplateEntryTypeConstants.TYPE_MASTER_LAYOUT) {
 
 			return false;
 		}
 
-		Layout layout = _getPublishedLayout();
+		Layout publishedLayout = _getPublishedLayout();
 
 		int masterUsagesCount = LayoutLocalServiceUtil.getLayoutsCount(
-			themeDisplay.getScopeGroupId(), layout.getPlid());
+			themeDisplay.getScopeGroupId(), publishedLayout.getPlid());
 
 		if (masterUsagesCount > 0) {
 			return true;
