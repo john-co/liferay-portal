@@ -9,6 +9,9 @@
 		"metal-jest-serializer": "2.0.0"
 	},
 	"private": true,
+	"resolutions": {
+		"dnd-core": "10.0.1"
+	},
 	"scripts": {
 		"checkFormat": "liferay-npm-scripts check",
 		"format": "liferay-npm-scripts fix"
@@ -45,6 +48,7 @@
 			"apps/frontend-theme-fjord/frontend-theme-fjord",
 			"apps/frontend-theme-porygon/frontend-theme-porygon",
 			"apps/frontend-theme-westeros-bank/frontend-theme-westeros-bank",
+			"apps/journal/journal-article-dynamic-data-mapping-form-field-type",
 			"apps/map/map-common",
 			"apps/map/map-google-maps",
 			"apps/map/map-openstreetmap",
