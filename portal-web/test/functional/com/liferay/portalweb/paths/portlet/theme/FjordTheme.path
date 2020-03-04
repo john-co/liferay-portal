@@ -13,6 +13,11 @@
     <td>portal/screenshots/theme/fjord_theme_home_page.png</td>
     <td></td>
 </tr>
+<tr>
+    <td>SCREENSHOTS_THEME_LAYOUT_PNG</td>
+    <td>portal/screenshots/theme/fjord_theme_layout.png</td>
+    <td></td>
+</tr>
 </tbody>
 </table>
 </body>
