@@ -68,4 +68,37 @@ definition {
 		takeScreenshot();
 	}
 
+	@description = "This test checks Fjord Theme Layout can be applied to home page."
+	@priority = "5"
+	test ApplyThemeToSinglePage {
+		property portal.acceptance = "false";
+		property test.name.skip.portal.instance = "FjordTheme#ApplyThemeToSinglePage";
+
+		ProductMenu.gotoPortlet(
+			category = "Site Builder",
+			panel = "Site Administration",
+			portlet = "Pages");
+
+		Page.changeCurrentTheme(
+			pageName = "Home",
+			themeName = "Fjord");
+
+		Navigator.openSpecificURL(url = "http://localhost:8080/web/guest");
+
+		ProductMenuHelper.closeProductMenu();
+
+		SikuliAssertElementPresent(locator1 = "FjordTheme#SCREENSHOTS_THEME_LAYOUT_PNG");
+
+		takeScreenshot();
+
+		ProductMenu.gotoPortlet(
+			category = "Site Builder",
+			panel = "Site Administration",
+			portlet = "Pages");
+
+		Page.changeCurrentTheme(
+			pageName = "Home",
+			themeName = "Classic");
+	}
+
 }
