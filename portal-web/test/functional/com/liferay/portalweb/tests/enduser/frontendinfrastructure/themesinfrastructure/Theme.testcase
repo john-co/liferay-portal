@@ -1,0 +1,65 @@
+@component-name = "portal-frontend-infrastructure"
+definition {
+
+	property portal.release = "true";
+	property portal.upstream = "true";
+	property testray.component.names = "Theme";
+	property testray.main.component.name = "Theme";
+
+	setUp {
+		TestCase.setUpPortalInstance();
+
+		User.firstLoginPG();
+	}
+
+	tearDown {
+		var testPortalInstance = PropsUtil.get("test.portal.instance");
+
+		if ("${testPortalInstance}" == "true") {
+			PortalInstances.tearDownCP();
+		}
+		
+		ProductMenu.gotoPortlet(
+			category = "Site Builder",
+			panel = "Site Administration",
+			portlet = "Pages");
+
+		Page.changeCurrentTheme(
+			pageName = "Home",
+			themeName = "Classic");
+	}
+
+	@description = "This test validates that a theme can be applied to a single page."
+	@priority = "5"
+	test ApplyThemeToSinglePage {
+		property portal.acceptance = "calvinctvo";
+		property test.name.skip.portal.instance = "Theme#ApplyThemeToSinglePage";
+
+		ProductMenu.gotoPortlet(
+			category = "Apps",
+			panel = "Control Panel",
+			portlet = "App Manager");
+
+		AppManager.uploadAppCP(
+			appName = "test-theme",
+			warFileName = "test-theme.war");
+
+		ProductMenu.gotoPortlet(
+			category = "Site Builder",
+			panel = "Site Administration",
+			portlet = "Pages");
+
+		Page.changeCurrentTheme(
+			pageName = "Home",
+			themeName = "test-theme");
+
+		Navigator.openURL();
+
+		ProductMenuHelper.closeProductMenu();
+
+		SikuliAssertElementPresent(locator1 = "Theme#TEST_THEME_7_3_HOME_PAGE_PNG");
+
+		takeScreenshot();
+	}
+
+}
