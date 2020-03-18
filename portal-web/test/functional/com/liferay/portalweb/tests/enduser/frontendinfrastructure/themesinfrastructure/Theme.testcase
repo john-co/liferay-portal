@@ -18,7 +18,7 @@ definition {
 		if ("${testPortalInstance}" == "true") {
 			PortalInstances.tearDownCP();
 		}
-		
+
 		ProductMenu.gotoPortlet(
 			category = "Site Builder",
 			panel = "Site Administration",
@@ -32,7 +32,7 @@ definition {
 	@description = "This test validates that a theme can be applied to a single page."
 	@priority = "5"
 	test ApplyThemeToSinglePage {
-		property portal.acceptance = "calvinctvo";
+		property portal.acceptance = "false";
 		property test.name.skip.portal.instance = "Theme#ApplyThemeToSinglePage";
 
 		ProductMenu.gotoPortlet(
