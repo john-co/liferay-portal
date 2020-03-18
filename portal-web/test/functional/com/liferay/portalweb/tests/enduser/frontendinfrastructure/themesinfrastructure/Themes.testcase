@@ -3,8 +3,8 @@ definition {
 
 	property portal.release = "true";
 	property portal.upstream = "true";
-	property testray.component.names = "Theme";
-	property testray.main.component.name = "Theme";
+	property testray.component.names = "Themes";
+	property testray.main.component.name = "Themes";
 
 	setUp {
 		TestCase.setUpPortalInstance();
@@ -33,7 +33,7 @@ definition {
 	@priority = "5"
 	test ApplyThemeToSinglePage {
 		property portal.acceptance = "false";
-		property test.name.skip.portal.instance = "Theme#ApplyThemeToSinglePage";
+		property test.name.skip.portal.instance = "Themes#ApplyThemeToSinglePage";
 
 		ProductMenu.gotoPortlet(
 			category = "Apps",
@@ -57,7 +57,7 @@ definition {
 
 		ProductMenuHelper.closeProductMenu();
 
-		SikuliAssertElementPresent(locator1 = "Theme#TEST_THEME_7_3_HOME_PAGE_PNG");
+		SikuliAssertElementPresent(locator1 = "Themes#TEST_THEME_7_3_HOME_PAGE_PNG");
 
 		takeScreenshot();
 	}
