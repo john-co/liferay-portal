@@ -32,7 +32,7 @@ definition {
 	@description = "This test validates that a theme can be applied to a single page."
 	@priority = "5"
 	test ApplyThemeToSinglePage {
-		property portal.acceptance = "false";
+		property portal.acceptance = "calvinctvo";
 		property test.name.skip.portal.instance = "Themes#ApplyThemeToSinglePage";
 
 		ProductMenu.gotoPortlet(
