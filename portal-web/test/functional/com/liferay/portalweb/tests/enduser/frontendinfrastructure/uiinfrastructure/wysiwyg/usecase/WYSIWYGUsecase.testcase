@@ -80,7 +80,7 @@ definition {
 
 		SelectFieldText(locator1 = "//body");
 
-		SelectFieldText.selectFieldTextCopy();
+		RobotType.robotTypeShortcut(locator1 = "Command + c");
 
 		Navigator.openURL();
 
@@ -97,7 +97,7 @@ definition {
 			key_editor = "content",
 			locator1 = "AlloyEditor#EDITOR");
 
-		SelectFieldText.selectFieldTextPaste();
+		RobotType.robotTypeShortcut(locator1 = "Command + v");
 
 		takeScreenshot();
 
