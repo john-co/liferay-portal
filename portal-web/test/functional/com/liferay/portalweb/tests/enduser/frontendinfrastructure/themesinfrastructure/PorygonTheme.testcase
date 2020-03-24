@@ -23,7 +23,7 @@ definition {
 	@priority = "5"
 	test AddThemeSite {
 		property osgi.app.includes = "frontend-theme-porygon";
-		property portal.acceptance = "true";
+		property portal.acceptance = "false";
 		property test.name.skip.portal.instance = "PorygonTheme#AddThemeSite";
 
 		ProductMenu.gotoPortlet(

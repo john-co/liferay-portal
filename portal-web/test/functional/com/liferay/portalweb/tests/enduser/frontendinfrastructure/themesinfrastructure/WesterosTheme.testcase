@@ -23,7 +23,7 @@ definition {
 	@priority = "5"
 	test AddThemeSite {
 		property osgi.app.includes = "frontend-theme-westeros-bank";
-		property portal.acceptance = "true";
+		property portal.acceptance = "false";
 		property test.name.skip.portal.instance = "WesterosTheme#AddThemeSite";
 
 		ProductMenu.gotoPortlet(

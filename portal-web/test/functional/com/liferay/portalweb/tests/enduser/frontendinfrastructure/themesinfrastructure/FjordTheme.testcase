@@ -27,7 +27,7 @@ definition {
 	@priority = "5"
 	test AddThemeSite {
 		property osgi.app.includes = "frontend-theme-fjord";
-		property portal.acceptance = "true";
+		property portal.acceptance = "false";
 		property portal.upstream = "quarantine";
 		property test.name.skip.portal.instance = "FjordTheme#AddThemeSite";
 
