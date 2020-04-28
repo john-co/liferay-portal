@@ -204,7 +204,7 @@ const Modal = ({
 								<Iframe
 									iframeBodyCssClass={iframeBodyCssClass}
 									processClose={processClose}
-									updateLoading={loading => {
+									updateLoading={(loading) => {
 										setLoading(loading);
 									}}
 									url={url}
