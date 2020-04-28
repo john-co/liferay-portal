@@ -58,7 +58,7 @@ definition {
 	}
 
 	macro _export {
-		SelectFrame(locator1 = "IFrame#CONFIGURATION_DIALOG");
+		SelectFrame.selectFrameNoLoading(locator1 = "IFrame#CONFIGURATION_DIALOG");
 
 		if (isSet(portletName)) {
 			if (IsNotChecked(locator1 = "ExportImport#CONTENT")) {

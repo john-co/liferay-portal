@@ -335,7 +335,7 @@ definition {
 			portletName = "Web Content Display",
 			portletOption = "Configuration");
 
-		SelectFrame(locator1 = "IFrame#DIALOG");
+		SelectFrame.selectFrameNoLoading(locator1 = "IFrame#DIALOG");
 
 		Pause(locator1 = "3000");
 

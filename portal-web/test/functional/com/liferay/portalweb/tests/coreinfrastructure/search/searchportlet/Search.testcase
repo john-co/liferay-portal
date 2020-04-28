@@ -369,7 +369,7 @@ definition {
 			portletName = "Search Results",
 			portletOption = "Configuration");
 
-		SelectFrame(locator1 = "IFrame#CONFIGURATION");
+		SelectFrame.selectFrameNoLoading(locator1 = "IFrame#CONFIGURATION");
 
 		AssertTextEquals(
 			locator1 = "SearchResults#RESULTS_PORTLET_PAGINATION_CONFIG",
