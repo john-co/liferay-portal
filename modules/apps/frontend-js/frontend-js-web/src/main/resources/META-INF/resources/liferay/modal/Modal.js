@@ -299,6 +299,8 @@ class Iframe extends React.Component {
 		this.props.updateLoading(false);
 
 		this.setState({loading: false});
+
+		Liferay.fire('modalIframeLoaded', {src: this.state.src});
 	};
 
 	render() {
