@@ -59,9 +59,7 @@ definition {
 
 			selenium.mouseOver();
 
-			selenium.waitForElementPresent(
-				"xpath=(//div[contains(@class,'overlaymask-hidden')])[2]"
-			);
+			selenium.waitForLiferayEvent("modalIframeLoaded", "src", url)
 
 			selenium.selectFrame();
 
