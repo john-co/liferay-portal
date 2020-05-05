@@ -7,7 +7,7 @@ definition {
 
 			selenium.mouseOver();
 
-			selenium.waitForLiferayEvent("modalIframeLoaded", "src", url)
+			selenium.waitForLiferayEvent("modalIframeLoaded", "src", url);
 
 			selenium.selectFrame();
 
@@ -59,7 +59,7 @@ definition {
 
 			selenium.mouseOver();
 
-			selenium.waitForLiferayEvent("modalIframeLoaded", "src", url)
+			selenium.waitForLiferayEvent("modalIframeLoaded", "src", url);
 
 			selenium.selectFrame();
 
