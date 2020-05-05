@@ -3270,6 +3270,16 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 	}
 
 	@Override
+	public void waitForLiferayEvent(
+		String eventName, String attributeName, String attributeValue,
+		String throwException) throws Exception {
+
+		Condition liferayEventCondition = getLiferayEventCondition(eventName, attributeName, attributeValue);
+
+		liferayEventCondition.waitFor();
+	}
+
+	@Override
 	public void waitForNotEditable(String locator) throws Exception {
 		Condition notEditableCondition = getNotEditableCondition(locator);
 
@@ -3771,6 +3781,52 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 			LiferaySeleniumUtil.getSourceDirFilePath(filePath));
 
 		return new ImageTarget(file);
+	}
+
+	protected boolean matchLiferayEvent(String eventName, String attributeName, String attributeValue, String timeout) {
+		if (timeout != null) {
+			setTimeoutImplicit(timeout);
+		}
+
+		try {
+			WebElement bodyWebElement = getWebElement("//body");
+
+			WrapsDriver wrapsDriver = (WrapsDriver)bodyWebElement;
+
+			WebDriver wrappedWebDriver = wrapsDriver.getWrappedDriver();
+
+			JavascriptExecutor javascriptExecutor =
+				(JavascriptExecutor)wrappedWebDriver;
+
+			StringBuilder sb = new StringBuilder();
+
+			sb.append("return LFR_JS_EVENTS_LOG.getLastEvent('");
+			sb.append(eventName);
+			sb.append("']");
+			sb.append("['");
+			sb.append(attributeName);
+			sb.append("']");
+
+			return ((String)javascriptExecutor.executeScript(sb.toString())).equals(attributeValue);
+		}
+		finally {
+			if (timeout != null) {
+				setDefaultTimeoutImplicit();
+			}
+		}
+	}
+
+	protected Condition getLiferayEventCondition(String eventName, String attributeName, String attributeValue) {
+		String message = "Event \"" + eventName + "\" with attribute \"" + attributeName + "\" and value \"" + attributeValue + "\" not fired.";
+
+		return new Condition(message) {
+
+			@Override
+			public boolean evaluate() throws Exception {
+				return matchLiferayEvent(eventName, attributeName, attributeValue, null);
+			}
+
+		};
 	}
 
 	protected int getNavigationBarHeight() {

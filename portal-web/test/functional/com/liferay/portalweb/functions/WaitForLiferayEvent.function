@@ -1,0 +1,8 @@
+@default = "waitForLiferayEvent"
+definition {
+
+	function waitForLiferayEvent {
+		selenium.waitForLiferayEvent();
+	}
+
+}
