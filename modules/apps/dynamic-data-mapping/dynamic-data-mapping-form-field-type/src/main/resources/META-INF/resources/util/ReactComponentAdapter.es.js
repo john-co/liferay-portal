@@ -90,6 +90,7 @@ const CONFIG_DEFAULT = ['displayErrors'];
 
 function getConnectedReactComponentAdapter(ReactComponent, variant) {
 	class ReactComponentAdapter extends JSXComponent {
+
 		/**
 		 * For Metal to track config changes, we need to declare the
 		 * configs in the static property so that willReceiveProps is
@@ -123,10 +124,12 @@ function getConnectedReactComponentAdapter(ReactComponent, variant) {
 		}
 
 		willReceiveProps(changes) {
+
 			// Delete the events and children properties to make it easier to
 			// check which values have been changed, events and children are
 			// properties that are changing all the time when new renderings
 			// happen, a new reference is created all the time.
+
 			delete changes.events;
 			delete changes.children;
 

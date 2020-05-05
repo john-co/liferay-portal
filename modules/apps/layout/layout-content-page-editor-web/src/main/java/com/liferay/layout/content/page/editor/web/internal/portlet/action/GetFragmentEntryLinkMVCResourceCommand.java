@@ -19,6 +19,7 @@ import com.liferay.fragment.model.FragmentEntryLink;
 import com.liferay.fragment.renderer.DefaultFragmentRendererContext;
 import com.liferay.fragment.renderer.FragmentRendererController;
 import com.liferay.fragment.service.FragmentEntryLinkLocalService;
+import com.liferay.info.constants.InfoDisplayWebKeys;
 import com.liferay.info.display.contributor.InfoDisplayContributor;
 import com.liferay.info.display.contributor.InfoDisplayContributorTracker;
 import com.liferay.info.display.contributor.InfoDisplayObjectProvider;
@@ -95,6 +96,13 @@ public class GetFragmentEntryLinkMVCResourceCommand
 			long collectionItemClassPK = ParamUtil.getLong(
 				resourceRequest, "collectionItemClassPK");
 
+			HttpServletRequest httpServletRequest =
+				_portal.getHttpServletRequest(resourceRequest);
+
+			InfoDisplayContributor currentInfoDisplayContributor =
+				(InfoDisplayContributor)httpServletRequest.getAttribute(
+					InfoDisplayWebKeys.INFO_DISPLAY_CONTRIBUTOR);
+
 			if (Validator.isNotNull(collectionItemClassName) &&
 				(collectionItemClassPK > 0)) {
 
@@ -109,23 +117,37 @@ public class GetFragmentEntryLinkMVCResourceCommand
 
 					defaultFragmentRendererContext.setDisplayObject(
 						infoDisplayObjectProvider.getDisplayObject());
+
+					httpServletRequest.setAttribute(
+						InfoDisplayWebKeys.INFO_DISPLAY_CONTRIBUTOR,
+						infoDisplayContributor);
+					httpServletRequest.setAttribute(
+						InfoDisplayWebKeys.INFO_LIST_DISPLAY_OBJECT,
+						infoDisplayObjectProvider.getDisplayObject());
 				}
 			}
 
-			HttpServletRequest httpServletRequest =
-				_portal.getHttpServletRequest(resourceRequest);
+			try {
+				String content = _fragmentRendererController.render(
+					defaultFragmentRendererContext, httpServletRequest,
+					_portal.getHttpServletResponse(resourceResponse));
 
-			String content = _fragmentRendererController.render(
-				defaultFragmentRendererContext, httpServletRequest,
-				_portal.getHttpServletResponse(resourceResponse));
+				jsonObject.put(
+					"content", content
+				).put(
+					"editableValues",
+					JSONFactoryUtil.createJSONObject(
+						fragmentEntryLink.getEditableValues())
+				);
+			}
+			finally {
+				httpServletRequest.removeAttribute(
+					InfoDisplayWebKeys.INFO_LIST_DISPLAY_OBJECT);
 
-			jsonObject.put(
-				"content", content
-			).put(
-				"editableValues",
-				JSONFactoryUtil.createJSONObject(
-					fragmentEntryLink.getEditableValues())
-			);
+				httpServletRequest.setAttribute(
+					InfoDisplayWebKeys.INFO_DISPLAY_CONTRIBUTOR,
+					currentInfoDisplayContributor);
+			}
 
 			if (SessionErrors.contains(
 					httpServletRequest, "fragmentEntryContentInvalid")) {

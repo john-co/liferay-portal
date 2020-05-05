@@ -66,7 +66,9 @@ const LocalizableTextWithContextMock = withContextMock(LocalizableText);
 
 describe('Field LocalizableText', () => {
 	beforeAll(() => {
+
 		// @ts-ignore
+
 		ReactDOM.createPortal = jest.fn((element) => {
 			return element;
 		});

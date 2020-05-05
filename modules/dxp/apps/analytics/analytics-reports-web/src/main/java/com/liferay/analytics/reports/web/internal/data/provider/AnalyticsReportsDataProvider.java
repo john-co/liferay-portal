@@ -27,6 +27,7 @@ import com.liferay.analytics.reports.web.internal.model.TimeSpan;
 import com.liferay.analytics.reports.web.internal.model.TrafficSource;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.Http;
 
 import java.time.format.DateTimeFormatter;
@@ -60,7 +61,7 @@ public class AnalyticsReportsDataProvider {
 						timeRange.getEndLocalDate()),
 					DateTimeFormatter.ISO_DATE.format(
 						timeRange.getStartLocalDate()),
-					url));
+					HtmlUtil.escapeURL(url)));
 
 			return _objectMapper.readValue(response, HistoricalMetric.class);
 		}
@@ -84,7 +85,7 @@ public class AnalyticsReportsDataProvider {
 						timeRange.getEndLocalDate()),
 					DateTimeFormatter.ISO_DATE.format(
 						timeRange.getStartLocalDate()),
-					url));
+					HtmlUtil.escapeURL(url)));
 
 			return _objectMapper.readValue(response, HistoricalMetric.class);
 		}
@@ -98,9 +99,12 @@ public class AnalyticsReportsDataProvider {
 		throws PortalException {
 
 		try {
-			return Long.valueOf(
+			long totalReads = GetterUtil.getLong(
 				_asahFaroBackendClient.doGet(
-					companyId, "api/1.0/pages/read-count?url=" + url));
+					companyId,
+					"api/1.0/pages/read-count?url=" + HtmlUtil.escapeURL(url)));
+
+			return Math.max(0, totalReads - _getTodayReads(companyId, url));
 		}
 		catch (Exception exception) {
 			throw new PortalException("Unable to get total reads", exception);
@@ -113,7 +117,8 @@ public class AnalyticsReportsDataProvider {
 		try {
 			long totalViews = GetterUtil.getLong(
 				_asahFaroBackendClient.doGet(
-					companyId, "api/1.0/pages/view-count?url=" + url));
+					companyId,
+					"api/1.0/pages/view-count?url=" + HtmlUtil.escapeURL(url)));
 
 			return Math.max(0, totalViews - _getTodayViews(companyId, url));
 		}
@@ -144,6 +149,17 @@ public class AnalyticsReportsDataProvider {
 
 	public boolean isValidAnalyticsConnection(long companyId) {
 		return _asahFaroBackendClient.isValidConnection(companyId);
+	}
+
+	private long _getTodayReads(long companyId, String url)
+		throws PortalException {
+
+		HistoricalMetric historicalMetric = getHistoricalReadsHistoricalMetric(
+			companyId, TimeRange.of(TimeSpan.TODAY, 0), url);
+
+		Double value = historicalMetric.getValue();
+
+		return value.longValue();
 	}
 
 	private long _getTodayViews(long companyId, String url)

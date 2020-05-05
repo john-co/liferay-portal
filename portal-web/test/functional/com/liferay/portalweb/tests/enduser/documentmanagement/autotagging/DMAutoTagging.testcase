@@ -227,7 +227,7 @@ definition {
 		DMDocument.addCP(
 			dmDocumentDescription = "DM Document Description",
 			dmDocumentFile = "Alice's Adventures in Wonderland.docx",
-			dmDocumentTitle = "DM Document Title");
+			dmDocumentTitle = "DM Document DOCX");
 
 		DMNavigator.openDocumentsAndMediaAdmin(siteURLKey = "guest");
 
@@ -308,7 +308,7 @@ definition {
 		DMDocument.addCP(
 			dmDocumentDescription = "DM Document Description",
 			dmDocumentFile = "Alice's Adventures in Wonderland.docx",
-			dmDocumentTitle = "DM Document Title");
+			dmDocumentTitle = "DM Document DOCX");
 
 		DMNavigator.openDocumentsAndMediaAdmin(siteURLKey = "guest");
 
@@ -396,10 +396,10 @@ definition {
 
 		LexiconEntry.changeDisplayStyle(displayStyle = "list");
 
-		DMDocument.addCP(
-			dmDocumentDescription = "DM Document Description",
+		DMDocument.addPG(
+			dmDocumentDescription = "Auto Tagged PDF Description",
 			dmDocumentFile = "Alice's Adventures in Wonderland.pdf",
-			dmDocumentTitle = "DM Document PDF");
+			dmDocumentTitle = "Auto Tagged PDF");
 
 		DMDocument.viewPG(
 			dmDocumentDescription = "Auto Tagged PDF Description",

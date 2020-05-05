@@ -24,7 +24,9 @@ const INSTANCE_MAP = new WeakMap();
  * component wrappers from a DOM element.
  */
 function getElement(element) {
+
 	// Remove jQuery wrapper, if any.
+
 	if (element && element.jquery) {
 		if (element.length > 1) {
 			throw new Error(
@@ -35,6 +37,7 @@ function getElement(element) {
 	}
 
 	// Remove Metal wrapper, if any.
+
 	if (element && !(element instanceof HTMLElement)) {
 		element = element.element;
 	}
@@ -113,11 +116,15 @@ function setClasses(element, classes) {
 	element = getElement(element);
 
 	if (element) {
+
 		// One at a time because IE 11: https://caniuse.com/#feat=classlist
+
 		Object.entries(classes).forEach(([className, present]) => {
+
 			// Some callers use multiple space-separated classNames for
 			// `openClass`/`data-open-class`. (Looking at you,
 			// product-navigation-simulation-web...)
+
 			className.split(/\s+/).forEach((name) => {
 				if (present) {
 					element.classList.add(name);
@@ -134,6 +141,7 @@ function hasClass(element, className) {
 	element = getElement(element);
 
 	// Again, product-navigation-simulation-web passes multiple classNames.
+
 	return className.split(/\s+/).every((name) => {
 		return element.classList.contains(name);
 	});
@@ -192,12 +200,14 @@ function handleEvent(eventName, event) {
 		let target = event.target;
 
 		while (target) {
+
 			// In IE11 SVG elements have no `parentElement`, only a
 			// `parentNode`, so we have to search up the DOM using
 			// the latter. This in turn requires us to check for the
 			// existence of `target.matches` before using it.
 			//
 			// See: https://stackoverflow.com/a/36270354/2103996
+
 			matches = target.matches && target.matches(selector);
 
 			if (matches) {
@@ -220,7 +230,9 @@ function handleEvent(eventName, event) {
  */
 function subscribe(elementOrSelector, eventName, handler) {
 	if (elementOrSelector) {
+
 		// Add only one listener per `eventName`.
+
 		if (!eventNamesToSelectors[eventName]) {
 			eventNamesToSelectors[eventName] = {};
 
@@ -372,6 +384,7 @@ SideNavigation.prototype = {
 					range.selectNode(sidebar);
 
 					// Unlike `.innerHTML`, this will eval scripts.
+
 					const fragment = range.createContextualFragment(text);
 
 					sidebar.removeChild(loading);
@@ -452,6 +465,7 @@ SideNavigation.prototype = {
 		}
 
 		// Force Reflow for IE11 Browser Bug
+
 		setStyles(container, {
 			display: '',
 		});
@@ -932,7 +946,9 @@ SideNavigation.prototype = {
 			}
 
 			if (instance.mobile) {
+
 				// ios 8 fixed element disappears when trying to scroll
+
 				menu.focus();
 			}
 		});
@@ -1078,7 +1094,9 @@ function onReady() {
 }
 
 if (document.readyState !== 'loading') {
+
 	// readyState is "interactive" or "complete".
+
 	onReady();
 }
 else {

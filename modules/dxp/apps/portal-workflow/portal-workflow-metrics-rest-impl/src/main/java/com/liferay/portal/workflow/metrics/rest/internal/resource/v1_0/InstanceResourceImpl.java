@@ -313,18 +313,6 @@ public class InstanceResourceImpl extends BaseInstanceResourceImpl {
 		return assignee;
 	}
 
-	private BooleanQuery _createAssigneeIdsExistsBooleanQuery(
-		Long[] assigneeIds) {
-
-		BooleanQuery booleanQuery = _queries.booleanQuery();
-
-		if (ArrayUtil.contains(assigneeIds, -1L)) {
-			booleanQuery.addMustNotQueryClauses(_queries.exists("assigneeIds"));
-		}
-
-		return booleanQuery;
-	}
-
 	private BooleanQuery _createAssigneeIdsTermsBooleanQuery(
 		Long[] assigneeIds) {
 
@@ -344,6 +332,17 @@ public class InstanceResourceImpl extends BaseInstanceResourceImpl {
 			));
 
 		return booleanQuery.addMustQueryClauses(termsQuery);
+	}
+
+	private BooleanQuery _createAssigneeTypeBooleanQuery(Long[] assigneeIds) {
+		BooleanQuery booleanQuery = _queries.booleanQuery();
+
+		if (ArrayUtil.contains(assigneeIds, -1L)) {
+			booleanQuery.addMustQueryClauses(
+				_queries.term("assigneeType", Role.class.getName()));
+		}
+
+		return booleanQuery;
 	}
 
 	private BooleanQuery _createBooleanQuery(long processId) {
@@ -453,16 +452,6 @@ public class InstanceResourceImpl extends BaseInstanceResourceImpl {
 		bucketSortPipelineAggregation.setSize(pagination.getPageSize());
 
 		return bucketSortPipelineAggregation;
-	}
-
-	private BooleanQuery _createCountFilterBooleanQuery() {
-		BooleanQuery booleanQuery = _queries.booleanQuery();
-
-		return booleanQuery.addFilterQueryClauses(
-			_queries.term(
-				"_index",
-				_taskWorkflowMetricsIndexNameBuilder.getIndexName(
-					contextCompany.getCompanyId())));
 	}
 
 	private Instance _createInstance(Document document) {
@@ -578,8 +567,8 @@ public class InstanceResourceImpl extends BaseInstanceResourceImpl {
 
 		if (assigneeIds.length > 0) {
 			booleanQuery.addShouldQueryClauses(
-				_createAssigneeIdsExistsBooleanQuery(assigneeIds),
-				_createAssigneeIdsTermsBooleanQuery(assigneeIds));
+				_createAssigneeIdsTermsBooleanQuery(assigneeIds),
+				_createAssigneeTypeBooleanQuery(assigneeIds));
 		}
 
 		return booleanQuery.addMustQueryClauses(
@@ -821,35 +810,44 @@ public class InstanceResourceImpl extends BaseInstanceResourceImpl {
 
 		SearchSearchRequest searchSearchRequest = new SearchSearchRequest();
 
-		TermsAggregation termsAggregation = _aggregations.terms("nodeId", null);
+		TermsAggregation termsAggregation = _aggregations.terms(
+			"nodeId", "nodeId");
 
 		termsAggregation.setSize(100000);
 
-		termsAggregation.setScript(
-			_scripts.script(
-				"doc.containsKey('taskId') ? doc.taskId.value : doc." +
-					"sourceNodeId.value"));
-
 		FilterAggregation countFilterAggregation = _aggregations.filter(
-			"countFilter", _createCountFilterBooleanQuery());
+			"countFilter",
+			_queries.term(
+				"_index",
+				_taskWorkflowMetricsIndexNameBuilder.getIndexName(
+					contextCompany.getCompanyId())));
 
 		countFilterAggregation.addChildrenAggregations(
-			_aggregations.valueCount("taskCount", "taskId"));
+			_aggregations.valueCount("nodeCount", "nodeId"));
+
+		FilterAggregation nameFilterAggregation = _aggregations.filter(
+			"nameFilter",
+			_queries.term(
+				"_index",
+				_transitionWorkflowMetricsIndexNameBuilder.getIndexName(
+					contextCompany.getCompanyId())));
 
 		TermsAggregation nameTermsAggregation = _aggregations.terms(
 			"name", "name");
 
 		nameTermsAggregation.setSize(100000);
 
+		nameFilterAggregation.addChildAggregation(nameTermsAggregation);
+
 		termsAggregation.addChildrenAggregations(
-			countFilterAggregation, nameTermsAggregation);
+			countFilterAggregation, nameFilterAggregation);
 
 		BucketSelectorPipelineAggregation bucketSelectorPipelineAggregation =
 			_aggregations.bucketSelector(
-				"bucketSelector", _scripts.script("params.taskCount > 0"));
+				"bucketSelector", _scripts.script("params.nodeCount > 0"));
 
 		bucketSelectorPipelineAggregation.addBucketPath(
-			"taskCount", "countFilter>taskCount.value");
+			"nodeCount", "countFilter>nodeCount.value");
 
 		termsAggregation.addPipelineAggregations(
 			bucketSelectorPipelineAggregation);
@@ -881,7 +879,13 @@ public class InstanceResourceImpl extends BaseInstanceResourceImpl {
 			Collection::stream
 		).map(
 			bucket -> Stream.of(
-				(TermsAggregationResult)bucket.getChildAggregationResult("name")
+				(FilterAggregationResult)bucket.getChildAggregationResult(
+					"nameFilter")
+			).map(
+				filterAggregationResult ->
+					(TermsAggregationResult)
+						filterAggregationResult.getChildAggregationResult(
+							"name")
 			).map(
 				TermsAggregationResult::getBuckets
 			).flatMap(

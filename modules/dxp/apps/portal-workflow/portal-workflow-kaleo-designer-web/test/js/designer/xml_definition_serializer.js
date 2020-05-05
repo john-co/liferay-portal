@@ -33,7 +33,9 @@ describe('liferay-kaleo-designer-xml-definition-serializer', () => {
 		AUI().use(
 			['liferay-kaleo-designer-xml-util', 'liferay-kaleo-designer-utils'],
 			(A) => {
+
 				// Stub for "aui-component", which refuses to load in test env.
+
 				A.Component = {
 					create({ATTRS, prototype, ...properties}) {
 						const constructor = function () {};

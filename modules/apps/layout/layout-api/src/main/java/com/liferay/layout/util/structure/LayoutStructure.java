@@ -14,6 +14,7 @@
 
 package com.liferay.layout.util.structure;
 
+import com.liferay.layout.responsive.ViewportSize;
 import com.liferay.petra.lang.HashUtil;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.json.JSONException;
@@ -53,17 +54,33 @@ public class LayoutStructure {
 			JSONObject itemsJSONObject =
 				layoutStructureJSONObject.getJSONObject("items");
 
+			Map<Long, LayoutStructureItem> fragmentLayoutStructureItems =
+				new HashMap<>(itemsJSONObject.length());
+
 			Map<String, LayoutStructureItem> layoutStructureItems =
 				new HashMap<>(itemsJSONObject.length());
 
 			for (String key : itemsJSONObject.keySet()) {
-				layoutStructureItems.put(
-					key,
-					LayoutStructureItem.of(itemsJSONObject.getJSONObject(key)));
+				LayoutStructureItem layoutStructureItem =
+					LayoutStructureItem.of(itemsJSONObject.getJSONObject(key));
+
+				layoutStructureItems.put(key, layoutStructureItem);
+
+				if (layoutStructureItem instanceof
+						FragmentLayoutStructureItem) {
+
+					FragmentLayoutStructureItem fragmentLayoutStructureItem =
+						(FragmentLayoutStructureItem)layoutStructureItem;
+
+					fragmentLayoutStructureItems.put(
+						fragmentLayoutStructureItem.getFragmentEntryLinkId(),
+						fragmentLayoutStructureItem);
+				}
 			}
 
 			return new LayoutStructure(
-				layoutStructureItems, rootItemsJSONObject.getString("main"));
+				fragmentLayoutStructureItems, layoutStructureItems,
+				rootItemsJSONObject.getString("main"));
 		}
 		catch (JSONException jsonException) {
 			if (_log.isDebugEnabled()) {
@@ -75,6 +92,7 @@ public class LayoutStructure {
 	}
 
 	public LayoutStructure() {
+		_fragmentLayoutStructureItems = new HashMap<>();
 		_layoutStructureItems = new HashMap<>();
 		_mainItemId = StringPool.BLANK;
 	}
@@ -137,6 +155,18 @@ public class LayoutStructure {
 		_updateLayoutStructure(dropZoneLayoutStructureItem, position);
 
 		return dropZoneLayoutStructureItem;
+	}
+
+	public LayoutStructureItem addFragmentDropZoneLayoutStructureItem(
+		String parentItemId, int position) {
+
+		FragmentDropZoneLayoutStructureItem
+			fragmentDropZoneLayoutStructureItem =
+				new FragmentDropZoneLayoutStructureItem(parentItemId);
+
+		_updateLayoutStructure(fragmentDropZoneLayoutStructureItem, position);
+
+		return fragmentDropZoneLayoutStructureItem;
 	}
 
 	public LayoutStructureItem addFragmentLayoutStructureItem(
@@ -291,6 +321,12 @@ public class LayoutStructure {
 		return _layoutStructureItems.get(itemId);
 	}
 
+	public LayoutStructureItem getLayoutStructureItemByFragmentEntryLinkId(
+		long fragmentEntryLinkId) {
+
+		return _fragmentLayoutStructureItems.get(fragmentEntryLinkId);
+	}
+
 	public List<LayoutStructureItem> getLayoutStructureItems() {
 		return ListUtil.fromCollection(_layoutStructureItems.values());
 	}
@@ -393,12 +429,19 @@ public class LayoutStructure {
 		RowLayoutStructureItem rowLayoutStructureItem =
 			(RowLayoutStructureItem)_layoutStructureItems.get(itemId);
 
+		for (ViewportSize viewportSize : ViewportSize.values()) {
+			_updateNumberOfColumns(
+				rowLayoutStructureItem, viewportSize.getViewportSizeId(),
+				numberOfColumns);
+		}
+
 		int oldNumberOfColumns = rowLayoutStructureItem.getNumberOfColumns();
 
 		if (oldNumberOfColumns == numberOfColumns) {
 			return Collections.emptyList();
 		}
 
+		rowLayoutStructureItem.setModulesPerRow(numberOfColumns);
 		rowLayoutStructureItem.setNumberOfColumns(numberOfColumns);
 
 		List<String> childrenItemIds = new ArrayList<>(
@@ -449,9 +492,11 @@ public class LayoutStructure {
 	}
 
 	private LayoutStructure(
+		Map<Long, LayoutStructureItem> fragmentLayoutStructureItems,
 		Map<String, LayoutStructureItem> layoutStructureItems,
 		String mainItemId) {
 
+		_fragmentLayoutStructureItems = fragmentLayoutStructureItems;
 		_layoutStructureItems = layoutStructureItems;
 		_mainItemId = mainItemId;
 	}
@@ -521,6 +566,24 @@ public class LayoutStructure {
 		}
 	}
 
+	private void _updateNumberOfColumns(
+		RowLayoutStructureItem rowLayoutStructureItem, String viewportSizeId,
+		int numberOfColumns) {
+
+		Map<String, JSONObject> viewportSizeConfigurations =
+			rowLayoutStructureItem.getViewportSizeConfigurations();
+
+		JSONObject viewportSizeConfigurationJSONObject =
+			viewportSizeConfigurations.getOrDefault(
+				viewportSizeId, JSONFactoryUtil.createJSONObject());
+
+		viewportSizeConfigurationJSONObject.put(
+			"modulesPerRow", numberOfColumns
+		).put(
+			"numberOfColumns", numberOfColumns
+		);
+	}
+
 	private static final int[][] _COLUMN_SIZES = {
 		{12}, {6, 6}, {4, 4, 4}, {3, 3, 3, 3}, {2, 2, 4, 2, 2},
 		{2, 2, 2, 2, 2, 2}, {1, 1, 1, 6, 1, 1, 1}, {1, 1, 1, 3, 3, 1, 1, 1},
@@ -533,6 +596,7 @@ public class LayoutStructure {
 	private static final Log _log = LogFactoryUtil.getLog(
 		LayoutStructure.class);
 
+	private final Map<Long, LayoutStructureItem> _fragmentLayoutStructureItems;
 	private final Map<String, LayoutStructureItem> _layoutStructureItems;
 	private String _mainItemId;
 

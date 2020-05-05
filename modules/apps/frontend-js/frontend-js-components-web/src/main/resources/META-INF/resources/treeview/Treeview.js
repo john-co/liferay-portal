@@ -188,13 +188,16 @@ function updateNode(state, id, callback) {
 	let node = callback(nodeMap[id]);
 
 	if (node === nodeMap[id]) {
+
 		// Node didn't change, so leave state as-is.
+
 		return state.nodes;
 	}
 
 	nodeMap[id] = node;
 
 	// Walk back to root updating subtrees.
+
 	while (node.parentId) {
 		const parent = nodeMap[node.parentId];
 
@@ -240,7 +243,9 @@ function reducer(state, action) {
 			};
 
 		case 'COLLAPSE':
+
 			// eg double click
+
 			if (!filteredNodes) {
 				return {
 					...state,
@@ -284,23 +289,29 @@ function reducer(state, action) {
 				else {
 					while (node) {
 						if (node.id !== action.nodeId) {
+
 							// Not the first iteration and we found a match: done.
+
 							break;
 						}
 
 						if (node.expanded && node.children.length) {
+
 							// Expanded, so go to first visible child.
+
 							node = node.children[0];
 							break;
 						}
 
 						// No visible children, so go to first visible sibling.
+
 						if (node.nextSiblingId) {
 							node = nodeMap[node.nextSiblingId];
 							continue;
 						}
 
 						// As last resort, go to parent's sibling.
+
 						if (node.parentId) {
 							const nextId = nodeMap[node.parentId].nextSiblingId;
 
@@ -311,6 +322,7 @@ function reducer(state, action) {
 						}
 
 						// Give up.
+
 						node = null;
 						break;
 					}
@@ -351,7 +363,9 @@ function reducer(state, action) {
 							break;
 						}
 						else {
+
 							// Go to parent.
+
 							node = nodeMap[node.parentId];
 							break;
 						}
@@ -401,8 +415,10 @@ function reducer(state, action) {
 			break;
 
 		case 'TOGGLE_EXPANDED':
+
 			// Toggles the expanded or collapsed state of the selected
 			// parent node. eg. by double clicking; doesn't select a child.
+
 			if (!filteredNodes) {
 				return {
 					...state,
@@ -460,9 +476,11 @@ function reducer(state, action) {
 
 		case 'COLLAPSE_PARENT':
 			{
+
 				// Collapse the currently selected parent node if it is
 				// expanded; otherwise move to the previous parent node
 				// (if possible).
+
 				if (!filteredNodes) {
 					const node = nodeMap[action.nodeId];
 
@@ -489,8 +507,10 @@ function reducer(state, action) {
 
 		case 'EXPAND_AND_ENTER':
 			{
+
 				// Expand the currently selected parent node if it is closed;
 				// move to the first child list item if it was already expanded.
+
 				if (!filteredNodes) {
 					const node = nodeMap[action.nodeId];
 
@@ -592,7 +612,9 @@ function reducer(state, action) {
 		}
 
 		case 'EXIT':
+
 			// Navigate away from tree.
+
 			break;
 
 		case 'UPDATE_NODES': {
@@ -759,6 +781,7 @@ function Treeview({
 		// immediately after this "blur" (eg. when moving around inside
 		// the treeview); so, we defer this state update until the next
 		// tick, giving us a chance to cancel it if needed.
+
 		focusTimer.current = delay(() => {
 			setHasFocus((hadFocus) => {
 				if (hadFocus) {

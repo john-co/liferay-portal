@@ -20,6 +20,8 @@ export default function ({context, props}) {
 	const {languageTag, namespace, page} = context;
 	const {defaultTimeRange, defaultTimeSpanKey, timeSpans} = context;
 	const {validAnalyticsConnection} = context;
+	const {readsEnabled} = context;
+
 	const {authorName, publishDate, title} = props;
 	const {trafficSources} = props;
 
@@ -41,13 +43,16 @@ export default function ({context, props}) {
 		page,
 	});
 
+	const publishedToday =
+		new Date().toDateString() === new Date(publishDate).toDateString();
+
 	return (
 		<ConnectionContext.Provider
 			value={{
 				validAnalyticsConnection,
 			}}
 		>
-			<StoreContextProvider>
+			<StoreContextProvider value={{publishedToday, readsEnabled}}>
 				<Navigation
 					api={api}
 					authorName={authorName}

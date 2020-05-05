@@ -26,9 +26,11 @@ import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
+import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.kernel.util.PrefsProps;
 import com.liferay.portal.kernel.util.PrefsPropsUtil;
+import com.liferay.portal.util.HtmlImpl;
 
 import java.io.IOException;
 
@@ -56,6 +58,10 @@ public class AnalyticsReportsDataProviderTest {
 
 	@BeforeClass
 	public static void setUpClass() {
+		HtmlUtil htmlUtil = new HtmlUtil();
+
+		htmlUtil.setHtml(new HtmlImpl());
+
 		JSONFactoryUtil jsonFactoryUtil = new JSONFactoryUtil();
 
 		jsonFactoryUtil.setJSONFactory(new JSONFactoryImpl());
@@ -117,14 +123,34 @@ public class AnalyticsReportsDataProviderTest {
 
 	@Test
 	public void testGetTotalReads() throws Exception {
+		LocalDate localDate = LocalDate.now();
+
 		AnalyticsReportsDataProvider analyticsReportsDataProvider =
 			new AnalyticsReportsDataProvider(
-				_getHttp(Collections.singletonMap("/read-count", "12345")));
+				_getHttp(
+					HashMapBuilder.put(
+						"/read-count", "12345"
+					).put(
+						"/read-counts",
+						JSONUtil.put(
+							"histogram",
+							JSONUtil.put(
+								JSONUtil.put(
+									"key",
+									localDate.format(
+										DateTimeFormatter.ISO_LOCAL_DATE)
+								).put(
+									"value", 5
+								))
+						).put(
+							"value", 5
+						).toJSONString()
+					).build()));
 
 		Long totalReads = analyticsReportsDataProvider.getTotalReads(
 			RandomTestUtil.randomLong(), RandomTestUtil.randomString());
 
-		Assert.assertEquals(Long.valueOf(12345), totalReads);
+		Assert.assertEquals(Long.valueOf(12340), totalReads);
 	}
 
 	@Test(expected = PortalException.class)
