@@ -1,0 +1,4 @@
+Bundle-Name: Liferay Frontend JS Test Instrumentation
+Bundle-SymbolicName: com.liferay.frontend.js.test.instrumentation
+Bundle-Version: 1.0.0
+Web-ContextPath: /frontend-js-test-instrumentation
