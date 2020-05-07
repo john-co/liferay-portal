@@ -722,9 +722,12 @@ definition {
 			webContentTitle = "WC2 WebContent2 Title2");
 	}
 
+	// Quarantine because of ticket LPS-110927, need to fix wait for select frame
+
 	@priority = "5"
 	test SelectWebContent {
 		property portal.acceptance = "true";
+		property portal.upstream = "quarantine";
 		property testray.component.names = "Web Content Display,Training";
 
 		JSONWebcontent.addWebContent(
