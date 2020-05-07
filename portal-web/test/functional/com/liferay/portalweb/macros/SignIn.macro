@@ -139,6 +139,8 @@ definition {
 		if (IsElementPresent(locator1 = "Select#QUESTION")) {
 			SignIn.setPasswordReminder();
 		}
+
+		LiferayEvent.initializeLiferayEventLog();
 	}
 
 }
