@@ -5,7 +5,7 @@ definition {
 			locator1 = "FormPortlet#SELECT_FORM",
 			value1 = "Select Form");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");

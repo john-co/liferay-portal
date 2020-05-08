@@ -67,7 +67,7 @@ definition {
 			portletOption = "${optionName}",
 			siteTemplate = "${siteTemplate}");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -80,7 +80,7 @@ definition {
 			menuItem = "Permissions",
 			rowEntry = "${dmDocumentTitle}");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -103,7 +103,7 @@ definition {
 
 		LexiconEntry.gotoEllipsisMenuItem(menuItem = "Permissions");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -121,7 +121,7 @@ definition {
 
 		MenuItem.click(menuItem = "Permissions");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -136,7 +136,7 @@ definition {
 
 		MenuItem.click(menuItem = "Permissions");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -160,7 +160,7 @@ definition {
 
 		MenuItem.click(menuItem = "Permissions");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -186,7 +186,7 @@ definition {
 			menuItem = "Permissions",
 			rowEntry = "${pollsQuestionTitle}");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -216,7 +216,7 @@ definition {
 			menuItem = "Permissions",
 			rowEntry = "${teamName}");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");

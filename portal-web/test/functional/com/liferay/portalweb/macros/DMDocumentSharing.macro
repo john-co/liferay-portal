@@ -40,7 +40,7 @@ definition {
 
 		DMDocumentSharing._manageCollaborators();
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -71,7 +71,7 @@ definition {
 	macro removeCollaborator {
 		DMDocumentSharing._manageCollaborators();
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");

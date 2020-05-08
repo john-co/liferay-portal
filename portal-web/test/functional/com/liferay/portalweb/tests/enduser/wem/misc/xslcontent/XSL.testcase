@@ -147,7 +147,7 @@ definition {
 
 		Portlet.gotoPortletOptions(portletOption = "Configuration");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -269,7 +269,7 @@ definition {
 
 		Portlet.gotoPortletOptions(portletOption = "Configuration");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -381,7 +381,7 @@ definition {
 
 		Portlet.gotoPortletOptions(portletOption = "Configuration");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -492,7 +492,7 @@ definition {
 
 		Portlet.gotoPortletOptions(portletOption = "Configuration");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");

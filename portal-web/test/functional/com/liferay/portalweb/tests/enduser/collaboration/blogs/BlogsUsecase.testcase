@@ -228,7 +228,7 @@ definition {
 
 		ItemSelector.searchDMImages(imageFileName = "Document_1");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -1310,7 +1310,7 @@ definition {
 			locator1 = "Portlet#TITLE",
 			value1 = "Blogs Aggregator");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -1325,7 +1325,7 @@ definition {
 
 		SelectFrame(value1 = "relative=top");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");

@@ -130,7 +130,7 @@ definition {
 
 			SelectFrame(value1 = "relative=top");
 
-			LiferayEvent.waitForLiferayEvent(
+			WaitForLiferayEvent(
 				attributeName = "src",
 				attributeValue = "dialog-iframe-popup",
 				eventName = "modalIframeLoaded");
@@ -241,7 +241,7 @@ definition {
 
 		Click(locator1 = "AssetLists#ASSET_TYPE_DROPDOWN_ITEM");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -349,7 +349,7 @@ definition {
 			key_menuItem = "View Content",
 			locator1 = "AssetLists#PERSONALIZATION_DROPDOWN_ITEM");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -382,7 +382,7 @@ definition {
 			key_menuItem = "View Content",
 			locator1 = "AssetLists#PERSONALIZATION_DROPDOWN_ITEM");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");

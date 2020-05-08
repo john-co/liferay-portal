@@ -136,7 +136,7 @@ definition {
 
 			SelectFrame(value1 = "relative=top");
 
-			LiferayEvent.waitForLiferayEvent(
+			WaitForLiferayEvent(
 				attributeName = "src",
 				attributeValue = "dialog-iframe-popup",
 				eventName = "modalIframeLoaded");
@@ -309,7 +309,7 @@ definition {
 
 		MenuItem.click(menuItem = "Move");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");

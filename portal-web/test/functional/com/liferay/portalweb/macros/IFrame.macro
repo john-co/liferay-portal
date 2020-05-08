@@ -1,7 +1,7 @@
 definition {
 
 	macro addCP {
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -30,7 +30,7 @@ definition {
 	}
 
 	macro selectCategoryFrame {
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -42,7 +42,7 @@ definition {
 		if (IsElementPresent(locator1 = "IFrame#MODAL_BODY")) {
 			echo("Selecting configuration iframe");
 
-			LiferayEvent.waitForLiferayEvent(
+			WaitForLiferayEvent(
 				attributeName = "src",
 				attributeValue = "dialog-iframe-popup",
 				eventName = "modalIframeLoaded");
@@ -52,7 +52,7 @@ definition {
 	}
 
 	macro selectEditAssetFrame {
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -61,7 +61,7 @@ definition {
 	}
 
 	macro selectModalFrame {
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -71,7 +71,7 @@ definition {
 
 	macro selectPermissionsFrame {
 		while (IsElementPresent(locator1 = "IFrame#MODAL_BODY")) {
-			LiferayEvent.waitForLiferayEvent(
+			WaitForLiferayEvent(
 				attributeName = "src",
 				attributeValue = "dialog-iframe-popup",
 				eventName = "modalIframeLoaded");

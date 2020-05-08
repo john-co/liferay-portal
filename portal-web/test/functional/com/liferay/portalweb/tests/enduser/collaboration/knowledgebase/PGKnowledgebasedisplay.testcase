@@ -193,7 +193,7 @@ definition {
 
 		KBArticle.moveArticleViaKBDisplayPG(kbArticleTitle = "Knowledge Base Article Title Child");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");

@@ -58,7 +58,7 @@ definition {
 	}
 
 	macro _export {
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -173,7 +173,7 @@ definition {
 	}
 
 	macro _selectImportFile {
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -383,7 +383,7 @@ definition {
 		if (isSet(deleteFromPortlet)) {
 			LAR._gotoExportImport();
 
-			LiferayEvent.waitForLiferayEvent(
+			WaitForLiferayEvent(
 				attributeName = "src",
 				attributeValue = "dialog-iframe-popup",
 				eventName = "modalIframeLoaded");

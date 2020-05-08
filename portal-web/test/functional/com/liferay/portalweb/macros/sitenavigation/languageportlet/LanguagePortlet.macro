@@ -1,7 +1,7 @@
 definition {
 
 	macro configureViewCurrentLanguages {
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -28,7 +28,7 @@ definition {
 	}
 
 	macro moveLanguagesToAvailable {
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -87,7 +87,7 @@ definition {
 	}
 
 	macro toggleDisplayTemplate {
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");

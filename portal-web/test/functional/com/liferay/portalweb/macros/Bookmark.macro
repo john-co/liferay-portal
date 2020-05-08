@@ -12,7 +12,7 @@ definition {
 
 			SelectFrameTop();
 
-			LiferayEvent.waitForLiferayEvent(
+			WaitForLiferayEvent(
 				attributeName = "src",
 				attributeValue = "dialog-iframe-popup",
 				eventName = "modalIframeLoaded");
@@ -188,7 +188,7 @@ definition {
 	}
 
 	macro addRelatedAssetBookmarksEntryPG {
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -379,7 +379,7 @@ definition {
 			locator1 = "Button#SELECT",
 			value1 = "Select");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -436,7 +436,7 @@ definition {
 			locator1 = "Button#SELECT",
 			value1 = "Select");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");

@@ -5,7 +5,7 @@ definition {
 			portletName = "${portletName}",
 			portletOption = "Configuration");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -81,7 +81,7 @@ definition {
 			portletName = "Documents and Media",
 			portletOption = "Configuration");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -94,7 +94,7 @@ definition {
 
 		SelectFrame(value1 = "relative=top");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -113,7 +113,7 @@ definition {
 
 		SelectFrame(value1 = "relative=top");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -134,7 +134,7 @@ definition {
 			portletName = "Documents and Media",
 			portletOption = "Configuration");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -161,7 +161,7 @@ definition {
 			portletName = "${portletName}",
 			portletOption = "Configuration");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");

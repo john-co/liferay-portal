@@ -538,7 +538,7 @@ definition {
 
 		Click(locator1 = "PageEditor#FRAGMENT_BODY_FLOATING_TOOLBAR_PLUS_BUTTON");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -621,7 +621,7 @@ definition {
 
 		Click(locator1 = "PageEditor#FRAGMENT_BODY_FLOATING_TOOLBAR_PLUS_BUTTON");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -737,7 +737,7 @@ definition {
 
 		Button.clickSelect();
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -868,7 +868,7 @@ definition {
 				}
 
 				else {
-					LiferayEvent.waitForLiferayEvent(
+					WaitForLiferayEvent(
 						attributeName = "src",
 						attributeValue = "dialog-iframe-popup",
 						eventName = "modalIframeLoaded");
@@ -1037,7 +1037,7 @@ definition {
 
 		Click(locator1 = "PageEditor#FRAGMENT_BODY_FLOATING_TOOLBAR_PLUS_BUTTON");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");

@@ -817,7 +817,7 @@ definition {
 			locator1 = "UsersAndOrganizationsEditUser#ROLES_ORGANIZATION_ROLES_SELECT_LINK",
 			value1 = "Select");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -854,7 +854,7 @@ definition {
 
 		Pause(locator1 = "5000");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -889,7 +889,7 @@ definition {
 			locator1 = "UsersAndOrganizationsEditUser#ROLES_SITE_ROLES_SELECT_LINK",
 			value1 = "Select");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -1517,7 +1517,7 @@ definition {
 			locator1 = "UsersAndOrganizationsEditUser#DEPOT_SELECT_LINK",
 			value1 = "SELECT");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -1621,7 +1621,7 @@ definition {
 			locator1 = "UsersAndOrganizationsEditUser#ORGANIZATIONS_SELECT_LINK",
 			value1 = "Select");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -1658,7 +1658,7 @@ definition {
 			locator1 = "UsersAndOrganizationsEditUser#SITES_SELECT_LINK",
 			value1 = "SELECT");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");

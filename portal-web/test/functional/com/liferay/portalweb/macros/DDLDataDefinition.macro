@@ -10,7 +10,7 @@ definition {
 				locator1 = "Portlet#H3_MODAL_TITLE",
 				value1 = "Data Definitions");
 
-			LiferayEvent.waitForLiferayEvent(
+			WaitForLiferayEvent(
 				attributeName = "src",
 				attributeValue = "dialog-iframe-popup",
 				eventName = "modalIframeLoaded");
@@ -32,7 +32,7 @@ definition {
 	}
 
 	macro _select {
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -180,7 +180,7 @@ definition {
 	}
 
 	macro editPermissionsCP {
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -230,7 +230,7 @@ definition {
 			Pause(locator1 = "1000");
 		}
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -345,7 +345,7 @@ definition {
 			locator1 = "Button#SELECT",
 			value1 = "Select");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");

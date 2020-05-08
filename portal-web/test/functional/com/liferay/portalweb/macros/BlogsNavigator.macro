@@ -18,7 +18,7 @@ definition {
 	macro gotoBlogsEntriesPermissionsCP {
 		LexiconEntry.gotoHeaderMenuItem(menuItem = "Entries Permissions");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -33,7 +33,7 @@ definition {
 			card = "${entryTitle}",
 			item = "Permissions");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -48,7 +48,7 @@ definition {
 			entryTitle = "${entryTitle}",
 			item = "Permissions");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -67,7 +67,7 @@ definition {
 	macro gotoConfigurationSetupPG {
 		Portlet.gotoPortletOptions(portletOption = "Configuration");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");

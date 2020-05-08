@@ -33,7 +33,7 @@ definition {
 			masterLayoutName = "${masterLayoutName}",
 			pageTemplateName = "${pageTemplateName}");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -83,7 +83,7 @@ definition {
 			masterLayoutName = "${masterLayoutName}",
 			pageTemplateName = "${pageTemplateName}");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");

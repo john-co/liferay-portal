@@ -43,7 +43,7 @@ definition {
 
 			Click.pauseClickAt(locator1 = "Button#SELECT_OPEN_GRAPH_IMAGE");
 
-			LiferayEvent.waitForLiferayEvent(
+			WaitForLiferayEvent(
 				attributeName = "src",
 				attributeValue = "dialog-iframe-popup",
 				eventName = "modalIframeLoaded");

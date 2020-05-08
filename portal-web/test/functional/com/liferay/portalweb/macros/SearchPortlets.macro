@@ -47,7 +47,7 @@ definition {
 			portletName = "Custom Filter",
 			portletOption = "Configuration");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -104,7 +104,7 @@ definition {
 	macro configureDestination {
 		SearchPortlets.gotoEmbeddedOptions(portletOption = "Configuration");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -132,7 +132,7 @@ definition {
 		SearchPortlets.gotoEmbeddedOptions(portletOption = "Configuration");
 
 		if (("${searchScope}" == "Everything") || ("${searchScope}" == "Let the User Choose") || ("${searchScope}" == "This Site")) {
-			LiferayEvent.waitForLiferayEvent(
+			WaitForLiferayEvent(
 				attributeName = "src",
 				attributeValue = "dialog-iframe-popup",
 				eventName = "modalIframeLoaded");
@@ -157,7 +157,7 @@ definition {
 			portletName = "Low Level Search Options",
 			portletOption = "Configuration");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -195,7 +195,7 @@ definition {
 			portletName = "Search Options",
 			portletOption = "Configuration");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -231,7 +231,7 @@ definition {
 			portletName = "Similar Results",
 			portletOption = "Configuration");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -329,7 +329,7 @@ definition {
 	macro configureWidgetParameterNames {
 		SearchPortlets.gotoWidgetOptions(portletOption = "Configuration");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -357,7 +357,7 @@ definition {
 		SearchPortlets.gotoWidgetOptions(portletOption = "Configuration");
 
 		if (("${searchScope}" == "Everything") || ("${searchScope}" == "Let the User Choose") || ("${searchScope}" == "This Site")) {
-			LiferayEvent.waitForLiferayEvent(
+			WaitForLiferayEvent(
 				attributeName = "src",
 				attributeValue = "dialog-iframe-popup",
 				eventName = "modalIframeLoaded");

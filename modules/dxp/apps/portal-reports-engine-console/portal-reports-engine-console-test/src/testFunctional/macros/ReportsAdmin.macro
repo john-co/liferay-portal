@@ -267,7 +267,7 @@ definition {
 	macro gotoConfiguration {
 		LexiconEntry.gotoHeaderMenuItem(menuItem = "Configuration");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");

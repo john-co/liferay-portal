@@ -252,7 +252,7 @@ definition {
 			locator1 = "Portlet#H3_MODAL_TITLE",
 			value1 = "Select Asset Type");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -284,7 +284,7 @@ definition {
 			locator1 = "Portlet#H3_MODAL_TITLE",
 			value1 = "Select Asset Type");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");

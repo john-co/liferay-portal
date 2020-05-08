@@ -348,7 +348,7 @@ definition {
 
 		ItemSelector.gotoItemSelectorViaAlloyEditor();
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -538,7 +538,7 @@ definition {
 			}
 
 			else {
-				LiferayEvent.waitForLiferayEvent(
+				WaitForLiferayEvent(
 					attributeName = "src",
 					attributeValue = "dialog-iframe-popup",
 					eventName = "modalIframeLoaded");
@@ -649,7 +649,7 @@ definition {
 			}
 
 			else {
-				LiferayEvent.waitForLiferayEvent(
+				WaitForLiferayEvent(
 					attributeName = "src",
 					attributeValue = "dialog-iframe-popup",
 					eventName = "modalIframeLoaded");
@@ -881,7 +881,7 @@ definition {
 				locator1 = "Button#SELECT_CONTENT",
 				value1 = "Select");
 
-			LiferayEvent.waitForLiferayEvent(
+			WaitForLiferayEvent(
 				attributeName = "src",
 				attributeValue = "dialog-iframe-popup",
 				eventName = "modalIframeLoaded");
@@ -944,7 +944,7 @@ definition {
 
 		SelectFrameTop();
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -1019,7 +1019,7 @@ definition {
 		var iFrameDialog = "IFrame#MODAL_BODY";
 
 		if (IsElementPresent(locator1 = "${iFrameDialog}")) {
-			LiferayEvent.waitForLiferayEvent(
+			WaitForLiferayEvent(
 				attributeName = "src",
 				attributeValue = "dialog-iframe-popup",
 				eventName = "modalIframeLoaded");
@@ -1106,7 +1106,7 @@ definition {
 				locator1 = "Button#SELECT_CONTENT",
 				value1 = "Select");
 
-			LiferayEvent.waitForLiferayEvent(
+			WaitForLiferayEvent(
 				attributeName = "src",
 				attributeValue = "dialog-iframe-popup",
 				eventName = "modalIframeLoaded");
@@ -1203,7 +1203,7 @@ definition {
 
 		Click(locator1 = "Button#PARENT_FOLDER_SELECT");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -1238,7 +1238,7 @@ definition {
 			locator1 = "Button#SELECT",
 			value1 = "Select");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -1272,7 +1272,7 @@ definition {
 			locator1 = "Button#SELECT",
 			value1 = "Select");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -1345,7 +1345,7 @@ definition {
 			locator1 = "APConfiguration#ASSET_SELECTION_MANUAL_ASSET_ENTRIES_ASSET",
 			value1 = "${assetType}");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -1364,7 +1364,7 @@ definition {
 
 		Click(locator1 = "WCEditWebContent#PREVIEW_TEMPLATE");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -1477,7 +1477,7 @@ definition {
 
 		IFrame.selectTopFrame();
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -1644,7 +1644,7 @@ definition {
 	}
 
 	macro viewCompareVersions {
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");

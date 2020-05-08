@@ -662,7 +662,7 @@ definition {
 
 		var key_roleTitle = "Roles Siterole Name";
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");

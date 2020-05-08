@@ -1,7 +1,7 @@
 definition {
 
 	macro configureDisplaySettings {
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -18,7 +18,7 @@ definition {
 	}
 
 	macro configureSharingAllowUsersToAddWikiToAnyWebsite {
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -71,7 +71,7 @@ definition {
 	}
 
 	macro viewConfigurationTabs {
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -88,7 +88,7 @@ definition {
 	}
 
 	macro viewConfigureSharingAllowUsersToAddWikiToAnyWebsite {
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -108,7 +108,7 @@ definition {
 	}
 
 	macro viewDisplaySettings {
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");

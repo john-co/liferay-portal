@@ -20,7 +20,7 @@ definition {
 
 		LexiconEntry.gotoAdd();
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -109,7 +109,7 @@ definition {
 
 			var key_parentSiteName = "${parentSiteName}";
 
-			LiferayEvent.waitForLiferayEvent(
+			WaitForLiferayEvent(
 				attributeName = "src",
 				attributeValue = "dialog-iframe-popup",
 				eventName = "modalIframeLoaded");
@@ -270,7 +270,7 @@ definition {
 			locator1 = "SiteSettingsDefaultUserAssociations#TEAMS_SELECT",
 			value1 = "Select");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -305,7 +305,7 @@ definition {
 
 		LexiconEntry.gotoAdd();
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -332,7 +332,7 @@ definition {
 			card = "${resourceName}",
 			item = "Assign Roles");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -366,7 +366,7 @@ definition {
 			locator1 = "MenuItem#ANY_MENU_ITEM",
 			value1 = "Assign Roles");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -392,7 +392,7 @@ definition {
 		AssertVisible(locator1 = "Button#DONE");
 
 		if (isSet(depotName)) {
-			LiferayEvent.waitForLiferayEvent(
+			WaitForLiferayEvent(
 				attributeName = "src",
 				attributeValue = "dialog-iframe-popup",
 				eventName = "modalIframeLoaded");
@@ -401,7 +401,7 @@ definition {
 		}
 
 		else {
-			LiferayEvent.waitForLiferayEvent(
+			WaitForLiferayEvent(
 				attributeName = "src",
 				attributeValue = "dialog-iframe-popup",
 				eventName = "modalIframeLoaded");
@@ -434,7 +434,7 @@ definition {
 
 		LexiconEntry.gotoAdd();
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -469,7 +469,7 @@ definition {
 			locator1 = "UsersAndOrganizationsEditUser#SITES_SELECT_LINK",
 			value1 = "Select");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -1073,7 +1073,7 @@ definition {
 
 		var key_parentSiteName = "${parentSiteName}";
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -1137,7 +1137,7 @@ definition {
 
 		MenuItem.click(menuItem = "Unassign Roles");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -1261,7 +1261,7 @@ definition {
 
 		ProductMenuHelper.openWorkspace();
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -1309,7 +1309,7 @@ definition {
 
 		LexiconEntry.gotoAdd();
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -1451,7 +1451,7 @@ definition {
 			locator1 = "Sites#SELECT_SITE_MODAL_HEADER",
 			value1 = "Select Site");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");

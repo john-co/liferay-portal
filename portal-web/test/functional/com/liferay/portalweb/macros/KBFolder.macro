@@ -79,7 +79,7 @@ definition {
 	macro selectParentCP {
 		var key_kbArticleTitle = "${kbFolderName}";
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");

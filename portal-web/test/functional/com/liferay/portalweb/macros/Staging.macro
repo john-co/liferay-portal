@@ -149,7 +149,7 @@ definition {
 	macro addEventRepeatDaily {
 		Click(locator1 = "Staging#STAGING_PUBLISH_TO_LIVE_BUTTON");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -205,7 +205,7 @@ definition {
 
 		Click(locator1 = "Staging#STAGING_MENU_MANAGE_PAGE_VARIATION");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -250,7 +250,7 @@ definition {
 
 		var key_sitePagesVariationName = "${sitePagesVariationName}";
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -325,7 +325,7 @@ definition {
 
 		Click(locator1 = "Staging#HISTORY_BUTTON");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -447,7 +447,7 @@ definition {
 			portletName = "${portletName}",
 			portletOption = "${portletOption}");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -510,7 +510,7 @@ definition {
 
 		Click(locator1 = "Staging#STAGING_MENU_MANAGE_PAGE_VARIATION");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -639,7 +639,7 @@ definition {
 
 		Click(locator1 = "Staging#HISTORY_BUTTON");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -660,7 +660,7 @@ definition {
 
 		Click(locator1 = "Staging#STAGING_PUBLISH_TO_LIVE_BUTTON");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -737,7 +737,7 @@ definition {
 
 		Click(locator1 = "Staging#MANAGE_VARIATIONS");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -820,7 +820,7 @@ definition {
 
 		Pause(locator1 = "3000");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -1049,7 +1049,7 @@ definition {
 
 		Click(locator1 = "Staging#STAGING_PUBLISH_TO_LIVE_BUTTON");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -1160,7 +1160,7 @@ definition {
 
 		Click(locator1 = "Staging#STAGING_PUBLISH_TO_LIVE_BUTTON");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -1288,7 +1288,7 @@ definition {
 	macro viewNoPublishContentCountViaPortletStagingCP {
 		LexiconEntry.gotoHeaderMenuItem(menuItem = "Staging");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -1321,7 +1321,7 @@ definition {
 			menuItem = "Summary",
 			rowEntry = "${publicationTitle}");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -1398,7 +1398,7 @@ definition {
 	macro viewPublishContentCountViaPortletStagingCP {
 		LexiconEntry.gotoHeaderMenuItem(menuItem = "Staging");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -1489,7 +1489,7 @@ definition {
 	macro viewVariationSuccessMessage {
 		SelectFrameTop(value1 = "relative=top");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");

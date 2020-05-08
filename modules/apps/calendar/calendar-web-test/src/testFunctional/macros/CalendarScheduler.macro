@@ -116,7 +116,7 @@ definition {
 			locator1 = "Calendar#SCHEDULER_EVENT_DIALOG_BOX_VIEW_DETAILS_BUTTON",
 			value1 = "View Details");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -133,7 +133,7 @@ definition {
 			locator1 = "Calendar#SCHEDULER_EVENT_DIALOG_BOX_EDIT_BUTTON",
 			value1 = "Edit");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -150,7 +150,7 @@ definition {
 			locator1 = "Calendar#SCHEDULER_EVENT_DIALOG_BOX_EDIT_BUTTON",
 			value1 = "Edit");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -163,7 +163,7 @@ definition {
 			locator1 = "Calendar#SCHEDULER_EVENT_DIALOG_BOX_EDIT_BUTTON",
 			value1 = "Edit");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");

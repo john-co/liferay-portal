@@ -9,7 +9,7 @@ definition {
 
 		Click(locator1 = "Tasks#ADD_TASK_BUTTON");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");

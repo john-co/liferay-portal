@@ -204,7 +204,7 @@ definition {
 
 		AssertElementPresent.assertVisible(locator1 = "Button#DONE");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -351,7 +351,7 @@ definition {
 
 		MenuItem.click(menuItem = "Assign Organization Roles");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -576,7 +576,7 @@ definition {
 			locator1 = "UsersAndOrganizationsEditOrganization#PARENT_ORGANIZATION_SELECT_BUTTON",
 			value1 = "Select");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -751,7 +751,7 @@ definition {
 				locator1 = "UsersAndOrganizationsEditOrganization#PARENT_ORGANIZATION_SELECT_BUTTON",
 				value1 = "Change");
 
-			LiferayEvent.waitForLiferayEvent(
+			WaitForLiferayEvent(
 				attributeName = "src",
 				attributeValue = "dialog-iframe-popup",
 				eventName = "modalIframeLoaded");
@@ -771,7 +771,7 @@ definition {
 				locator1 = "UsersAndOrganizationsEditOrganization#PARENT_ORGANIZATION_SELECT_BUTTON",
 				value1 = "Select");
 
-			LiferayEvent.waitForLiferayEvent(
+			WaitForLiferayEvent(
 				attributeName = "src",
 				attributeValue = "dialog-iframe-popup",
 				eventName = "modalIframeLoaded");

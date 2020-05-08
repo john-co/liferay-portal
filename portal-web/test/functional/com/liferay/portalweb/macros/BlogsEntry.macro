@@ -94,7 +94,7 @@ definition {
 
 		var key_assetTitle = "${assetTitle}";
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -340,7 +340,7 @@ definition {
 			locator1 = "ReportContent#REASON_SELECT",
 			value1 = "${flagReason}");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");

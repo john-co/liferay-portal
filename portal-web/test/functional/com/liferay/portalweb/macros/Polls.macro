@@ -183,7 +183,7 @@ definition {
 	macro addPollPG {
 		Click(locator1 = "Polls#ADD_NEW_POLL");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -233,7 +233,7 @@ definition {
 
 		Click(locator1 = "Polls#SELECT_QUESTION");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");

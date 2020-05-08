@@ -35,7 +35,7 @@ definition {
 	macro addAssignees {
 		LexiconEntry.gotoAdd();
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -74,7 +74,7 @@ definition {
 
 		LexiconEntry.gotoAdd();
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -149,7 +149,7 @@ definition {
 		var key_roleTitle = StringUtil.lowerCase("${key_roleTitle}");
 
 		if (IsElementPresent.isElementPresentAfterWait(locator1 = "IFrame#MODAL_BODY")) {
-			LiferayEvent.waitForLiferayEvent(
+			WaitForLiferayEvent(
 				attributeName = "src",
 				attributeValue = "dialog-iframe-popup",
 				eventName = "modalIframeLoaded");
@@ -392,7 +392,7 @@ definition {
 
 				var key_card = "${siteNameScope}";
 
-				LiferayEvent.waitForLiferayEvent(
+				WaitForLiferayEvent(
 					attributeName = "src",
 					attributeValue = "dialog-iframe-popup",
 					eventName = "modalIframeLoaded");
@@ -482,7 +482,7 @@ definition {
 		var key_roleTitle = StringUtil.lowerCase("${key_roleTitle}");
 
 		if (IsElementPresent.isElementPresentAfterWait(locator1 = "IFrame#MODAL_BODY")) {
-			LiferayEvent.waitForLiferayEvent(
+			WaitForLiferayEvent(
 				attributeName = "src",
 				attributeValue = "dialog-iframe-popup",
 				eventName = "modalIframeLoaded");

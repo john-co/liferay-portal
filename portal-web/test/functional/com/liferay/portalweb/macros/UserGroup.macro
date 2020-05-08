@@ -75,7 +75,7 @@ definition {
 
 		LexiconEntry.gotoAdd();
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -112,7 +112,7 @@ definition {
 
 		AssertElementPresent.assertVisible(locator1 = "Button#ADD");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");

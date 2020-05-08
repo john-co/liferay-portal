@@ -6,7 +6,7 @@ definition {
 			pageTemplateName = "${pageTemplateName}",
 			sitePageType = "${sitePageType}");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");

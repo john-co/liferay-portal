@@ -168,7 +168,7 @@ definition {
 
 			LexiconCard.clickCard(card = "Widget Page");
 
-			LiferayEvent.waitForLiferayEvent(
+			WaitForLiferayEvent(
 				attributeName = "src",
 				attributeValue = "dialog-iframe-popup",
 				eventName = "modalIframeLoaded");

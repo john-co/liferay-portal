@@ -263,7 +263,7 @@ definition {
 			menuItem = "Permissions",
 			rowEntry = "${vocabularyName}");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");

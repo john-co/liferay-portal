@@ -27,7 +27,7 @@ definition {
 	}
 
 	macro viewConfigurationXSLContent {
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");

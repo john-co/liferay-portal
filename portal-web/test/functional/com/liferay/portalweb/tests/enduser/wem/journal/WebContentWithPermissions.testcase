@@ -108,7 +108,7 @@ definition {
 			addRoleViewPermissions = "Regular Role Name",
 			structureName = "WC Structure Name");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -135,7 +135,7 @@ definition {
 			item = "Permissions",
 			templateName = "WC Template Name");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");

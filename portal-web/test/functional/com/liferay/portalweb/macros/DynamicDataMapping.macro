@@ -596,7 +596,7 @@ definition {
 
 	macro selectDynamicDataMappingFrame {
 		if (IsElementPresent(locator1 = "DDMEditStructure#IFRAME")) {
-			LiferayEvent.waitForLiferayEvent(
+			WaitForLiferayEvent(
 				attributeName = "src",
 				attributeValue = "dialog-iframe-popup",
 				eventName = "modalIframeLoaded");
@@ -604,7 +604,7 @@ definition {
 			SelectFrame(locator1 = "DDMEditStructure#IFRAME");
 		}
 		else if (IsElementPresent(locator1 = "IFrame#MODAL_BODY")) {
-			LiferayEvent.waitForLiferayEvent(
+			WaitForLiferayEvent(
 				attributeName = "src",
 				attributeValue = "dialog-iframe-popup",
 				eventName = "modalIframeLoaded");

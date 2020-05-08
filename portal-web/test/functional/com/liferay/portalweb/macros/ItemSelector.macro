@@ -4,7 +4,7 @@ definition {
 		var key_imageSourceURL = "${imageSourceURL}";
 		var key_navTab = "${navTab}";
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -57,7 +57,7 @@ definition {
 	}
 
 	macro changeWorkspaces {
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -101,7 +101,7 @@ definition {
 	}
 
 	macro gotoPreviewViaSelectFile {
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -119,7 +119,7 @@ definition {
 	macro searchBlogImages {
 		var key_imageFileName = "${imageFileName}";
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -161,7 +161,7 @@ definition {
 		var key_imageFileName = "${imageFileName}";
 		var key_uploadFileName = "${imageFileName}";
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -204,7 +204,7 @@ definition {
 		var key_navTab = "${navTab}";
 		var key_uploadFileName = "${imageFileName}";
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -230,7 +230,7 @@ definition {
 		var key_navTab = "${navTab}";
 		var key_uploadFileName = "${imageFileName}";
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -282,7 +282,7 @@ definition {
 		var key_navTab = "${navTab}";
 		var key_uploadFileName = "${uploadFileName}";
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -316,7 +316,7 @@ definition {
 		var key_imageFileName = "${imageFileName}";
 		var key_uploadFileName = "${uploadFileName}";
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -387,7 +387,7 @@ definition {
 
 		ItemSelector.gotoItemSelectorViaCKEditor();
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");

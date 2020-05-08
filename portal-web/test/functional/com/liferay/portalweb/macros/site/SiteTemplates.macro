@@ -89,7 +89,7 @@ definition {
 			LexiconCard.clickCard(card = "${rowEntry}");
 		}
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");

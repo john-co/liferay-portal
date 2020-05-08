@@ -27,7 +27,7 @@ definition {
 			locator1 = "DDMEditTemplate#DETAILS_SELECT_STRUCTURE",
 			value1 = "Select");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");

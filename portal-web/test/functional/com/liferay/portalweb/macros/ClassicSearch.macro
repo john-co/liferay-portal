@@ -4,7 +4,7 @@ definition {
 		ClassicSearch.gotoOptions(portletOption = "Configuration");
 
 		if (("${searchScope}" == "Everything") || ("${searchScope}" == "Let the User Choose") || ("${searchScope}" == "This Site")) {
-			LiferayEvent.waitForLiferayEvent(
+			WaitForLiferayEvent(
 				attributeName = "src",
 				attributeValue = "dialog-iframe-popup",
 				eventName = "modalIframeLoaded");
@@ -57,7 +57,7 @@ definition {
 
 		MenuItem.click(menuItem = "Configuration");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");

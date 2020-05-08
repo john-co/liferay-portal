@@ -111,7 +111,7 @@ definition {
 
 		WebContentNavigator.gotoPreviewEntryCP(webContentTitle = "Web Content Title");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -156,7 +156,7 @@ definition {
 
 		WebContentNavigator.gotoPreviewEntryCP(webContentTitle = "Web Content Title");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");

@@ -3,7 +3,7 @@ definition {
 	var siteName = "Liferay";
 
 	macro _selectCalendarSettingsIframe {
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -16,7 +16,7 @@ definition {
 			locator1 = "CalendarPermissions#PERMISSIONS_TITLE",
 			value1 = "Permissions");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -103,7 +103,7 @@ definition {
 			portletName = "Calendar",
 			portletOption = "Configuration");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");

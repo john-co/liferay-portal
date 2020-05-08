@@ -261,7 +261,7 @@ definition {
 
 		ItemSelector.searchDMImages(imageFileName = "Document_2");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");

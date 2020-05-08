@@ -52,7 +52,7 @@ definition {
 	macro mapEditableFieldToAsset {
 		Click(locator1 = "PageEditor#EDITABLE_FIELD_TOOLBAR_MAP_ASSET_SELECT_POPUP_BUTTON");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");

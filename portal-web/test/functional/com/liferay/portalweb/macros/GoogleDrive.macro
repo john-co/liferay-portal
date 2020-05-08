@@ -41,7 +41,7 @@ definition {
 			Click.clickNoSPARefresh(locator1 = "ProductMenu#TOGGLE");
 		}
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");

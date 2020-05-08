@@ -23,7 +23,7 @@ definition {
 				locator1 = "IFrame#IFRAME_TITLE",
 				value1 = "New Field Set");
 
-			LiferayEvent.waitForLiferayEvent(
+			WaitForLiferayEvent(
 				attributeName = "src",
 				attributeValue = "dialog-iframe-popup",
 				eventName = "modalIframeLoaded");
@@ -35,7 +35,7 @@ definition {
 	}
 
 	macro addForm {
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -90,7 +90,7 @@ definition {
 			locator1 = "KaleoFormsAdminEditProcess#ADD_WORKFLOW_BUTTON",
 			value1 = "Add Workflow");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -320,7 +320,7 @@ definition {
 			locator1 = "IFrame#IFRAME_TITLE",
 			value1 = "Edit Field Set");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -353,7 +353,7 @@ definition {
 			menuItem = "Edit Form",
 			rowEntry = "${kfFormName}");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -408,7 +408,7 @@ definition {
 			menuItem = "Edit",
 			rowEntry = "${workflowDefinitionTitle}");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -518,7 +518,7 @@ definition {
 			menuItem = "Edit",
 			rowEntry = "${workflowDefinitionTitle}");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
@@ -630,7 +630,7 @@ definition {
 			menuItem = "Edit Form",
 			rowEntry = "${kfFormNameEdit}");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");

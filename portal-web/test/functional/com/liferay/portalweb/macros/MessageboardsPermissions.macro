@@ -5,7 +5,7 @@ definition {
 
 		MenuItem.click(menuItem = "Permissions");
 
-		LiferayEvent.waitForLiferayEvent(
+		WaitForLiferayEvent(
 			attributeName = "src",
 			attributeValue = "dialog-iframe-popup",
 			eventName = "modalIframeLoaded");
