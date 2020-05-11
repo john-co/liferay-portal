@@ -77,8 +77,6 @@ window.LFR_JS_EVENTS_LOG = {
 	}
 
 	function waitForLiferayEvent {
-		WaitForLiferayEvent.initializeLiferayEventLog();
-
 		var javascript = '''
 			try {
 				var eventValue = LFR_JS_EVENTS_LOG.getLastEvent("${eventName}").${attributeName};

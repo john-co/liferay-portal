@@ -128,6 +128,19 @@ definition {
 
 	@summary = "View default welcome page while signed in as '${userFirstName} ${userLastName}'"
 	macro viewWelcomePage {
+		WaitForLiferayEvent.initializeLiferayEventLog();
+
+		Portlet.gotoPortletOptions(
+			portletName = "Navigation Menu",
+			portletOption = "Look and Feel Configuration");
+
+		WaitForLiferayEvent(
+			attributeName = "src",
+			attributeValue = "dialog-iframe-popup",
+			eventName = "modalIframeLoaded");
+
+		SelectFrame(locator1 = "IFrame#MODAL_BODY");
+
 		AssertTextPresent(
 			locator1 = "HelloWorld#PORTLET_TITLE",
 			value1 = "Hello World");

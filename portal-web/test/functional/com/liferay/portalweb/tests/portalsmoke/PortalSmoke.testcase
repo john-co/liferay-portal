@@ -39,7 +39,7 @@ definition {
 
 		Smoke.viewWelcomePage();
 
-		Smoke.runSmoke();
+		// Smoke.runSmoke();
 
 		// Assert mismatching checksum for release bundles
 
