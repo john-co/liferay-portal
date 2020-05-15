@@ -184,8 +184,6 @@ definition {
 
 	macro openNodePort {
 		Open(locator1 = "http://localhost:${nodePort}");
-
-		LiferayEvent.initializeLiferayEventLog();
 	}
 
 	macro openPrivateSitePageURL {
@@ -200,8 +198,6 @@ definition {
 		}
 
 		Open(locator1 = "${baseURL}/group/${siteNameURL}/${pageNameURL}");
-
-		LiferayEvent.initializeLiferayEventLog();
 	}
 
 	macro openPrivateSiteURL {
