@@ -1874,17 +1874,10 @@ AUI.add(
 				},
 
 				showNotice(message) {
-					var instance = this;
-
-					if (!instance.notice) {
-						instance.notice = new Liferay.Notice({
-							toggleText: false,
-							type: 'warning',
-						}).hide();
-					}
-
-					instance.notice.html(message);
-					instance.notice.show();
+					return Liferay.Util.openToast({
+						message,
+						type: 'warning',
+					});
 				},
 
 				syncReadOnlyUI() {
@@ -4584,7 +4577,6 @@ AUI.add(
 			'liferay-layouts-tree-radio',
 			'liferay-layouts-tree-selectable',
 			'liferay-map-base',
-			'liferay-notice',
 			'liferay-translation-manager',
 		],
 	}
