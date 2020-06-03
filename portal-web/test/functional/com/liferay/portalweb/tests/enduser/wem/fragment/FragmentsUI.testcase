@@ -81,6 +81,7 @@ definition {
 		task ("Add the section fragment to the content page") {
 			PageEditor.addFragment(
 				collectionName = "Collection Name",
+				fragmentOrder = "0",
 				fragmentName = "Fragment Name");
 		}
 
