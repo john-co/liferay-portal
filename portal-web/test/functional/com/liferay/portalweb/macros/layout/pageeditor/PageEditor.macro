@@ -122,11 +122,18 @@ definition {
 			}
 		}
 		else {
-			DragAndDrop.javaScriptDragAndDropToObject(
-				key_fragmentName = "${fragmentName}",
-				locator1 = "PageEditor#FRAGMENTS_AND_WIDGETS_TAB_ITEM",
-				locator2 = "PageEditor#FRAGMENT_DROP_TARGET",
-				value1 = "");
+			var browserType = PropsUtil.get("browser.type");
+
+			if ("${browserType}" == "internetexplorer") {
+				DragAndDrop.javaScriptDragAndDropFragmentIE(elementOrder = "${elementOrder}");
+			}
+			else {
+				DragAndDrop.javaScriptDragAndDropToObject(
+					key_fragmentName = "${fragmentName}",
+					locator1 = "PageEditor#FRAGMENTS_AND_WIDGETS_TAB_ITEM",
+					locator2 = "PageEditor#FRAGMENT_DROP_TARGET",
+					value1 = "");
+			}
 		}
 
 		PageEditor.waitForAutoSave();
