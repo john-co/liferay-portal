@@ -2,6 +2,8 @@
 definition {
 
 	function initializeLiferayEventLog {
+		WaitForSPARefresh();
+
 		var javascript = '''
 			if (typeof Liferay !== "undefined") {
 				if (typeof getLastEvent !== "function") {
