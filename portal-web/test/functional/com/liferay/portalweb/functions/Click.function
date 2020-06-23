@@ -11,6 +11,8 @@ definition {
 
 		selenium.click();
 
+		WaitForLiferayEvent.initializeLiferayEventLog();
+
 		selenium.assertJavaScriptErrors();
 
 		selenium.assertLiferayErrors();
@@ -25,6 +27,8 @@ definition {
 
 		selenium.clickAt();
 
+		WaitForLiferayEvent.initializeLiferayEventLog();
+
 		selenium.assertJavaScriptErrors();
 
 		selenium.assertLiferayErrors();
@@ -38,6 +42,8 @@ definition {
 		selenium.mouseOver();
 
 		selenium.clickAt();
+
+		WaitForLiferayEvent.initializeLiferayEventLog();
 
 		selenium.assertJavaScriptErrors();
 
@@ -75,6 +81,8 @@ definition {
 
 		selenium.click();
 
+		WaitForLiferayEvent.initializeLiferayEventLog();
+
 		selenium.assertJavaScriptErrors();
 
 		selenium.assertLiferayErrors();
@@ -84,6 +92,8 @@ definition {
 		WaitForSPARefresh();
 
 		selenium.click();
+
+		WaitForLiferayEvent.initializeLiferayEventLog();
 
 		selenium.assertJavaScriptErrors();
 
@@ -97,6 +107,8 @@ definition {
 
 		selenium.click();
 
+		WaitForLiferayEvent.initializeLiferayEventLog();
+
 		selenium.assertJavaScriptErrors();
 
 		selenium.assertLiferayErrors();
@@ -108,6 +120,8 @@ definition {
 		selenium.mouseOver();
 
 		selenium.click();
+
+		WaitForLiferayEvent.initializeLiferayEventLog();
 
 		selenium.assertJavaScriptErrors();
 
@@ -126,12 +140,16 @@ definition {
 		selenium.waitForVisible();
 
 		selenium.click();
+
+		WaitForLiferayEvent.initializeLiferayEventLog();
 	}
 
 	function javaScriptClick {
 		WaitForSPARefresh();
 
 		selenium.javaScriptClick();
+
+		WaitForLiferayEvent.initializeLiferayEventLog();
 
 		selenium.assertJavaScriptErrors();
 
@@ -149,6 +167,8 @@ definition {
 
 		selenium.mouseUp();
 
+		WaitForLiferayEvent.initializeLiferayEventLog();
+
 		selenium.assertJavaScriptErrors();
 
 		selenium.assertLiferayErrors();
@@ -164,6 +184,8 @@ definition {
 		selenium.waitForVisible();
 
 		selenium.click();
+
+		WaitForLiferayEvent.initializeLiferayEventLog();
 
 		selenium.assertJavaScriptErrors();
 
