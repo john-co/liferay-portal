@@ -337,7 +337,6 @@ definition {
 			portlet = "Wiki");
 
 		LAR.importPortlet(
-			initializeLiferayEvent = "true",
 			larFileName = "space-history-wiki.lar",
 			uploadFrom = "dependencies");
 

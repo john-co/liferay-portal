@@ -28,8 +28,6 @@ definition {
 			value1 = "Sign In");
 
 		AssertElementNotPresent(locator1 = "Button#SIGN_IN");
-
-		WaitForLiferayEvent.initializeLiferayEventLog();
 	}
 
 	@summary = "Agree to Liferay Portal Terms of Use"

@@ -78,8 +78,6 @@ definition {
 
 	macro clickSave {
 		Button.click(button = "Save");
-
-		WaitForLiferayEvent.initializeLiferayEventLog();
 	}
 
 	macro clickSaveAsDraft {

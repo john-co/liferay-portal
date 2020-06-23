@@ -59,8 +59,6 @@ definition {
 
 		Click.pauseClickAt(locator1 = "ManagementBar#FILTER_AND_ORDER");
 
-		WaitForLiferayEvent.initializeLiferayEventLog();
-
 		MenuItem.click(menuItem = "${menuItem}");
 	}
 

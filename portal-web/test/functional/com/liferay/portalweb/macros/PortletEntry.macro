@@ -152,8 +152,6 @@ definition {
 		Button.clickSave();
 
 		Alert.viewSuccessMessage();
-
-		WaitForLiferayEvent.initializeLiferayEventLog();
 	}
 
 	macro saveAsDraft {

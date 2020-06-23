@@ -518,8 +518,6 @@ definition {
 				key_portletName = "Categories Navigation",
 				locator1 = "Portlet#SPECIFIC_BORDERLESS_ELLIPSIS_ICON");
 
-			WaitForLiferayEvent.initializeLiferayEventLog();
-
 			MenuItem.click(menuItem = "Permissions");
 
 			IFrame.selectPermissionsFrame();
@@ -575,8 +573,6 @@ definition {
 			Click.waitForMenuToggleJSClick(
 				key_portletName = "Categories Navigation",
 				locator1 = "Portlet#SPECIFIC_BORDERLESS_ELLIPSIS_ICON");
-
-			WaitForLiferayEvent.initializeLiferayEventLog();
 
 			MenuItem.click(menuItem = "Permissions");
 

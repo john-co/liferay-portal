@@ -30,8 +30,6 @@ definition {
 		UserNavigator.gotoGeneral();
 
 		Navigator.gotoNavNested(navNested = "Memberships");
-
-		WaitForLiferayEvent.initializeLiferayEventLog();
 	}
 
 	macro gotoOrganizations {
