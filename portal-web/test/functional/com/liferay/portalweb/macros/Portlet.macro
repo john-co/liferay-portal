@@ -341,8 +341,6 @@ definition {
 	}
 
 	macro selectScopePG {
-		WaitForLiferayEvent.initializeLiferayEventLog();
-
 		Portlet.gotoPortletOptions(
 			portletName = "${portletName}",
 			portletOption = "Configuration");

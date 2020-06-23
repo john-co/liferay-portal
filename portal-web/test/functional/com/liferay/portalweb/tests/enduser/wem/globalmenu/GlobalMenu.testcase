@@ -292,8 +292,6 @@ definition {
 		}
 
 		task ("Go to Site via View All link") {
-			WaitForLiferayEvent.initializeLiferayEventLog();
-
 			Click(locator1 = "GlobalMenu#VIEW_ALL_LINK");
 
 			AssertVisible(locator1 = "Portlet#MODAL_TITLE");

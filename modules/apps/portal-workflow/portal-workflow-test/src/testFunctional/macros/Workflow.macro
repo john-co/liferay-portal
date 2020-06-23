@@ -199,8 +199,6 @@ definition {
 		Button.clickDone();
 
 		Alert.viewSuccessMessage();
-
-		WaitForLiferayEvent.initializeLiferayEventLog();
 	}
 
 	macro assignTaskToUser {
@@ -223,8 +221,6 @@ definition {
 			workflowAssetTitle = "${workflowAssetTitle}",
 			workflowAssetType = "${workflowAssetType}",
 			workflowTask = "${workflowTask}");
-
-		WaitForLiferayEvent.initializeLiferayEventLog();
 
 		Workflow.gotoTaskAssignedToMyRolesActionsCmd(
 			workflowAssetTitle = "${workflowAssetTitle}",
@@ -380,8 +376,6 @@ definition {
 		Click(locator1 = "Button#DONE");
 
 		Alert.viewSuccessMessage();
-
-		WaitForLiferayEvent.initializeLiferayEventLog();
 	}
 
 	macro createWorkflowBlogInstance {
