@@ -362,7 +362,7 @@ definition {
 
 			Click(locator1 = "ContentRow#ENTRY_CONTENT_ENTRY_NAME");
 
-			SelectFrame(locator1 = "IFrame#MODAL_BODY");
+			SelectFrame.selectFrameNoLoading(locator1 = "IFrame#MODAL_BODY");
 
 			AssertTextEquals.assertPartialText(
 				key_card = "${webContentTitle}",
@@ -382,7 +382,7 @@ definition {
 					value1 = "${webContentTitle}");
 			}
 
-			SelectFrame(locator1 = "IFrame#MODAL_BODY");
+			SelectFrame.selectFrameNoLoading(locator1 = "IFrame#MODAL_BODY");
 
 			AssertTextEquals(
 				key_card = "${webContentTitle}",
