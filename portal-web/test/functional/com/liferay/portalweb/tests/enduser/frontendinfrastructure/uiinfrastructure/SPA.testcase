@@ -30,6 +30,10 @@ definition {
 			category = "Content &amp; Data",
 			portlet = "Web Content");
 
+		Click.clickNoInitializeLiferayEventLog(
+			key_portlet = "Blogs",
+			locator1 = "ProductMenu#PORTLET");
+
 		AssertVisible.assertVisibleNoSPAWait(locator1 = "//html[contains(@class,'lfr-spa-loading')]");
 	}
 
