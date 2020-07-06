@@ -130,8 +130,6 @@ definition {
 
 		Refresh();
 
-		WaitForLiferayEvent.initializeLiferayEventLog();
-
 		Page.manageDeviceFamilyActions(
 			actionName = "Windows Device Family Test Action",
 			actionType = "Redirect to Site",
