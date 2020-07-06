@@ -96,8 +96,6 @@ definition {
 				value1 = "Updating the field set or workflow will cause loss of data.");
 		}
 
-		WaitForLiferayEvent.initializeLiferayEventLog();
-
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Assign Form",
 			rowEntry = "${workflowTask}");
@@ -159,8 +157,6 @@ definition {
 			value1 = "${kfFormName}");
 
 		SelectFrame(value1 = "relative=top");
-
-		WaitForLiferayEvent.initializeLiferayEventLog();
 	}
 
 	macro chooseWorkflow {
@@ -405,8 +401,6 @@ definition {
 			locator1 = "KaleoFormsAdminEditProcess#WORKFLOW_TABLE_TITLE",
 			value1 = "${workflowDefinitionTitle}");
 
-		WaitForLiferayEvent.initializeLiferayEventLog();
-
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
 			rowEntry = "${workflowDefinitionTitle}");
@@ -496,8 +490,6 @@ definition {
 	}
 
 	macro reactivateInactiveWorkflowDefinition {
-		WaitForLiferayEvent.initializeLiferayEventLog();
-
 		LexiconEntry.gotoEntryMenuItemNoError(
 			menuItem = "Edit",
 			rowEntry = "${workflowDefinitionTitle}");
@@ -525,8 +517,6 @@ definition {
 		if (IsElementPresent(locator1 = "IFrame#MODAL_BODY")) {
 			Click(locator1 = "Icon#CLOSE");
 		}
-
-		WaitForLiferayEvent.initializeLiferayEventLog();
 	}
 
 	macro saveForm {
