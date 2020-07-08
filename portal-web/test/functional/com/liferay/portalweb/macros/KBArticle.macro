@@ -494,7 +494,7 @@ definition {
 
 		SelectFrame(value1 = "relative=top");
 
-		SelectFrame.selectFrameNoLoading(locator1 = "IFrame#MODAL_BODY");
+		SelectFrame(locator1 = "IFrame#MODAL_BODY");
 
 		PortletEntry.save();
 	}

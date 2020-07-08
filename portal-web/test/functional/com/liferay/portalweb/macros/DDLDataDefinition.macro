@@ -209,7 +209,7 @@ definition {
 			Pause(locator1 = "1000");
 		}
 
-		SelectFrame.selectFrameNoLoading(locator1 = "IFrame#MODAL_BODY");
+		SelectFrame(locator1 = "IFrame#MODAL_BODY");
 
 		AssertTextEquals.assertValue(
 			locator1 = "TextInput#DATA_DEFINITION",
