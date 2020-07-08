@@ -74,20 +74,6 @@ definition {
 		);
 	}
 
-	function clickNoInitializeLiferayEventLog {
-		WaitForSPARefresh();
-
-		selenium.waitForVisible();
-
-		selenium.mouseOver();
-
-		selenium.click();
-
-		selenium.assertJavaScriptErrors();
-
-		selenium.assertLiferayErrors();
-	}
-
 	function clickNoMouseOver {
 		WaitForSPARefresh();
 
