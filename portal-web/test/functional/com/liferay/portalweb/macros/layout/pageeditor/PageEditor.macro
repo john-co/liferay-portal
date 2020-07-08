@@ -647,7 +647,7 @@ definition {
 
 		Click(locator1 = "PageEditor#FRAGMENT_BODY_FLOATING_TOOLBAR_PLUS_BUTTON");
 
-		SelectFrame.selectFrameNoLoading(locator1 = "IFrame#MODAL_BODY");
+		SelectFrame(locator1 = "IFrame#MODAL_BODY");
 
 		if (isSet(assetListName)) {
 			NavItem.click(navItem = "Collections");
