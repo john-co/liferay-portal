@@ -22,8 +22,6 @@ definition {
 
 		selenium.clickAt();
 
-		WaitForLiferayEvent.initializeLiferayEventLog();
-
 		selenium.assertJavaScriptErrors();
 
 		selenium.assertLiferayErrors();
@@ -35,8 +33,6 @@ definition {
 		AssertTextEquals.assertPartialText();
 
 		selenium.clickAt();
-
-		WaitForLiferayEvent.initializeLiferayEventLog();
 
 		selenium.assertJavaScriptErrors();
 
@@ -52,8 +48,6 @@ definition {
 
 		selenium.clickAt();
 
-		WaitForLiferayEvent.initializeLiferayEventLog();
-
 		selenium.assertJavaScriptErrors();
 
 		selenium.assertLiferayErrors();
@@ -67,8 +61,6 @@ definition {
 		selenium.mouseOver();
 
 		selenium.clickAt();
-
-		WaitForLiferayEvent.initializeLiferayEventLog();
 
 		selenium.assertJavaScriptErrors();
 
@@ -85,8 +77,6 @@ definition {
 		selenium.mouseOver();
 
 		selenium.clickAt();
-
-		WaitForLiferayEvent.initializeLiferayEventLog();
 
 		selenium.assertLiferayErrors();
 	}
@@ -114,8 +104,6 @@ definition {
 
 		selenium.click();
 
-		WaitForLiferayEvent.initializeLiferayEventLog();
-
 		selenium.assertJavaScriptErrors();
 
 		selenium.assertLiferayErrors();
@@ -127,8 +115,6 @@ definition {
 		AssertTextEquals.assertText();
 
 		selenium.click();
-
-		WaitForLiferayEvent.initializeLiferayEventLog();
 
 		selenium.assertJavaScriptErrors();
 
@@ -143,8 +129,6 @@ definition {
 		selenium.mouseOver();
 
 		selenium.clickAt();
-
-		WaitForLiferayEvent.initializeLiferayEventLog();
 
 		selenium.assertJavaScriptErrors();
 
