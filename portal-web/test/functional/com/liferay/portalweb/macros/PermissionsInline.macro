@@ -160,6 +160,8 @@ definition {
 	}
 
 	macro gotoRolePermissions {
+		WaitForLiferayEvent.initializeLiferayEventLog();
+
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Permissions",
 			rowEntry = "${roleName}");

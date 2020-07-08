@@ -1196,6 +1196,8 @@ definition {
 	macro moveToFolderPG {
 		var key_dmDocumentTitle = "${dmDocumentTitle}";
 
+		WaitForLiferayEvent.initializeLiferayEventLog();
+
 		if (isSet(bulkSelection)) {
 			AssertTextEquals(
 				locator1 = "ManagementBar#NAVBAR_TEXT",

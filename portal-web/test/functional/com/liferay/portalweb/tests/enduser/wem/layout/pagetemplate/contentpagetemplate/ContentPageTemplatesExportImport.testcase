@@ -620,6 +620,8 @@ definition {
 
 			PageTemplatesAdmin.gotoPageTemplate(pageTemplateName = "Page Template Name");
 
+			WaitForLiferayEvent.initializeLiferayEventLog();
+
 			MouseOver.mouseOverNotVisible(
 				key_portletName = "Sites Directory",
 				locator1 = "Portlet#SPECIFIC_BORDERLESS_ELLIPSIS_ICON");

@@ -85,6 +85,8 @@ definition {
 	}
 
 	macro mergeTagsSelectAdditionalTags {
+		WaitForLiferayEvent.initializeLiferayEventLog();
+
 		Click(locator1 = "Button#SELECT");
 
 		SelectFrameTop();

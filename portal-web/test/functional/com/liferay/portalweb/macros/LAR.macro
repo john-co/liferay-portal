@@ -114,6 +114,10 @@ definition {
 			portletName = "${portletName}",
 			portletOption = "Export / Import");
 
+		if (isSet(initializeLiferayEvent)) {
+			WaitForLiferayEvent.initializeLiferayEventLog();
+		}
+
 		Pause(locator1 = "3000");
 	}
 

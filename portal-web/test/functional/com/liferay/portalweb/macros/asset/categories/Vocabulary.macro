@@ -118,6 +118,8 @@ definition {
 	}
 
 	macro deleteByIconCP {
+		WaitForLiferayEvent.initializeLiferayEventLog();
+
 		Click.waitForMenuToggleJSClick(locator1 = "NavNested#NAV_NESTED_ELLIPSIS");
 
 		MenuItem.click(menuItem = "Delete");
@@ -148,6 +150,8 @@ definition {
 	}
 
 	macro deleteByMenuCP {
+		WaitForLiferayEvent.initializeLiferayEventLog();
+
 		Click.waitForMenuToggleJSClick(locator1 = "NavNested#NAV_NESTED_ELLIPSIS");
 
 		MenuItem.click(menuItem = "Delete");
@@ -224,6 +228,8 @@ definition {
 			category = "Categorization",
 			portlet = "Categories");
 
+		WaitForLiferayEvent.initializeLiferayEventLog();
+
 		Click.waitForMenuToggleJSClick(locator1 = "NavNested#NAV_NESTED_ELLIPSIS");
 
 		MenuItem.click(menuItem = "Delete");
@@ -258,6 +264,8 @@ definition {
 
 	macro viewVocabularyPermissionsCP {
 		Navigator.gotoNavNested(navNested = "${vocabularyName}");
+
+		WaitForLiferayEvent.initializeLiferayEventLog();
 
 		LexiconEntry.gotoEllipsisMenuItem(menuItem = "Permissions");
 

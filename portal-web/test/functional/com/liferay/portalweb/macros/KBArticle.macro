@@ -142,6 +142,8 @@ definition {
 		}
 
 		if (isSet(embedVideo)) {
+			WaitForLiferayEvent.initializeLiferayEventLog();
+
 			Click.pauseClickAt(locator1 = "CKEditor#CONTENT_VIDEO_IMAGE");
 
 			Type(
@@ -853,6 +855,8 @@ definition {
 	}
 
 	macro moveArticleViaKBDisplayPG {
+		WaitForLiferayEvent.initializeLiferayEventLog();
+
 		AssertClick(
 			key_kbTool = "Move",
 			locator1 = "KnowledgeBase#KB_TOOLS",
