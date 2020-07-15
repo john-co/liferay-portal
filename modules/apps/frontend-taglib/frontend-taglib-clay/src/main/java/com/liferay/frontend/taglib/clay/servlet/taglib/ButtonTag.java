@@ -290,7 +290,7 @@ public class ButtonTag extends BaseContainerTag {
 			cssClasses.add("btn-block");
 		}
 
-		if (Validator.isNotNull(_icon) || _monospaced) {
+		if (_monospaced) {
 			cssClasses.add("btn-monospaced");
 		}
 
