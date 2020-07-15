@@ -322,6 +322,7 @@ public class ButtonTag extends BaseContainerTag {
 			JspWriter jspWriter = pageContext.getOut();
 
 			if (Validator.isNotNull(_icon)) {
+				jspWriter.write("\">");
 				jspWriter.write("<svg class=\"lexicon-icon lexicon-icon-");
 				jspWriter.write(_icon);
 				jspWriter.write("\" role=\"presentation\" viewBox=\"0 0 512 ");
@@ -342,10 +343,13 @@ public class ButtonTag extends BaseContainerTag {
 			}
 
 			if (Validator.isNotNull(_label)) {
+				jspWriter.write("<span class=\"inline-item inline-item-");
+				jspWriter.write("after\">");
 				jspWriter.write(
 					LanguageUtil.get(
 						TagResourceBundleUtil.getResourceBundle(pageContext),
 						_label));
+				jspWriter.write("</span>");
 			}
 
 			return SKIP_BODY;
