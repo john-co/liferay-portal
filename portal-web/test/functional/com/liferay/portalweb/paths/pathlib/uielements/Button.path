@@ -74,6 +74,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>ANY_DROPDOWN_ITEM</td>
+	<td>//*[contains(@class,'dropdown-item')][normalize-space(text())='${key_item}']</td>
+	<td></td>
+</tr>
+<tr>
 	<td>ANY_ENABLED</td>
 	<td>//*[contains(@class,'btn')][normalize-space(text())='${key_text}'][not(@disabled='')]</td>
 	<td></td>

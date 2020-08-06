@@ -38,6 +38,12 @@ definition {
 		Button.click(button = "Done");
 	}
 
+	macro clickDropdownItem {
+		Click(
+			key_item = "${item}",
+			locator1 = "Button#ANY_DROPDOWN_ITEM");
+	}
+
 	macro clickEdit {
 		Button.click(button = "Edit");
 	}
