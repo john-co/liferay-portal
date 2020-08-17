@@ -166,6 +166,51 @@ definition {
 	}
 
 	@priority = "5"
+	test PublishStagedThemeToLive {
+		property test.name.skip.portal.instance = "Theme#PublishStagedThemeToLive";
+
+		Theme.deployThemeWar(themeName = "test-theme");
+
+		Staging.openStagingAdmin(siteURLKey = "guest");
+
+		var siteName = TestCase.getSiteName(siteName = "${siteName}");
+
+		Staging.activateStagingCP(
+			pageVersioningEnabled = "true",
+			siteName = "${siteName}");
+
+		Navigator.openStagingSiteURL(defaultSite = "true");
+
+		Page.changeSinglePageTheme(themeName = "test-theme-7-3");
+
+		Navigator.gotoBack();
+
+		Button.clickPublish();
+
+		SikuliAssertElementPresent(locator1 = "Theme#TEST_THEME_7_3_HOME_PAGE_PNG");
+
+		takeScreenshot();
+
+		Navigator.openURL();
+
+		SikuliAssertElementNotPresent(locator1 = "Theme#TEST_THEME_7_3_HOME_PAGE_PNG");
+
+		takeScreenshot();
+
+		Navigator.openStagingSiteURL(defaultSite = "true");
+
+		Staging.gotoPublishToLive();
+
+		Staging.publishToLive();
+
+		Navigator.openURL();
+
+		SikuliAssertElementPresent(locator1 = "Theme#TEST_THEME_7_3_HOME_PAGE_PNG");
+
+		takeScreenshot();
+	}
+
+	@priority = "5"
 	test UninstallAndRedeployTheme {
 		property test.name.skip.portal.instance = "Theme#UninstallAndRedeployTheme";
 		var appName = "test-theme";
