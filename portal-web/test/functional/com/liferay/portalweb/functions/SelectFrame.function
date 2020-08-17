@@ -74,4 +74,15 @@ definition {
 		WaitForSPARefresh();
 	}
 
+	function selectModal {
+		Pause(locator1 = "3000");
+
+		selenium.selectFrame();
+
+		selenium.assertJavaScriptErrors();
+
+		selenium.assertLiferayErrors();
+
+		WaitForSPARefresh();
+	}
 }

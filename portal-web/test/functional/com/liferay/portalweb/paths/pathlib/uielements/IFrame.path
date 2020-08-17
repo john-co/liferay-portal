@@ -120,7 +120,7 @@
 </tr>
 <tr>
 	<td>MODAL_ANY</td>
-	<td>//*[contains(@class,'modal-dialog') and contains(.,'${key_title}')]//iframe</td>
+	<td>//*[contains(@class,'modal-dialog') and contains(.,'${key_title}')]//*[contains(@class,'modal-body')]/iframe</td>
 	<td></td>
 </tr>
 <tr>

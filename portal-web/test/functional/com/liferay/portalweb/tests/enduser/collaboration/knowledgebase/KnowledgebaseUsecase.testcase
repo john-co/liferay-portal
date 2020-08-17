@@ -15,20 +15,6 @@ definition {
 	tearDown {
 		var testPortalInstance = PropsUtil.get("test.portal.instance");
 
-		if ("${testPortalInstance}" == "true") {
-			PortalInstances.tearDownCP();
-		}
-		else {
-			Workflow.tearDownSiteWorkflow();
-
-			KBFolder.tearDownCP();
-
-			KBArticle.tearDownCP();
-
-			JSONUser.tearDownNonAdminUsers();
-
-			Page.tearDownCP();
-		}
 	}
 
 	@description = "This is a use case for LPS-68599."
@@ -206,34 +192,6 @@ definition {
 	test DeleteConfiguredKBFolder {
 		property portal.acceptance = "true";
 		property testray.component.names = "Training";
-
-		JSONLayout.addPublicLayout(
-			groupName = "Guest",
-			layoutName = "Knowledge Base Page");
-
-		JSONLayout.addWidgetToPublicLayout(
-			column = "1",
-			groupName = "Guest",
-			layoutName = "Knowledge Base Page",
-			widgetName = "Knowledge Base Display");
-
-		KBAdmin.openKBAdmin(siteURLKey = "guest");
-
-		KBArticle.addCP(
-			kbArticleContent = "Article Content",
-			kbArticleTitle = "KB Article Outside Folder");
-
-		KBAdmin.openKBAdmin(siteURLKey = "guest");
-
-		KBFolder.addCP(
-			kbFolderDescription = "KB Folder Description",
-			kbFolderName = "KB Folder");
-
-		KBFolder.gotoCP(kbFolderName = "KB Folder");
-
-		KBArticle.addCP(
-			kbArticleContent = "Article Content",
-			kbArticleTitle = "KB Article Inside Folder");
 
 		Navigator.gotoPage(pageName = "Knowledge Base Page");
 
