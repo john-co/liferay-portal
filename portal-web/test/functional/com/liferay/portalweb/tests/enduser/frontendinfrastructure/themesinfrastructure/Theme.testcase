@@ -29,6 +29,39 @@ definition {
 		Button.clickPublish();
 	}
 
+	@priority = "5"
+	test ActivateStagingForSiteWithTheme {
+		property test.name.skip.portal.instance = "Theme#ActivateStagingForSiteWithTheme";
+
+		Theme.deployThemeWar(themeName = "test-theme");
+
+		Page.changeSinglePageTheme(themeName = "test-theme-7-3");
+
+		Navigator.gotoBack();
+
+		Button.clickPublish();
+
+		Staging.openStagingAdmin(siteURLKey = "guest");
+
+		var siteName = TestCase.getSiteName(siteName = "${siteName}");
+
+		Staging.activateStagingCP(
+			pageVersioningEnabled = "true",
+			siteName = "${siteName}");
+
+		Navigator.openStagingSiteURL(defaultSite = "true");
+
+		SikuliAssertElementPresent(locator1 = "Theme#TEST_THEME_7_3_HOME_PAGE_PNG");
+
+		takeScreenshot();
+
+		Navigator.openURL();
+
+		SikuliAssertElementPresent(locator1 = "Theme#TEST_THEME_7_3_HOME_PAGE_PNG");
+
+		takeScreenshot();
+	}
+
 	@description = "This test validates that a theme can be applied to a single page."
 	@priority = "5"
 	test ApplyThemeToSinglePage {
