@@ -128,6 +128,8 @@ public class PageFragmentInstanceDefinitionDTOConverter {
 				fragmentViewports =
 					pageFragmentInstanceDefinitionFragmentViewports;
 				widgetInstances = _getWidgetInstances(fragmentEntryLink);
+
+				setFragmentStyle(fragmentStyle);
 			}
 		};
 	}
