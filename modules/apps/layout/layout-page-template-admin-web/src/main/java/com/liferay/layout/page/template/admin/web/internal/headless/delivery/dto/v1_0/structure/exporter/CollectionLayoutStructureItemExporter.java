@@ -72,13 +72,13 @@ public class CollectionLayoutStructureItemExporter
 							collectionStyledLayoutStructureItem.
 								getTemplateKey();
 
-						setFragmentStyle(
+						setStyles(
 							() -> {
 								JSONObject itemConfigJSONObject =
 									collectionStyledLayoutStructureItem.
 										getItemConfigJSONObject();
 
-								return toFragmentStyle(
+								return toStyles(
 									itemConfigJSONObject.getJSONObject(
 										"styles"),
 									saveMappingConfiguration);

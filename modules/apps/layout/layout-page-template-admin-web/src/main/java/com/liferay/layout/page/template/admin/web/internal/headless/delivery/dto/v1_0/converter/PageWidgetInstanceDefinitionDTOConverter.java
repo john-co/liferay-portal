@@ -15,9 +15,12 @@
 package com.liferay.layout.page.template.admin.web.internal.headless.delivery.dto.v1_0.converter;
 
 import com.liferay.fragment.model.FragmentEntryLink;
-import com.liferay.headless.delivery.dto.v1_0.FragmentStyle;
 import com.liferay.headless.delivery.dto.v1_0.PageWidgetInstanceDefinition;
+import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.Validator;
+
+import java.util.Collections;
+import java.util.Map;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -29,9 +32,14 @@ import org.osgi.service.component.annotations.Reference;
 public class PageWidgetInstanceDefinitionDTOConverter {
 
 	public PageWidgetInstanceDefinition toDTO(
-		FragmentEntryLink fragmentEntryLink,
-		FragmentStyle pageWidgetInstanceDefinitionFragmentStyle,
-		String portletId) {
+		FragmentEntryLink fragmentEntryLink, String portletId) {
+
+		return toDTO(fragmentEntryLink, portletId, Collections.emptyMap());
+	}
+
+	public PageWidgetInstanceDefinition toDTO(
+		FragmentEntryLink fragmentEntryLink, String portletId,
+		Map<String, Object> stylesMap) {
 
 		if (Validator.isNull(portletId)) {
 			return null;
@@ -39,17 +47,14 @@ public class PageWidgetInstanceDefinitionDTOConverter {
 
 		return new PageWidgetInstanceDefinition() {
 			{
-				fragmentStyle = pageWidgetInstanceDefinitionFragmentStyle;
+				if (MapUtil.isNotEmpty(stylesMap)) {
+					setStyles(stylesMap);
+				}
+
 				widgetInstance = _widgetInstanceDTOConverter.toDTO(
 					fragmentEntryLink, portletId);
 			}
 		};
-	}
-
-	public PageWidgetInstanceDefinition toDTO(
-		FragmentEntryLink fragmentEntryLink, String portletId) {
-
-		return toDTO(fragmentEntryLink, null, portletId);
 	}
 
 	@Reference

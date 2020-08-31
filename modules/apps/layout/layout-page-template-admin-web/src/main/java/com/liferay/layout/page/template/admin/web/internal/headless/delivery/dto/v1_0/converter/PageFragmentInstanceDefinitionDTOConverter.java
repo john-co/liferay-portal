@@ -34,7 +34,6 @@ import com.liferay.headless.delivery.dto.v1_0.FragmentImage;
 import com.liferay.headless.delivery.dto.v1_0.FragmentInlineValue;
 import com.liferay.headless.delivery.dto.v1_0.FragmentLink;
 import com.liferay.headless.delivery.dto.v1_0.FragmentMappedValue;
-import com.liferay.headless.delivery.dto.v1_0.FragmentStyle;
 import com.liferay.headless.delivery.dto.v1_0.Mapping;
 import com.liferay.headless.delivery.dto.v1_0.PageFragmentInstanceDefinition;
 import com.liferay.headless.delivery.dto.v1_0.WidgetInstance;
@@ -60,6 +59,7 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -90,13 +90,15 @@ public class PageFragmentInstanceDefinitionDTOConverter {
 		FragmentStyledLayoutStructureItem fragmentStyledLayoutStructureItem,
 		boolean saveInlineContent, boolean saveMapping) {
 
-		return toDTO(fragmentStyledLayoutStructureItem, null, true, true);
+		return toDTO(
+			fragmentStyledLayoutStructureItem, true, true,
+			Collections.emptyMap());
 	}
 
 	public PageFragmentInstanceDefinition toDTO(
 		FragmentStyledLayoutStructureItem fragmentStyledLayoutStructureItem,
-		FragmentStyle pageFragmentInstanceDefinitionFragmentStyle,
-		boolean saveInlineContent, boolean saveMapping) {
+		boolean saveInlineContent, boolean saveMapping,
+		Map<String, Object> stylesMap) {
 
 		FragmentEntryLink fragmentEntryLink =
 			_fragmentEntryLinkLocalService.fetchFragmentEntryLink(
@@ -122,10 +124,11 @@ public class PageFragmentInstanceDefinitionDTOConverter {
 				fragmentConfig = _getFragmentConfig(fragmentEntryLink);
 				fragmentFields = _getFragmentFields(
 					fragmentEntryLink, saveInlineContent, saveMapping);
-				fragmentStyle = pageFragmentInstanceDefinitionFragmentStyle;
 				widgetInstances = _getWidgetInstances(fragmentEntryLink);
 
-				setFragmentStyle(fragmentStyle);
+				if (MapUtil.isNotEmpty(stylesMap)) {
+					setStyles(stylesMap);
+				}
 			}
 		};
 	}
