@@ -54,20 +54,20 @@ public class PageWidgetInstanceDefinition {
 
 	@Schema
 	@Valid
-	public FragmentStyle getFragmentStyle() {
-		return fragmentStyle;
+	public Map<String, Object> getStyles() {
+		return styles;
 	}
 
-	public void setFragmentStyle(FragmentStyle fragmentStyle) {
-		this.fragmentStyle = fragmentStyle;
+	public void setStyles(Map<String, Object> styles) {
+		this.styles = styles;
 	}
 
 	@JsonIgnore
-	public void setFragmentStyle(
-		UnsafeSupplier<FragmentStyle, Exception> fragmentStyleUnsafeSupplier) {
+	public void setStyles(
+		UnsafeSupplier<Map<String, Object>, Exception> stylesUnsafeSupplier) {
 
 		try {
-			fragmentStyle = fragmentStyleUnsafeSupplier.get();
+			styles = stylesUnsafeSupplier.get();
 		}
 		catch (RuntimeException re) {
 			throw re;
@@ -79,37 +79,7 @@ public class PageWidgetInstanceDefinition {
 
 	@GraphQLField
 	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
-	protected FragmentStyle fragmentStyle;
-
-	@Schema
-	@Valid
-	public FragmentViewport[] getFragmentViewports() {
-		return fragmentViewports;
-	}
-
-	public void setFragmentViewports(FragmentViewport[] fragmentViewports) {
-		this.fragmentViewports = fragmentViewports;
-	}
-
-	@JsonIgnore
-	public void setFragmentViewports(
-		UnsafeSupplier<FragmentViewport[], Exception>
-			fragmentViewportsUnsafeSupplier) {
-
-		try {
-			fragmentViewports = fragmentViewportsUnsafeSupplier.get();
-		}
-		catch (RuntimeException re) {
-			throw re;
-		}
-		catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	@GraphQLField
-	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
-	protected FragmentViewport[] fragmentViewports;
+	protected Map<String, Object> styles;
 
 	@Schema
 	@Valid
@@ -170,34 +140,14 @@ public class PageWidgetInstanceDefinition {
 
 		sb.append("{");
 
-		if (fragmentStyle != null) {
+		if (styles != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
 			}
 
-			sb.append("\"fragmentStyle\": ");
+			sb.append("\"styles\": ");
 
-			sb.append(String.valueOf(fragmentStyle));
-		}
-
-		if (fragmentViewports != null) {
-			if (sb.length() > 1) {
-				sb.append(", ");
-			}
-
-			sb.append("\"fragmentViewports\": ");
-
-			sb.append("[");
-
-			for (int i = 0; i < fragmentViewports.length; i++) {
-				sb.append(String.valueOf(fragmentViewports[i]));
-
-				if ((i + 1) < fragmentViewports.length) {
-					sb.append(", ");
-				}
-			}
-
-			sb.append("]");
+			sb.append(_toJSON(styles));
 		}
 
 		if (widgetInstance != null) {
