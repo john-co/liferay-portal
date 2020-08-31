@@ -35,7 +35,6 @@ import com.liferay.headless.delivery.dto.v1_0.FragmentInlineValue;
 import com.liferay.headless.delivery.dto.v1_0.FragmentLink;
 import com.liferay.headless.delivery.dto.v1_0.FragmentMappedValue;
 import com.liferay.headless.delivery.dto.v1_0.FragmentStyle;
-import com.liferay.headless.delivery.dto.v1_0.FragmentViewport;
 import com.liferay.headless.delivery.dto.v1_0.Mapping;
 import com.liferay.headless.delivery.dto.v1_0.PageFragmentInstanceDefinition;
 import com.liferay.headless.delivery.dto.v1_0.WidgetInstance;
@@ -91,13 +90,12 @@ public class PageFragmentInstanceDefinitionDTOConverter {
 		FragmentStyledLayoutStructureItem fragmentStyledLayoutStructureItem,
 		boolean saveInlineContent, boolean saveMapping) {
 
-		return toDTO(fragmentStyledLayoutStructureItem, null, null, true, true);
+		return toDTO(fragmentStyledLayoutStructureItem, null, true, true);
 	}
 
 	public PageFragmentInstanceDefinition toDTO(
 		FragmentStyledLayoutStructureItem fragmentStyledLayoutStructureItem,
 		FragmentStyle pageFragmentInstanceDefinitionFragmentStyle,
-		FragmentViewport[] pageFragmentInstanceDefinitionFragmentViewports,
 		boolean saveInlineContent, boolean saveMapping) {
 
 		FragmentEntryLink fragmentEntryLink =
@@ -125,8 +123,6 @@ public class PageFragmentInstanceDefinitionDTOConverter {
 				fragmentFields = _getFragmentFields(
 					fragmentEntryLink, saveInlineContent, saveMapping);
 				fragmentStyle = pageFragmentInstanceDefinitionFragmentStyle;
-				fragmentViewports =
-					pageFragmentInstanceDefinitionFragmentViewports;
 				widgetInstances = _getWidgetInstances(fragmentEntryLink);
 
 				setFragmentStyle(fragmentStyle);

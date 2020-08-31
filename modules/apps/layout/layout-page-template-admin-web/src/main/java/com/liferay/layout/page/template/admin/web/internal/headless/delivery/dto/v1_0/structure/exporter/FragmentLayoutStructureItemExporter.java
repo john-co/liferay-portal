@@ -82,7 +82,6 @@ public class FragmentLayoutStructureItemExporter
 							toFragmentStyle(
 								itemConfigJSONObject.getJSONObject("styles"),
 								saveMappingConfiguration),
-							getFragmentViewPorts(itemConfigJSONObject),
 							saveInlineContent, saveMappingConfiguration);
 					type = PageElement.Type.FRAGMENT;
 				}
@@ -98,8 +97,6 @@ public class FragmentLayoutStructureItemExporter
 					toFragmentStyle(
 						itemConfigJSONObject.getJSONObject("styles"),
 						saveMappingConfiguration),
-					getFragmentViewPorts(
-						itemConfigJSONObject.getJSONObject("style")),
 					PortletIdCodec.encode(portletId, instanceId));
 				type = PageElement.Type.WIDGET;
 			}

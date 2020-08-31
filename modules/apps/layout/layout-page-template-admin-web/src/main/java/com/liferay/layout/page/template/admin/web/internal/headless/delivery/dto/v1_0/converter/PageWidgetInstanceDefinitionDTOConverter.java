@@ -16,7 +16,6 @@ package com.liferay.layout.page.template.admin.web.internal.headless.delivery.dt
 
 import com.liferay.fragment.model.FragmentEntryLink;
 import com.liferay.headless.delivery.dto.v1_0.FragmentStyle;
-import com.liferay.headless.delivery.dto.v1_0.FragmentViewport;
 import com.liferay.headless.delivery.dto.v1_0.PageWidgetInstanceDefinition;
 import com.liferay.portal.kernel.util.Validator;
 
@@ -32,7 +31,6 @@ public class PageWidgetInstanceDefinitionDTOConverter {
 	public PageWidgetInstanceDefinition toDTO(
 		FragmentEntryLink fragmentEntryLink,
 		FragmentStyle pageWidgetInstanceDefinitionFragmentStyle,
-		FragmentViewport[] pageWidgetInstanceDefinitionFragmentViewports,
 		String portletId) {
 
 		if (Validator.isNull(portletId)) {
@@ -42,8 +40,6 @@ public class PageWidgetInstanceDefinitionDTOConverter {
 		return new PageWidgetInstanceDefinition() {
 			{
 				fragmentStyle = pageWidgetInstanceDefinitionFragmentStyle;
-				fragmentViewports =
-					pageWidgetInstanceDefinitionFragmentViewports;
 				widgetInstance = _widgetInstanceDTOConverter.toDTO(
 					fragmentEntryLink, portletId);
 			}
@@ -53,7 +49,7 @@ public class PageWidgetInstanceDefinitionDTOConverter {
 	public PageWidgetInstanceDefinition toDTO(
 		FragmentEntryLink fragmentEntryLink, String portletId) {
 
-		return toDTO(fragmentEntryLink, null, null, portletId);
+		return toDTO(fragmentEntryLink, null, portletId);
 	}
 
 	@Reference
