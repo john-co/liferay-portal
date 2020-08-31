@@ -2391,6 +2391,7 @@ components:
                     type: string
                 backgroundFragmentImage:
                     $ref: "#/components/schemas/FragmentImage"
+                    deprecated: true
                 backgroundImage:
                     deprecated: true
                     description:
