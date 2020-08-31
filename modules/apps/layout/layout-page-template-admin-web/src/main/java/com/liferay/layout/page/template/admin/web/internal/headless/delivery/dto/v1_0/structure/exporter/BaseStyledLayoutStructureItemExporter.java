@@ -32,7 +32,6 @@ import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.Validator;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -349,34 +348,8 @@ public abstract class BaseStyledLayoutStructureItemExporter
 		};
 	}
 
-	protected Map<String, Object> toMap(JSONObject jsonObject) {
-		Map<String, Object> map = new HashMap<>();
-
-		Set<String> keys = jsonObject.keySet();
-
-		Iterator<String> iterator = keys.iterator();
-
-		while (iterator.hasNext()) {
-			String key = iterator.next();
-
-			Object value = jsonObject.get(key);
-
-			if (value instanceof JSONObject) {
-				value = toMap((JSONObject)value);
-			}
-
-			map.put(key, value);
-		}
-
-		return map;
-	}
-
 	protected Map<String, Object> toStyles(
 		JSONObject jsonObject, boolean saveMappingConfiguration) {
-
-		if (jsonObject == null) {
-			return Collections.emptyMap();
-		}
 
 		return new HashMap<String, Object>() {
 			{
@@ -396,9 +369,6 @@ public abstract class BaseStyledLayoutStructureItemExporter
 						value = toBackgroundFragmentImage(
 							backgroundImageJSONObject,
 							saveMappingConfiguration);
-					}
-					else if (value instanceof JSONObject) {
-						value = toMap((JSONObject)value);
 					}
 
 					put(key, value);
