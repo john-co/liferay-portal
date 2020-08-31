@@ -21,7 +21,6 @@ import com.liferay.layout.util.structure.LayoutStructureItem;
 import com.liferay.layout.util.structure.RowStyledLayoutStructureItem;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.util.GetterUtil;
 
@@ -101,16 +100,6 @@ public class RowLayoutStructureItemImporter
 						rowStyledLayoutStructureItem,
 						(Map<String, Object>)entry.getValue(), entry.getKey());
 				}
-			}
-
-			Map<String, Object> styles = (Map<String, Object>)definitionMap.get(
-				"styles");
-
-			if (styles != null) {
-				JSONObject jsonObject = JSONUtil.put(
-					"styles", toStylesJSONObject(styles));
-
-				rowStyledLayoutStructureItem.updateItemConfig(jsonObject);
 			}
 		}
 

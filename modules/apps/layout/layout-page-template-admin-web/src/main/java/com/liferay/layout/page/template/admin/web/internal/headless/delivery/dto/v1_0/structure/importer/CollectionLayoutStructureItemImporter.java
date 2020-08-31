@@ -33,6 +33,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.MapUtil;
+import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.util.Map;
@@ -85,17 +86,6 @@ public class CollectionLayoutStructureItemImporter
 				(Integer)definitionMap.get("numberOfItems"));
 			collectionStyledLayoutStructureItem.setTemplateKey(
 				(String)definitionMap.get("templateKey"));
-
-			Map<String, Object> styles = (Map<String, Object>)definitionMap.get(
-				"styles");
-
-			if (styles != null) {
-				JSONObject jsonObject = JSONUtil.put(
-					"styles", toStylesJSONObject(styles));
-
-				collectionStyledLayoutStructureItem.updateItemConfig(
-					jsonObject);
-			}
 		}
 
 		return collectionStyledLayoutStructureItem;
@@ -156,7 +146,8 @@ public class CollectionLayoutStructureItemImporter
 		}
 
 		return JSONUtil.put(
-			"classNameId", portal.getClassNameId(AssetListEntry.class.getName())
+			"classNameId",
+			_portal.getClassNameId(AssetListEntry.class.getName())
 		).put(
 			"classPK", String.valueOf(classPK)
 		).put(
@@ -225,5 +216,8 @@ public class CollectionLayoutStructureItemImporter
 
 	@Reference
 	private InfoListProviderTracker _infoListProviderTracker;
+
+	@Reference
+	private Portal _portal;
 
 }

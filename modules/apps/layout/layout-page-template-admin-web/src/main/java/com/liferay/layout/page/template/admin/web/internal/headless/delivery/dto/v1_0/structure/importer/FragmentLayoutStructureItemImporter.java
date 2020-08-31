@@ -93,27 +93,8 @@ public class FragmentLayoutStructureItemImporter
 			return null;
 		}
 
-		LayoutStructureItem layoutStructureItem =
-			layoutStructure.addFragmentLayoutStructureItem(
-				fragmentEntryLink.getFragmentEntryLinkId(), parentItemId,
-				position);
-
-		Map<String, Object> definitionMap = getDefinitionMap(
-			pageElement.getDefinition());
-
-		if (definitionMap != null) {
-			Map<String, Object> styles = (Map<String, Object>)definitionMap.get(
-				"styles");
-
-			if (styles != null) {
-				JSONObject jsonObject = JSONUtil.put(
-					"styles", toStylesJSONObject(styles));
-
-				layoutStructureItem.updateItemConfig(jsonObject);
-			}
-		}
-
-		return layoutStructureItem;
+		return layoutStructure.addFragmentLayoutStructureItem(
+			fragmentEntryLink.getFragmentEntryLinkId(), parentItemId, position);
 	}
 
 	@Override
