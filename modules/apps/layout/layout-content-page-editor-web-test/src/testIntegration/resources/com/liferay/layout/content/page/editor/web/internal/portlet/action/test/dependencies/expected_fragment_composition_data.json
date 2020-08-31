@@ -93,11 +93,11 @@
 				"fragmentStyle": {
 					"backgroundFragmentImage": {
 					},
-					"borderRadius": "",
+					"borderRadius": "0",
 					"borderWidth": "0",
-					"fontFamily": "",
-					"fontSize": "",
-					"fontWeight": "",
+					"fontFamily": "fontFamilyBase",
+					"fontSize": "fontSizeBase",
+					"fontWeight": "fontWeightNormal",
 					"height": "",
 					"marginBottom": "0",
 					"marginLeft": "0",
@@ -108,13 +108,13 @@
 					"minHeight": "",
 					"minWidth": "",
 					"opacity": "100",
-					"overflow": "",
+					"overflow": "visible",
 					"paddingBottom": "0",
 					"paddingLeft": "0",
 					"paddingRight": "0",
 					"paddingTop": "0",
-					"shadow": "",
-					"textAlign": "",
+					"shadow": "none",
+					"textAlign": "none",
 					"width": ""
 				}
 			},
