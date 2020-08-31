@@ -3,8 +3,11 @@
 		"pageElements": [
 			{
 				"definition": {
-					"fragmentStyle": {
-						"backgroundFragmentImage": {
+					"layout": {
+						"containerType": "Fluid"
+					},
+					"styles": {
+						"backgroundImage": {
 							"title": {
 								"value": "test.jpg"
 							},
@@ -13,7 +16,7 @@
 							}
 						},
 						"borderRadius": "rounded-0",
-						"borderWidth": "0",
+						"borderWidth": 0,
 						"fontFamily": "sans-serif",
 						"fontSize": "medium",
 						"fontWeight": "font-weight-normal",
@@ -26,7 +29,7 @@
 						"maxWidth": "none",
 						"minHeight": "auto",
 						"minWidth": "auto",
-						"opacity": "1",
+						"opacity": 1,
 						"overflow": "",
 						"paddingBottom": "5",
 						"paddingLeft": "5",
@@ -35,9 +38,6 @@
 						"shadow": "shadow-none",
 						"textAlign": "",
 						"width": "w-auto"
-					},
-					"layout": {
-						"containerType": "Fluid"
 					}
 				},
 				"type": "Section"
