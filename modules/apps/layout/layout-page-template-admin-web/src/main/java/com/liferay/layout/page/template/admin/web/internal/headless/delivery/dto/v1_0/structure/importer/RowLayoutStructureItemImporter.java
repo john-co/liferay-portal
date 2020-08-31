@@ -103,28 +103,14 @@ public class RowLayoutStructureItemImporter
 				}
 			}
 
-			Map<String, Object> fragmentStyleMap =
-				(Map<String, Object>)definitionMap.get("fragmentStyle");
+			Map<String, Object> styles = (Map<String, Object>)definitionMap.get(
+				"styles");
 
-			if (fragmentStyleMap != null) {
+			if (styles != null) {
 				JSONObject jsonObject = JSONUtil.put(
-					"styles", toStylesJSONObject(fragmentStyleMap));
+					"styles", toStylesJSONObject(styles));
 
 				rowStyledLayoutStructureItem.updateItemConfig(jsonObject);
-			}
-
-			if (definitionMap.containsKey("fragmentViewports")) {
-				List<Map<String, Object>> fragmentViewports =
-					(List<Map<String, Object>>)definitionMap.get(
-						"fragmentViewports");
-
-				for (Map<String, Object> fragmentViewport : fragmentViewports) {
-					JSONObject jsonObject = JSONUtil.put(
-						(String)fragmentViewport.get("id"),
-						toFragmentViewportStylesJSONObject(fragmentViewport));
-
-					rowStyledLayoutStructureItem.updateItemConfig(jsonObject);
-				}
 			}
 		}
 
