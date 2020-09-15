@@ -1,0 +1,30 @@
+definition {
+
+	property portal.release = "true";
+	property portal.upstream = "true";
+	property testray.component.names = "User Interface";
+	property testray.main.component.name = "User Interface";
+	
+	setUp {
+	User.firstLoginPG();
+	}
+
+	tearDown {
+		WebContent.tearDownCP();
+	}
+
+test AddWebContent{
+
+	ProductMenu.gotoPortlet(
+		category = "Content & Data",
+		portlet = "Web Content"
+	);
+	
+	WebContent.addArticleCP(
+		webContentContent = "Have a great day :D",
+		webContentTitle = "Hello John!");
+
+
+	}
+
+}
