@@ -92,7 +92,7 @@ definition {
 
 		Navigator.gotoNavTab(navTab = "Widgets");
 
-		Pause(locator1 = "5000");
+		Pause(locator1 = "3000");
 
 		Type(
 			locator1 = "NavBar#APPLICATION_SEARCH_FIELD",
