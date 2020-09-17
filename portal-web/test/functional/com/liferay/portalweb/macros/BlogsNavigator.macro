@@ -163,7 +163,7 @@ definition {
 	}
 
 	macro gotoSelectFile {
-		Pause(locator1 = "3000");
+		WaitForElementPresent.waitForLastJavaScript();
 
 		AssertClick(
 			locator1 = "BlogsEntry#ENTRY_COVER_IMAGE_SELECT_FILE",

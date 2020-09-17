@@ -5,4 +5,8 @@ definition {
 		selenium.waitForElementPresent();
 	}
 
+	function waitForLastJavaScript {
+		selenium.waitForElementPresent("xpath=(//script)[last()]");
+	}
+
 }
