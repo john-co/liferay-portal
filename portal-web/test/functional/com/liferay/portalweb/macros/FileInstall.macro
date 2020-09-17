@@ -5,7 +5,7 @@ definition {
 			locator1 = "build-test.xml",
 			value1 = "delete-dependency-file  -Dliferay.dependency.jars=${liferayDependencyJars}");
 
-		Pause(locator1 = "10000");
+		Pause(locator1 = "3000");
 	}
 
 	macro deleteWarOffline {
@@ -13,7 +13,7 @@ definition {
 			locator1 = "build-test.xml",
 			value1 = "delete-dependency-file  -Dliferay.dependency.wars=${liferayDependencyWars}");
 
-		Pause(locator1 = "10000");
+		Pause(locator1 = "3000");
 	}
 
 	macro deployFileOnServer {
