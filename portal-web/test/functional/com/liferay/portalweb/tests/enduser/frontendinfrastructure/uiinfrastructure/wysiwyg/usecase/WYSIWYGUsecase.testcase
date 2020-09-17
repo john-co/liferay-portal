@@ -146,7 +146,7 @@ definition {
 			RobotType.robotTypeShortcut(locator1 = "Ctrl + v");
 		}
 
-		Pause(locator1 = "5000");
+		Pause(locator1 = "3000");
 
 		takeScreenshot();
 
