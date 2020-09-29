@@ -1,0 +1,42 @@
+definition {
+
+	property portal.release = "true";
+	property portal.upstream = "true";
+	property testray.component.names = "User Interface";
+	property testray.main.component.name = "User Interface";
+	
+	
+	setUp {
+	User.firstLoginPG();
+	}
+
+	tearDown {
+	BlogsEntry.tearDownCP();
+	Page.tearDownCP();
+		
+	}
+	
+	test AddBlogInPageLevel{
+	ProductMenu.gotoPortlet(
+			category = "Site Builder",
+			portlet = "Pages");
+	SitePages.addPublicPage(pageName = "Baba Jaga");
+	Navigator.gotoPage(pageName = "Baba Jaga");
+	Portlet.addPG(portletName = "Blogs");
+	
+	BlogsNavigator.gotoAddEntry();
+	
+	BlogsEntry.addEntryContent(
+		
+			entryTitle = "Blog entryTitle",
+			entryContent = "Entry Content");
+			
+			
+		PortletEntry.publish();
+	var key_entryContent = "Entry Content";
+	
+	AssertTextEquals.assertPartialText(
+	locator1 = "BlogsEntry#CONTENT",
+	value1 = "Entry Content");
+	}
+	}
