@@ -5,7 +5,6 @@ definition {
 	property testray.component.names = "User Interface";
 	property testray.main.component.name = "User Interface";
 
-
 	setUp {
 		User.firstLoginPG();
 	}
@@ -14,10 +13,9 @@ definition {
 		BlogsEntry.tearDownCP();
 
 		Page.tearDownCP();
-
 	}
 
-	test AddBlogInPageLevel{
+	test AddBlogInPageLevel {
 		ProductMenu.gotoPortlet(
 			category = "Site Builder",
 			portlet = "Pages");
@@ -31,14 +29,15 @@ definition {
 		BlogsNavigator.gotoAddEntry();
 
 		BlogsEntry.addEntryContent(
-			entryTitle = "Blog entryTitle",
-			entryContent = "Entry Content");
+			entryContent = "Entry Content",
+			entryTitle = "Blog entryTitle");
 
 		PortletEntry.publish();
-			var key_entryContent = "Entry Content";
+		var key_entryContent = "Entry Content";
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "BlogsEntry#CONTENT",
 			value1 = "Entry Content");
 	}
+
 }
