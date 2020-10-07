@@ -10,7 +10,6 @@ definition {
 	}
 
 	test UncheckDisableSPAInInternetExplorer {
-
 		ApplicationsMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
@@ -21,9 +20,10 @@ definition {
 			configurationName = "Frontend SPA Infrastructure",
 			configurationScope = "System Scope");
 
-		FrontendSPAInfrastructure.UncheckDisableSPA();
+		FrontendSPAInfrastructure.uncheckDisableSPA(
+			settingName = "Disable SPA in Internet Explorer");
 
-		FrontendSPAInfrastructure.Save();
+		PortleEntry.save();
 
 		AssertNotChecked.assertNotChecked(
 			locator1 = "FrontendSPAInfrastructure#Disable_SPA",

@@ -1,11 +1,9 @@
 definition {
 
-	macro Save {
-		Click(locator1 = "Frontend SPA Infrastructure#Save");
-	}
-
 	macro UncheckDisableSPA {
-		Click.clickAtNotVisible(locator1 = "Frontend SPA Infrastructure#Disable_SPA");
+		Uncheck.uncheckNotVisible(
+			checkboxName = "${settingName}",
+			locator1 = "Checkbox#ANY_CHECKBOX_SPECIFIC");
 	}
 
 }
