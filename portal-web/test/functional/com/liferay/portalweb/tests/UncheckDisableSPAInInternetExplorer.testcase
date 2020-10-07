@@ -23,11 +23,11 @@ definition {
 		FrontendSPAInfrastructure.uncheckDisableSPA(
 			settingName = "Disable SPA in Internet Explorer");
 
-		PortleEntry.save();
+		PortletEntry.save();
 
-		AssertNotChecked.assertNotChecked(
-			locator1 = "FrontendSPAInfrastructure#Disable_SPA",
-			value1 = "Disable SPA in Internet Explorer");
+		AssertNotChecked.assertNotCheckedNotVisible(
+			checkboxName = "Disable SPA in Internet Explorer",
+			locator1 = "Checkbox#ANY_CHECKBOX_SPECIFIC");
 	}
 
 }

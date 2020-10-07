@@ -1,6 +1,6 @@
 definition {
 
-	macro UncheckDisableSPA {
+	macro uncheckDisableSPA {
 		Uncheck.uncheckNotVisible(
 			checkboxName = "${settingName}",
 			locator1 = "Checkbox#ANY_CHECKBOX_SPECIFIC");
