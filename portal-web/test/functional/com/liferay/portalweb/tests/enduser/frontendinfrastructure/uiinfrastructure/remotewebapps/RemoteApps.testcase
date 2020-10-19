@@ -6,26 +6,33 @@ definition {
 	property testray.main.component.name = "User Interface";
 
 	setUp {
+		TestCase.setUpPortalInstance();
+
 		User.firstLoginPG();
 	}
 
 	tearDown {
-		Page.tearDownCP();
+		var testPortalInstance = PropsUtil.get("test.portal.instance");
+
+		if ("${testPortalInstance}" == "true") {
+			PortalInstances.tearDownCP();
+		}
+		else {
+			Page.tearDownCP();
+
+			RemoteApps.tearDown();
+		}
 	}
 
-	test addRemoteWebApp {
-
+	test AddRemoteWebApp {
 		ApplicationsMenu.gotoPortlet(
 			category = "Custom Apps",
 			panel = "Applications",
 			portlet = "Remote Apps");
 
-		RemoteApps.new();
-
-		RemoteApps.name(enterName = "Test Remote App");
-		RemoteApps.url(enterUrl = "http://remote-app-test.wincent.com/");
-
-		PortletEntry.save();
+		RemoteApps.addApp(
+			name = "Test Remote App",
+			url = "http://remote-app-test.wincent.com/");
 
 		Navigator.openURL();
 

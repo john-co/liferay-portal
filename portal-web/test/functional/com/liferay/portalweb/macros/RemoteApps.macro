@@ -1,19 +1,42 @@
 definition {
 
-	macro name {
+	macro addApp {
+		Click(locator1 = "RemoteApps#NEW_REMOTEAPP");
+
+		VerifyElementPresent(locator1 = "RemoteApps#NAME")
+
+		//Workaround for LPS-121683
 		Type(
 			locator1 = "RemoteApps#NAME",
-			value1 = "${enterName}");
-	}
+			value1 = "${name}");
 
-	macro new {
-		Click(locator1 = "RemoteApps#NEW_REMOTEAPP");
-	}
-
-	macro url {
 		Type(
-			locator1 = "RemoteApps#Url",
-			value1 = "${enterUrl}");
+			locator1 = "TextInput#ANY",
+			key_text = "URL"
+			value1 = "${url}");
+
+		Type(
+			key_text = "URL",
+			locator1 = "TextInput#ANY",
+			value1 = "${url}");
+
+		PortletEntry.save();
+	}
+
+
+	macro tearDownCP {
+		ApplicationsMenu.gotoPortlet(
+			category = "Custom Apps",
+			panel = "Applications",
+			portlet = "Remote Apps");
+
+		Search.searchCP(searchTerm = "App");
+
+		while (IsElementPresent.pauseIsElementPresent(locator1 = "Icon#SVG_ELLIPSIS")) {
+			Click(locator1 = "Icon#SVG_ELLIPSIS");
+
+			MenuItem.clickNoError(menuItem = "Delete");
+		}
 	}
 
 }
