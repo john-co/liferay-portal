@@ -20,10 +20,10 @@ definition {
 			panel = "Applications",
 			portlet = "Remote Apps");
 
-		AddRemoteApp.new();
+		RemoteApps.new();
 
-		AddRemoteApp.name(enterName = "Test Remote App");
-		AddRemoteApp.url(enterUrl = "http://remote-app-test.wincent.com/");
+		RemoteApps.name(enterName = "Test Remote App");
+		RemoteApps.url(enterUrl = "http://remote-app-test.wincent.com/");
 
 		PortletEntry.save();
 
