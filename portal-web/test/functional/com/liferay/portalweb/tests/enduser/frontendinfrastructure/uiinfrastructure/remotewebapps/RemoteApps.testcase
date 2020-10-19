@@ -46,15 +46,17 @@ definition {
 
 		Portlet.addPG(portletName = "Test Remote App");
 
-		Pause(locator1 = "1000")
+		WaitForElementPresent(
+			locator1 = "Link#ANY",
+			key_text = "Company ID");
 
 		AssertTextEquals.assertPartialText(
-			locator1 = "RemoteApps#LINK",
-			value1 = "Company ID");
+			locator1 = "Link#ANY",
+			key_text = "Company ID");
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "Button#ANY",
-			value1 = "Say hello");
+			key_text = "Say hello");
 	}
 
 }
