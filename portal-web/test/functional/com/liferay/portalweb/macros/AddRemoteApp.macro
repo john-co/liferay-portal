@@ -3,7 +3,7 @@ definition {
 	macro name {
 		Type(
 			locator1 = "RemoteApps#NAME",
-			value1 = "${EnterName}");
+			value1 = "${enterName}");
 	}
 
 	macro new {
@@ -13,7 +13,7 @@ definition {
 	macro url {
 		Type(
 			locator1 = "RemoteApps#Url",
-			value1 = "${EnterUrl}");
+			value1 = "${enterUrl}");
 	}
 
 }
