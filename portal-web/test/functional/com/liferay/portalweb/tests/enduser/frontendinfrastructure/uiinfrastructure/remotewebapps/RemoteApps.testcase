@@ -14,13 +14,15 @@ definition {
 	tearDown {
 		var testPortalInstance = PropsUtil.get("test.portal.instance");
 
+		Navigator.openURL();
+
 		if ("${testPortalInstance}" == "true") {
 			PortalInstances.tearDownCP();
 		}
 		else {
-			Page.tearDownCP();
-
 			RemoteApps.tearDown();
+
+			Page.tearDownCP();
 		}
 	}
 
@@ -46,17 +48,21 @@ definition {
 
 		Portlet.addPG(portletName = "Test Remote App");
 
+		SelectFrame.selectFrameNoLoading(locator1 = "IFrame#IFRAME");
+
 		WaitForElementPresent(
-			locator1 = "Link#ANY",
-			key_text = "Company ID");
+			key_text = "Company ID",
+			locator1 = "Link#ANY");
 
 		AssertTextEquals.assertPartialText(
+			key_text = "Company ID",
 			locator1 = "Link#ANY",
-			key_text = "Company ID");
+			value1 = "Company ID");
 
 		AssertTextEquals.assertPartialText(
+			key_text = "Say hello",
 			locator1 = "Button#ANY",
-			key_text = "Say hello");
+			value1 = "Say hello");
 	}
 
 }

@@ -1,19 +1,22 @@
 definition {
 
 	macro addApp {
-		Click(locator1 = "RemoteApps#NEW_REMOTEAPP");
+		Click(locator1 = "Button#PLUS");
 
-		VerifyElementPresent(locator1 = "RemoteApps#NAME")
+		VerifyElementPresent(locator1 = "RemoteApps#NAME");
 
-		//Workaround for LPS-121683
+		// Workaround for LPS-121683
+
 		Type(
 			locator1 = "RemoteApps#NAME",
 			value1 = "${name}");
 
+		/* Use this instead when LPS-121683 is fixed
 		Type(
+		 	key_text = "Name"
 			locator1 = "TextInput#ANY",
-			key_text = "URL"
-			value1 = "${url}");
+			value1 = "${name}");
+		*/
 
 		Type(
 			key_text = "URL",
@@ -23,8 +26,7 @@ definition {
 		PortletEntry.save();
 	}
 
-
-	macro tearDownCP {
+	macro tearDown {
 		ApplicationsMenu.gotoPortlet(
 			category = "Custom Apps",
 			panel = "Applications",
