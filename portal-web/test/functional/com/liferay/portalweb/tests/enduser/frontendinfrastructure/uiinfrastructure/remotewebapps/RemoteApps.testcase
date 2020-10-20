@@ -1,0 +1,71 @@
+definition {
+
+	property portal.release = "true";
+	property portal.upstream = "true";
+	property testray.component.names = "User Interface";
+	property testray.main.component.name = "User Interface";
+
+	setUp {
+		TestCase.setUpPortalInstance();
+
+		User.firstLoginPG();
+	}
+
+	tearDown {
+		var testPortalInstance = PropsUtil.get("test.portal.instance");
+
+		Navigator.openURL();
+
+		if ("${testPortalInstance}" == "true") {
+			PortalInstances.tearDownCP();
+		}
+		else {
+			RemoteApps.tearDown();
+
+			Page.tearDownCP();
+		}
+	}
+
+	@priority = "4"
+	test AddRemoteWebApp {
+		property portal.acceptance = "john-co";
+
+		ApplicationsMenu.gotoPortlet(
+			category = "Custom Apps",
+			panel = "Applications",
+			portlet = "Remote Apps");
+
+		RemoteApps.addApp(
+			name = "Test Remote App",
+			url = "http://remote-app-test.wincent.com/");
+
+		Navigator.openURL();
+
+		ProductMenu.gotoPortlet(
+			category = "Site Builder",
+			portlet = "Pages");
+
+		SitePages.addPublicPage(pageName = "Test Remote App Page");
+
+		Navigator.gotoPage(pageName = "Test Remote App Page");
+
+		Portlet.addPG(portletName = "Test Remote App");
+
+		SelectFrame.selectFrameNoLoading(locator1 = "IFrame#IFRAME");
+
+		WaitForElementPresent(
+			key_text = "Company ID",
+			locator1 = "Link#ANY");
+
+		AssertTextEquals.assertPartialText(
+			key_text = "Company ID",
+			locator1 = "Link#ANY",
+			value1 = "Company ID");
+
+		AssertTextEquals.assertPartialText(
+			key_text = "Say hello",
+			locator1 = "Button#ANY",
+			value1 = "Say hello");
+	}
+
+}
