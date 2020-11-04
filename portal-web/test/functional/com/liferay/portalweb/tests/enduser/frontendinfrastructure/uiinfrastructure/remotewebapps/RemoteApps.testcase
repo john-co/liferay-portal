@@ -28,7 +28,7 @@ definition {
 
 	@priority = "5"
 	test AddRemoteApp {
-		property portal.acceptance = "true";
+		property portal.acceptance = "john-co";
 
 		ApplicationsMenu.gotoPortlet(
 			category = "Custom Apps",
