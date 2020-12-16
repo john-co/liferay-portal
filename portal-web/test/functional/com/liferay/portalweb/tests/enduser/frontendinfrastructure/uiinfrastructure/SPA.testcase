@@ -36,6 +36,7 @@ definition {
 	@description = "Validate user can configure SPA timeout notification"
 	@priority = "4"
 	test ConfigureSPANotificationTimeout {
+		property portal.acceptance = "john-co";
 		property test.name.skip.portal.instance = "SPA#AssertLoadingBar";
 
 		var appName = "Liferay Frontend JS SPA Web";
