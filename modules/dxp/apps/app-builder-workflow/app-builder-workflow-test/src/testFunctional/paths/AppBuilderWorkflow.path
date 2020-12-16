@@ -60,6 +60,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>SELECT_CUSTOM_OBJECT_BUTTON_TEXT</td>
+	<td>//button[contains(@aria-labelledby,'select-object-label')]//span</td>
+	<td></td>
+</tr>
+<tr>
 	<td>SELECT_FORM_VIEW_BUTTON</td>
 	<td>xpath=(//button[contains(@aria-labelledby,'form-view')])[${key_positionNumber}]</td>
 	<td></td>
@@ -77,6 +82,11 @@
 <tr>
 	<td>SELECT_TABLE_VIEW_BUTTON</td>
 	<td>//button[contains(@aria-labelledby,'table-view')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>SELECT_TABLE_VIEW_BUTTON_TEXT</td>
+	<td>//button[contains(@aria-labelledby,'table-view')]//span</td>
 	<td></td>
 </tr>
 <tr>
@@ -150,6 +160,16 @@
 	<td></td>
 </tr>
 <tr>
+	<td>CREATE_FORM_VIEW_BUTTON</td>
+	<td>xpath=(//button[@title='New Form View'])[${key_positionNumber}]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>CREATE_TABLE_VIEW_BUTTON</td>
+	<td>//button[@title='New Table View']</td>
+	<td></td>
+</tr>
+<tr>
 	<td>REMOVE_FORM_VIEW_BUTTON_GENERAL</td>
 	<td>//div[contains(@class,'step-form-view')]//button[contains(@title,'Remove')]</td>
 	<td></td>
@@ -157,6 +177,21 @@
 <tr>
 	<td>REMOVE_FORM_VIEW_BUTTON_SPECIFIC</td>
 	<td>xpath=(//div[contains(@class,'step-form-view')]//button[contains(@title,'Remove')])[${key_positionNumber}]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>CREATE_NEW_CUSTOM_OBJECT_BUTTON</td>
+	<td>//button[contains(@class,'btn btn-monospaced btn-secondary mr-2 nav-btn nav-btn-monospaced')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>NEW_OBJECT_NAME_FIELD</td>
+	<td>//div[contains(@class, 'modal-content')]//div//input[contains(@class, 'form-control')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>BUTTON_CONTINUE</td>
+	<td>//button[contains(text(),'Continue')]</td>
 	<td></td>
 </tr>
 <!--APP_RUNNING-->

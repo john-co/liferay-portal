@@ -136,13 +136,18 @@
 
 		<!-- Other fields -->
 
-		<column name="name" type="String" />
+		<column name="defaultAccountGroup" type="boolean" />
 		<column name="description" type="String" />
+		<column name="name" type="String" />
 
 		<!-- Finder methods -->
 
 		<finder name="CompanyId" return-type="Collection">
 			<finder-column name="companyId" />
+		</finder>
+		<finder name="C_D" return-type="Collection">
+			<finder-column name="companyId" />
+			<finder-column name="defaultAccountGroup" />
 		</finder>
 
 		<!-- References -->
@@ -216,6 +221,7 @@
 		<exception>AccountEntryDomains</exception>
 		<exception>AccountEntryName</exception>
 		<exception>AccountEntryType</exception>
+		<exception>DefaultAccountGroup</exception>
 		<exception>DuplicateAccountEntryId</exception>
 		<exception>DuplicateAccountEntryOrganizationRel</exception>
 		<exception>DuplicateAccountEntryUserRel</exception>

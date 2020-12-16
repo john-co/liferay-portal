@@ -29,14 +29,16 @@ public class DirectTrafficChannelImpl implements TrafficChannel {
 
 	public DirectTrafficChannelImpl(boolean error) {
 		_error = error;
+
 		_trafficAmount = 0;
 		_trafficShare = 0;
 	}
 
 	public DirectTrafficChannelImpl(long trafficAmount, double trafficShare) {
-		_error = false;
 		_trafficAmount = trafficAmount;
 		_trafficShare = trafficShare;
+
+		_error = false;
 	}
 
 	@Override

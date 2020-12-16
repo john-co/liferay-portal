@@ -56,14 +56,12 @@ public class CountryLocalServiceUtil {
 			String a2, String a3, boolean active, boolean billingAllowed,
 			String idd, String name, String number, double position,
 			boolean shippingAllowed, boolean subjectToVAT, boolean zipRequired,
-			java.util.Map<String, String> titleMap,
 			ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return getService().addCountry(
 			a2, a3, active, billingAllowed, idd, name, number, position,
-			shippingAllowed, subjectToVAT, zipRequired, titleMap,
-			serviceContext);
+			shippingAllowed, subjectToVAT, zipRequired, serviceContext);
 	}
 
 	/**
@@ -234,6 +232,30 @@ public class CountryLocalServiceUtil {
 		return getService().fetchCountry(countryId);
 	}
 
+	public static com.liferay.portal.kernel.model.Country fetchCountryByA2(
+		long companyId, String a2) {
+
+		return getService().fetchCountryByA2(companyId, a2);
+	}
+
+	public static com.liferay.portal.kernel.model.Country fetchCountryByA3(
+		long companyId, String a3) {
+
+		return getService().fetchCountryByA3(companyId, a3);
+	}
+
+	public static com.liferay.portal.kernel.model.Country fetchCountryByName(
+		long companyId, String name) {
+
+		return getService().fetchCountryByName(companyId, name);
+	}
+
+	public static com.liferay.portal.kernel.model.Country fetchCountryByNumber(
+		long companyId, String number) {
+
+		return getService().fetchCountryByNumber(companyId, number);
+	}
+
 	/**
 	 * Returns the country with the matching UUID and company.
 	 *
@@ -265,8 +287,38 @@ public class CountryLocalServiceUtil {
 		return getService().getCompanyCountries(companyId);
 	}
 
+	public static java.util.List<com.liferay.portal.kernel.model.Country>
+		getCompanyCountries(long companyId, boolean active) {
+
+		return getService().getCompanyCountries(companyId, active);
+	}
+
+	public static java.util.List<com.liferay.portal.kernel.model.Country>
+		getCompanyCountries(
+			long companyId, boolean active, int start, int end,
+			com.liferay.portal.kernel.util.OrderByComparator
+				<com.liferay.portal.kernel.model.Country> orderByComparator) {
+
+		return getService().getCompanyCountries(
+			companyId, active, start, end, orderByComparator);
+	}
+
+	public static java.util.List<com.liferay.portal.kernel.model.Country>
+		getCompanyCountries(
+			long companyId, int start, int end,
+			com.liferay.portal.kernel.util.OrderByComparator
+				<com.liferay.portal.kernel.model.Country> orderByComparator) {
+
+		return getService().getCompanyCountries(
+			companyId, start, end, orderByComparator);
+	}
+
 	public static int getCompanyCountriesCount(long companyId) {
 		return getService().getCompanyCountriesCount(companyId);
+	}
+
+	public static int getCompanyCountriesCount(long companyId, boolean active) {
+		return getService().getCompanyCountriesCount(companyId, active);
 	}
 
 	/**
@@ -307,6 +359,34 @@ public class CountryLocalServiceUtil {
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return getService().getCountry(countryId);
+	}
+
+	public static com.liferay.portal.kernel.model.Country getCountryByA2(
+			long companyId, String a2)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return getService().getCountryByA2(companyId, a2);
+	}
+
+	public static com.liferay.portal.kernel.model.Country getCountryByA3(
+			long companyId, String a3)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return getService().getCountryByA3(companyId, a3);
+	}
+
+	public static com.liferay.portal.kernel.model.Country getCountryByName(
+			long companyId, String name)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return getService().getCountryByName(companyId, name);
+	}
+
+	public static com.liferay.portal.kernel.model.Country getCountryByNumber(
+			long companyId, String number)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return getService().getCountryByNumber(companyId, number);
 	}
 
 	/**
@@ -372,6 +452,13 @@ public class CountryLocalServiceUtil {
 		return getService().getPersistedModel(primaryKeyObj);
 	}
 
+	public static com.liferay.portal.kernel.model.Country updateActive(
+			long countryId, boolean active)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return getService().updateActive(countryId, active);
+	}
+
 	/**
 	 * Updates the country in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
@@ -386,6 +473,17 @@ public class CountryLocalServiceUtil {
 		com.liferay.portal.kernel.model.Country country) {
 
 		return getService().updateCountry(country);
+	}
+
+	public static com.liferay.portal.kernel.model.Country updateCountry(
+			long countryId, String a2, String a3, boolean active,
+			boolean billingAllowed, String idd, String name, String number,
+			double position, boolean shippingAllowed, boolean subjectToVAT)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return getService().updateCountry(
+			countryId, a2, a3, active, billingAllowed, idd, name, number,
+			position, shippingAllowed, subjectToVAT);
 	}
 
 	public static com.liferay.portal.kernel.model.CountryLocalization
@@ -406,6 +504,14 @@ public class CountryLocalServiceUtil {
 			throws com.liferay.portal.kernel.exception.PortalException {
 
 		return getService().updateCountryLocalizations(country, titleMap);
+	}
+
+	public static com.liferay.portal.kernel.model.Country
+			updateGroupFilterEnabled(long countryId, boolean groupFilterEnabled)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return getService().updateGroupFilterEnabled(
+			countryId, groupFilterEnabled);
 	}
 
 	public static CountryLocalService getService() {

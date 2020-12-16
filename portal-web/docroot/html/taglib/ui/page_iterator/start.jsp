@@ -56,6 +56,7 @@ if (Validator.isNull(id)) {
 }
 
 int start = (cur - 1) * delta;
+
 int end = cur * delta;
 
 if (end > total) {
@@ -340,6 +341,4 @@ private String _getHREF(String formName, String curParam, int cur, String jsCall
 private String _getOnClick(String namespace, String curParam, int cur) {
 	return "event.preventDefault(); " + namespace + "submitForm('" + namespace + curParam + "','" + cur + "');";
 }
-%>
-
 %>

@@ -39,7 +39,7 @@ definition {
 
 		ItemSelector.gotoItemSelectorViaAlloyEditor();
 
-		ItemSelector.addFromURL(
+		ItemSelector.addImageFromURL(
 			imageSourceURL = "https://raw.githubusercontent.com/liferay/liferay-portal/master/portal-web/test/functional/com/liferay/portalweb/dependencies/Document_1.png",
 			navTab = "URL");
 
@@ -439,6 +439,82 @@ definition {
 		Click(locator1 = "Pagination#NEXT_LINK");
 
 		Pagination.viewResults(results = "Showing 21 to 30 of 30 entries.");
+	}
+
+	@description = "This ensures that a message is displayed in the preview section of the item selector when pasting an invalid URL."
+	@priority = "5"
+	test PreviewInvalidVideos {
+		KBAdmin.openKBAdmin(siteURLKey = "guest");
+
+		LexiconEntry.gotoAddMenuItem(menuItem = "Basic Article");
+
+		ItemSelector.gotoItemSelectorViaCKEditor(video = "true");
+
+		ItemSelector.addVideoFromURL(
+			navTab = "URL",
+			unpublish = "true",
+			videoSourceURL = "https://www.youtube.com/watch?v=test");
+
+		ItemSelector.previewEmbeddedVideo(invalidURL = "https://www.youtube.com");
+
+		ItemSelector.addVideoFromURL(
+			navTab = "URL",
+			unpublish = "true",
+			videoSourceURL = "https://vimeo.com/test");
+
+		ItemSelector.previewEmbeddedVideo(invalidURL = "https://player.vimeo.com");
+
+		ItemSelector.addVideoFromURL(
+			navTab = "URL",
+			unpublish = "true",
+			videoSourceURL = "https://www.facebook.com/Cristiano/videos/test");
+
+		ItemSelector.previewEmbeddedVideo(invalidURL = "https://www.facebook.com");
+
+		ItemSelector.addVideoFromURL(
+			navTab = "URL",
+			unpublish = "true",
+			videoSourceURL = "https://test.com/test");
+
+		ItemSelector.previewEmbeddedVideo(invalidURL = "https://test.com/test");
+	}
+
+	@description = "This ensures that users can preview the supported videos in the item selector."
+	@priority = "5"
+	test PreviewSupportedVideos {
+		BlogsNavigator.openBlogsAdmin(siteURLKey = "guest");
+
+		BlogsNavigator.gotoAddEntry();
+
+		ItemSelector.gotoItemSelectorViaAlloyEditor(video = "true");
+
+		ItemSelector.addVideoFromURL(
+			navTab = "URL",
+			unpublish = "true",
+			videoSourceURL = "https://www.youtube.com/watch?v=2EPZxIC5ogU");
+
+		ItemSelector.previewEmbeddedVideo(validURL = "https://www.youtube.com");
+
+		ItemSelector.addVideoFromURL(
+			navTab = "URL",
+			unpublish = "true",
+			videoSourceURL = "https://www.facebook.com/Cristiano/videos/1710977485745946");
+
+		ItemSelector.previewEmbeddedVideo(validURL = "https://www.facebook.com");
+
+		ItemSelector.addVideoFromURL(
+			navTab = "URL",
+			unpublish = "true",
+			videoSourceURL = "https://www.twitch.tv/videos/806178790");
+
+		ItemSelector.previewEmbeddedVideo(validURL = "https://player.twitch.tv");
+
+		ItemSelector.addVideoFromURL(
+			navTab = "URL",
+			unpublish = "true",
+			videoSourceURL = "https://vimeo.com/483035084");
+
+		ItemSelector.previewEmbeddedVideo(validURL = "https://player.vimeo.com");
 	}
 
 	@description = "This ensures that users can preview the SVG image in item selector."

@@ -14,6 +14,7 @@
 
 package com.liferay.journal.web.internal.display.context;
 
+import com.liferay.dynamic.data.mapping.form.values.factory.DDMFormValuesFactory;
 import com.liferay.dynamic.data.mapping.model.DDMStructure;
 import com.liferay.dynamic.data.mapping.model.DDMTemplate;
 import com.liferay.dynamic.data.mapping.service.DDMStructureLocalServiceUtil;
@@ -205,7 +206,11 @@ public class JournalEditArticleDisplayContext {
 		}
 
 		if (_article == null) {
-			return _ddmFormValues;
+			DDMFormValuesFactory ddmFormValuesFactory =
+				_getDDMFormValuesFactory();
+
+			return ddmFormValuesFactory.create(
+				_httpServletRequest, ddmStructure.getDDMForm());
 		}
 
 		String content = _article.getContent();
@@ -649,6 +654,11 @@ public class JournalEditArticleDisplayContext {
 		}
 
 		return false;
+	}
+
+	private DDMFormValuesFactory _getDDMFormValuesFactory() {
+		return (DDMFormValuesFactory)_httpServletRequest.getAttribute(
+			DDMFormValuesFactory.class.getName());
 	}
 
 	private long _getInheritedWorkflowDDMStructuresFolderId()

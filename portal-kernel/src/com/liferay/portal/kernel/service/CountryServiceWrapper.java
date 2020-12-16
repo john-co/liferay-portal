@@ -34,14 +34,12 @@ public class CountryServiceWrapper
 			boolean billingAllowed, java.lang.String idd, java.lang.String name,
 			java.lang.String number, double position, boolean shippingAllowed,
 			boolean subjectToVAT, boolean zipRequired,
-			java.util.Map<java.lang.String, java.lang.String> titleMap,
 			ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _countryService.addCountry(
 			a2, a3, active, billingAllowed, idd, name, number, position,
-			shippingAllowed, subjectToVAT, zipRequired, titleMap,
-			serviceContext);
+			shippingAllowed, subjectToVAT, zipRequired, serviceContext);
 	}
 
 	/**
@@ -58,12 +56,30 @@ public class CountryServiceWrapper
 	}
 
 	@Override
+	public void deleteCountry(long countryId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		_countryService.deleteCountry(countryId);
+	}
+
+	@Override
 	public com.liferay.portal.kernel.model.Country fetchCountry(
 		long countryId) {
 
 		return _countryService.fetchCountry(countryId);
 	}
 
+	@Override
+	public com.liferay.portal.kernel.model.Country fetchCountryByA2(
+		long companyId, java.lang.String a2) {
+
+		return _countryService.fetchCountryByA2(companyId, a2);
+	}
+
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x)
+	 */
+	@Deprecated
 	@Override
 	public com.liferay.portal.kernel.model.Country fetchCountryByA2(
 		java.lang.String a2) {
@@ -73,6 +89,17 @@ public class CountryServiceWrapper
 
 	@Override
 	public com.liferay.portal.kernel.model.Country fetchCountryByA3(
+		long companyId, java.lang.String a3) {
+
+		return _countryService.fetchCountryByA3(companyId, a3);
+	}
+
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x)
+	 */
+	@Deprecated
+	@Override
+	public com.liferay.portal.kernel.model.Country fetchCountryByA3(
 		java.lang.String a3) {
 
 		return _countryService.fetchCountryByA3(a3);
@@ -80,11 +107,65 @@ public class CountryServiceWrapper
 
 	@Override
 	public java.util.List<com.liferay.portal.kernel.model.Country>
+		getCompanyCountries(long companyId) {
+
+		return _countryService.getCompanyCountries(companyId);
+	}
+
+	@Override
+	public java.util.List<com.liferay.portal.kernel.model.Country>
+		getCompanyCountries(long companyId, boolean active) {
+
+		return _countryService.getCompanyCountries(companyId, active);
+	}
+
+	@Override
+	public java.util.List<com.liferay.portal.kernel.model.Country>
+		getCompanyCountries(
+			long companyId, boolean active, int start, int end,
+			com.liferay.portal.kernel.util.OrderByComparator
+				<com.liferay.portal.kernel.model.Country> orderByComparator) {
+
+		return _countryService.getCompanyCountries(
+			companyId, active, start, end, orderByComparator);
+	}
+
+	@Override
+	public java.util.List<com.liferay.portal.kernel.model.Country>
+		getCompanyCountries(
+			long companyId, int start, int end,
+			com.liferay.portal.kernel.util.OrderByComparator
+				<com.liferay.portal.kernel.model.Country> orderByComparator) {
+
+		return _countryService.getCompanyCountries(
+			companyId, start, end, orderByComparator);
+	}
+
+	@Override
+	public int getCompanyCountriesCount(long companyId) {
+		return _countryService.getCompanyCountriesCount(companyId);
+	}
+
+	@Override
+	public int getCompanyCountriesCount(long companyId, boolean active) {
+		return _countryService.getCompanyCountriesCount(companyId, active);
+	}
+
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x)
+	 */
+	@Deprecated
+	@Override
+	public java.util.List<com.liferay.portal.kernel.model.Country>
 		getCountries() {
 
 		return _countryService.getCountries();
 	}
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x)
+	 */
+	@Deprecated
 	@Override
 	public java.util.List<com.liferay.portal.kernel.model.Country> getCountries(
 		boolean active) {
@@ -101,12 +182,36 @@ public class CountryServiceWrapper
 
 	@Override
 	public com.liferay.portal.kernel.model.Country getCountryByA2(
+			long companyId, java.lang.String a2)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _countryService.getCountryByA2(companyId, a2);
+	}
+
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x)
+	 */
+	@Deprecated
+	@Override
+	public com.liferay.portal.kernel.model.Country getCountryByA2(
 			java.lang.String a2)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _countryService.getCountryByA2(a2);
 	}
 
+	@Override
+	public com.liferay.portal.kernel.model.Country getCountryByA3(
+			long companyId, java.lang.String a3)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _countryService.getCountryByA3(companyId, a3);
+	}
+
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x)
+	 */
+	@Deprecated
 	@Override
 	public com.liferay.portal.kernel.model.Country getCountryByA3(
 			java.lang.String a3)
@@ -117,10 +222,30 @@ public class CountryServiceWrapper
 
 	@Override
 	public com.liferay.portal.kernel.model.Country getCountryByName(
+			long companyId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _countryService.getCountryByName(companyId, name);
+	}
+
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x)
+	 */
+	@Deprecated
+	@Override
+	public com.liferay.portal.kernel.model.Country getCountryByName(
 			java.lang.String name)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _countryService.getCountryByName(name);
+	}
+
+	@Override
+	public com.liferay.portal.kernel.model.Country getCountryByNumber(
+			long companyId, java.lang.String number)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _countryService.getCountryByNumber(companyId, number);
 	}
 
 	/**
@@ -131,6 +256,36 @@ public class CountryServiceWrapper
 	@Override
 	public java.lang.String getOSGiServiceIdentifier() {
 		return _countryService.getOSGiServiceIdentifier();
+	}
+
+	@Override
+	public com.liferay.portal.kernel.model.Country updateActive(
+			long countryId, boolean active)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _countryService.updateActive(countryId, active);
+	}
+
+	@Override
+	public com.liferay.portal.kernel.model.Country updateCountry(
+			long countryId, java.lang.String a2, java.lang.String a3,
+			boolean active, boolean billingAllowed, java.lang.String idd,
+			java.lang.String name, java.lang.String number, double position,
+			boolean shippingAllowed, boolean subjectToVAT)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _countryService.updateCountry(
+			countryId, a2, a3, active, billingAllowed, idd, name, number,
+			position, shippingAllowed, subjectToVAT);
+	}
+
+	@Override
+	public com.liferay.portal.kernel.model.Country updateGroupFilterEnabled(
+			long countryId, boolean groupFilterEnabled)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _countryService.updateGroupFilterEnabled(
+			countryId, groupFilterEnabled);
 	}
 
 	@Override

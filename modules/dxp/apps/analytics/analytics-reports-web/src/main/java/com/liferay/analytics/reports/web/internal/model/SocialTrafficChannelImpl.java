@@ -23,10 +23,13 @@ import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -37,16 +40,25 @@ public class SocialTrafficChannelImpl implements TrafficChannel {
 	public SocialTrafficChannelImpl(boolean error) {
 		_error = error;
 
-		_referringSocialMedia = Collections.emptyList();
+		_referringSocialMediaList = Collections.emptyList();
 		_trafficAmount = 0;
 		_trafficShare = 0;
 	}
 
 	public SocialTrafficChannelImpl(
-		List<ReferringSocialMedia> referringSocialMedia, long trafficAmount,
+		List<ReferringSocialMedia> referringSocialMediaList, long trafficAmount,
 		double trafficShare) {
 
-		_referringSocialMedia = referringSocialMedia;
+		_referringSocialMediaList = Optional.ofNullable(
+			referringSocialMediaList
+		).orElse(
+			Collections.emptyList()
+		).stream(
+		).filter(
+			referringSocialMedia -> referringSocialMedia.getTrafficAmount() > 0
+		).collect(
+			Collectors.toList()
+		);
 		_trafficAmount = trafficAmount;
 		_trafficShare = trafficShare;
 
@@ -72,8 +84,8 @@ public class SocialTrafficChannelImpl implements TrafficChannel {
 				socialTrafficChannelImpl.getHelpMessageKey()) &&
 			Objects.equals(getName(), socialTrafficChannelImpl.getName()) &&
 			Objects.equals(
-				_referringSocialMedia,
-				socialTrafficChannelImpl._referringSocialMedia) &&
+				_referringSocialMediaList,
+				socialTrafficChannelImpl._referringSocialMediaList) &&
 			Objects.equals(
 				_trafficAmount, socialTrafficChannelImpl._trafficAmount) &&
 			Objects.equals(
@@ -96,8 +108,8 @@ public class SocialTrafficChannelImpl implements TrafficChannel {
 		return "social";
 	}
 
-	public List<ReferringSocialMedia> getReferringSocialMedia() {
-		return _referringSocialMedia;
+	public List<ReferringSocialMedia> getReferringSocialMediaList() {
+		return _referringSocialMediaList;
 	}
 
 	@Override
@@ -127,7 +139,7 @@ public class SocialTrafficChannelImpl implements TrafficChannel {
 			getName(), ResourceBundleUtil.getString(resourceBundle, getName()),
 			_trafficAmount, _trafficShare);
 
-		if (ListUtil.isNotEmpty(_referringSocialMedia)) {
+		if (ListUtil.isNotEmpty(_referringSocialMediaList)) {
 			jsonObject.put(
 				"referringSocialMedia",
 				_getReferringSocialMediaJSONArray(resourceBundle));
@@ -147,21 +159,27 @@ public class SocialTrafficChannelImpl implements TrafficChannel {
 	private JSONArray _getReferringSocialMediaJSONArray(
 		ResourceBundle resourceBundle) {
 
-		if (ListUtil.isEmpty(_referringSocialMedia)) {
+		if (ListUtil.isEmpty(_referringSocialMediaList)) {
 			return JSONFactoryUtil.createJSONArray();
 		}
 
-		Stream<ReferringSocialMedia> stream = _referringSocialMedia.stream();
+		Stream<ReferringSocialMedia> stream =
+			_referringSocialMediaList.stream();
+
+		Comparator<ReferringSocialMedia> comparator = Comparator.comparingInt(
+			ReferringSocialMedia::getTrafficAmount);
 
 		return JSONUtil.putAll(
-			stream.map(
+			stream.sorted(
+				comparator.reversed()
+			).map(
 				referringSocialMedia -> referringSocialMedia.toJSONObject(
 					resourceBundle)
 			).toArray());
 	}
 
 	private final boolean _error;
-	private final List<ReferringSocialMedia> _referringSocialMedia;
+	private final List<ReferringSocialMedia> _referringSocialMediaList;
 	private final long _trafficAmount;
 	private final double _trafficShare;
 

@@ -1,6 +1,36 @@
 definition {
 
-	macro addFromURL {
+	macro addAudioFromURL {
+		var key_navTab = "${navTab}";
+
+		SelectFrame(locator1 = "ItemSelector#ITEM_SELECTOR_IFRAME");
+
+		AssertClick(
+			locator1 = "ItemSelector#NAVIGATION_SPECIFIC_TAB",
+			value1 = "URL");
+
+		AssertElementPresent(locator1 = "ItemSelector#URL_LABEL");
+
+		Type(
+			locator1 = "TextInput#URL",
+			value1 = "${audioSourceURL}");
+
+		AssertTextEquals(
+			locator1 = "TextInput#URL",
+			value1 = "${audioSourceURL}");
+
+		Pause(locator1 = "3000");
+
+		AssertElementPresent.pauseAssertVisible(
+			key_text = "Add",
+			locator1 = "Button#ANY_ENABLED");
+
+		Button.clickAdd();
+
+		SelectFrameTop(value1 = "relative=top");
+	}
+
+	macro addImageFromURL {
 		var key_imageSourceURL = "${imageSourceURL}";
 		var key_navTab = "${navTab}";
 
@@ -22,38 +52,51 @@ definition {
 			key_text = "Add",
 			locator1 = "Button#ANY_DISABLED");
 
-		if (isSet(embedVideo)) {
-			Type(
-				locator1 = "TextInput#VIDEO_URL",
-				value1 = "${embedVideo}");
-		}
-		else {
-			Type(
-				locator1 = "TextInput#URL",
-				value1 = "${imageSourceURL}");
+		Type(
+			locator1 = "TextInput#URL",
+			value1 = "${imageSourceURL}");
 
-			AssertTextEquals(
-				locator1 = "TextInput#URL",
-				value1 = "${imageSourceURL}");
+		AssertTextEquals(
+			locator1 = "TextInput#URL",
+			value1 = "${imageSourceURL}");
+
+		AssertElementPresent.pauseAssertVisible(locator1 = "ItemSelector#URL_IMAGE_SOURCE");
+
+		if (IsElementPresent(locator1 = "ItemSelector#URL_IMAGE_EXAMPLE")) {
+			Click(locator1 = "ItemSelector#URL_IMAGE_EXAMPLE");
 		}
 
-		if (("${type}" == "Audio") || ("${type}" == "Video")) {
+		MouseOver(
+			key_text = "Add",
+			locator1 = "Button#ANY");
+
+		Button.clickAdd();
+
+		SelectFrameTop(value1 = "relative=top");
+	}
+
+	macro addVideoFromURL {
+		var key_navTab = "${navTab}";
+
+		SelectFrame(locator1 = "ItemSelector#ITEM_SELECTOR_IFRAME");
+
+		AssertClick(
+			locator1 = "ItemSelector#NAVIGATION_SPECIFIC_TAB",
+			value1 = "URL");
+
+		AssertElementPresent(locator1 = "ItemSelector#URL_LABEL");
+		AssertElementNotPresent(locator1 = "IFrame#EXTERNAL_VIDEO_IFRAME");
+
+		Type(
+			locator1 = "TextInput#VIDEO_URL",
+			value1 = "${videoSourceURL}");
+
+		Pause(locator1 = "3000");
+
+		if (!(isSet(unpublish))) {
 			AssertElementPresent.pauseAssertVisible(
 				key_text = "Add",
 				locator1 = "Button#ANY_ENABLED");
-
-			Button.clickAdd();
-		}
-		else {
-			AssertElementPresent.pauseAssertVisible(locator1 = "ItemSelector#URL_IMAGE_SOURCE");
-
-			if (IsElementPresent(locator1 = "ItemSelector#URL_IMAGE_EXAMPLE")) {
-				Click(locator1 = "ItemSelector#URL_IMAGE_EXAMPLE");
-			}
-
-			MouseOver(
-				key_text = "Add",
-				locator1 = "Button#ANY");
 
 			Button.clickAdd();
 		}
@@ -114,13 +157,25 @@ definition {
 
 		Click(locator1 = "AlloyEditor#CONTENT_ADD_BUTTON");
 
-		Click.clickNoMouseOver(locator1 = "AlloyEditor#CONTENT_ADD_MENUBAR_IMAGE");
+		if (isSet(video)) {
+			Click(locator1 = "AlloyEditor#CONTENT_ADD_MENUBAR_VIDEO");
+		}
+		else {
+			Click.clickNoMouseOver(locator1 = "AlloyEditor#CONTENT_ADD_MENUBAR_IMAGE");
+		}
 	}
 
 	macro gotoItemSelectorViaCKEditor {
-		Click(locator1 = "CKEditor#TOOLBAR_IMAGE_BUTTON");
+		if (isSet(video)) {
+			WaitForLiferayEvent.initializeLiferayEventLog();
 
-		SelectFrame(value1 = "relative=top");
+			Click.pauseClickAt(locator1 = "CKEditor#CONTENT_VIDEO_IMAGE");
+		}
+		else {
+			Click(locator1 = "CKEditor#TOOLBAR_IMAGE_BUTTON");
+
+			SelectFrame(value1 = "relative=top");
+		}
 	}
 
 	macro gotoItemSelectorViaSelectButton {
@@ -136,6 +191,52 @@ definition {
 			value1 = "${navTab}");
 
 		Click(locator1 = "Icon#EYE_PREVIEW");
+	}
+
+	macro previewEmbeddedVideo {
+		SelectFrame(locator1 = "ItemSelector#ITEM_SELECTOR_IFRAME");
+
+		if (isSet(invalidURL)) {
+			if (contains("${invalidURL}", "youtube")) {
+				SelectFrame.selectFrameNoLoading(locator1 = "IFrame#EXTERNAL_VIDEO_IFRAME");
+
+				Click(locator1 = "Button#YOUTUBE_PLAY");
+
+				AssertTextEquals.assertPartialText(
+					locator1 = "Message#ERROR_INVALID_YOUTUBE_VIDEO",
+					value1 = "An error occurred. Please try again later.");
+			}
+			else if (contains("${invalidURL}", "facebook")) {
+				SelectFrame.selectFrameNoLoading(locator1 = "IFrame#EXTERNAL_VIDEO_IFRAME");
+
+				AssertTextEquals.assertPartialText(
+					locator1 = "Message#ERROR_INVALID_FACEBOOK_VIDEO",
+					value1 = "Video Unavailable");
+			}
+			else if (contains("${invalidURL}", "vimeo")) {
+				SelectFrame.selectFrameNoLoading(locator1 = "IFrame#EXTERNAL_VIDEO_IFRAME");
+
+				AssertTextEquals.assertPartialText(
+					locator1 = "Message#ERROR_INVALID_VIMEO_VIDEO",
+					value1 = "The embed code for this video is not valid.");
+			}
+			else {
+				AssertTextEquals(
+					locator1 = "Message#INFO_EXTERNAL_VIDEO_PREVIEW",
+					value1 = "Sorry, this platform is not supported.");
+			}
+		}
+		else {
+			AssertElementPresent.pauseAssertVisible(
+				key_text = "Add",
+				locator1 = "Button#ANY_ENABLED");
+
+			AssertVisible(
+				key_videoShortcutPreview = "${validURL}",
+				locator1 = "DocumentsAndMediaDocument#VIDEO_SHORTCUT_PREVIEW");
+		}
+
+		SelectFrameTop(value1 = "relative=top");
 	}
 
 	macro searchBlogImages {

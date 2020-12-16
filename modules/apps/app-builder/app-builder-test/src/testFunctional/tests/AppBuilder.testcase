@@ -590,6 +590,48 @@ definition {
 			title = "Numeric Field - Table View Title");
 	}
 
+	@description = "Automate LPS-117199 Define translations when creating fieldsets"
+	@priority = "5"
+	test DefineTranslationForFieldSets {
+		property portal.acceptance = "true";
+
+		Site.openSiteSettingsAdmin(siteURLKey = "guest");
+
+		Site.configureCurrentLanguagesCP(defaultSiteLanguage = "Spanish (Spain)");
+
+		Navigator.openURL();
+
+		ApplicationsMenu.gotoPortlet(
+			category = "App Builder",
+			panel = "Applications",
+			portlet = "Objects");
+
+		AppBuilderAdmin.addCustomObject(
+			customObjectName = "my custom object",
+			isCreatingFormView = "true",
+			isCreatingViaPlusIcon = "true");
+
+		Click(locator1 = "FormViewBuilder#FIELD_SETS_TAB");
+		Click(locator1 = "FormViewBuilder#CREATE_NEW_FIELD_SETS");
+		FormViewBuilder.validateLocalizationForFieldSet(symbolName = "es-ES");
+		FormViewBuilder.cancelFieldSet();
+
+		FormViewBuilder.setUpFieldSet(
+			fieldLabel = "Name ES",
+			fieldSetName = "Field Set Spanish",
+			fieldType = "Text");
+
+		FormViewBuilder.editFieldSetEntry(
+			rowNumber = "1",
+			selectAction = "Edit");
+
+		FormViewBuilder.validateLocalizationForFieldSet(symbolName = "es-ES");
+
+		Navigator.openURL();
+		Site.openSiteSettingsAdmin(siteURLKey = "guest");
+		Site.configureCurrentLanguagesCP(defaultSiteLanguage = "English (United States)");
+	}
+
 	@description = "Delete an existing custom object with no associated relationships"
 	@priority = "5"
 	test DeleteCustomObjectWithAssociatedRelationship {
@@ -967,11 +1009,15 @@ definition {
 
 		App.selectTableView(tableViewName = "My Table View 2");
 
+		Button.clickNext();
+
 		App.clickPrevious();
 
 		App.clickPrevious();
 
 		App.selectTableView(tableViewName = "My Table View 1");
+
+		Button.clickNext();
 
 		App.toggleDeploy(deployOption = "Widget");
 
@@ -1025,6 +1071,8 @@ definition {
 
 		App.selectTableView(tableViewName = "My Table View 2");
 
+		Button.clickNext();
+
 		App.saveApp();
 
 		Navigator.gotoSitePage(
@@ -1047,6 +1095,8 @@ definition {
 		App.clickNext();
 
 		App.selectTableView(tableViewName = "My Table View 1");
+
+		Button.clickNext();
 
 		App.saveApp();
 
@@ -1498,7 +1548,8 @@ definition {
 	@description = "Publish my app as a widget with only a Table View"
 	@priority = "5"
 	test PublishAppAsWidgetWithOnlyTableView {
-		property portal.acceptance = "true";
+		property portal.acceptance = "quarantine";
+		property portal.upstream = "quarantine";
 
 		AppBuilderAdmin.addCustomObject(
 			customObjectName = "my custom object",
@@ -1813,6 +1864,7 @@ definition {
 		AppBuilderAdmin.validateItemNameOnTable(itemName = "${myTableViewName_1}");
 		AppBuilderAdmin.validateItemNameOnTable(itemName = "${myTableViewName_2}");
 		App.selectTableView(tableViewName = "${myTableViewName_1}");
+		Button.clickNext();
 		App.toggleDeploy(deployOption = "Product Menu");
 		App.openProductMenuPlaceItDropdown();
 		App.validateProductMenuPlaceItDropdownList(menuOption = "Applications");
@@ -1922,6 +1974,7 @@ definition {
 		AppBuilderAdmin.setName(title = "${myAppName_1}");
 		App.selectFormView(formViewName = "${myFormViewName_1}");
 		App.selectTableView(tableViewName = "${myTableViewName_1}");
+		Button.clickNext();
 		App.toggleDeploy(deployOption = "Widget");
 		App.toggleDeploy(deployOption = "Standalone");
 		App.toggleDeploy(deployOption = "Product Menu");
@@ -2960,6 +3013,8 @@ definition {
 
 		App.selectTableView(tableViewName = "Table View Title");
 
+		Button.clickNext();
+
 		App.saveApp();
 
 		AppBuilderAdmin.openItem(itemName = "Test App C");
@@ -2968,6 +3023,8 @@ definition {
 
 		App.selectTableView(tableViewName = "Table View Title Two");
 
+		Button.clickNext();
+
 		App.saveApp();
 
 		AppBuilderAdmin.openItem(itemName = "Test App C");
@@ -2975,6 +3032,8 @@ definition {
 		App.selectFormView(formViewName = "Form View Title Two");
 
 		App.selectTableView(tableViewName = "Table View Title");
+
+		Button.clickNext();
 
 		App.saveApp();
 	}
@@ -3387,7 +3446,6 @@ definition {
 	@priority = "5"
 	test ViewFormViewRules {
 		property portal.acceptance = "quarantine";
-		property portal.upstream = "quarantine";
 
 		ApplicationsMenu.gotoPortlet(
 			category = "Users",

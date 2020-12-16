@@ -802,15 +802,17 @@ definition {
 			userPassword = PropsUtil.get("email.password.4"),
 			windowTitle = "New Google Drive Shortcut - ${siteName}");
 
-		GoogleDrive.selectDocument(googleDocName = "liferay.txt");
+		GoogleDrive.selectDocument(
+			googleDocName = "liferay.txt",
+			googleDocTitle = "liferay");
 
 		PortletEntry.publish();
 
-		DMDocument.viewPG(dmDocumentTitle = "liferay.txt");
+		DMDocument.viewPG(dmDocumentTitle = "liferay");
 
 		Navigator.gotoPage(pageName = "Documents and Media Page");
 
-		DMDocument.deletePG(dmDocumentTitle = "liferay.txt");
+		DMDocument.deletePG(dmDocumentTitle = "liferay");
 	}
 
 	@priority = "5"
@@ -1144,7 +1146,9 @@ definition {
 			userPassword = PropsUtil.get("email.password.4"),
 			windowTitle = "New Google Drive Shortcut - ${siteName}");
 
-		GoogleDrive.selectDocument(googleDocName = "liferay.txt");
+		GoogleDrive.selectDocument(
+			googleDocName = "liferay.txt",
+			googleDocTitle = "liferay");
 
 		PortletEntry.publish();
 
@@ -1156,17 +1160,18 @@ definition {
 		Navigator.gotoPage(pageName = "Documents and Media Page");
 
 		DMDocument.moveToFolderPG(
-			dmDocumentTitle = "liferay.txt",
+			dmDocumentTitle = "liferay",
 			dmFolderName = "DM Folder Name");
 
 		DMNavigator.gotoFolder(dmFolderName = "DM Folder Name");
 
-		DMDocument.viewPG(dmDocumentTitle = "liferay.txt");
+		DMDocument.viewPG(dmDocumentTitle = "liferay");
 	}
 
 	@priority = "5"
 	test RemovePortlet {
-		property portal.acceptance = "true";
+		property portal.acceptance = "quarantine";
+		property portal.upstream = "quarantine";
 
 		Navigator.gotoPage(pageName = "Documents and Media Page");
 

@@ -18,14 +18,12 @@ import ClayLoadingIndicator from '@clayui/loading-indicator';
 import {ClayTooltipProvider} from '@clayui/tooltip';
 import classNames from 'classnames';
 import {useIsMounted, useStateSafe} from 'frontend-js-react-web';
-import React from 'react';
+import React, {useRef, useState} from 'react';
 
 import AppContext from '../../AppContext.es';
-import useLazy from '../../hooks/useLazy.es';
 import useLoad from '../../hooks/useLoad.es';
-import usePlugins from '../../hooks/usePlugins.es';
 
-const {Suspense, useCallback, useContext, useEffect} = React;
+const {useContext, useEffect} = React;
 
 const CLASSNAME_INDICATORS = [
 	'.change-tracking-indicator',
@@ -43,69 +41,49 @@ export default function MultiPanelSidebar({
 	sidebarPanels,
 	variant = 'dark',
 }) {
-	const [{sidebarOpen, sidebarPanelId}, dispatch] = useContext(AppContext);
+	const [, dispatch] = useContext(AppContext);
+	const [{sidebarOpen, sidebarPanelId}, setSidebarState] = useState({
+		sidebarOpen: true,
+		sidebarPanelId: 'fields',
+	});
 	const [hasError, setHasError] = useStateSafe(false);
 	const isMounted = useIsMounted();
 	const load = useLoad();
-	const {getInstance, register} = usePlugins();
+	const sidebarPanelsRef = useRef(sidebarPanels);
 
-	const panel = sidebarPanels[sidebarPanelId];
-	const promise = panel
-		? load(sidebarPanelId, panel.pluginEntryPoint)
-		: Promise.resolve();
+	const [panelComponents, setPanelComponents] = useState([]);
 
-	const app = {
-		dispatch,
-		panel,
-		sidebarOpen,
-		sidebarPanelId,
-	};
+	useEffect(() => {
+		const panelPromises = Object.values(sidebarPanelsRef.current).map(
+			(sidebarPanel) =>
+				load(sidebarPanel.sidebarPanelId, sidebarPanel.pluginEntryPoint)
+					.then((Plugin) => {
+						const instance = new Plugin(
+							{
+								dispatch,
+								panel: sidebarPanel,
+								sidebarOpen: true,
+								sidebarPanelId: sidebarPanel.sidebarPanelId,
+							},
+							sidebarPanel
+						);
 
-	let registerPanel;
+						return {
+							Component: () => instance.renderSidebar(),
+							sidebarPanelId: sidebarPanel.sidebarPanelId,
+						};
+					})
+					.catch((error) => console.error(error))
+		);
 
-	if (sidebarPanelId) {
-		registerPanel = register(sidebarPanelId, promise, {app, panel});
-	}
+		setPanelComponents([]);
 
-	const togglePlugin = () => {
-		if (hasError) {
-			setHasError(false);
-		}
-
-		if (registerPanel) {
-			registerPanel.then((plugin) => {
-				if (
-					plugin &&
-					typeof plugin.activate === 'function' &&
-					isMounted()
-				) {
-					plugin.activate();
-				}
-				else if (!plugin) {
-					setHasError(true);
-				}
-			});
-		}
-	};
-
-	useEffect(
-		() => {
-			if (panel) {
-				togglePlugin(panel);
+		Promise.all(panelPromises).then((result) => {
+			if (isMounted()) {
+				setPanelComponents(result);
 			}
-			else if (sidebarPanelId) {
-				dispatch({
-					payload: {
-						sidebarOpen: false,
-						sidebarPanelId: null,
-					},
-					type: 'SWITCH_SIDEBAR_PANEL',
-				});
-			}
-		},
-		/* eslint-disable react-hooks/exhaustive-deps */
-		[panel, sidebarOpen, sidebarPanelId]
-	);
+		});
+	}, [isMounted, dispatch, load]);
 
 	const changeAlertClassName = (styleName) => {
 		const formBuilderMessage = document.querySelector(
@@ -130,12 +108,9 @@ export default function MultiPanelSidebar({
 					changeAlertClassName('data-engine-form-builder-messages');
 				}
 
-				dispatch({
-					payload: {
-						sidebarOpen: false,
-						sidebarPanelId: null,
-					},
-					type: 'SWITCH_SIDEBAR_PANEL',
+				setSidebarState({
+					sidebarOpen: false,
+					sidebarPanelId: null,
 				});
 			};
 
@@ -148,21 +123,7 @@ export default function MultiPanelSidebar({
 				sideNavigationListener.removeListener();
 			};
 		}
-	}, []);
-
-	const SidebarPanel = useLazy(
-		useCallback(({instance}) => {
-			if (typeof instance.renderSidebar === 'function') {
-				return instance.renderSidebar();
-			}
-			else if (typeof instance === 'function') {
-				return instance;
-			}
-			else {
-				return null;
-			}
-		}, [])
-	);
+	}, [sidebarOpen]);
 
 	const handleClick = (panel) => {
 		const open =
@@ -184,12 +145,9 @@ export default function MultiPanelSidebar({
 			changeAlertClassName('data-engine-form-builder-messages');
 		}
 
-		dispatch({
-			payload: {
-				sidebarOpen: open,
-				sidebarPanelId: panel.sidebarPanelId,
-			},
-			type: 'SWITCH_SIDEBAR_PANEL',
+		setSidebarState({
+			sidebarOpen: open,
+			sidebarPanelId: panel.sidebarPanelId,
 		});
 	};
 
@@ -300,13 +258,10 @@ export default function MultiPanelSidebar({
 								block
 								displayType="secondary"
 								onClick={() => {
-									dispatch({
-										payload: {
-											sidebarOpen: false,
-											sidebarPanelId:
-												panels[0] && panels[0][0],
-										},
-										type: 'SWITCH_SIDEBAR_PANEL',
+									setSidebarState({
+										sidebarOpen: false,
+										sidebarPanelId:
+											panels[0] && panels[0][0],
 									});
 									setHasError(false);
 								}}
@@ -321,12 +276,22 @@ export default function MultiPanelSidebar({
 								setHasError(true);
 							}}
 						>
-							<Suspense fallback={<ClayLoadingIndicator />}>
-								<SidebarPanel
-									getInstance={getInstance}
-									pluginId={sidebarPanelId}
-								/>
-							</Suspense>
+							{panelComponents.length === 0 && (
+								<ClayLoadingIndicator />
+							)}
+
+							{panelComponents.map((panel) => (
+								<div
+									className={classNames({
+										'd-none':
+											panel.sidebarPanelId !==
+											sidebarPanelId,
+									})}
+									key={panel.sidebarPanelId}
+								>
+									<panel.Component />
+								</div>
+							))}
 						</ErrorBoundary>
 					)}
 				</div>

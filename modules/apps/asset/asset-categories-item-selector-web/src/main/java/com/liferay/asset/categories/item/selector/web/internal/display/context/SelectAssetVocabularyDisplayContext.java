@@ -14,6 +14,7 @@
 
 package com.liferay.asset.categories.item.selector.web.internal.display.context;
 
+import com.liferay.asset.categories.item.selector.web.internal.constants.AssetCategoryTreeNodeConstants;
 import com.liferay.asset.kernel.model.AssetVocabulary;
 import com.liferay.asset.kernel.model.AssetVocabularyConstants;
 import com.liferay.asset.kernel.service.AssetVocabularyServiceUtil;
@@ -70,7 +71,8 @@ public class SelectAssetVocabularyDisplayContext {
 
 		SearchContainer<AssetVocabulary> searchContainer =
 			new SearchContainer<>(
-				_getPortletRequest(), _portletURL, null, "no-items-to-display");
+				_getPortletRequest(), _portletURL, null,
+				"there-are-no-items-to-display");
 
 		List<AssetVocabulary> assetVocabularies = _getAssetVocabularies();
 
@@ -137,12 +139,15 @@ public class SelectAssetVocabularyDisplayContext {
 			_portletURL, PortalUtil.getLiferayPortletResponse(portletResponse));
 
 		portletURL.setParameter(
-			"assetCategoryTreeNodeId", String.valueOf(assetVocabularyId));
-		portletURL.setParameter(
 			"backURL",
 			ParamUtil.getString(
 				_httpServletRequest, "backURL",
 				PortalUtil.getCurrentURL(_httpServletRequest)));
+		portletURL.setParameter(
+			"assetCategoryTreeNodeId", String.valueOf(assetVocabularyId));
+		portletURL.setParameter(
+			"assetCategoryTreeNodeType",
+			AssetCategoryTreeNodeConstants.TYPE_ASSET_VOCABULARY);
 
 		return portletURL.toString();
 	}

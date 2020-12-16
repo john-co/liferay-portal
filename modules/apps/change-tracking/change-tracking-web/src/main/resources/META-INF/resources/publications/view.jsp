@@ -58,9 +58,16 @@ SearchContainer<CTCollection> searchContainer = publicationsDisplayContext.getSe
 							<%= ctCollection.getName() %>
 						</div>
 
-						<div class="publication-description <%= (publicationsDisplayContext.getCtCollectionId() == ctCollection.getCtCollectionId()) ? "font-italic" : StringPool.BLANK %>">
-							<%= ctCollection.getDescription() %>
-						</div>
+						<c:if test="<%= Validator.isNotNull(ctCollection.getDescription()) %>">
+							<div class="publication-description <%= (publicationsDisplayContext.getCtCollectionId() == ctCollection.getCtCollectionId()) ? "font-italic" : StringPool.BLANK %>">
+								<%= ctCollection.getDescription() %>
+							</div>
+						</c:if>
+
+						<clay:label
+							displayType="<%= publicationsDisplayContext.getStatusStyle(ctCollection.getStatus()) %>"
+							label="<%= publicationsDisplayContext.getStatusLabel(ctCollection.getStatus()) %>"
+						/>
 					</liferay-ui:search-container-column-text>
 				</c:when>
 				<c:otherwise>
@@ -101,6 +108,16 @@ SearchContainer<CTCollection> searchContainer = publicationsDisplayContext.getSe
 					</liferay-ui:search-container-column-text>
 
 					<liferay-ui:search-container-column-text
+						cssClass="table-cell-expand-smaller"
+						name="status"
+					>
+						<clay:label
+							displayType="<%= publicationsDisplayContext.getStatusStyle(ctCollection.getStatus()) %>"
+							label="<%= publicationsDisplayContext.getStatusLabel(ctCollection.getStatus()) %>"
+						/>
+					</liferay-ui:search-container-column-text>
+
+					<liferay-ui:search-container-column-text
 						cssClass="table-cell-expand-smallest text-center"
 						name="owner"
 					>
@@ -138,3 +155,20 @@ SearchContainer<CTCollection> searchContainer = publicationsDisplayContext.getSe
 		/>
 	</liferay-ui:search-container>
 </clay:container-fluid>
+
+<liferay-ui:error exception="<%= CTLocalizedException.class %>">
+
+	<%
+	CTLocalizedException ctLocalizedException = (CTLocalizedException)errorException;
+	%>
+
+	<aui:script>
+		Liferay.Util.openToast({
+			autoClose: 10000,
+			message:
+				'<%= HtmlUtil.escapeJS(ctLocalizedException.formatMessage(resourceBundle)) %>',
+			title: '<liferay-ui:message key="error" />:',
+			type: 'danger',
+		});
+	</aui:script>
+</liferay-ui:error>

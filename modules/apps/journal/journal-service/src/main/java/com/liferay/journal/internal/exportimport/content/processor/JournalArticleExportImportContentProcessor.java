@@ -16,7 +16,6 @@ package com.liferay.journal.internal.exportimport.content.processor;
 
 import com.liferay.document.library.kernel.exception.NoSuchFileEntryException;
 import com.liferay.document.library.kernel.service.DLAppService;
-import com.liferay.dynamic.data.mapping.model.DDMFormFieldType;
 import com.liferay.dynamic.data.mapping.model.DDMStructure;
 import com.liferay.dynamic.data.mapping.model.Value;
 import com.liferay.dynamic.data.mapping.storage.DDMFormFieldValue;
@@ -279,9 +278,7 @@ public class JournalArticleExportImportContentProcessor
 		}
 
 		for (Field field : fields) {
-			if (!Objects.equals(
-					field.getType(), DDMFormFieldType.JOURNAL_ARTICLE)) {
-
+			if (!Objects.equals(field.getType(), "journal_article")) {
 				continue;
 			}
 
@@ -379,7 +376,8 @@ public class JournalArticleExportImportContentProcessor
 			}
 		}
 
-		return _journalConverter.getContent(ddmStructure, fields);
+		return _journalConverter.getContent(
+			ddmStructure, fields, ddmStructure.getGroupId());
 	}
 
 	protected String replaceImportJournalArticleReferences(
@@ -388,9 +386,7 @@ public class JournalArticleExportImportContentProcessor
 		throws Exception {
 
 		for (Field field : fields) {
-			if (!Objects.equals(
-					field.getType(), DDMFormFieldType.JOURNAL_ARTICLE)) {
-
+			if (!Objects.equals(field.getType(), "journal_article")) {
 				continue;
 			}
 
@@ -453,7 +449,8 @@ public class JournalArticleExportImportContentProcessor
 			}
 		}
 
-		return _journalConverter.getContent(ddmStructure, fields);
+		return _journalConverter.getContent(
+			ddmStructure, fields, ddmStructure.getGroupId());
 	}
 
 	protected void validateJournalArticleReferences(String content)

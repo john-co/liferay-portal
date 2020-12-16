@@ -89,7 +89,7 @@ definition {
 				locator1 = "Button#SELECT",
 				value1 = "Select Site");
 
-			SelectFrame.selectFrameNoLoading(locator1 = "IFrame#MODAL_IFRAME");
+			SelectFrame(locator1 = "IFrame#MODAL_IFRAME");
 
 			Click(
 				key_siteName = "${siteName}",
@@ -178,20 +178,13 @@ definition {
 			locator1 = "CommerceEntry#DISCOUNT_AMOUNT",
 			value1 = "${discountAmount}");
 
-		Type(
-			locator1 = "CommerceEntry#MAXIMUM_DISCOUNT_AMOUNT_FIELD",
-			value1 = "${maximumDiscountAmount}");
+		if (isSet(maximumDiscountAmount)) {
+			Type(
+				locator1 = "CommerceEntry#MAXIMUM_DISCOUNT_AMOUNT_FIELD",
+				value1 = "${maximumDiscountAmount}");
+		}
 
 		Check.checkToggleSwitch(locator1 = "CommerceEntry#ACTIVE_CHECKBOX");
-
-		Button.clickPublish();
-
-		CommerceEntry.gotoMenuTab(menuTab = "Eligibility");
-
-		CommerceEntry.setEntryEligibility(
-			accountGroupsEligibility = "${accountGroupsEligibility}",
-			accountsEligibility = "${accountsEligibility}",
-			channelsEligibility = "${channelsEligibility}");
 
 		Button.clickPublish();
 	}
@@ -677,6 +670,8 @@ definition {
 				key_radioOption = "All Channels",
 				locator1 = "CommerceEntry#RADIO_BUTTON");
 		}
+
+		Button.clickPublish();
 	}
 
 	macro uploadCatalogEntrySingleImage {

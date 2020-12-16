@@ -44,7 +44,7 @@ const formatDataRecord = (languageId, pages, preserveValue) => {
 
 		if (localizable) {
 			const edited =
-				localizedValue[languageId] ||
+				!!localizedValue[languageId] ||
 				(localizedValueEdited && localizedValueEdited[languageId]);
 
 			if (!dataRecordValues[fieldName]) {
@@ -54,16 +54,34 @@ const formatDataRecord = (languageId, pages, preserveValue) => {
 						[languageId]: [],
 					};
 				}
-				else if (edited) {
+				else if (!repeatable && edited) {
 					dataRecordValues[fieldName] = {
 						[languageId]: [],
 						...localizedValue,
 					};
 				}
+				else if (repeatable) {
+					Object.keys(localizedValue).forEach((key) => {
+						dataRecordValues[fieldName] = {
+							...dataRecordValues[fieldName],
+							[key]: [],
+							[languageId]: [],
+						};
+					});
+				}
 			}
 
 			if (repeatable) {
-				dataRecordValues[fieldName][languageId].push(_value);
+				Object.keys(localizedValue).forEach((key) => {
+					if (edited && key === languageId) {
+						dataRecordValues[fieldName][key].push(_value);
+					}
+					else {
+						dataRecordValues[fieldName][key].push(
+							localizedValue[key]
+						);
+					}
+				});
 			}
 			else if (edited) {
 				dataRecordValues[fieldName] = {
@@ -169,9 +187,21 @@ export default function pageLanguageUpdate({
 		)
 			.then((response) => response.json())
 			.then((response) => {
+				let previousField;
+				let repeatableIndex = 0;
+
 				const visitor = new PagesVisitor(response.pages);
 				const newPages = visitor.mapFields(
-					(field, index) => {
+					(field) => {
+						if (
+							(previousField &&
+								previousField.repeatable &&
+								previousField.fieldName !== field.fieldName) ||
+							!field.repeatable
+						) {
+							repeatableIndex = 0;
+						}
+
 						if (!field.localizedValue) {
 							field.localizedValue = {};
 						}
@@ -186,16 +216,20 @@ export default function pageLanguageUpdate({
 									[key]:
 										newDataRecordValues[field.fieldName][
 											key
-										][index],
+										][repeatableIndex],
 								};
 							});
 							field.localizedValue = values;
+
+							repeatableIndex++;
 						}
 						else if (newDataRecordValues[field.fieldName]) {
 							field.localizedValue = {
 								...newDataRecordValues[field.fieldName],
 							};
 						}
+
+						previousField = field;
 
 						return {
 							...field,

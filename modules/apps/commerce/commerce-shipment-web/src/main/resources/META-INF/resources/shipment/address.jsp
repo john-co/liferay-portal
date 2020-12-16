@@ -92,9 +92,9 @@ CommerceAddress shippingAddress = commerceShipmentDisplayContext.getShippingAddr
 				Liferay.Service(
 					'/commerce.commercecountry/get-shipping-commerce-countries',
 					{
+						active: true,
 						companyId: <%= company.getCompanyId() %>,
-						end: -1,
-						start: -1,
+						shippingAllowed: true,
 					},
 					callback
 				);

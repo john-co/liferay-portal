@@ -63,6 +63,7 @@ import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.theme.PortletDisplay;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.AggregateResourceBundle;
+import com.liferay.portal.kernel.util.CookieKeys;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -524,6 +525,18 @@ public class DDMFormDisplayContext {
 				themeDisplay.getPermissionChecker(), getFormInstanceId(),
 				ActionKeys.UPDATE)) {
 
+			return true;
+		}
+
+		return false;
+	}
+
+	public boolean isRememberMe() {
+		String rememberMe = CookieKeys.getCookie(
+			PortalUtil.getHttpServletRequest(_renderRequest),
+			CookieKeys.REMEMBER_ME);
+
+		if ((rememberMe != null) && rememberMe.equals("true")) {
 			return true;
 		}
 
