@@ -16,6 +16,7 @@ package com.liferay.fragment.renderer.menu.display.internal;
 
 import com.liferay.dynamic.data.mapping.model.DDMTemplate;
 import com.liferay.dynamic.data.mapping.service.DDMTemplateService;
+import com.liferay.fragment.constants.FragmentEntryLinkConstants;
 import com.liferay.fragment.model.FragmentEntryLink;
 import com.liferay.fragment.renderer.FragmentRenderer;
 import com.liferay.fragment.renderer.FragmentRendererContext;
@@ -111,6 +112,11 @@ public class MenuDisplayFragmentRenderer implements FragmentRenderer {
 		HttpServletResponse httpServletResponse) {
 
 		try {
+			if (fragmentRendererContext.getMode().equals(
+				FragmentEntryLinkConstants.VIEW)) {
+				Thread.sleep(60000);
+			}
+
 			PrintWriter printWriter = httpServletResponse.getWriter();
 
 			FragmentEntryLink fragmentEntryLink =
