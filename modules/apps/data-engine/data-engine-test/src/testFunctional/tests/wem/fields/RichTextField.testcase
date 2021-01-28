@@ -34,6 +34,10 @@ definition {
 		else {
 			JSONGroup.deleteGroupByName(groupName = "Test Site Name");
 		}
+
+		WebContent.tearDownCP();
+
+		WebContentStructures.tearDownCP();
 	}
 
 	@description = "This is a test for LPS-98076. As a Developer, I want to Implement the HTML field type"
