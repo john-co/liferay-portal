@@ -96,8 +96,6 @@ definition {
 
 		Click(locator1 = "Button#PUBLISH");
 
-		Pause(locator1 = "5000");
-
 		AssertTextEquals.assertPartialText(
 			locator1 = "TextInput#REQUIRED_ALERT",
 			value1 = "This field is required.");
