@@ -196,7 +196,7 @@ definition {
 		}
 
 		if (isSet(categoryName)) {
-			Panel.expandPanel(panel = "Categorization");
+			Panel.expandUnstyledPanel(panel = "Categorization");
 
 			AssetCategorization.addCategory(
 				categoryName = "${categoryName}",

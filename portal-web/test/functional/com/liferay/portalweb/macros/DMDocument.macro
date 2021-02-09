@@ -4,7 +4,7 @@ definition {
 	var dmDocumentTypeName = "File Upload";
 
 	macro addCategories {
-		Panel.expandPanel(panel = "Categorization");
+		Panel.expandUnstyledPanel(panel = "Categorization");
 
 		AssetCategorization.addMultipleCategories(
 			categoryNameList = "${categoryNameList}",
@@ -41,7 +41,7 @@ definition {
 		}
 
 		if (isSet(tagNameList)) {
-			Panel.expandPanel(panel = "Categorization");
+			Panel.expandUnstyledPanel(panel = "Categorization");
 
 			for (var tagName : list "${tagNameList}") {
 				AssetCategorization.addTag(tagName = "${tagName}");
@@ -453,7 +453,7 @@ definition {
 		if (isSet(categoryName)) {
 			var key_categoryName = "${categoryName}";
 
-			Panel.expandPanel(panel = "Categorization");
+			Panel.expandUnstyledPanel(panel = "Categorization");
 
 			AssetCategorization.addCategory(
 				categoryName = "${categoryName}",
@@ -467,7 +467,7 @@ definition {
 		}
 
 		if (isSet(tagNameList)) {
-			Panel.expandPanel(panel = "Categorization");
+			Panel.expandUnstyledPanel(panel = "Categorization");
 
 			for (var tagName : list "${tagNameList}") {
 				AssetCategorization.addTag(tagName = "${tagName}");
@@ -1044,7 +1044,7 @@ definition {
 		}
 
 		if (!(contains("${dmDocumentTagName}", "{dmDocumentTagName}"))) {
-			Panel.expandPanel(panel = "Categorization");
+			Panel.expandUnstyledPanel(panel = "Categorization");
 
 			Type(
 				locator1 = "AssetCategorization#TAGS_FIELD",
@@ -1608,7 +1608,7 @@ definition {
 				rowEntry = "DM Document Title");
 		}
 
-		Panel.expandPanel(panel = "Categorization");
+		Panel.expandUnstyledPanel(panel = "Categorization");
 
 		var key_removeTag = "${removeTag}";
 
@@ -1833,7 +1833,7 @@ definition {
 	}
 
 	macro viewCategories {
-		Panel.expandPanel(panel = "Categorization");
+		Panel.expandUnstyledPanel(panel = "Categorization");
 
 		for (var categoryName : list "${categoryNameList}") {
 			var key_categoryName = "${categoryName}";

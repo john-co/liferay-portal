@@ -60,7 +60,7 @@ definition {
 			entrySubtitle = "${entrySubtitle}",
 			entryTitle = "${entryTitle}");
 
-		Panel.expandPanel(panel = "Categorization");
+		Panel.expandUnstyledPanel(panel = "Categorization");
 
 		AssetCategorization.addCategory(
 			categoryName = "${categoryName}",

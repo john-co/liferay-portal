@@ -38,7 +38,7 @@ definition {
 		if (isSet(categoryName)) {
 			var key_categoryName = "${categoryName}";
 
-			Panel.expandPanel(panel = "Categorization");
+			Panel.expandUnstyledPanel(panel = "Categorization");
 
 			AssetCategorization.addCategory(
 				categoryName = "${categoryName}",
@@ -46,7 +46,7 @@ definition {
 		}
 
 		if (isSet(tagNameList)) {
-			Panel.expandPanel(panel = "Categorization");
+			Panel.expandUnstyledPanel(panel = "Categorization");
 
 			for (var tagName : list "${tagNameList}") {
 				AssetCategorization.addTag(tagName = "${tagName}");

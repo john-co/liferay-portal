@@ -580,7 +580,7 @@ definition {
 
 		MenuItem.click(menuItem = "Bookmark");
 
-		Panel.expandPanel(panel = "Categorization");
+		Panel.expandUnstyledPanel(panel = "Categorization");
 
 		AssertElementNotPresent(locator1 = "AssetCategorization#VOCABULARY");
 	}

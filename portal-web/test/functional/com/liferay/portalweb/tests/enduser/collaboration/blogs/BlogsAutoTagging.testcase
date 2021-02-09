@@ -231,7 +231,7 @@ definition {
 
 		BlogsNavigator.gotoEditCP(entryTitle = "Digital Transformation or Digital Experience?");
 
-		Panel.expandPanel(panel = "Categorization");
+		Panel.expandUnstyledPanel(panel = "Categorization");
 
 		AssetCategorization.removeTag(tagName = "dxp");
 

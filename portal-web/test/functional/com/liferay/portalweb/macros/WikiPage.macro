@@ -425,7 +425,7 @@ definition {
 	}
 
 	macro addTagPGCmd {
-		Panel.expandPanel(panel = "Categorization");
+		Panel.expandUnstyledPanel(panel = "Categorization");
 
 		for (var tagName : list "${tagNameList}") {
 			AssetCategorization.addTag(tagName = "${tagName}");
