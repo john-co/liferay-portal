@@ -410,6 +410,12 @@ definition {
 
 		SitePages.addPublicPage(pageName = "${pageName}");
 
+		SitePages.configurePage(
+			columnName = "1 Column",
+			pageName = "${pageName}",
+			privacy = "Public Pages",
+			sitePageType = "Widget Page");
+
 		Navigator.gotoPage(pageName = "${pageName}");
 
 		Portlet.addPG(portletName = "Language Selector");

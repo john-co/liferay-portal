@@ -14,6 +14,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>EDITOR</td>
+	<td>//*[contains(@class,'cke_editable')]</td>
+	<td></td>
+</tr>
+<tr>
 	<td>BODY_FIELD</td>
 	<td>//div[contains(@id,'cke')]</td>
 	<td></td>
