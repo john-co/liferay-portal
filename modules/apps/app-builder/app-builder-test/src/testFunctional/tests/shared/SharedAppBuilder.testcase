@@ -63,7 +63,10 @@ definition {
 		}
 	}
 
-	@description = "Create, Remove, Update and Delete entries of an application deployed as Product Menu"
+	@description = "Create, Remove, Update and Delete entries of an application deployed as Product Menu \
+	Upgrade blah blah \
+	blah blah blah"
+
 	@priority = "5"
 	test CreateRemoveUpdateDeleteEntriesOfProductMenuApp {
 		property portal.acceptance = "quarantine";
