@@ -375,6 +375,8 @@ definition {
 
 	@priority = "4"
 	test ViewWikiFrontPageLeftToRight {
+		property portal.acceptance = "john-co";
+
 		ProductMenu.gotoPortlet(
 			category = "Site Builder",
 			portlet = "Pages");
@@ -399,6 +401,7 @@ definition {
 
 	@priority = "4"
 	test ViewWikiFrontPageRightToLeft {
+		property portal.acceptance = "john-co";
 		property test.name.skip.portal.instance = "WYSIWIGUsecase#ViewWikiFrontPageRightToLeft";
 
 		ProductMenu.gotoPortlet(
@@ -406,6 +409,12 @@ definition {
 			portlet = "Pages");
 
 		SitePages.addPublicPage(pageName = "${pageName}");
+
+		SitePages.configurePage(
+			columnName = "1 Column",
+			pageName = "${pageName}",
+			privacy = "Public Pages",
+			sitePageType = "Widget Page");
 
 		Navigator.gotoPage(pageName = "${pageName}");
 
