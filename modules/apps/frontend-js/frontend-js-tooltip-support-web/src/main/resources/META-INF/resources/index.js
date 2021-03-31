@@ -39,21 +39,9 @@ const ALIGN_POSITIONS = [
 const SELECTOR_TOOLTIP = '.tooltip[role="tooltip"]';
 const SELECTOR_TRIGGER = `
 	.lfr-portal-tooltip,
-	.manage-collaborators-dialog .lexicon-icon[data-title]:not(.lfr-portal-tooltip),
-	.manage-collaborators-dialog .lexicon-icon[title]:not(.lfr-portal-tooltip),
-	.manage-collaborators-dialog [data-restore-title],
-	.management-bar [data-title]:not(.lfr-portal-tooltip),
-	.management-bar [title]:not(.lfr-portal-tooltip),
-	.management-bar [data-restore-title],
-	.preview-toolbar-container [data-title]:not(.lfr-portal-tooltip),
-	.preview-toolbar-container [title]:not(.lfr-portal-tooltip),
-	.preview-tooltbar-containter [data-restore-title],
-	.progress-container[data-title],
-	.redirect-entries [data-title]:not(.lfr-portal-tooltip),
-	.source-editor__fixed-text__help[data-title],
-	.upper-tbar [data-title]:not(.lfr-portal-tooltip),
-	.upper-tbar [title]:not(.lfr-portal-tooltip),
-	.upper-tbar [data-restore-title]
+	[data-restore-title],
+	[data-title],
+	[title]
 `;
 
 const TRIGGER_HIDE_EVENTS = [
