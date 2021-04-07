@@ -26,14 +26,14 @@ import React, {
 import reducer, {STATES} from './reducer';
 
 const ALIGN_POSITIONS = [
-	'top-right',
 	'top',
-	'top-left',
+	'top-right',
+	'right',
 	'bottom-right',
 	'bottom',
 	'bottom-left',
 	'left',
-	'right',
+	'top-left',
 ];
 
 const SELECTOR_TOOLTIP = '.tooltip[role="tooltip"]';
