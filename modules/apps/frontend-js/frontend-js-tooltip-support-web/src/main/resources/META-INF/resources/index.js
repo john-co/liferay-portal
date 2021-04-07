@@ -36,6 +36,17 @@ const ALIGN_POSITIONS = [
 	'top-left',
 ];
 
+const ALIGN_POSITIONS_MAP = {
+	bottom: POSITIONS.Bottom,
+	'bottom-left': POSITIONS.BottomLeft,
+	'bottom-right': POSITIONS.BottomRight,
+	left: POSITIONS.Left,
+	right: POSITIONS.Right,
+	top: POSITIONS.Top,
+	'top-left': POSITIONS.TopLeft,
+	'top-right': POSITIONS.TopRight,
+};
+
 const SELECTOR_TOOLTIP = '.tooltip[role="tooltip"]';
 const SELECTOR_TRIGGER = `
 	.lfr-portal-tooltip,
@@ -188,9 +199,15 @@ const TooltipProvider = () => {
 
 	useLayoutEffect(() => {
 		if (state.target && tooltipRef.current) {
-			setAlignment(
-				align(tooltipRef.current, state.target, POSITIONS.BottomCenter)
-			);
+			let position = POSITIONS.BottomCenter;
+
+			const dataAlign = state.target.dataset['tooltipAlign'];
+
+			if (dataAlign) {
+				position = ALIGN_POSITIONS_MAP[dataAlign];
+			}
+
+			setAlignment(align(tooltipRef.current, state.target, position));
 		}
 	}, [state.target]);
 
