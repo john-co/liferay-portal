@@ -8,7 +8,6 @@
 		"@clayui/loading-indicator": "3.2.0",
 		"@clayui/pagination": "3.25.1",
 		"@clayui/tabs": "3.3.5",
-		"@clayui/tooltip": "3.4.5",
 		"classnames": "2.2.6",
 		"dom-align": "1.10.4",
 		"frontend-js-web": "*",

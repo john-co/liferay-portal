@@ -14,7 +14,6 @@ import ClayDropDown from '@clayui/drop-down';
 import ClayIcon from '@clayui/icon';
 import ClayLabel from '@clayui/label';
 import ClayLayout from '@clayui/layout';
-import {ClayTooltipProvider} from '@clayui/tooltip';
 import PropTypes from 'prop-types';
 import React, {useContext, useMemo, useState} from 'react';
 
@@ -84,17 +83,15 @@ export default function Translation({onSelectedLanguageClick, viewURLs}) {
 							>
 								<ClayLayout.ContentRow>
 									<ClayLayout.ContentCol expand>
-										<ClayTooltipProvider>
-											<span
-												className="text-truncate-inline"
-												data-tooltip-align="top"
-												title={language.languageLabel}
-											>
-												<span className="text-truncate">
-													{language.languageLabel}
-												</span>
+										<span
+											className="text-truncate-inline"
+											data-tooltip-align="top"
+											title={language.languageLabel}
+										>
+											<span className="text-truncate">
+												{language.languageLabel}
 											</span>
-										</ClayTooltipProvider>
+										</span>
 									</ClayLayout.ContentCol>
 									{language.default && (
 										<ClayLabel displayType="primary">
