@@ -49,7 +49,6 @@ const ALIGN_POSITIONS_MAP = {
 
 const SELECTOR_TOOLTIP = '.tooltip[role="tooltip"]';
 const SELECTOR_TRIGGER = `
-	.lfr-portal-tooltip,
 	[data-restore-title],
 	[data-title],
 	[title]
