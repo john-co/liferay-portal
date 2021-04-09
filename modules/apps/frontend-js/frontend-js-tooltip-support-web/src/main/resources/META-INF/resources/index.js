@@ -199,13 +199,9 @@ const TooltipProvider = () => {
 
 	useLayoutEffect(() => {
 		if (state.target && tooltipRef.current) {
-			let position = POSITIONS.BottomCenter;
-
-			const dataAlign = state.target.dataset['tooltipAlign'];
-
-			if (dataAlign) {
-				position = ALIGN_POSITIONS_MAP[dataAlign];
-			}
+			const position =
+				ALIGN_POSITIONS_MAP[state.target.dataset['tooltipAlign']] ||
+				POSITIONS.BottomCenter;
 
 			setAlignment(align(tooltipRef.current, state.target, position));
 		}
