@@ -49,9 +49,9 @@ const ALIGN_POSITIONS_MAP = {
 
 const SELECTOR_TOOLTIP = '.tooltip[role="tooltip"]';
 const SELECTOR_TRIGGER = `
-	[data-restore-title],
-	[data-title],
-	[title]
+	[data-restore-title]:not([data-restore-title=""]),
+	[data-title]:not([data-title=""]),
+	[title]:not([title=""])
 `;
 
 const TRIGGER_HIDE_EVENTS = [
