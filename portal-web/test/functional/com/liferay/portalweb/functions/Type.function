@@ -9,8 +9,6 @@ definition {
 
 		selenium.waitForEditable();
 
-		selenium.mouseOver();
-
 		selenium.clickAt();
 
 		selenium.pause("1000");
@@ -34,8 +32,6 @@ definition {
 		selenium.waitForVisible();
 
 		selenium.waitForEditable();
-
-		selenium.mouseOver();
 
 		selenium.sendKeys();
 

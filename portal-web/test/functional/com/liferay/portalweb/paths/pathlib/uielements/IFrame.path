@@ -140,7 +140,7 @@
 </tr>
 <tr>
 	<td>MODAL_ANY</td>
-	<td>//iframe[contains(@title,'${key_title}')]</td>
+	<td>//*[contains(@class,'modal') and contains(.,'${key_title}')]//iframe</td>
 	<td></td>
 </tr>
 <tr>

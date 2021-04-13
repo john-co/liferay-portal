@@ -56,7 +56,7 @@
 </tr>
 <tr>
 	<td>OBJECT_ITEM</td>
-	<td>//span[contains(@title,'${key_objectName}')]</td>
+	<td>//span[contains(.,'${key_objectName}')]</td>
 	<td></td>
 </tr>
 <tr>

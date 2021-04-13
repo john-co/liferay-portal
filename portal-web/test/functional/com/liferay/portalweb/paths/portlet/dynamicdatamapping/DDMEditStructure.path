@@ -52,7 +52,7 @@
 </tr>
 <tr>
 	<td>FIELDS_FIELD</td>
-	<td>//li[@title='${key_field}' and contains(@class,'property-builder-field-draggable')]/div</td>
+	<td>//li[contains(@class,'property-builder-field-draggable')]//div[.='${key_field}']</td>
 	<td></td>
 </tr>
 <tr>
