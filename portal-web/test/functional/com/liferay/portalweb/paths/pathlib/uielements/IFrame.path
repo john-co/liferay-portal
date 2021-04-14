@@ -10,22 +10,22 @@
 <tbody>
 <tr>
 	<td>ADD_ASSIGNEE_TO_ACCOUNT</td>
-	<td>//iframe[@title='Assign ${key_assigneeType} to ${key_accountName}']</td>
+	<td>//*[contains(@class,'modal') and contains(.,'Assign ${key_assigneeType} to ${key_accountName}')]//iframe</td>
 	<td></td>
 </tr>
 <tr>
 	<td>ADD_DOMAIN</td>
-	<td>//iframe[@title='Add Domain']</td>
+	<td>//*[contains(@class,'modal') and contains(.,'Add Domain')]//iframe</td>
 	<td></td>
 </tr>
 <tr>
 	<td>ADD_USERS_TO_ASSET_LIBRARY</td>
-	<td>//iframe[@title='Assign Users to This Asset Library']</td>
+	<td>//*[contains(@class,'modal') and contains(.,'Assign Users to This Asset Library')]//iframe</td>
 	<td></td>
 </tr>
 <tr>
 	<td>ADD_USERS_TO_SITE</td>
-	<td>//iframe[@title='Assign Users to This Site']</td>
+	<td>//*[contains(@class,'modal') and contains(.,'Assign Users to This Site')]//iframe</td>
 	<td></td>
 </tr>
 <tr>
@@ -50,7 +50,7 @@
 </tr>
 <tr>
 	<td>CONFIRM_PASSWORD</td>
-	<td>//iframe[@title='Confirm Password']</td>
+	<td>//*[contains(@class,'modal') and contains(.,'Confirm Password')]//iframe</td>
 	<td></td>
 </tr>
 <tr>
@@ -195,12 +195,12 @@
 </tr>
 <tr>
 	<td>SELECT_ACCOUNT</td>
-	<td>//iframe[@title='Select an Account']</td>
+	<td>//*[contains(@class,'modal') and contains(.,'Select an Account')]//iframe</td>
 	<td></td>
 </tr>
 <tr>
 	<td>SELECT_ACCOUNTS</td>
-	<td>//iframe[@title='Select Accounts']</td>
+	<td>//*[contains(@class,'modal') and contains(.,'Select Accounts')]//iframe</td>
 	<td></td>
 </tr>
 <tr>
@@ -235,7 +235,7 @@
 </tr>
 <tr>
 	<td>SELECT_USER_GROUP</td>
-	<td>//iframe[@title='Select User Group']</td>
+	<td>//*[contains(@class,'modal') and contains(.,'Select User Group')]//iframe</td>
 	<td></td>
 </tr>
 <tr>
@@ -245,7 +245,7 @@
 </tr>
 <tr>
 	<td>SELECT_STRUCTURE_FIELD</td>
-	<td>//iframe[contains(@title,'Select Structure Field')]</td>
+	<td>//*[contains(@class,'modal') and contains(.,'Select Structure Field')]//iframe</td>
 	<td></td>
 </tr>
 <tr>
@@ -255,7 +255,7 @@
 </tr>
 <tr>
 	<td>VALID_DOMAINS</td>
-	<td>//iframe[@title='Valid Domains']</td>
+	<td>//*[contains(@class,'modal') and contains(.,'Valid Domains')]//iframe</td>
 	<td></td>
 </tr>
 <tr>
