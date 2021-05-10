@@ -17,6 +17,7 @@
 <%@ include file="/init.jsp" %>
 <%@ taglib uri="http://liferay.com/tld/aui" prefix="aui" %>
 <%@ taglib uri="http://liferay.com/tld/react" prefix="react" %>
+<%@ taglib uri="/js/sharedState" prefix="sharedState" %>
 
 <div class="row">
 	<div class="col">
@@ -45,7 +46,7 @@
 				counterElement.innerText = newVal;
 			});
 
-			State.subscribe('clay-sample-atom', function(event) {
+			State.subscribe('myTestAtom', function(event) {
 				nameElement.innerText = event.name;
 			});
 
