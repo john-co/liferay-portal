@@ -77,10 +77,16 @@
 		'<portlet:namespace />termsOfUseSettings'
 	);
 
-	const journalArticleNameInput = document.getElementById('<portlet:namespace />journalArticleNameInput');
-	const journalArticleRemove = document.getElementById('<portlet:namespace />journalArticleRemove');
+	const journalArticleNameInput = document.getElementById(
+		'<portlet:namespace />journalArticleNameInput'
+	);
+	const journalArticleRemove = document.getElementById(
+		'<portlet:namespace />journalArticleRemove'
+	);
 
-	const selectArticle = document.getElementById('<portlet:namespace />selectArticle');
+	const selectArticle = document.getElementById(
+		'<portlet:namespace />selectArticle'
+	);
 
 	if (journalArticleNameInput && journalArticleRemove && selectArticle) {
 		selectArticle.addEventListener('click', (event) => {
@@ -88,10 +94,13 @@
 
 			Liferay.Util.openSelectionModal({
 				onSelect: (selectedItem) => {
-					const termsOfUseJournalArticleResourcePrimKey = document.getElementById('<portlet:namespace />termsOfUseJournalArticleResourcePrimKey');
+					const termsOfUseJournalArticleResourcePrimKey = document.getElementById(
+						'<portlet:namespace />termsOfUseJournalArticleResourcePrimKey'
+					);
 
 					if (termsOfUseJournalArticleResourcePrimKey) {
-						termsOfUseJournalArticleResourcePrimKey.value = selectedItem.assetclasspk;
+						termsOfUseJournalArticleResourcePrimKey.value =
+							selectedItem.assetclasspk;
 					}
 
 					journalArticleRemove.classList.remove('hide');
@@ -100,14 +109,17 @@
 				},
 				selectEventName: 'selectJournalArticle',
 				title: '<liferay-ui:message key="select-web-content" />',
-				url: '<%= cpDefinitionVirtualSettingDisplayContext.getTermsOfUseJournalArticleBrowserURL() %>',
+				url:
+					'<%= cpDefinitionVirtualSettingDisplayContext.getTermsOfUseJournalArticleBrowserURL() %>',
 			});
 		});
 
 		journalArticleRemove.addEventListener('click', (event) => {
 			event.preventDefault();
 
-			const termsOfUseJournalArticleResourcePrimKey = document.getElementById('<portlet:namespace />termsOfUseJournalArticleResourcePrimKey');
+			const termsOfUseJournalArticleResourcePrimKey = document.getElementById(
+				'<portlet:namespace />termsOfUseJournalArticleResourcePrimKey'
+			);
 
 			if (termsOfUseJournalArticleResourcePrimKey) {
 				termsOfUseJournalArticleResourcePrimKey.value = 0;

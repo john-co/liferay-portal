@@ -129,8 +129,12 @@ if ((commerceVirtualOrderItem != null) && (commerceVirtualOrderItem.getDuration(
 </aui:form>
 
 <aui:script sandbox="<%= true %>">
-	const fileEntryNameInput = document.getElementById('<portlet:namespace />fileEntryNameInput');
-	const fileEntryRemove = document.getElementById('<portlet:namespace />fileEntryRemove');
+	const fileEntryNameInput = document.getElementById(
+		'<portlet:namespace />fileEntryNameInput'
+	);
+	const fileEntryRemove = document.getElementById(
+		'<portlet:namespace />fileEntryRemove'
+	);
 	const selectFile = document.getElementById('<portlet:namespace />selectFile');
 
 	if (fileEntryNameInput && fileEntryRemove && selectFile) {
@@ -145,7 +149,9 @@ if ((commerceVirtualOrderItem != null) && (commerceVirtualOrderItem.getDuration(
 
 					const value = JSON.parse(selectedItem.value);
 
-					const fileEntryIdInput = document.getElementById('<portlet:namespace />fileEntryId');
+					const fileEntryIdInput = document.getElementById(
+						'<portlet:namespace />fileEntryId'
+					);
 
 					if (fileEntryIdInput) {
 						fileEntryIdInput.value = value.fileEntryId;
@@ -157,7 +163,9 @@ if ((commerceVirtualOrderItem != null) && (commerceVirtualOrderItem.getDuration(
 						url.setAttribute('disabled', true);
 					}
 
-					const message = document.getElementById('lfr-virtual-order-item-button-row-message');
+					const message = document.getElementById(
+						'lfr-virtual-order-item-button-row-message'
+					);
 
 					if (message) {
 						message.classList.add('hide');
@@ -165,20 +173,21 @@ if ((commerceVirtualOrderItem != null) && (commerceVirtualOrderItem.getDuration(
 
 					fileEntryRemove.classList.remove('hide');
 
-					fileEntryNameInput.innerHTML =
-						'<a>' + value.title + '</a>';
+					fileEntryNameInput.innerHTML = '<a>' + value.title + '</a>';
 				},
 				selectEventName: 'uploadCommerceVirtualOrderItem',
 				title: '<liferay-ui:message key="select-file" />',
 				url:
-					'<%= commerceVirtualOrderItemEditDisplayContext.getFileEntryItemSelectorURL() %>'
+					'<%= commerceVirtualOrderItemEditDisplayContext.getFileEntryItemSelectorURL() %>',
 			});
 		});
 
 		fileEntryRemove.addEventListener('click', (event) => {
 			event.preventDefault();
 
-			const fileEntryIdInput = document.getElementById('<portlet:namespace />fileEntryId');
+			const fileEntryIdInput = document.getElementById(
+				'<portlet:namespace />fileEntryId'
+			);
 
 			if (fileEntryIdInput) {
 				fileEntryIdInput.value = 0;
@@ -190,7 +199,9 @@ if ((commerceVirtualOrderItem != null) && (commerceVirtualOrderItem.getDuration(
 				url.setAttribute('disabled', false);
 			}
 
-			const message = document.getElementById('lfr-virtual-order-item-button-row-message');
+			const message = document.getElementById(
+				'lfr-virtual-order-item-button-row-message'
+			);
 
 			if (message) {
 				message.classList.remove('hide');

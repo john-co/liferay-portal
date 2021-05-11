@@ -60,8 +60,12 @@
 </div>
 
 <aui:script sandbox="<%= true %>">
-	const fileEntryNameInput = document.getElementById('<portlet:namespace />fileEntryNameInput');
-	const fileEntryRemove = document.getElementById('<portlet:namespace />fileEntryRemove');
+	const fileEntryNameInput = document.getElementById(
+		'<portlet:namespace />fileEntryNameInput'
+	);
+	const fileEntryRemove = document.getElementById(
+		'<portlet:namespace />fileEntryRemove'
+	);
 	const selectFile = document.getElementById('<portlet:namespace />selectFile');
 
 	if (fileEntryNameInput && fileEntryRemove && selectFile) {
@@ -76,7 +80,9 @@
 
 					const value = JSON.parse(selectedItem.value);
 
-					const fileEntryIdInput = document.getElementById('<portlet:namespace />fileEntryId');
+					const fileEntryIdInput = document.getElementById(
+						'<portlet:namespace />fileEntryId'
+					);
 
 					if (fileEntryIdInput) {
 						fileEntryIdInput.value = value.fileEntryId;
@@ -88,7 +94,9 @@
 						url.setAttribute('disabled', true);
 					}
 
-					const message = document.getElementById('lfr-definition-virtual-button-row-message');
+					const message = document.getElementById(
+						'lfr-definition-virtual-button-row-message'
+					);
 
 					if (message) {
 						message.classList.add('hide');
@@ -96,20 +104,21 @@
 
 					fileEntryRemove.classList.remove('hide');
 
-					fileEntryNameInput.innerHTML =
-						'<a>' + value.title + '</a>';
+					fileEntryNameInput.innerHTML = '<a>' + value.title + '</a>';
 				},
 				selectEventName: 'uploadCPDefinitionVirtualSetting',
 				title: '<liferay-ui:message key="select-file" />',
 				url:
-					'<%= cpDefinitionVirtualSettingDisplayContext.getFileEntryItemSelectorURL() %>'
+					'<%= cpDefinitionVirtualSettingDisplayContext.getFileEntryItemSelectorURL() %>',
 			});
 		});
 
 		fileEntryRemove.addEventListener('click', (event) => {
 			event.preventDefault();
 
-			const fileEntryIdInput = document.getElementById('<portlet:namespace />fileEntryId');
+			const fileEntryIdInput = document.getElementById(
+				'<portlet:namespace />fileEntryId'
+			);
 
 			if (fileEntryIdInput) {
 				fileEntryIdInput.value = 0;
@@ -121,7 +130,9 @@
 				url.setAttribute('disabled', false);
 			}
 
-			const message = document.getElementById('lfr-definition-virtual-button-row-message');
+			const message = document.getElementById(
+				'lfr-definition-virtual-button-row-message'
+			);
 
 			if (message) {
 				message.classList.remove('hide');

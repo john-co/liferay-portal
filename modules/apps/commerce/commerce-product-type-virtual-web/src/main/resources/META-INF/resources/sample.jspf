@@ -62,9 +62,15 @@
 </div>
 
 <aui:script sandbox="<%= true %>">
-	const sampleFileEntryNameInput = document.getElementById('<portlet:namespace />sampleFileEntryNameInput');
-	const sampleFileEntryRemove = document.getElementById('<portlet:namespace />sampleFileEntryRemove');
-	const selectSampleFile = document.getElementById('<portlet:namespace />selectSampleFile');
+	const sampleFileEntryNameInput = document.getElementById(
+		'<portlet:namespace />sampleFileEntryNameInput'
+	);
+	const sampleFileEntryRemove = document.getElementById(
+		'<portlet:namespace />sampleFileEntryRemove'
+	);
+	const selectSampleFile = document.getElementById(
+		'<portlet:namespace />selectSampleFile'
+	);
 
 	if (sampleFileEntryNameInput && sampleFileEntryRemove && selectSampleFile) {
 		selectSampleFile.addEventListener('click', (event) => {
@@ -78,19 +84,25 @@
 
 					const value = JSON.parse(selectedItem.value);
 
-					const sampleFileEntryId = document.getElementById('<portlet:namespace />sampleFileEntryId');
+					const sampleFileEntryId = document.getElementById(
+						'<portlet:namespace />sampleFileEntryId'
+					);
 
 					if (sampleFileEntryId) {
 						sampleFileEntryId.value = value.fileEntryId;
 					}
 
-					const sampleUrl = document.getElementById('<portlet:namespace />sampleUrl');
+					const sampleUrl = document.getElementById(
+						'<portlet:namespace />sampleUrl'
+					);
 
 					if (sampleUrl) {
 						sampleUrl.setAttribute('disabled', true);
 					}
 
-					const message = document.getElementById('lfr-definition-virtual-sample-button-row-message');
+					const message = document.getElementById(
+						'lfr-definition-virtual-sample-button-row-message'
+					);
 
 					if (message) {
 						message.classList.add('hide');
@@ -111,23 +123,31 @@
 		sampleFileEntryRemove.addEventListener('click', (event) => {
 			event.preventDefault();
 
-			const useSample = document.getElementById('<portlet:namespace />useSample');
+			const useSample = document.getElementById(
+				'<portlet:namespace />useSample'
+			);
 
 			if (useSample.checked) {
-				const sampleUrl = document.getElementById('<portlet:namespace />sampleUrl');
+				const sampleUrl = document.getElementById(
+					'<portlet:namespace />sampleUrl'
+				);
 
 				if (sampleUrl) {
 					sampleUrl.setAttribute('disabled', false);
 				}
 			}
 
-			const sampleFileEntryId = document.getElementById('<portlet:namespace />sampleFileEntryId');
+			const sampleFileEntryId = document.getElementById(
+				'<portlet:namespace />sampleFileEntryId'
+			);
 
 			if (sampleFileEntryId) {
 				sampleFileEntryId.value = 0;
 			}
 
-			const message = document.getElementById('lfr-definition-virtual-sample-button-row-message');
+			const message = document.getElementById(
+				'lfr-definition-virtual-sample-button-row-message'
+			);
 
 			if (message) {
 				message.classList.remove('hide');
