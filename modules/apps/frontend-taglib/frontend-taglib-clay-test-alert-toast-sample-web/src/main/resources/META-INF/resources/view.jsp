@@ -17,7 +17,6 @@
 <%@ include file="/init.jsp" %>
 <%@ taglib uri="http://liferay.com/tld/aui" prefix="aui" %>
 <%@ taglib uri="http://liferay.com/tld/react" prefix="react" %>
-<%@ taglib uri="/js/sharedState" prefix="sharedState" %>
 
 <div class="row">
 	<div class="col">
@@ -29,7 +28,7 @@
 	<div class="col">
 		<button id="test-button">Increment</button>
 
-		<h3>Counter<span id="test-counter">0</span></h3>
+		<h3>Counter: <span id="test-counter">0</span></h3>
 
 		<h3>Name: <span id="test-name">Initial Name</span></h3>
 
@@ -46,7 +45,7 @@
 				counterElement.innerText = newVal;
 			});
 
-			State.subscribe('myTestAtom', function(event) {
+			State.subscribe(SharedState.userAtom, function(event) {
 				nameElement.innerText = event.name;
 			});
 

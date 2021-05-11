@@ -16,17 +16,17 @@ import {State} from '@liferay/frontend-js-state-web';
 
 // Shared state (atoms and selectors);
 
-const userAtom = State.atom('clay-sample-atom', {
+export const userAtom = State.atom('clay-sample-atom', {
 	name: Liferay.ThemeDisplay.getUserName(),
 });
 
-const userSelector = State.selector('clay-sample-selector', (get) => {
+export const userSelector = State.selector('clay-sample-selector', (get) => {
 	const user = get(userAtom);
 
 	return `${user.name} (${user.name.length})`;
 });
 
-export const SharedState = {
-	userAtom,
-	userSelector,
-}
+// export const SharedState = {
+// 	userAtom,
+// 	userSelector,
+// }
