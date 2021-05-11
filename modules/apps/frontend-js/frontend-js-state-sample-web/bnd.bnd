@@ -1,0 +1,4 @@
+Bundle-Name: frontend-js-state-sample-web
+Bundle-SymbolicName: com.liferay.frontend.js.state.sample.web
+Bundle-Version: 1.0.0
+Web-ContextPath: /frontend-js-state-sample-web
