@@ -17,15 +17,14 @@ import ClayForm, {ClayInput} from '@clayui/form';
 import {State} from '@liferay/frontend-js-state-web';
 import {useLiferayState} from '@liferay/frontend-js-react-web';
 import React from 'react';
-import {SharedState} from './sharedState';
+import {userAtom, userSelector} from './sharedState';
 
 import '../css/main.scss';
 
-// Shared state (atoms and selectors); normally these would be in a separate
-// file.
+// Point to shared state variables (atoms and selectors);
 
-const userAtom = SharedState.userAtom;
-const userSelector = SharedState.userSelector;
+const userAtom = userAtom;
+const userSelector = userSelector;
 
 // Components that access that shared state:
 

@@ -14,9 +14,7 @@
 
 import {State} from '@liferay/frontend-js-state-web';
 
-
-// Shared state (atoms and selectors); normally these would be in a separate
-// file.
+// Shared state (atoms and selectors);
 
 const userAtom = State.atom('clay-sample-atom', {
 	name: Liferay.ThemeDisplay.getUserName(),
