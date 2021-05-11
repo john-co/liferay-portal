@@ -12,53 +12,60 @@
  * details.
  */
 
-import ClayAlert from '@clayui/alert';
-import ClayButton from '@clayui/button';
-import {openToast} from 'frontend-js-web';
+import ClayCard from '@clayui/card';
+import ClayForm, {ClayInput} from '@clayui/form';
+import {useLiferayState} from '@liferay/frontend-js-react-web';
 import React from 'react';
+import {userAtom, userSelector} from './atoms';
 
 import '../css/main.scss';
 
-export default () => {
-	const onClickSuccess = () => {
-		openToast({
-			message: Liferay.Language.get(
-				'your-request-completed-successfully'
-			),
-			title: Liferay.Language.get('success'),
-			type: 'success',
-		});
-	};
+// Components that access that shared state:
 
-	const onClickFail = () => {
-		openToast({
-			message: Liferay.Language.get('an-unexpected-error-occurred'),
-			title: Liferay.Language.get('error'),
-			type: 'danger',
-		});
-	};
+function Name() {
+	const [userNameAndLength] = useLiferayState(userSelector);
 
 	return (
-		<div>
-			<ClayAlert title="Info">
-				This widget is used to test out Clay Toast Alert.
-			</ClayAlert>
+		<ClayCard>
+			<ClayCard.Body>
+				<ClayCard.Description displayType="title">
+					{Liferay.Language.get('name')}
+				</ClayCard.Description>
+				<ClayCard.Description displayType="text" truncate={false}>
+					{userNameAndLength}
+				</ClayCard.Description>
+			</ClayCard.Body>
+		</ClayCard>
+	);
+}
 
-			<div className="sheet-footer">
-				<ClayButton.Group spaced>
-					<ClayButton onClick={onClickSuccess} type="submit">
-						{Liferay.Language.get('success-submit')}
-					</ClayButton>
+function NameUpdater(portletId) {
+	const id = `${portletId}_form`;
+	const [user, setUser] = useLiferayState(userAtom);
 
-					<ClayButton
-						displayType="secondary"
-						onClick={onClickFail}
-						type="submit"
-					>
-						{Liferay.Language.get('fail-submit')}
-					</ClayButton>
-				</ClayButton.Group>
-			</div>
+	return (
+		<ClayForm.Group>
+			<label htmlFor={id}>Name</label>
+			<ClayInput
+				id={id}
+				onChange={(event) => {
+					setUser({
+						...user,
+						name: event.target.value,
+					});
+				}}
+				type="text"
+				value={user.name}
+			/>
+		</ClayForm.Group>
+	);
+}
+
+export default ({portletId}) => {
+	return (
+		<div className="col-md-6">
+			<NameUpdater portletId={portletId} />
+			<Name />
 		</div>
 	);
 };
