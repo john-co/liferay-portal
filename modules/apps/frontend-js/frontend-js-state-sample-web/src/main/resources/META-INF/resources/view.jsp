@@ -44,20 +44,23 @@
 
 			const counterAtom = State.atom('test-counter-jsp', 0);
 
-			State.subscribe(counterAtom, function(newVal) {
+			State.subscribe(counterAtom, (newVal) => {
 				counterElement.innerText = newVal;
 			});
 
-			State.subscribe(SharedState.userAtom, function(event) {
+			State.subscribe(SharedState.userAtom, (event) => {
 				nameElement.innerText = event.name;
 			});
 
-			buttonElementJSP.addEventListener('click', function() {
+			buttonElementJSP.addEventListener('click', () => {
 				State.write(counterAtom, State.read(counterAtom) + 1);
 			});
 
-			buttonElementReact.addEventListener('click', function() {
-				State.write(SharedState.counterAtomReact, State.read(SharedState.counterAtomReact) + 1);
+			buttonElementReact.addEventListener('click', () => {
+				State.write(
+					SharedState.counterAtomReact,
+					State.read(SharedState.counterAtomReact) + 1
+				);
 			});
 		</aui:script>
 	</div>

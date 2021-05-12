@@ -12,9 +12,9 @@
  * details.
  */
 
-package com.liferay.frontend.js.state.sample.web.portlet;
+package com.liferay.frontend.js.state.sample.web.internal.portlet;
 
-import com.liferay.frontend.js.state.sample.web.constants.JavaScriptStateSamplePortletKeys;
+import com.liferay.frontend.js.state.sample.web.internal.constants.JavaScriptStateSamplePortletKeys;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 
 import javax.portlet.Portlet;
@@ -22,7 +22,7 @@ import javax.portlet.Portlet;
 import org.osgi.service.component.annotations.Component;
 
 /**
- * @author john-co
+ * @author John Co
  */
 @Component(
 	immediate = true,

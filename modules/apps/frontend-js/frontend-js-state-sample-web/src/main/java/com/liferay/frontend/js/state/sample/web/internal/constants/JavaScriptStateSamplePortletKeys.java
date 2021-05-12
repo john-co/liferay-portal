@@ -12,10 +12,10 @@
  * details.
  */
 
-package com.liferay.frontend.js.state.sample.web.constants;
+package com.liferay.frontend.js.state.sample.web.internal.constants;
 
 /**
- * @author john-co
+ * @author John Co
  */
 public class JavaScriptStateSamplePortletKeys {
 

@@ -27,8 +27,3 @@ export const userSelector = State.selector('clay-sample-selector', (get) => {
 });
 
 export const counterAtomReact = State.atom('sample-counter', 0);
-
-// export const SharedState = {
-// 	userAtom,
-// 	userSelector,
-// }

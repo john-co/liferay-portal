@@ -16,7 +16,8 @@ import ClayCard from '@clayui/card';
 import ClayForm, {ClayInput} from '@clayui/form';
 import {useLiferayState} from '@liferay/frontend-js-react-web';
 import React from 'react';
-import {userAtom, userSelector, counterAtomReact} from './sharedState';
+
+import {counterAtomReact, userAtom, userSelector} from './sharedState';
 
 import '../css/main.scss';
 
@@ -65,7 +66,9 @@ function ButtonCounter() {
 	const [count] = useLiferayState(counterAtomReact);
 
 	return (
-		<h3>React Counter: <span id="test-counter-react">{count}</span></h3>
+		<h3>
+			React Counter: <span id="test-counter-react">{count}</span>
+		</h3>
 	);
 }
 
