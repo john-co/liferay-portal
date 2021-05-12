@@ -1,5 +1,5 @@
 <%@ include file="/init.jsp" %>
-<%@ taglib uri="http://liferay.com/tld/aui" prefix="aui" %>
+
 <%@ taglib uri="http://liferay.com/tld/react" prefix="react" %>
 
 <div class="row">

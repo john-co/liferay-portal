@@ -1,7 +1,6 @@
 package com.liferay.frontend.js.state.sample.web.portlet;
 
 import com.liferay.frontend.js.state.sample.web.constants.JavaScriptStateSamplePortletKeys;
-
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 
 import javax.portlet.Portlet;
@@ -18,7 +17,7 @@ import org.osgi.service.component.annotations.Component;
 		"com.liferay.portlet.header-portlet-css=/css/main.css",
 		"com.liferay.portlet.instanceable=true",
 		"javax.portlet.display-name=JavaScript State Sample",
-		"javax.portlet.init-param.template-path=/",
+		"javax.portlet.init-param.template-path=/META-INF/resources/",
 		"javax.portlet.init-param.view-template=/view.jsp",
 		"javax.portlet.name=" + JavaScriptStateSamplePortletKeys.JAVASCRIPTSTATESAMPLE,
 		"javax.portlet.resource-bundle=content.Language",
