@@ -34,7 +34,7 @@
 
 		<button id="test-button-react">Increment react</button>
 
-		<aui:script require="@liferay/frontend-js-state-web@1.0.3/index as StateModule, frontend-js-state-sample-web@1.0.0/js/sharedState as SharedState">
+		<aui:script require="@liferay/frontend-js-state-web@1.0.3/index as StateModule, @liferay/frontend-js-state-sample-web@1.0.0/js/sharedState as SharedState">
 			const buttonElementJSP = document.getElementById('test-button-jsp');
 			const buttonElementReact = document.getElementById('test-button-react');
 			const counterElement = document.getElementById('test-counter-jsp');
