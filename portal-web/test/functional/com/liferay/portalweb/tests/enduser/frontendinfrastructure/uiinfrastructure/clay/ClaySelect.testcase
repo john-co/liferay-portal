@@ -38,6 +38,8 @@ definition {
 
 	@priority = "5"
 	test SmokeMultipleSelect {
+		property osgi.modules.includes = "multi-factor-authentication-sample";
+
 		Navigator.gotoNavTab(navTab = "Form Elements");
 
 		AssertEditable(

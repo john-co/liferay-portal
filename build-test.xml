@@ -7607,19 +7607,18 @@ virtualHostname="localhost"
 		</for>
 	</target>
 
+	<target name="john">
+		<echo>Hello</echo>
+	</target>
+
 	<target name="deploy-osgi-modules">
-		<if>
-			<not>
-				<isset property="skip.get.testcase.osgi.modules.includes" />
-			</not>
-			<then>
-				<get-testcase-property property.name="osgi.modules.includes" />
-			</then>
-		</if>
+		<echo>Hello</echo>
+		<echo file="tools/sdk/build.${user.name}.properties">auto.deploy.dir=${liferay.home}/deploy</echo>
 
 		<if>
 			<isset property="osgi.modules.includes" />
 			<then>
+				<echo>Hello2</echo>
 				<echo file="tools/sdk/build.${user.name}.properties">auto.deploy.dir=${liferay.home}/deploy</echo>
 
 				<property name="osgi.module.pattern" value="**" />
@@ -7665,6 +7664,7 @@ virtualHostname="localhost"
 							tofile="${module.base.dir}/settings.gradle.temp"
 							verbose="true"
 						/>
+						<echo>OSGI modules path @{osgi.module.path}</echo>
 
 						<gradle-execute dir="@{osgi.module.path}" forcedcacheenabled="false" task="deploy">
 							<arg value="clean" />
@@ -7678,6 +7678,15 @@ virtualHostname="localhost"
 					</sequential>
 				</for>
 			</then>
+		</if>
+
+		<if>
+			<not>
+				<isset property="osgi.modules.includes" />
+				<then>
+					<echo>Not set</echo>
+				</then>
+			</not>
 		</if>
 	</target>
 
