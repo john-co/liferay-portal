@@ -38,7 +38,14 @@ definition {
 
 	@priority = "5"
 	test SmokeMultipleSelect {
+		property portal.acceptance = "john-co";
 		property osgi.modules.includes = "multi-factor-authentication-sample";
+		property osgi.modules.includes = "frontend-taglib-clay-sample-web";
+		property osgi.modules.includes = "frontend-taglib-clay-test-alert-toast-sample-web";
+
+		WaitForConsoleTextPresent(value1 = "STARTED com.liferay.multi.factor.authentication.sample_1.0.0");
+
+		Portlet.addPG(portletName = "Clay Test Alert Toast Sample");
 
 		Navigator.gotoNavTab(navTab = "Form Elements");
 
