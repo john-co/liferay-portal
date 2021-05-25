@@ -15,9 +15,43 @@
 --%>
 
 <%@ include file="/init.jsp" %>
+<%@ taglib uri="http://liferay.com/tld/aui" prefix="aui" %>
+<%@ taglib uri="http://liferay.com/tld/react" prefix="react" %>
 
-<div>
-	<react:component
-		module="js/App"
-	/>
+<div class="row">
+	<div class="col">
+		<react:component
+			module="js/App"
+		/>
+	</div>
+
+	<div class="col">
+		<button id="test-button">Increment</button>
+
+		<h3>Counter: <span id="test-counter">0</span></h3>
+
+		<h3>Name: <span id="test-name">Initial Name</span></h3>
+
+		<aui:script require="@liferay/frontend-js-state-web@1.0.3/index as StateModule, frontend-taglib-clay-test-alert-toast-sample-web@1.0.0/js/sharedState as SharedState">
+			const buttonElement = document.getElementById('test-button');
+			const counterElement = document.getElementById('test-counter');
+			const nameElement = document.getElementById('test-name');
+
+			const State = StateModule.State;
+
+			const counterAtom = State.atom('test-counter', 0);
+
+			State.subscribe(counterAtom, function(newVal) {
+				counterElement.innerText = newVal;
+			});
+
+			State.subscribe(SharedState.userAtom, function(event) {
+				nameElement.innerText = event.name;
+			});
+
+			buttonElement.addEventListener('click', function() {
+				State.write(counterAtom, State.read(counterAtom) + 1);
+			});
+		</aui:script>
+	</div>
 </div>
