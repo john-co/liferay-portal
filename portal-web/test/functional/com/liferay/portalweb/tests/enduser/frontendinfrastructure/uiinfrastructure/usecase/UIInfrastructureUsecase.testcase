@@ -25,7 +25,7 @@ definition {
 		}
 	}
 
-	@description = "This is a use case for LPS-95157. Verify control menu on home page is styled correctly after refreshing page."
+	@description = "This is a use case for LPS-95157. Verify control menu on an admin page is styled correctly after refreshing page"
 	@priority = "5"
 	@refactorneeded
 	test AdminPageCanDisplayStyleCorrectlyAfterPageRefresh {
@@ -53,6 +53,9 @@ definition {
 		takeScreenshot();
 	}
 
+	@description = "Verify portlets have defined boundaries in 3 column page layout."
+	@priority = "5"
+	@refactorneeded
 	test PortletBoundariesAreContained {
 		property app.server.types = "jboss,tcserver,tomcat,weblogic,websphere,wildfly";
 		property database.types = "db2,hypersonic,mariadb,mysql,oracle,postgresql,sqlserver,sybase";
@@ -124,6 +127,9 @@ definition {
 		takeScreenshot();
 	}
 
+	@description = "Smoke test to verify portlet can be dragged and dropped, configuration is available, look and feel is available, and can be removed"
+	@priority = "5"
+	@refactorneeded
 	test PortletUISmoke {
 		property app.server.types = "jboss,tcserver,tomcat,weblogic,websphere,wildfly";
 		property database.types = "db2,hypersonic,mariadb,mysql,oracle,postgresql,sqlserver,sybase";
@@ -194,6 +200,9 @@ definition {
 		}
 	}
 
+	@description = "This is a use case for LPS-95157. Verify control menu on home page is styled correctly after refreshing page."
+	@priority = "5"
+	@refactorneeded
 	test SitePageCanDisplayStyleCorrectlyAfterPageRefresh {
 		property app.server.types = "jboss,tcserver,tomcat,weblogic,websphere,wildfly";
 		property database.types = "db2,hypersonic,mariadb,mysql,oracle,postgresql,sqlserver,sybase";
@@ -235,6 +244,9 @@ definition {
 		takeScreenshot();
 	}
 
+	@description = "This is a use case for LPS-70390."
+	@priority = "4"
+	@refactorneeded
 	test ViewNonASCIICharactersWithSPADisabled {
 		property custom.properties = "javascript.single.page.application.enabled=false";
 

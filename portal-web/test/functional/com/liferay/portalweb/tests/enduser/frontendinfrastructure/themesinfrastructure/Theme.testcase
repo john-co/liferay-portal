@@ -57,6 +57,9 @@ definition {
 		Theme.viewTestThemeBackgroundColor();
 	}
 
+	@description = "Verify portal will apply different available page theme if classic theme not available"
+	@priority = "5"
+	@refactorneeded
 	test CanBeAppliedToPageWhenClassicThemeNotAvailable {
 		property portal.upstream = "true";
 		property skip.start-app-server = "true";
@@ -83,6 +86,9 @@ definition {
 		takeScreenshot();
 	}
 
+	@description = "Verify page theme can be deactivated and reactivated"
+	@priority = "5"
+	@refactorneeded
 	test CanBeDeactivatedAndReactivated {
 		property test.name.skip.portal.instance = "Theme#CanBeDeactivatedAndReactivated";
 
@@ -157,6 +163,9 @@ definition {
 			themeName = "test-theme-7-4");
 	}
 
+	@description = "Verify page theme can be uninstalled and redeployed"
+	@priority = "5"
+	@refactorneeded
 	test CanBeUnInstalledAndRedeployed {
 		property test.name.skip.portal.instance = "Theme#CanBeUnInstalledAndRedeployed";
 

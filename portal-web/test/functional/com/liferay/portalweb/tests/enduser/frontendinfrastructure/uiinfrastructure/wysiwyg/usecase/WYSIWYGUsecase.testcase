@@ -77,6 +77,8 @@ definition {
 		BlogsEntry.viewInlineImage(uploadFileName = "Document_1");
 	}
 
+	@priority = "4"
+	@refactorneeded
 	test AddWebContentArticleWithImageViaURL {
 		Navigator.openURL();
 
@@ -103,6 +105,9 @@ definition {
 		AssertElementPresent(locator1 = "//img[contains(@src,'Document_1.jpg')]");
 	}
 
+	@description = "Verify existing text can be formatted as a hyperlink"
+	@priority = "4"
+	@refactorneeded
 	test CanAddHyperlinkToExistingText {
 		JSONGroup.addGroup(groupName = "Test Site Name");
 
@@ -129,6 +134,9 @@ definition {
 			locator1 = "CKEditor#BODY_TEXT_HREF");
 	}
 
+	@description = "Verify content can display content from left to right"
+	@priority = "4"
+	@refactorneeded
 	test CanDisplayContentLeftToRight {
 		ProductMenu.gotoPortlet(
 			category = "Site Builder",
@@ -152,6 +160,9 @@ definition {
 		WikiPage.viewLocalizedFrontPagePG(wikiPageContent = "Wiki Left to Right Content");
 	}
 
+	@description = "Verify content localized with a right to left language is displayed from right to left"
+	@priority = "4"
+	@refactorneeded
 	test CanDisplayContentRightToLeft {
 		property test.name.skip.portal.instance = "WYSIWIGUsecase#ViewWikiFrontPageRightToLeft";
 
@@ -190,6 +201,9 @@ definition {
 			textIcon = "english-United States");
 	}
 
+	@description = "Verify editor can display html formatted contents from copy paste"
+	@priority = "4"
+	@refactorneeded
 	test CanDisplayFormattedHTMLFromCopyPaste {
 		property app.server.types = "jboss,tcserver,tomcat,weblogic,websphere,wildfly";
 		property database.types = "db2,hypersonic,mariadb,mysql,oracle,postgresql,sqlserver,sybase";
@@ -285,6 +299,9 @@ definition {
 		takeScreenshot();
 	}
 
+	@description = "Verify source content can be previewed"
+	@priority = "4"
+	@refactorneeded
 	test CanEditTextInPreviewSourceContent {
 		property portal.upstream = "quarantine";
 
@@ -329,6 +346,9 @@ definition {
 		AssertElementPresent(locator1 = "//h1[normalize-space(text())='Sample document for editor area test edit']");
 	}
 
+	@description = "Verify source content can be previewed"
+	@priority = "4"
+	@refactorneeded
 	test CanPreviewSourceContent {
 		ProductMenu.gotoPortlet(
 			category = "Content & Data",
@@ -371,6 +391,9 @@ definition {
 
 	}
 
+	@description = "Verify styled content can be added from source view"
+	@priority = "4"
+	@refactorneeded
 	test ViewSourceCodeFormattedInTextView {
 		ProductMenu.gotoPortlet(
 			category = "Content & Data",
