@@ -52,7 +52,7 @@ definition {
 
 		takeScreenshot();
 	}
-
+//
 	@description = "This is a use case for LPS-70390."
 	@priority = "4"
 	@refactordone
