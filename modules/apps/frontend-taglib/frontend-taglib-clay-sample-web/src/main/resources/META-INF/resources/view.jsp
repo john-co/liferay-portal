@@ -17,12 +17,16 @@
 <%@ include file="/init.jsp" %>
 
 <liferay-ui:tabs
-	names="Alerts,Badges,Buttons,Cards,Dropdowns,Form Elements,Icons,Labels,Links,Management Toolbars,Navigation Bars,Pagination Bars,Progress Bars,Stickers"
+	names="Test Component"
 	refresh="<%= false %>"
 >
+<%--
+/**
+ * Take 1st test baseline of the jsp
+--%>
 
 	<%
-	String[] sections = {"alerts", "badges", "buttons", "cards", "dropdowns", "form_elements", "icons", "labels", "links", "management_toolbars", "navigation_bars", "pagination_bars", "progress_bars", "stickers"};
+	String[] sections = {"alerts"};
 
 	for (int i = 0; i < sections.length; i++) {
 	%>
@@ -36,5 +40,17 @@
 	<%
 	}
 	%>
+
+
+<%--
+/**
+	* Remove the jsp code, and uncomment the below
+--%>
+
+<div>
+	<react:component
+		module="js/App"
+	/>
+</div>
 
 </liferay-ui:tabs>
