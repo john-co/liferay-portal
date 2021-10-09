@@ -40,25 +40,41 @@ export default () => {
 
 	return (
 		<div>
-			<ClayAlert title="Info">
-				This widget is used to test out Clay Toast Alert.
+			<h3>REACT EMBEDDED</h3>
+
+			<ClayAlert displayType="danger" title="Error">
+				This is an error message.
 			</ClayAlert>
 
-			<div className="sheet-footer">
-				<ClayButton.Group spaced>
-					<ClayButton onClick={onClickSuccess} type="submit">
-						{Liferay.Language.get('success-submit')}
-					</ClayButton>
+			<ClayAlert displayType="success" title="Success">
+				This is a success message.
+			</ClayAlert>
 
-					<ClayButton
-						displayType="secondary"
-						onClick={onClickFail}
-						type="submit"
-					>
-						{Liferay.Language.get('fail-submit')}
-					</ClayButton>
-				</ClayButton.Group>
-			</div>
+			<ClayAlert displayType="info" title="Info">
+				This is an info message.
+			</ClayAlert>
+
+			<ClayAlert displayType="warning" title="Warning">
+				This is a warning message.
+			</ClayAlert>
+
+			<h3>REACT STRIPE</h3>
+
+			<ClayAlert displayType="danger" title="Error" variant="stripe">
+				This is an error message.
+			</ClayAlert>
+
+			<ClayAlert displayType="success" title="Success" variant="stripe">
+				This is a success message.
+			</ClayAlert>
+
+			<ClayAlert displayType="info" title="Info" variant="stripe">
+				This is an info message.
+			</ClayAlert>
+
+			<ClayAlert displayType="warning" title="Warning" variant="stripe">
+				This is a warning message.
+			</ClayAlert>
 		</div>
 	);
 };
