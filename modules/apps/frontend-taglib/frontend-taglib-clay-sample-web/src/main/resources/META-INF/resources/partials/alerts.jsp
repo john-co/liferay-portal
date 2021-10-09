@@ -73,3 +73,15 @@
 	message="This is a warning message."
 	title="Warning"
 />
+
+
+<%--
+/**
+ * React component
+--%>
+
+<div>
+	<react:component
+		module="js/App"
+	/>
+</div>

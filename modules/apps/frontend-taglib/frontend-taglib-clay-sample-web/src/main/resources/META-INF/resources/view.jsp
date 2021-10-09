@@ -20,10 +20,6 @@
 	names="Test Component"
 	refresh="<%= false %>"
 >
-<%--
-/**
- * Take 1st test baseline of the jsp
---%>
 
 	<%
 	String[] sections = {"alerts"};
@@ -40,17 +36,5 @@
 	<%
 	}
 	%>
-
-
-<%--
-/**
-	* Remove the jsp code, and uncomment the below
---%>
-
-<div>
-	<react:component
-		module="js/App"
-	/>
-</div>
 
 </liferay-ui:tabs>
