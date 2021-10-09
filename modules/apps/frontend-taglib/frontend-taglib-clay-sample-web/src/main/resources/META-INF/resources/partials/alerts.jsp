@@ -18,7 +18,7 @@
 
 <h3>Test for alert embedded and stripe components</h3>
 
-<h4>JSP EMBEDDED</h4>
+<!-- <h4>JSP EMBEDDED</h4>
 
 <clay:alert
 	displayType="danger"
@@ -66,15 +66,16 @@
 	displayType="warning"
 	message="This is a warning message."
 	title="Warning"
-/>
+/> -->
 
 <%--
 /**
  * React component
 --%>
 
-<!-- <div>
+
+<div>
 	<react:component
 		module="js/App"
 	/>
-</div> -->
+</div>
