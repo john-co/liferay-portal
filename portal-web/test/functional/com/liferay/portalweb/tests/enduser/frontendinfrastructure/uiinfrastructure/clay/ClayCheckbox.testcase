@@ -50,34 +50,8 @@ definition {
 			key_definition = "On",
 			locator1 = "ClaySamplePortlet#CHECKBOX");
 
-		AssertNotChecked.assertNotCheckedNotVisible(
-			key_definition = "Off",
-			locator1 = "ClaySamplePortlet#CHECKBOX");
-
-		AssertEditable.assertEditableNotVisible(locator1 = "ClaySamplePortlet#CHECKBOX_WITH_CUSTOM_CLASS_AND_ID");
-
-		Check.checkNotVisible(
-			checkboxName = "Checkbox with Label",
-			locator1 = "Checkbox#ANY_CHECKBOX");
-
-		AssertNotEditable.assertNotEditableNotVisible(
-			key_definition = "On disabled",
-			locator1 = "ClaySamplePortlet#CHECKBOX");
-
-		AssertChecked.assertCheckedNotVisible(
-			key_definition = "On disabled",
-			locator1 = "ClaySamplePortlet#CHECKBOX");
-
-		AssertNotEditable.assertNotEditableNotVisible(
-			key_definition = "Off disabled",
-			locator1 = "ClaySamplePortlet#CHECKBOX");
-
-		AssertNotChecked.assertNotCheckedNotVisible(
-			key_definition = "Off disabled",
-			locator1 = "ClaySamplePortlet#CHECKBOX");
-
-		AssertEditable.assertEditableNotVisible(
-			key_definition = "Indeterminate",
+		AssertElementImage(
+			key_definition = "On",
 			locator1 = "ClaySamplePortlet#CHECKBOX");
 	}
 
