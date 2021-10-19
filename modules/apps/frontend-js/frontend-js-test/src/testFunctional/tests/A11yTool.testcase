@@ -1,0 +1,52 @@
+@component-name = "portal-frontend-infrastructure"
+definition {
+
+	property osgi.modules.includes = "frontend-js-a11y-sample-web";
+	property portal.release = "true";
+	property portal.upstream = "true";
+	property testray.component.names = "User Interface";
+	property testray.main.component.name = "User Interface";
+
+	setUp {
+		TestCase.setUpPortalInstance();
+
+		User.firstLoginPG();
+
+		JSONLayout.addPublicLayout(
+			groupName = "Guest",
+			layoutName = "A11y Test Page");
+
+		JSONLayout.addWidgetToPublicLayout(
+			groupName = "Guest",
+			layoutName = "A11y Test Page",
+			widgetName = "JS A11y Sample Web");
+
+		Navigator.gotoPage(pageName = "A11y Test Page");
+	}
+
+	tearDown {
+		var testPortalInstance = PropsUtil.get("test.portal.instance");
+
+		if ("${testPortalInstance}" == "true") {
+			PortalInstances.tearDownCP();
+		}
+		else {
+			JSONLayout.deletePublicLayout(
+				groupName = "Guest",
+				layoutName = "A11y Test Page");
+		}
+	}
+
+	@description = "LPS-140736. Ensures there is no accessibility side panel on a page with no violations."
+	@priority = "5"
+	test CanDetectNoViolations {
+		Navigator.gotoPage(pageName = "Home");
+
+		if (IsElementPresent(locator1 = "A11yTool#ACCESSIBILITY_PANEL_HEADING")) {
+			Refresh();
+		}
+
+		AssertElementNotPresent(locator1 = "A11yTool#ACCESSIBILITY_PANEL_HEADING");
+	}
+
+}
