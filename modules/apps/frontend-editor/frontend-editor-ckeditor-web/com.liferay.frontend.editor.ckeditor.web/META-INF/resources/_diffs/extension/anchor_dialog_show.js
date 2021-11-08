@@ -1,0 +1,2 @@
+ckEditor.on("dialogShow",(a=>{var e=a.data.definition.dialog;if("anchor"===e.getName()){var i=e.getValueOf.bind(e);e.getValueOf=function(a,e){var t=i(a,e);return"info"===a&&"txtName"===e&&(t=t.replace(/ /g,"_")),t}}}));
+//# sourceMappingURL=anchor_dialog_show.js.map

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.frontend.editor.ckeditor.web.internal.CKEditorPortalWebResources" immediate="true" activate="activate">
+  <service>
+    <provide interface="com.liferay.portal.kernel.servlet.PortalWebResources"/>
+  </service>
+  <reference name="ServletContext" interface="javax.servlet.ServletContext" target="(osgi.web.symbolicname=com.liferay.frontend.editor.ckeditor.web)" bind="setServletContext"/>
+  <implementation class="com.liferay.frontend.editor.ckeditor.web.internal.CKEditorPortalWebResources"/>
+</scr:component>

@@ -1,0 +1,2 @@
+CKEDITOR.plugins.add("lfrpopup",{init(i){AUI().use("querystring-parse",(e=>{i.popup=function(i,t,p,r){var n=e.QueryString.parse(i.split("?")[1]);n.p_p_id&&(i=i.replace("CKEditorFuncNum=","_"+n.p_p_id+"_CKEditorFuncNum=")),r=e.QueryString.parse(r),Liferay.Util.openWindow({dialog:{zIndex:CKEDITOR.getNextZIndex()},height:p,stack:!1,title:r.title||"",uri:i,width:t})}}))}});
+//# sourceMappingURL=plugin.js.map

@@ -1,0 +1,2 @@
+!function(){var e="restore";CKEDITOR.plugins.add(e,{init(t){t.addCommand(e,{canUndo:!1,exec(e){e.fire("restoreContent")}}),t.ui.addButton&&t.ui.addButton("Restore",{command:e,icon:Liferay.AUI.getPathCKEditor()+"/ckeditor/plugins/restore/assets/restore.png",label:Liferay.Language.get("restore-the-original-content")})}})}();
+//# sourceMappingURL=plugin.js.map

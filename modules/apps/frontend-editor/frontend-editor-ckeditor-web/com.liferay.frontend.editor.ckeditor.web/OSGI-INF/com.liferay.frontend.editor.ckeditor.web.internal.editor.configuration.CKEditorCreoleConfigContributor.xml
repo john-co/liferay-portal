@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.frontend.editor.ckeditor.web.internal.editor.configuration.CKEditorCreoleConfigContributor">
+  <property name="editor.name" type="String" value="ckeditor_creole"/>
+  <service>
+    <provide interface="com.liferay.portal.kernel.editor.configuration.EditorConfigContributor"/>
+  </service>
+  <implementation class="com.liferay.frontend.editor.ckeditor.web.internal.editor.configuration.CKEditorCreoleConfigContributor"/>
+</scr:component>

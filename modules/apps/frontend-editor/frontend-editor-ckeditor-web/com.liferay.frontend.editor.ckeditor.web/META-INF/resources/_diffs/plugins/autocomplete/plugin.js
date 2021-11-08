@@ -1,0 +1,2 @@
+CKEDITOR.plugins.add("autocomplete",{init(e){var t=this;AUI().use("aui-debounce","liferay-autocomplete-input",(()=>{var a=t.path,o=[CKEDITOR.getUrl(a+"autocomplete.js")];CKEDITOR.scriptLoader.load(o,(()=>{var t=new Liferay.AutoCompleteCKEditor(Object.assign(e.config.autocomplete,{editor:e,width:300}));t.render(),t.detach("valueChange")}))}))}});
+//# sourceMappingURL=plugin.js.map
