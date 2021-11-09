@@ -1,0 +1,2 @@
+!function(){var t=/(?:\[((?:[a-z]|\*){1,16})(?:[=\s]([^\x00-\x1F'<>[\]]{1,2083}))?\])|(?:\[\/([a-z]{1,16})\])/gi,e=function(t){this._data=t};e.prototype={constructor:e,getLastIndex:()=>t.lastIndex,getNextToken(){return t.exec(this._data)}},Liferay.BBCodeLexer=e}();
+//# sourceMappingURL=lexer.js.map

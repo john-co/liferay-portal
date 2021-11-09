@@ -1,0 +1,2 @@
+!function(){var e=AUI(),a=e.merge(Liferay.Util.MAP_HTML_CHARS_ESCAPED,{"(":"&#40;",")":"&#41;","[":"&#91;","]":"&#93;"}),i=Liferay.namespace("BBCodeUtil");i.escape=e.rbind("escapeHTML",Liferay.Util,!0,a),i.unescape=e.rbind("unescapeHTML",Liferay.Util,a)}();
+//# sourceMappingURL=bbcode_utils.js.map

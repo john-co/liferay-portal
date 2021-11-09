@@ -1,0 +1,2 @@
+CKEDITOR.dialog.add("videoembedDialog",(e=>({contents:[{elements:[{id:"url_video",label:Liferay.Language.get("video"),type:"text",validate:CKEDITOR.dialog.validate.notEmpty(Liferay.Language.get("video-field-cannot-be-empty"))}],id:"info"}],minHeight:200,minWidth:400,onOk(){const i={type:"video",url:this.getValueOf("info","url_video")};e.plugins.videoembed.onOkVideo(e,i)},title:Liferay.Language.get("video-properties")})));
+//# sourceMappingURL=videoembedDialog.js.map

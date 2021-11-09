@@ -1,0 +1,2 @@
+!function(){var a="ajaxsave";CKEDITOR.plugins.add(a,{init(n){n.addCommand(a,{canUndo:!1,exec(a){a.fire("saveContent")}}),n.ui.addButton&&n.ui.addButton("AjaxSave",{command:a,icon:Liferay.AUI.getPathCKEditor()+"/ckeditor/plugins/ajaxsave/assets/save.png",label:n.lang.save.toolbar})}})}();
+//# sourceMappingURL=plugin.js.map

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="com.liferay.frontend.editor.ckeditor.web.internal.spa.navigation.exception.selector.contributor.CKEditorSPANavigationExceptionSelectorContributor" immediate="true">
+  <property name="javascript.single.page.application.navigation.exception.selector" type="String" value=":not([data-cke-saved-href])"/>
+  <service>
+    <provide interface="java.lang.Object"/>
+  </service>
+  <implementation class="com.liferay.frontend.editor.ckeditor.web.internal.spa.navigation.exception.selector.contributor.CKEditorSPANavigationExceptionSelectorContributor"/>
+</scr:component>

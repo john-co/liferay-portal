@@ -1,0 +1,2 @@
+CKEDITOR.plugins.add("creole",{init(e){var r=this.path,s=[CKEDITOR.getUrl(r+"creole_data_processor.js"),CKEDITOR.getUrl(r+"creole_parser.js")];CKEDITOR.scriptLoader.load(s,(()=>{CKEDITOR.plugins.get("creole_data_processor").init(e)}))}});
+//# sourceMappingURL=plugin.js.map

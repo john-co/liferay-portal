@@ -1,0 +1,2 @@
+CKEDITOR.on("dialogDefinition",(i=>{var o=i.editor.window,n=i.data.definition,t=i.data.dialog,e=n.onShow,d=function(){var i=t.getSize(),o=window.innerWidth/2-i.width/2,n=window.innerHeight/2-i.height/2;t.move(o,n,!1)};n.onShow=function(){"function"==typeof e&&e.apply(this,arguments),d()};var a,r,f=o.on("resize",(a=()=>{d()},r=250,function i(){clearTimeout(i.id),i.id=setTimeout((()=>{a()}),r)}));Liferay.once("destroyPortlet",(function(){clearTimeout(f.id)}))}));
+//# sourceMappingURL=dialog_definition.js.map
