@@ -5,7 +5,7 @@
         "dir": "./build/node/packageRunBuild/resources",
         "id": "/",
         "name": "frontend-editor-ckeditor-web",
-        "version": "5.0.26"
+        "version": "5.0.25"
       },
       "modules": {
         "editor/BalloonEditor.js": {
@@ -43,7 +43,7 @@
         "dir": ".",
         "id": "/",
         "name": "frontend-editor-ckeditor-web",
-        "version": "5.0.26"
+        "version": "5.0.25"
       }
     },
     "@liferay/amd-loader@4.3.1": {

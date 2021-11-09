@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Bnd-LastModified: 1636415869402
+Bnd-LastModified: 1636417031702
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay Frontend Editor CKEditor Sample Web
 Bundle-SymbolicName: com.liferay.frontend.editor.ckeditor.sample.web
@@ -56,10 +56,10 @@ Require-Capability: osgi.extender;filter:="(&(osgi.extender=jsp.taglib
  .extender=jsp.taglib)(uri=http://liferay.com/tld/theme))",osgi.extend
  er;filter:="(&(osgi.extender=jsp.taglib)(uri=http://liferay.com/tld/u
  til))",osgi.extender;filter:="(&(osgi.extender=osgi.component)(versio
- n>=1.4.0)(!(version>=2.0.0)))",osgi.contract;osgi.contract=JavaPortle
- t;filter:="(&(osgi.contract=JavaPortlet)(version=3.0.0))",osgi.contra
- ct;osgi.contract=JavaServlet;filter:="(&(osgi.contract=JavaServlet)(v
- ersion=3.1.0))",osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.8))"
+ n>=1.4.0)(!(version>=2.0.0)))",osgi.contract;osgi.contract=JavaServle
+ t;filter:="(&(osgi.contract=JavaServlet)(version=3.1.0))",osgi.contra
+ ct;osgi.contract=JavaPortlet;filter:="(&(osgi.contract=JavaPortlet)(v
+ ersion=3.0.0))",osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.8))"
 Service-Component: OSGI-INF/com.liferay.frontend.editor.ckeditor.sampl
  e.web.internal.portlet.CKEditorSamplePortlet.xml
 Tool: Bnd-4.3.0.201909301554

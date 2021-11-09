@@ -6,7 +6,6 @@
     "frontend-editor-ckeditor-web$prop-types": "15.7.2",
     "@liferay/document-library-preview-css": "*",
     "@liferay/fragment-renderer-collection-filter-impl": "*",
-    "@liferay/frontend-data-set-web": "*",
     "@liferay/frontend-js-a11y-web": "*",
     "@liferay/frontend-js-react-web": "*",
     "@liferay/frontend-js-state-web": "*",
@@ -200,5 +199,5 @@
     "checkFormat": "liferay-npm-scripts check",
     "format": "liferay-npm-scripts fix"
   },
-  "version": "5.0.26"
+  "version": "5.0.25"
 }
