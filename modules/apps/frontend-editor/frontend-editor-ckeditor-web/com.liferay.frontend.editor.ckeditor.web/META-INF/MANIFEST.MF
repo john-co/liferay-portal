@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Bnd-LastModified: 1636419770509
+Bnd-LastModified: 1636420406824
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay Frontend Editor CKEditor Web
 Bundle-SymbolicName: com.liferay.frontend.editor.ckeditor.web
@@ -95,9 +95,9 @@ Require-Capability: osgi.extender;filter:="(&(osgi.extender=jsp.taglib
  ri=http://liferay.com/tld/util))",osgi.service;filter:="(objectClass=
  javax.servlet.ServletContext)";effective:=active,osgi.extender;filter
  :="(&(osgi.extender=osgi.component)(version>=1.4.0)(!(version>=2.0.0)
- ))",osgi.contract;osgi.contract=JavaPortlet;filter:="(&(osgi.contract
- =JavaPortlet)(version=3.0.0))",osgi.contract;osgi.contract=JavaServle
- t;filter:="(&(osgi.contract=JavaServlet)(version=3.1.0))",osgi.ee;fil
+ ))",osgi.contract;osgi.contract=JavaServlet;filter:="(&(osgi.contract
+ =JavaServlet)(version=3.1.0))",osgi.contract;osgi.contract=JavaPortle
+ t;filter:="(&(osgi.contract=JavaPortlet)(version=3.0.0))",osgi.ee;fil
  ter:="(&(osgi.ee=JavaSE)(version=1.8))"
 Service-Component: OSGI-INF/com.liferay.frontend.editor.ckeditor.web.i
  nternal.CKEditorBBCodeEditor.xml,OSGI-INF/com.liferay.frontend.editor
