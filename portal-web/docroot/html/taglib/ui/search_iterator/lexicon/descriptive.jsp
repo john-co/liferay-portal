@@ -150,7 +150,7 @@
 	<%
 	}
 
-	String rowHtmlTag = "li";
+	String rowHtmlTag = "dd";
 	%>
 
 </div>
