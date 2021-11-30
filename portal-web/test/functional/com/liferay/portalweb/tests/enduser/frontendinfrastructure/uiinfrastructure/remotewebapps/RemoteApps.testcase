@@ -8,18 +8,18 @@ definition {
 	setUp {
 		TestCase.setUpPortalInstance();
 
-		User.firstLoginPG();
+		// User.firstLoginPG();
 	}
 
 	tearDown {
 		var testPortalInstance = PropsUtil.get("test.portal.instance");
 
-		if ("${testPortalInstance}" == "true") {
-			PortalInstances.tearDownCP();
-		}
-		else {
-			RemoteApps.tearDown();
-		}
+		// if ("${testPortalInstance}" == "true") {
+		// 	PortalInstances.tearDownCP();
+		// }
+		// else {
+		// 	RemoteApps.tearDown();
+		// }
 	}
 
 	@description = "Verify remote app can be deleted"
@@ -73,44 +73,43 @@ definition {
 		var customElementHTMLName = "vanilla-counter";
 		var customElementURL = "http://remote-component-test.wincent.com/packages/vanilla-counter/index.js";
 
-		task ("Add a public page with JSON") {
-			JSONLayout.addPublicLayout(
-				groupName = "Guest",
-				layoutName = "Test Page",
-				type = "content");
-		}
+		// task ("Add a public page with JSON") {
+		// 	JSONLayout.addPublicLayout(
+		// 		groupName = "Guest",
+		// 		layoutName = "Test Page",
+		// 		type = "content");
+		// }
 
-		task ("Create Vanilla Counter as a Custom Element"){
-			RemoteApps.goToRemoteAppsPortlet();
+		// task ("Create Vanilla Counter as a Custom Element"){
+		// 	RemoteApps.goToRemoteAppsPortlet();
 
-			RemoteApps.addCustomElement(
-							entryHTMLName = "${customElementHTMLName}",
-							entryName = "${customElementName}",
-							entryURL = "${customElementURL}");
-		}
+		// 	RemoteApps.addCustomElement(
+		// 		entryHTMLName = "${customElementHTMLName}",
+		// 		entryName = "${customElementName}",
+		// 		entryURL = "${customElementURL}");
+		// }
 
-		task ("Add Vanilla Counter to Test Page"){
-			ContentPagesNavigator.openEditContentPage(
-							pageName = "Test Page",
-							siteName = "Guest");
+		// task ("Add Vanilla Counter to Test Page"){
+		// 	ContentPagesNavigator.openEditContentPage(
+		// 		pageName = "Test Page",
+		// 		siteName = "Guest");
 
-			PageEditor.addWidget(portletName = "Vanilla Counter");
+		// 	PageEditor.addWidget(portletName = "Vanilla Counter");
 
-			PageEditor.clickPublish();
-		}
+		// 	PageEditor.clickPublish();
+		// }
 
 		task ("Assert Vanilla Counter is displayed"){
-			Navigator.gotoPage(pageName = "Test Page");
+			// Navigator.gotoPage(pageName = "Test Page");
 
-			Click(locator1 = "//body");
+			// Click(locator1 = "//body");
 
-			AssertElementPresent(locator1 = "//${customElementHTMLName}");
+			AssertElementPresent(locator1 = "//vanilla-counter");
 
 			Pause(locator1 = "3000");
 
-			AssertElementImage(locator1 = "//body",
-				value1 = "remote-apps/body.png");
-
+			AssertElementImage(locator1 = "//vanilla-counter",
+				value1 = "remote-apps/vanillaCounter.png");
 		}
    }
 
