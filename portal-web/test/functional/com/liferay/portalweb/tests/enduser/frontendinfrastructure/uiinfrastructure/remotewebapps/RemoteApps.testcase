@@ -161,4 +161,24 @@ definition {
 			locator1 = "TextInput#ANY");
 	}
 
+	@priority = "5"
+	test CanRegisterToNewCompanyWithNoConsoleErrors {
+		property portal.acceptance = "true";
+		property test.assert.warning.exceptions = "true";
+		property test.name.skip.portal.instance = "RemoteApps#RegistersToNewCompany";
+
+		PortalInstances.openVirtualInstancesAdmin();
+
+		PortalInstances.addCP(
+			mailDomain = "www.able.com",
+			virtualHost = "www.able.com",
+			webId = "www.able.com");
+
+		SignOut.signOut();
+
+		User.firstLoginUI(
+			password = "test",
+			specificURL = "http://www.able.com:8080",
+			userEmailAddress = "test@www.able.com");
+	}
 }
