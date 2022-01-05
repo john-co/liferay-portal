@@ -20,7 +20,8 @@ definition {
 	@description = "Upgrade to 7.3.10.1 and assert remote app fields were saved properly"
 	@priority = "5"
 	test CanViewRemoteAppFieldsAfterUpgrade73101 {
-		property portal.acceptance = "true";
+		property portal.acceptance = "LRQA-72475";
+		
 		property data.archive.type = "data-archive-remote-app";
 		property portal.version = "7.3.10.1";
 
