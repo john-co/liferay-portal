@@ -11,21 +11,29 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-
-import ClayAlert from '@clayui/alert';
 import React from 'react';
+import ClayDatePicker from '@clayui/date-picker';
 
 import '../css/main.scss';
 
 export default function App() {
+	const [value, setValue] = React.useState(null);
+
 	return (
 		<div>
-			<ClayAlert title="Info">
-				This widget is used to test out Clay components. Simply add
-				whatever JS you want to App.js and redeploy.
-			</ClayAlert>
-
-			<div className="clay-test-class">This is where your code goes.</div>
+			<ClayDatePicker
+				dateFormat="MM/dd/yyyy"
+				time
+				use12Hours
+				onValueChange={setValue}
+				placeholder="__/__/____ __:__ _"
+				spritemap={spritemap}
+				value={value}
+				years={{
+					end: 2024,
+					start: 2008
+				}}
+			/>
 		</div>
 	);
 }
