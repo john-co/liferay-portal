@@ -10,6 +10,11 @@
 </thead>
 
 <tbody>
+<tr>
+	<td>ACTIVE_TAB_CONTENT</td>
+	<td>//section[contains(@id,'portlet_com_liferay_clay_sample_web_portlet_ClaySamplePortlet')]//div[@class='portlet-body']/div[not(contains(@class,'hide'))]</td>
+	<td></td>
+</tr>
 <!--FORM_ELEMENTS-->
 <tr>
 	<td>CHECKBOX</td>

@@ -42,97 +42,133 @@ definition {
 		}
 	}
 
-	@description = "Check if each nav section of clay sample portlet looks normal from screenshot"
+	@description = "Test Ocular method"
 	@priority = "3"
-	test CanRenderUI {
+	test Smoke {
 		task ("Take a screenshot of Alerts tab") {
 			Navigator.gotoNavTab(navTab = "Alerts");
 
-			takeScreenshot();
+			OcularAssertElementImage(
+				locator1="ClaySamplePortlet#ACTIVE_TAB_CONTENT",
+				value1="portal/screenshots/claysample/alerts/content"
+			);
 		}
 
 		task ("Take a screenshot of Badges tab") {
 			Navigator.gotoNavTab(navTab = "Badges");
 
-			takeScreenshot();
+			OcularAssertElementImage(
+				locator1="ClaySamplePortlet#ACTIVE_TAB_CONTENT",
+				value1="portal/screenshots/claysample/badges/content"
+			);
 		}
 
 		task ("Take a screenshot of Buttons tab") {
 			Navigator.gotoNavTab(navTab = "Buttons");
 
-			takeScreenshot();
+			OcularAssertElementImage(
+				locator1="ClaySamplePortlet#ACTIVE_TAB_CONTENT",
+				value1="portal/screenshots/claysample/buttons/content"
+			);
 		}
 
 		task ("Take a screenshot of Cards tab") {
 			Navigator.gotoNavTab(navTab = "Cards");
 
-			takeScreenshot();
+			OcularAssertElementImage(
+				locator1="ClaySamplePortlet#ACTIVE_TAB_CONTENT",
+				value1="portal/screenshots/claysample/cards/content"
+			);
 		}
 
 		task ("Take a screenshot of Dropdowns tab") {
 			Navigator.gotoNavTab(navTab = "Dropdowns");
 
-			takeScreenshot();
+			OcularAssertElementImage(
+				locator1="ClaySamplePortlet#ACTIVE_TAB_CONTENT",
+				value1="portal/screenshots/claysample/dropdowns/content"
+			);
 		}
 
 		task ("Take a screenshot of Form tab") {
 			Navigator.gotoNavTab(navTab = "Form");
 
-			takeScreenshot();
+			OcularAssertElementImage(
+				locator1="ClaySamplePortlet#ACTIVE_TAB_CONTENT",
+				value1="portal/screenshots/claysample/form/content"
+			);
 		}
 
 		task ("Take a screenshot of Icons tab") {
 			Navigator.gotoNavTab(navTab = "Icons");
 
-			takeScreenshot();
+			OcularAssertElementImage(
+				locator1="ClaySamplePortlet#ACTIVE_TAB_CONTENT",
+				value1="portal/screenshots/claysample/icons/content"
+			);
 		}
 
 		task ("Take a screenshot of Labels tab") {
 			Navigator.gotoNavTab(navTab = "Labels");
 
-			takeScreenshot();
+			OcularAssertElementImage(
+				locator1="ClaySamplePortlet#ACTIVE_TAB_CONTENT",
+				value1="portal/screenshots/claysample/labels/content"
+			);
 		}
 
 		task ("Take a screenshot of Links tab") {
 			Navigator.gotoNavTab(navTab = "Links");
 
-			takeScreenshot();
+			OcularAssertElementImage(
+				locator1="ClaySamplePortlet#ACTIVE_TAB_CONTENT",
+				value1="portal/screenshots/claysample/links/content"
+			);
 		}
 
 		task ("Take a screenshot of Management Toolbars tab") {
 			Navigator.gotoNavTab(navTab = "Management Toolbars");
 
-			takeScreenshot();
-		}
-
-		task ("Take a screenshot of Labels tab") {
-			Navigator.gotoNavTab(navTab = "Labels");
-
-			takeScreenshot();
+			OcularAssertElementImage(
+				locator1="ClaySamplePortlet#ACTIVE_TAB_CONTENT",
+				value1="portal/screenshots/claysample/managementtoolbars/content"
+			);
 		}
 
 		task ("Take a screenshot of Navigation Bars tab") {
 			Navigator.gotoNavTab(navTab = "Navigation Bars");
 
-			takeScreenshot();
+			OcularAssertElementImage(
+				locator1="ClaySamplePortlet#ACTIVE_TAB_CONTENT",
+				value1="portal/screenshots/claysample/navigationbars/content"
+			);
 		}
 
 		task ("Take a screenshot of Pagination Bars tab") {
 			Navigator.gotoNavTab(navTab = "Pagination Bars");
 
-			takeScreenshot();
+			OcularAssertElementImage(
+				locator1="ClaySamplePortlet#ACTIVE_TAB_CONTENT",
+				value1="portal/screenshots/claysample/paginationbars/content"
+			);
 		}
 
 		task ("Take a screenshot of Progress Bars tab") {
 			Navigator.gotoNavTab(navTab = "Progress Bars");
 
-			takeScreenshot();
+			OcularAssertElementImage(
+				locator1="ClaySamplePortlet#ACTIVE_TAB_CONTENT",
+				value1="portal/screenshots/claysample/progressbars/content"
+			);
 		}
 
 		task ("Take a screenshot of Stickers tab") {
 			Navigator.gotoNavTab(navTab = "Stickers");
 
-			takeScreenshot();
+			OcularAssertElementImage(
+				locator1="ClaySamplePortlet#ACTIVE_TAB_CONTENT",
+				value1="portal/screenshots/claysample/stickers/content"
+			);
 		}
 	}
 
