@@ -37,7 +37,7 @@
 	>
 		<clay:dropdown-menu
 			dropdownItems="<%= dropdownsDisplayContext.getGroupDropdownItems() %>"
-			label="Dividers"
+			label="ERROR-TEST"
 		/>
 	</clay:col>
 
