@@ -29,38 +29,64 @@ definition {
 
 		Navigator.gotoPage(pageName = "Frontend Data Set Test Page");
 
-		var iterator = "0";
-		var maxRetryNumber = "3";
+		takeScreenshot();
 
-		while ((IsElementNotPresent(
-			key_itemName = "Sample1",
-			locator1 = "FrontendDataSet#TABLE_ITEM_ROW")) && ("${iterator}" != "${maxRetryNumber}")) {
-				takeScreenshot();
+		Pause(locator1 = "5000");
 
-				Refresh();
+		takeScreenshot();
 
-				Pause(locator1 = "5000");
-		}
+		Pause(locator1 = "15000");
 
-		while ((IsElementNotPresent(
-			key_itemName = "Sample1",
-			locator1 = "FrontendDataSet#TABLE_ITEM_ROW")) && ("${iterator}" != "${maxRetryNumber}")) {
-				takeScreenshot();
+		takeScreenshot();
 
-				Refresh();
+		Pause(locator1 = "30000");
 
-				Pause(locator1 = "15000");
-		}
+		takeScreenshot();
 
-		while ((IsElementNotPresent(
-			key_itemName = "Sample1",
-			locator1 = "FrontendDataSet#TABLE_ITEM_ROW")) && ("${iterator}" != "${maxRetryNumber}")) {
-				takeScreenshot();
+		Refresh();
 
-				Refresh();
+		Pause(locator1 = "5000");
 
-				Pause(locator1 = "30000");
-		}
+		takeScreenshot();
+
+		Pause(locator1 = "15000");
+
+		takeScreenshot();
+
+		Pause(locator1 = "30000");
+
+		// var iterator = "0";
+		// var maxRetryNumber = "3";
+
+		// while ((IsElementNotPresent(
+		// 	key_itemName = "Sample1",
+		// 	locator1 = "FrontendDataSet#TABLE_ITEM_ROW")) && ("${iterator}" != "${maxRetryNumber}")) {
+		// 		takeScreenshot();
+
+		// 		Refresh();
+
+		// 		Pause(locator1 = "5000");
+		// }
+
+		// while ((IsElementNotPresent(
+		// 	key_itemName = "Sample1",
+		// 	locator1 = "FrontendDataSet#TABLE_ITEM_ROW")) && ("${iterator}" != "${maxRetryNumber}")) {
+		// 		takeScreenshot();
+
+		// 		Refresh();
+
+		// 		Pause(locator1 = "15000");
+		// }
+
+		// while ((IsElementNotPresent(
+		// 	key_itemName = "Sample1",
+		// 	locator1 = "FrontendDataSet#TABLE_ITEM_ROW")) && ("${iterator}" != "${maxRetryNumber}")) {
+		// 		takeScreenshot();
+
+		// 		Refresh();
+
+		// 		Pause(locator1 = "30000");
+		// }
 	}
 
 	tearDown {
