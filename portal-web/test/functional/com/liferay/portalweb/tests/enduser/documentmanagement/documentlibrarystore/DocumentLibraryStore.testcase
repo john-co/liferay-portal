@@ -68,6 +68,7 @@ definition {
 	@priority = "4"
 	test AssertNoErrorMessageAfterExportAndImportSiteLAR {
 		property aws.store.enabled = "true";
+		property portal.acceptance = "john-co";
 		property test.name.skip.portal.instance = "DocumentLibraryStore#AssertNoErrorMessageAfterExportAndImportSiteLAR";
 
 		JSONGroup.addGroup(groupName = "Site A");
