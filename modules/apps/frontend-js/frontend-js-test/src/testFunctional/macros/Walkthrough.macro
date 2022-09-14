@@ -34,6 +34,25 @@ definition {
 		SystemSettings.saveConfiguration();
 	}
 
+	macro configureJSON {
+		var jsonSnippet = Walkthrough.getWalkthroughSteps(fileName = "${fileName}");
+
+		ProductMenu.gotoPortlet(
+			category = "Configuration",
+			portlet = "Site Settings");
+
+		SystemSettings.gotoConfiguration(
+			configurationCategory = "Walkthrough",
+			configurationName = "Walkthrough",
+			configurationScope = "Site Scope");
+
+		SystemSettings.editTextAreaSetting(
+			settingName = "Steps",
+			settingValue = "${jsonSnippet}");
+
+		SystemSettings.saveConfiguration();
+	}
+
 	macro getWalkthroughSteps {
 		var dependencyFilePath = TestCase.getDependenciesDirPath(fileName = "${fileName}");
 
