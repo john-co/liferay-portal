@@ -1,0 +1,88 @@
+@component-name = "portal-frontend-infrastructure"
+definition {
+
+	property app.server.types = "tomcat";
+	property database.partition.enabled = "true";
+	property database.types = "mysql";
+	property liferay.online.properties = "true";
+	property portal.release = "true";
+	property portal.upstream = "true";
+	property testray.main.component.name = "Remote Apps";
+
+	setUp {
+		TestCase.setUpPortalInstance();
+
+		User.firstLoginPG();
+	}
+
+	tearDown {
+		var testPortalInstance = PropsUtil.get("test.portal.instance");
+
+		if ("${testPortalInstance}" == "true") {
+			PortalInstances.tearDownCP();
+		}
+		else {
+			PortalInstances.tearDownCP();
+
+			PagesAdmin.tearDownCP();
+
+			RemoteApps.tearDown();
+		}
+	}
+
+	@description = "This is a test for LPS-153716. Validates Remote Apps on liferay online still displays after restarting liferay"
+	@priority = "4"
+	test CanBeEditedAfterRestartPortalOnVirtualInstance {
+		property custom.properties = "virtual.hosts.valid.hosts=localhost,127.0.0.1,www.able.com";
+		property portal.acceptance = "true";
+		property test.name.skip.portal.instance = "RemoteAppsLiferayOnline#CanBeEditedAfterRestartPortalOnVirtualInstance";
+		property testray.component.names = "Database Partitioning Remote Apps,Liferay Online Remote Apps";
+
+		task ("Given a virtual instance") {
+			HeadlessPortalInstanceAPI.addPortalInstance(
+				domain = "www.able.com",
+				portalInstanceId = "www.able.com",
+				virtualHost = "www.able.com");
+		}
+
+		task ("And Given sign in to virtual instance") {
+			User.firstLoginUI(
+				password = "test",
+				specificURL = "http://www.able.com:8080",
+				userEmailAddress = "test@www.able.com");
+		}
+
+		task ("And Given a public page") {
+			JSONLayout.addPublicLayout(
+				groupName = "Guest",
+				layoutName = "Test Page",
+				type = "content");
+		}
+
+		task ("And Given a custom element client extension") {
+			JSONRemoteApp.addCustomElementRemoteAppEntry(
+				customElementHtmlName = "vanilla-counter",
+				customElementName = "Vanilla Counter",
+				customElementURL = "https://liferay.github.io/liferay-frontend-projects/vanilla-counter/index.js");
+		}
+
+		task ("And Given client extension added to widget") {
+			var remoteAppEntryId = RemoteApps.getRemoteAppEntryId();
+
+			JSONLayout.addWidgetToPublicLayout(
+				groupName = "Guest",
+				layoutName = "Test Page",
+				remoteAppEntryId = "${remoteAppEntryId}",
+				widgetName = "Vanilla Counter");
+		}
+
+		task ("Assert Vanilla Counter continues displayed") {
+			Refresh();
+
+			Navigator.gotoPage(pageName = "Test Page");
+
+			AssertElementPresent(locator1 = "RemoteApps#VANILLA_COUNTER_REMOTE_APP");
+		}
+	}
+
+}
