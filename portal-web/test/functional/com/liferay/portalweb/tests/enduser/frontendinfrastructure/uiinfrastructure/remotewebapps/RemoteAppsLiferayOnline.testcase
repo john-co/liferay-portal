@@ -9,6 +9,8 @@ definition {
 	property portal.upstream = "true";
 	property testray.main.component.name = "Remote Apps";
 
+	static var portalURL = "http://www.able.com:8080";
+
 	setUp {
 		TestCase.setUpPortalInstance();
 
@@ -50,20 +52,23 @@ definition {
 				password = "test",
 				specificURL = "http://www.able.com:8080",
 				userEmailAddress = "test@www.able.com");
+
+			AssertLocation.assertPartialLocation(value1 = "http://www.able.com:8080");
 		}
 
 		task ("And Given a public page") {
 			JSONLayout.addPublicLayout(
 				groupName = "Guest",
 				layoutName = "Test Page",
-				type = "content");
+				type = "widget");
 		}
 
 		task ("And Given a custom element client extension") {
 			JSONRemoteApp.addCustomElementRemoteAppEntry(
 				customElementHtmlName = "vanilla-counter",
 				customElementName = "Vanilla Counter",
-				customElementURL = "https://liferay.github.io/liferay-frontend-projects/vanilla-counter/index.js");
+				customElementURL = "https://liferay.github.io/liferay-frontend-projects/vanilla-counter/index.js",
+				portalURL = "http://www.able.com:8080");
 		}
 
 		task ("And Given client extension added to widget") {
@@ -79,7 +84,11 @@ definition {
 		task ("Assert Vanilla Counter continues displayed") {
 			Refresh();
 
+			AssertLocation.assertPartialLocation(value1 = "http://www.able.com:8080");
+
 			Navigator.gotoPage(pageName = "Test Page");
+
+			AssertLocation.assertPartialLocation(value1 = "http://www.able.com:8080");
 
 			AssertElementPresent(locator1 = "RemoteApps#VANILLA_COUNTER_REMOTE_APP");
 		}

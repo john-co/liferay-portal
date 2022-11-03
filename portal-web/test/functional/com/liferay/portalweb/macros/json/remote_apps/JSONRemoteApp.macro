@@ -9,7 +9,8 @@ definition {
 			customElementName = "${customElementName}",
 			customElementProperties = "${customElementProperties}",
 			customElementURL = "${customElementURL}",
-			customElementUseESM = "${customElementUseESM}");
+			customElementUseESM = "${customElementUseESM}",
+			portalURL = "${portalURL}");
 	}
 
 	macro addIFrameRemoteAppEntry {

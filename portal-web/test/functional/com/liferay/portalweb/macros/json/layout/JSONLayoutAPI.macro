@@ -4,7 +4,9 @@ definition {
 	macro _addLayout {
 		Variables.assertDefined(parameterList = "${friendlyURL},${groupId},${privateLayout},${parentLayoutId},${layoutName},${serviceContext}");
 
-		var portalURL = JSONCompany.getPortalURL();
+		if (!(isSet(portalURL))) {
+			var portalURL = JSONCompany.getPortalURL();
+		}
 
 		var curl = '''
 			${portalURL}/api/jsonws/layout/add-layout \
