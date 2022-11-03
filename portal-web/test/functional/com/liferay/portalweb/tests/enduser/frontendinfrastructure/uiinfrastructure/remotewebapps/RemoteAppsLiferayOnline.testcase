@@ -9,8 +9,6 @@ definition {
 	property portal.upstream = "true";
 	property testray.main.component.name = "Remote Apps";
 
-	static var portalURL = "http://www.able.com:8080";
-
 	setUp {
 		TestCase.setUpPortalInstance();
 
@@ -57,18 +55,30 @@ definition {
 		}
 
 		task ("And Given a public page") {
-			JSONLayout.addPublicLayout(
-				groupName = "Guest",
-				layoutName = "Test Page",
-				type = "widget");
+			ProductMenu.gotoPortlet(
+				category = "Site Builder",
+				portlet = "Pages");
+
+			PagesAdmin.addPage(
+				pageName = "Test Page",
+				sitePageType = "Widget Page");
+
+			PagesAdmin.configurePage(
+				columnName = "1 Column",
+				pageName = "Test Page",
+				sitePageType = "Widget Page");
+
+			Navigator.gotoPage(pageName = "Test Page");
+
 		}
 
 		task ("And Given a custom element client extension") {
 			JSONRemoteApp.addCustomElementRemoteAppEntry(
+				customElementCssurl = "http://remote-component-test.wincent.com/index.css",
 				customElementHtmlName = "vanilla-counter",
 				customElementName = "Vanilla Counter",
-				customElementURL = "https://liferay.github.io/liferay-frontend-projects/vanilla-counter/index.js",
-				portalURL = "http://www.able.com:8080");
+				customElementProperties = "test-data-user=QAuser",
+				customElementURL = "https://liferay.github.io/liferay-frontend-projects/vanilla-counter/index.js");
 		}
 
 		task ("And Given client extension added to widget") {
@@ -78,6 +88,7 @@ definition {
 				groupName = "Guest",
 				layoutName = "Test Page",
 				remoteAppEntryId = "${remoteAppEntryId}",
+				portalURL = "http://www.able.com:8080",
 				widgetName = "Vanilla Counter");
 		}
 

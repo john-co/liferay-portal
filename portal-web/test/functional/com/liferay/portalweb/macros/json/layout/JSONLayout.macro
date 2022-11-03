@@ -107,6 +107,7 @@ definition {
 			grandParentGroupName = "${grandParentGroupName}",
 			groupName = "${groupName}",
 			parentGroupName = "${parentGroupName}",
+			portalURL = "${portalURL}",
 			site = "${site}");
 
 		var layoutId = JSONLayoutSetter.setLayoutId(
