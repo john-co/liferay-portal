@@ -67,39 +67,47 @@ definition {
 				columnName = "1 Column",
 				pageName = "Test Page",
 				sitePageType = "Widget Page");
-
-			Navigator.gotoPage(pageName = "Test Page");
-
 		}
 
 		task ("And Given a custom element client extension") {
-			JSONRemoteApp.addCustomElementRemoteAppEntry(
-				customElementCssurl = "http://remote-component-test.wincent.com/index.css",
-				customElementHtmlName = "vanilla-counter",
-				customElementName = "Vanilla Counter",
-				customElementProperties = "test-data-user=QAuser",
-				customElementURL = "https://liferay.github.io/liferay-frontend-projects/vanilla-counter/index.js");
+			RemoteApps.goToRemoteAppsPortlet();
+
+			RemoteApps.addCustomElementAllFields(
+				entryCssurl = "https://liferay.github.io/liferay-frontend-projects/index.css",
+				entryHtmlName = "vanilla-counter",
+				entryName = "Vanilla Counter",
+				entryProperties = "test-data-user=QAuser",
+				entryURL = "https://liferay.github.io/liferay-frontend-projects/vanilla-counter/index.js");
 		}
 
 		task ("And Given client extension added to widget") {
-			var remoteAppEntryId = RemoteApps.getRemoteAppEntryId();
+			Navigator.openSpecificURL(url = "http://www.able.com:8080/web/guest/test-page");
 
-			JSONLayout.addWidgetToPublicLayout(
-				groupName = "Guest",
-				layoutName = "Test Page",
-				remoteAppEntryId = "${remoteAppEntryId}",
-				portalURL = "http://www.able.com:8080",
-				widgetName = "Vanilla Counter");
+			Click(locator1 = "ControlMenu#ADD");
+
+			Type(
+				locator1 = "NavBar#APPLICATION_SEARCH_FIELD",
+				value1 = "Vanilla Counter");
+
+			Portlet._clickAddPortlet(portletName = "Vanilla Counter");
+
+			Refresh();
 		}
 
 		task ("Assert Vanilla Counter continues displayed") {
-			Refresh();
-
 			AssertLocation.assertPartialLocation(value1 = "http://www.able.com:8080");
 
-			Navigator.gotoPage(pageName = "Test Page");
+			AssertElementPresent(locator1 = "RemoteApps#VANILLA_COUNTER_REMOTE_APP");
+		}
 
-			AssertLocation.assertPartialLocation(value1 = "http://www.able.com:8080");
+		task ("Restart portal") {
+			Portlet.shutdownServer();
+
+			Portlet.startServer(deleteLiferayHome = "false");
+		}
+
+		task ("Assert Vanilla Counter continues displayed") {
+			Navigator.openSpecificURL(url = "http://www.able.com:8080/web/guest/test-page");
 
 			AssertElementPresent(locator1 = "RemoteApps#VANILLA_COUNTER_REMOTE_APP");
 		}
