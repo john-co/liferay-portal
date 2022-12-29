@@ -39,8 +39,4 @@ public interface DispatchTaskExecutor {
 	@Deprecated
 	public String getName();
 
-	public default boolean isClusterModeSingle() {
-		return false;
-	}
-
 }
