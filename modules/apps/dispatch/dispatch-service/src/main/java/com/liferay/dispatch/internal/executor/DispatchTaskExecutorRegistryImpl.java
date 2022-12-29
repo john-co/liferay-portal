@@ -57,16 +57,7 @@ public class DispatchTaskExecutorRegistryImpl
 	public String fetchDispatchTaskExecutorName(
 		String dispatchTaskExecutorType) {
 
-		DispatchTaskExecutor dispatchTaskExecutor = fetchDispatchTaskExecutor(
-			dispatchTaskExecutorType);
-
-		if ((dispatchTaskExecutor != null) &&
-			!dispatchTaskExecutor.isHiddenInUI()) {
-
-			return dispatchTaskExecutor.getName();
-		}
-
-		return null;
+		return _dispatchTaskExecutorNames.get(dispatchTaskExecutorType);
 	}
 
 	@Override
@@ -88,11 +79,8 @@ public class DispatchTaskExecutorRegistryImpl
 
 	@Override
 	public boolean isHiddenInUI(String type) {
-		DispatchTaskExecutor dispatchTaskExecutor = fetchDispatchTaskExecutor(
-			type);
-
-		if (dispatchTaskExecutor != null) {
-			return dispatchTaskExecutor.isHiddenInUI();
+		if (!_dispatchTaskExecutorNames.containsKey(type)) {
+			return true;
 		}
 
 		return false;
@@ -132,6 +120,12 @@ public class DispatchTaskExecutorRegistryImpl
 				clazz2.getName(), StringPool.PERIOD));
 	}
 
+	private static final String _KEY_DISPATCH_TASK_EXECUTOR_HIDDEN_IN_UI =
+		"dispatch.task.executor.hidden-in-ui";
+
+	private static final String _KEY_DISPATCH_TASK_EXECUTOR_NAME =
+		"dispatch.task.executor.name";
+
 	private static final String _KEY_DISPATCH_TASK_EXECUTOR_TYPE =
 		"dispatch.task.executor.type";
 
@@ -141,6 +135,8 @@ public class DispatchTaskExecutorRegistryImpl
 	private static final Log _log = LogFactoryUtil.getLog(
 		DispatchTaskExecutorRegistryImpl.class);
 
+	private final Map<String, String> _dispatchTaskExecutorNames =
+		new ConcurrentHashMap<>();
 	private final Map<String, DispatchTaskExecutor> _dispatchTaskExecutors =
 		new ConcurrentHashMap<>();
 	private ServiceTracker<DispatchTaskExecutor, DispatchTaskExecutor>
@@ -181,6 +177,16 @@ public class DispatchTaskExecutorRegistryImpl
 			_validateDispatchTaskExecutorProperties(
 				dispatchTaskExecutor, dispatchTaskExecutorType);
 
+			if (!GetterUtil.getBoolean(
+					serviceReference.getProperty(
+						_KEY_DISPATCH_TASK_EXECUTOR_HIDDEN_IN_UI))) {
+
+				_dispatchTaskExecutorNames.put(
+					dispatchTaskExecutorType,
+					(String)serviceReference.getProperty(
+						_KEY_DISPATCH_TASK_EXECUTOR_NAME));
+			}
+
 			_dispatchTaskExecutors.put(
 				dispatchTaskExecutorType, dispatchTaskExecutor);
 
@@ -202,6 +208,7 @@ public class DispatchTaskExecutorRegistryImpl
 				(String)serviceReference.getProperty(
 					_KEY_DISPATCH_TASK_EXECUTOR_TYPE);
 
+			_dispatchTaskExecutorNames.remove(dispatchTaskExecutorType);
 			_dispatchTaskExecutors.remove(dispatchTaskExecutorType);
 
 			_bundleContext.ungetService(serviceReference);
