@@ -14797,6 +14797,11 @@ mail.send.blacklist=</echo>
 			</else>
 		</if>
 
+		<echo append="true" file="${app.server.classes.portal.dir}/portal-ext.properties">
+
+javascript.fast.load=false
+minifier.enabled=false</echo>
+
 		<antcall target="prepare-ip-address-update" />
 
 		<antcall target="check-inet-address" />
