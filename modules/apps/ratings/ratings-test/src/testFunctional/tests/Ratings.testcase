@@ -236,6 +236,7 @@ definition {
 	@refactordone
 	test CanRateAndEditWikiPageComment {
 		property custom.properties = "default.layout.template.id=1_column";
+		property portal.acceptance = "john-co";
 
 		JSONLayout.addPublicLayout(
 			groupName = "Guest",
