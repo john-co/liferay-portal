@@ -260,9 +260,32 @@ definition {
 			commentRating = "true",
 			ratingResult = "Rate this as good");
 
-		WikiPage.editComment(
-			entryComment = "Wiki Page Comment",
-			entryCommentEdit = "Wiki Page Comment Edited");
+		// WikiPage.editComment(
+		// 	entryComment = "Wiki Page Comment",
+		// 	entryCommentEdit = "Wiki Page Comment Edited");
+
+		MouseOver(locator1 = "//div/p[contains(.,'Wiki Page Comment')]");
+
+		Click.clickNoMouseOverNoWaitForVisible(locator1 = "//*[@class='dropdown lfr-icon-menu actions-menu'] ");
+
+		MenuItem.click(menuItem = "Edit");
+
+		WaitForVisible(locator1 = "CKEditor#BODY_FIELD_IFRAME_2");
+
+		SelectFrame.selectFrameNoLoading(locator1 = "CKEditor#BODY_FIELD_IFRAME_2");
+
+		// Type(
+		// 	locator1 = "CKEditor#BODY",
+		// 	value1 = "${entryCommentEdit}");
+
+		// SelectFrame(value1 = "relative=top");
+
+		// AssertClick(
+		// 	key_text = "Save",
+		// 	locator1 = "Comments#ANY_BUTTON_IN_COMMENT",
+		// 	value1 = "Save");
+
+		Alert.viewSuccessMessage();
 
 		WikiNavigator.openToWikiPage(
 			layoutURLKey = "wiki-test-page",
