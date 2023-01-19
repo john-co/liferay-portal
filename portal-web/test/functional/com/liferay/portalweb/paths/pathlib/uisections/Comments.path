@@ -17,7 +17,7 @@
 </tr>
 <tr>
 	<td>COMMENT_ACTIONS</td>
-	<td>//div[contains(@class,'comment')]/div[contains(.,'${key_entryComment}')]/..//a[span/*[name()='svg'][contains(@class,'icon-ellipsis')]]</td>
+	<td>//div[contains(@class,'comment')]/div[contains(.,'${key_entryComment}')]/..//a[contains(@class,'component-action')]</td>
 	<td></td>
 </tr>
 <tr>
