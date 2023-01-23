@@ -149,7 +149,7 @@ definition {
 
 		Alert.viewSuccessMessage();
 
-		Alert.closeMessage(messageType = "SUCCESS");
+		Alert.closeToastMessage(messageType = "SUCCESS");
 	}
 
 	macro addCP {

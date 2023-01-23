@@ -242,6 +242,11 @@ definition {
 			groupName = "Guest",
 			layoutName = "Wiki Test Page");
 
+		JSONLayout.updateLayoutTemplateOfPublicLayout(
+			groupName = "Guest",
+			layoutName = "Wiki Test Page",
+			layoutTemplate = "1 Column");
+
 		JSONLayout.addWidgetToPublicLayout(
 			column = "1",
 			groupName = "Guest",
