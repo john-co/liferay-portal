@@ -18,6 +18,12 @@ definition {
 			PortalInstances.tearDownCP();
 		}
 		else {
+			PagesAdmin.tearDownCP();
+
+			WikiPage.tearDownCP();
+
+			WikiNode.tearDownCP();
+
 			User.logoutPG();
 		}
 	}
@@ -259,7 +265,7 @@ definition {
 			commentRating = "true",
 			ratingResult = "Rate this as good");
 
-		WikiPage.editComment(
+		Comments.edit(
 			entryComment = "Wiki Page Comment",
 			entryCommentEdit = "Wiki Page Comment Edited");
 
