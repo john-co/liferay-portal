@@ -90,6 +90,8 @@ public interface LiferaySelenium {
 
 	public void assertNoLiferayExceptions() throws Exception;
 
+	public void assertNotAccessible() throws Exception;
+
 	public void assertNotAlert(String pattern);
 
 	public void assertNotAttributeValue(

@@ -1,0 +1,14 @@
+@default = "assertNotAccessible"
+definition {
+
+	function assertNotAccessible {
+		WaitForSPARefresh();
+
+		selenium.assertNotAccessible();
+
+		selenium.assertJavaScriptErrors();
+
+		selenium.assertLiferayErrors();
+	}
+
+}

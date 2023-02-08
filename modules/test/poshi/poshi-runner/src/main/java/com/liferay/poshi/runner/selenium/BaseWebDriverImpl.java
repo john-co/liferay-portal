@@ -371,6 +371,30 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 		}
 	}
 
+	public void assertElementNotAccessible(String locator) throws Exception {
+		WebDriver webDriver = WebDriverUtil.getWebDriver();
+
+		AxeBuilder axeBuilder = new AxeBuilder();
+
+		axeBuilder.withTags(
+			Arrays.asList(PropsValues.ACCESSIBILITY_STANDARDS_TAGS.split(",")));
+
+		Results results = null;
+
+		if (Validator.isNotNull(locator)) {
+			results = axeBuilder.analyze(webDriver, getWebElement(locator));
+		}
+		else {
+			results = axeBuilder.analyze(webDriver);
+		}
+
+		List<Rule> violations = results.getViolations();
+
+		if (violations.isEmpty()) {
+			throw new Exception("No accesibilty violations detected");
+		}
+	}
+
 	@Override
 	public void assertElementNotPresent(String locator) throws Exception {
 		Condition elementNotPresentCondition = getElementNotPresentCondition(
@@ -508,6 +532,11 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 	@Override
 	public void assertNoLiferayExceptions() throws Exception {
 		LiferaySeleniumUtil.assertNoLiferayExceptions();
+	}
+
+	@Override
+	public void assertNotAccessible() throws Exception {
+		assertElementNotAccessible(null);
 	}
 
 	@Override
