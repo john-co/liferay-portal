@@ -56,7 +56,7 @@ definition {
 				layoutName = "A11y Test Page",
 				layoutTemplate = "1 Column");
 
-			Navigator.gotoPage(pageName = "A11y Test Page");	
+			Navigator.gotoPage(pageName = "A11y Test Page");
 		}
 
 		task ("And Given an accessibility violation is present") {
@@ -66,12 +66,11 @@ definition {
 		}
 
 		task ("When checking if accessibility violation is present") {
-			AssertAccessible();
+			AssertNotAccessible();
 		}
 
 		task ("Then violation is thrown") {
 		}
-
 	}
 
 }

@@ -371,6 +371,7 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 		}
 	}
 
+	@Override
 	public void assertElementNotAccessible(String locator) throws Exception {
 		WebDriver webDriver = WebDriverUtil.getWebDriver();
 
