@@ -1,0 +1,8 @@
+@default = "assertNotAccessible"
+definition {
+
+	function assertNotAccessible {
+		selenium.assertNotAccessible();
+	}
+
+}

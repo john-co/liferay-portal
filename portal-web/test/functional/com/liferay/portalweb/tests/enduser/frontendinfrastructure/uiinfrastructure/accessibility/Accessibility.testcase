@@ -36,9 +36,7 @@ definition {
 	@ignore = "Test Stub"
 	@priority = "5"
 	test CanAssertNotAccessible {
-		property osgi.module.configuration.file.names = "com.liferay.frontend.js.a11y.web.internal.configuration.FFA11yConfiguration.config";
-		property osgi.module.configurations = "enable=B\"true\"";
-		property osgi.modules.includes = "frontend-js-a11y-sample-web,frontend-js-a11y-web";
+		property osgi.modules.includes = "frontend-js-a11y-sample-web";
 		property portal.acceptance = "false";
 
 		task ("Given frontend js a11y sample portlet on a page") {
@@ -62,7 +60,7 @@ definition {
 		task ("And Given an accessibility violation is present") {
 			VerifyElementPresent(
 				key_index = "1",
-				locator1 = "A11yTool#HIGHLIGHTED_ELEMENT_INDEX");
+				locator1 = "A11yTool#PORTLET_HEADER");
 		}
 
 		task ("When checking if accessibility violation is present") {
