@@ -11,6 +11,14 @@
 
 <tbody>
 
+<!--JS A11Y SAMPLE PORTLET-->
+
+<tr>
+	<td>PORTLET_HEADER</td>
+	<td>//section[@class='portlet']//header[contains(.,'JS A11y Sample')]</td>
+	<td></td>
+</tr>
+
 <!--SIDE PANEL TOP LEVEL-->
 
 <tr>

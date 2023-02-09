@@ -371,7 +371,6 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 		}
 	}
 
-	@Override
 	public void assertElementNotAccessible(String locator) throws Exception {
 		WebDriver webDriver = WebDriverUtil.getWebDriver();
 
@@ -391,8 +390,15 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 
 		List<Rule> violations = results.getViolations();
 
-		if (violations.isEmpty()) {
-			throw new Exception("No accesibilty violations detected");
+		if (!violations.isEmpty()) {
+			System.out.println("Accessibility violation detected");
+
+			AxeReporter.getReadableAxeResults("analyze", webDriver, violations);
+
+			System.out.println(AxeReporter.getAxeResultString());
+		}
+		else {
+			throw new Exception("Could not detect an accessibility violation");
 		}
 	}
 
