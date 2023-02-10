@@ -12,10 +12,9 @@
 <tbody>
 
 <!--JS A11Y SAMPLE PORTLET-->
-
 <tr>
-	<td>PORTLET_HEADER</td>
-	<td>//section[@class='portlet']//header[contains(.,'JS A11y Sample')]</td>
+	<td>BUTTON_WITH_NO_TEXT</td>
+	<td>//p[contains(.,'There are buttons')]/following-sibling::button</td>
 	<td></td>
 </tr>
 

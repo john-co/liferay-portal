@@ -55,19 +55,18 @@ definition {
 				layoutTemplate = "1 Column");
 
 			Navigator.gotoPage(pageName = "A11y Test Page");
+
+			ProductMenuHelper.closeProductMenu();
 		}
 
-		task ("And Given an accessibility violation is present") {
+		task ("When an accessibility violation is present") {
 			VerifyElementPresent(
 				key_index = "1",
-				locator1 = "A11yTool#PORTLET_HEADER");
+				locator1 = "A11yTool#BUTTON_WITH_NO_TEXT");
 		}
 
-		task ("When checking if accessibility violation is present") {
-			AssertNotAccessible();
-		}
-
-		task ("Then violation is thrown") {
+		task ("Then violation can be detected") {
+			AssertNotAccessible(locator1 = "A11yTool#BUTTON_WITH_NO_TEXT");
 		}
 	}
 
