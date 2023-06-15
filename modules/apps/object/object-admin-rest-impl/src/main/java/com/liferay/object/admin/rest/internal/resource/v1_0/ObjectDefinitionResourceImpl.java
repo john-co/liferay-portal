@@ -784,19 +784,7 @@ public class ObjectDefinitionResourceImpl
 			}
 		}
 
-		if (objectLayouts != null) {
-			ObjectLayoutResource.Builder builder =
-				_objectLayoutResourceFactory.create();
-
-			ObjectLayoutResource objectLayoutResource = builder.user(
-				contextUser
-			).build();
-
-			for (ObjectLayout objectLayout : objectLayouts) {
-				objectLayoutResource.postObjectDefinitionObjectLayout(
-					objectDefinitionId, objectLayout);
-			}
-		}
+		// Object Relationship must be created before Object Layout
 
 		if (objectRelationships != null) {
 			ObjectRelationshipResource.Builder builder =
@@ -878,6 +866,20 @@ public class ObjectDefinitionResourceImpl
 						_objectRelationshipLocalService.getObjectRelationship(
 							objectRelationship.getId()));
 				}
+			}
+		}
+
+		if (objectLayouts != null) {
+			ObjectLayoutResource.Builder builder =
+				_objectLayoutResourceFactory.create();
+
+			ObjectLayoutResource objectLayoutResource = builder.user(
+				contextUser
+			).build();
+
+			for (ObjectLayout objectLayout : objectLayouts) {
+				objectLayoutResource.postObjectDefinitionObjectLayout(
+					objectDefinitionId, objectLayout);
 			}
 		}
 
