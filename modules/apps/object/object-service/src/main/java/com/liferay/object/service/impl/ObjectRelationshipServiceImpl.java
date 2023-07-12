@@ -36,12 +36,29 @@ import org.osgi.service.component.annotations.Reference;
 public class ObjectRelationshipServiceImpl
 	extends ObjectRelationshipServiceBaseImpl {
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x)
+	 */
+	@Deprecated
 	@Override
 	public ObjectRelationship addObjectRelationship(
 			long objectDefinitionId1, long objectDefinitionId2,
 			long parameterObjectFieldId, String deletionType,
 			Map<Locale, String> labelMap, String name, boolean system,
 			String type)
+		throws PortalException {
+
+		return objectRelationshipService.addObjectRelationship(
+			null, objectDefinitionId1, objectDefinitionId2,
+			parameterObjectFieldId, deletionType, labelMap, name, system, type);
+	}
+
+	@Override
+	public ObjectRelationship addObjectRelationship(
+			String externalReferenceCode, long objectDefinitionId1,
+			long objectDefinitionId2, long parameterObjectFieldId,
+			String deletionType, Map<Locale, String> labelMap, String name,
+			boolean system, String type)
 		throws PortalException {
 
 		ObjectDefinition objectDefinition =
@@ -52,8 +69,9 @@ public class ObjectRelationshipServiceImpl
 			ActionKeys.UPDATE);
 
 		return objectRelationshipLocalService.addObjectRelationship(
-			getUserId(), objectDefinitionId1, objectDefinitionId2,
-			parameterObjectFieldId, deletionType, labelMap, name, system, type);
+			externalReferenceCode, getUserId(), objectDefinitionId1,
+			objectDefinitionId2, parameterObjectFieldId, deletionType, labelMap,
+			name, system, type);
 	}
 
 	@Override
@@ -136,10 +154,30 @@ public class ObjectRelationshipServiceImpl
 			objectDefinitionId1, start, end);
 	}
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x)
+	 */
+	@Deprecated
 	@Override
 	public ObjectRelationship updateObjectRelationship(
 			long objectRelationshipId, long parameterObjectFieldId,
 			String deletionType, boolean edge, Map<Locale, String> labelMap)
+		throws PortalException {
+
+		ObjectRelationship objectRelationship =
+			objectRelationshipPersistence.findByPrimaryKey(
+				objectRelationshipId);
+
+		return objectRelationshipService.updateObjectRelationship(
+			objectRelationship.getExternalReferenceCode(), objectRelationshipId,
+			parameterObjectFieldId, deletionType, edge, labelMap);
+	}
+
+	@Override
+	public ObjectRelationship updateObjectRelationship(
+			String externalReferenceCode, long objectRelationshipId,
+			long parameterObjectFieldId, String deletionType, boolean edge,
+			Map<Locale, String> labelMap)
 		throws PortalException {
 
 		ObjectRelationship objectRelationship =
@@ -151,8 +189,8 @@ public class ObjectRelationshipServiceImpl
 			ActionKeys.UPDATE);
 
 		return objectRelationshipLocalService.updateObjectRelationship(
-			objectRelationshipId, parameterObjectFieldId, deletionType, edge,
-			labelMap);
+			externalReferenceCode, objectRelationshipId, parameterObjectFieldId,
+			deletionType, edge, labelMap);
 	}
 
 	@Reference(
