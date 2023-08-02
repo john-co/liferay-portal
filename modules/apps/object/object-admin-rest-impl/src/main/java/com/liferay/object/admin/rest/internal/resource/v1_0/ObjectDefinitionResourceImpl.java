@@ -71,6 +71,7 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.Localization;
+import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -87,8 +88,10 @@ import com.liferay.portal.vulcan.util.SearchUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -804,19 +807,50 @@ public class ObjectDefinitionResourceImpl
 					contextUser
 				).build();
 
+			Map<String, Boolean> updateReverseObjectRelationshipMap =
+				new HashMap<>();
+
 			for (ObjectRelationship objectRelationship : objectRelationships) {
 				com.liferay.object.model.ObjectRelationship
 					serviceBuilderObjectRelationship =
 						_objectRelationshipLocalService.
-							fetchObjectRelationshipByObjectDefinitionId(
+							fetchObjectRelationshipByExternalReferenceCode(
+								objectRelationship.getExternalReferenceCode(),
+								contextCompany.getCompanyId(),
+								objectDefinitionId);
+
+				if (serviceBuilderObjectRelationship == null) {
+					serviceBuilderObjectRelationship =
+						_objectRelationshipLocalService.
+							fetchObjectRelationshipByObjectDefinitionId1(
 								objectDefinitionId,
 								objectRelationship.getName());
+				}
 
 				if (serviceBuilderObjectRelationship != null) {
+					if (MapUtil.getBoolean(
+							updateReverseObjectRelationshipMap,
+							serviceBuilderObjectRelationship.getName())) {
+
+						serviceBuilderObjectRelationship =
+							_objectRelationshipLocalService.
+								fetchReverseObjectRelationship(
+									serviceBuilderObjectRelationship, true);
+					}
+
 					objectRelationshipResource.putObjectRelationship(
 						serviceBuilderObjectRelationship.
 							getObjectRelationshipId(),
 						objectRelationship);
+
+					if (Objects.equals(
+							serviceBuilderObjectRelationship.getType(),
+							ObjectRelationshipConstants.TYPE_MANY_TO_MANY) &&
+						serviceBuilderObjectRelationship.isSelf()) {
+
+						updateReverseObjectRelationshipMap.putIfAbsent(
+							serviceBuilderObjectRelationship.getName(), true);
+					}
 
 					continue;
 				}
@@ -825,6 +859,17 @@ public class ObjectDefinitionResourceImpl
 					objectRelationshipResource.
 						postObjectDefinitionObjectRelationship(
 							objectDefinitionId, objectRelationship);
+
+				if (Objects.equals(
+						objectRelationship.getTypeAsString(),
+						ObjectRelationshipConstants.TYPE_MANY_TO_MANY) &&
+					Objects.equals(
+						objectRelationship.getObjectDefinitionId1(),
+						objectRelationship.getObjectDefinitionId2())) {
+
+					updateReverseObjectRelationshipMap.putIfAbsent(
+						objectRelationship.getName(), true);
+				}
 
 				if (accountEntryRestrictedObjectRelationshipsNames.contains(
 						objectRelationship.getName())) {
