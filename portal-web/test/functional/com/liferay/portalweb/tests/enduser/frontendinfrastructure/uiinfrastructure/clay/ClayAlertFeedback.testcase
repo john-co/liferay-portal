@@ -42,7 +42,7 @@ definition {
 		}
 	}
 
-	@description = "LPS-110903 - Alerts are not styled correctly"
+	@description = "LPS-110903 - Alerts are not styled correctly test"
 	@priority = 5
 	test IconCanDisplayTooltip {
 		task ("When an alert icon without text and hovered over the icon") {
