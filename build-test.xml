@@ -9410,14 +9410,30 @@ org.apache.catalina.tribes.level = FINE]]>
 					</not>
 				</and>
 				<then>
-					<copy
-						todir="${todir}"
-					>
-						<fileset
-							dir="lib/development"
-							includes="${jdbc.mariadb.driver}"
-						/>
-					</copy>
+					<get-testcase-property property.name="portal.version" />
+
+					<if>
+						<isset property="portal.version" />
+						<and>
+							<not>
+								<or>
+									<equals arg1="${portal.version}" arg2="7.0.4" />
+									<equals arg1="${portal.version}" arg2="7.0.10" />
+									<equals arg1="${portal.version}" arg2="7.0.10.6" />
+								</or>
+							</not>
+						</and>
+						<then>
+							<copy
+								todir="${todir}"
+							>
+								<fileset
+									dir="lib/development"
+									includes="${jdbc.mariadb.driver}"
+								/>
+							</copy>
+						</then>
+					</if>
 				</then>
 			</elseif>
 			<elseif>
@@ -9431,14 +9447,41 @@ org.apache.catalina.tribes.level = FINE]]>
 					</not>
 				</and>
 				<then>
-					<copy
-						todir="${todir}"
-					>
-						<fileset
-							dir="lib/development"
-							includes="${jdbc.mysql.driver}"
-						/>
-					</copy>
+					<get-testcase-property property.name="portal.version" />
+
+					<if>
+						<or>
+							<equals arg1="${portal.version}" arg2="7.0.4" />
+							<equals arg1="${portal.version}" arg2="7.0.10" />
+							<equals arg1="${portal.version}" arg2="7.0.10.6" />
+						</or>
+						<then>
+							<mirrors-get
+								dest="${todir}"
+								src="https://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.23/mysql-connector-java-5.1.23.jar"
+							/>
+
+							<propertycopy from="app.server.${app.server.type}.classes.portal.dir" name="app.server.classes.portal.dir" override="true" />
+
+							<replace
+								file="${app.server.classes.portal.dir}/portal-ext.properties"
+								token="com.mysql.cj.jdbc.Driver"
+								value="com.mysql.jdbc.Driver"
+							/>
+
+							<print-file file.name="${app.server.classes.portal.dir}/portal-ext.properties" />
+						</then>
+						<else>
+							<copy
+								todir="${todir}"
+							>
+								<fileset
+									dir="lib/development"
+									includes="${jdbc.mysql.driver}"
+								/>
+							</copy>
+						</else>
+					</if>
 				</then>
 			</elseif>
 			<elseif>
