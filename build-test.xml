@@ -9345,6 +9345,12 @@ org.apache.catalina.tribes.level = FINE]]>
 
 		<get-test-app-server-lib-portal-dir />
 
+		<beanshell>
+		<![CDATA[
+				System.out.println("Testing change");
+		]]>
+		</beanshell>
+
 		<if>
 			<and>
 				<equals arg1="${database.type}" arg2="db2" />
@@ -9412,11 +9418,22 @@ org.apache.catalina.tribes.level = FINE]]>
 				<then>
 					<get-testcase-property property.name="portal.version" />
 
+					<beanshell>
+					<![CDATA[
+							System.out.println("${portal.version}");
+					]]>
+					</beanshell>
+
 					<if>
 						<not>
 							<isset property="portal.version" />
 						</not>
 						<then>
+							<beanshell>
+							<![CDATA[
+									System.out.println("Copying mariadriver");
+							]]>
+							</beanshell>
 							<copy
 								todir="${todir}"
 							>
@@ -9442,9 +9459,22 @@ org.apache.catalina.tribes.level = FINE]]>
 				<then>
 					<get-testcase-property property.name="portal.version" />
 
+					<beanshell>
+					<![CDATA[
+							System.out.println("mysql driver");
+							System.out.println("${portal.version}");
+							System.out.println("${test.base.dir.name}");
+					]]>
+					</beanshell>
+
 					<if>
-						<contains string="${portal.version}" substring="7.0" />
+						<contains string="${test.base.dir.name}" substring="7.0" />
 						<then>
+							<beanshell>
+							<![CDATA[
+									System.out.println("replacing portal-ext.properties");
+							]]>
+							</beanshell>
 							<replace
 								file="${app.server.classes.portal.dir}/portal-ext.properties"
 								token="${database.mysql.driver}"
