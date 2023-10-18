@@ -21,7 +21,7 @@ import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 /**
- * @author Evan Thibodeau
+ * @author Evan Thibodeaus
  */
 public class AccessibilitySettingsUtilTest {
 
