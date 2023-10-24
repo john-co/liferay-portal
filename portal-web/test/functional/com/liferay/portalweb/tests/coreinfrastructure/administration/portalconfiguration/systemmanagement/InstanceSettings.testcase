@@ -41,6 +41,7 @@ definition {
 	@priority = 4
 	test AssertEmailVerificationIsRequiredByDefault {
 		property custom.properties = "company.security.strangers.verify=true${line.separator}jsonws.web.service.paths.excludes=${line.separator}mail.send.blacklist=noreply@liferay.com,noreply@domain.invalid,test@domain.invalid";
+		property portal.acceptance = "john";
 		property test.smtp.server.enabled = "true";
 
 		var portalURL = PropsUtil.get("portal.url");
