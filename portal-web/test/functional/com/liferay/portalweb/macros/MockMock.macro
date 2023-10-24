@@ -73,6 +73,10 @@ definition {
 	macro _viewMailMessage {
 		var key_asset = ${subject};
 
+		ScrollBy(value1 = "0, 3000");
+
+		takeScreenshot();
+
 		AssertTextEquals.assertPartialText(
 			locator1 = "MockMock#MOCKMOCK_MESSAGE_BODY",
 			value1 = ${subject});
