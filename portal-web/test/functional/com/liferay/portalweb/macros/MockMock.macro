@@ -73,6 +73,8 @@ definition {
 	macro _viewMailMessage {
 		var key_asset = ${subject};
 
+		takeScreenshot();
+
 		ScrollBy(value1 = "0, 3000");
 
 		takeScreenshot();

@@ -1565,6 +1565,7 @@ definition {
 	@priority = 3
 	test ViewPasswordResetNotificationTemplateUpdated {
 		property custom.properties = "mail.send.blacklist=noreply@liferay.com,noreply@domain.invalid,test@domain.invalid";
+		property portal.acceptance = "john";
 		property test.liferay.virtual.instance = "false";
 		property test.run.type = "single";
 		property test.smtp.server.enabled = "true";
@@ -1628,6 +1629,8 @@ definition {
 			MockMock._gotoMailMessage(
 				asset = "${portalURL}: Dear userfn, please reset Your Password",
 				recipient = "userfn userln");
+
+			takeScreenshot();
 
 			AssertTextEquals.assertPartialText(
 				key_asset = "${portalURL}: Dear userfn, please reset Your Password",

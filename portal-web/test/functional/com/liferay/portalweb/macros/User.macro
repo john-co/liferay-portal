@@ -2676,13 +2676,13 @@ definition {
 	macro verifyEmail {
 		if (IsElementPresent.pauseIsElementPresent(locator1 = "TextInput#EMAIL_VERIFICATION_CODE")) {
 			var bodySpecificText = MockMock.getBodySpecificText(
-				asset = "${portalURL}: Email Address Verification",
+				asset = "${portalURL}: Email Address",
 				content = "Please verify your email address for ${portalURL}",
 				extractFirstText = "&",
 				recipient = ${recipient},
 				sender = "Joe Bloggs",
 				specificText = "ticketKey=",
-				subject = "${portalURL}: Email Address Verification");
+				subject = "${portalURL}: Email Address");
 
 			Navigator.openURL();
 
