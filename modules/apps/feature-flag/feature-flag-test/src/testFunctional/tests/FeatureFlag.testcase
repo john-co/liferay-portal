@@ -36,7 +36,7 @@ definition {
 	@description = "LPS-167698 - This tests asserts that a feature flag can be disabled."
 	@priority = 5
 	test CanBeDisabled {
-		property portal.acceptance = "true";
+		property portal.acceptance = "john";
 
 		task ("And a feature flag is enabled") {
 			if (IsElementPresent(locator1 = "FeatureFlag#TOGGLE_ROW", title_row = "Terms and Conditions pages", toggle_state = "Disabled")) {
