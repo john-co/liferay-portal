@@ -15584,7 +15584,8 @@ jdbc.default.jndi.name=
 jdbc.default.driverClassName=${database.mysql.driver}
 jdbc.default.url=${database.mysql.url}
 jdbc.default.username=${database.mysql.username}
-jdbc.default.password=${database.mysql.password}</echo>
+jdbc.default.password=${database.mysql.password}
+</echo>
 			</then>
 		</if>
 
@@ -16260,6 +16261,17 @@ mail.send.blacklist=</echo>
 				</if>
 			</then>
 		</if>
+
+		<echo message="Hello World - finish start-docker-database-mysql ${project.dir}" />
+
+		<echo file="portal-impl/classes/portal-ext.properties">liferay.home=${liferay.home}
+upgrade.database.auto.run=true
+</echo>
+		<execute>
+			<![CDATA[
+				cat ${project.dir}/mysql.sql | docker exec -i localhost_mysql mysql -u root lportal
+			]]>
+		</execute>
 
 		<get-testcase-property property.name="skip.start.app.server" />
 
