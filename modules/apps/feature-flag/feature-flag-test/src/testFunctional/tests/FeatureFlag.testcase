@@ -12,6 +12,8 @@ definition {
 
 		User.firstLoginPG();
 
+		takeScreenshot();
+
 		task ("Given the Feature Flags page") {
 			ApplicationsMenu.gotoPortlet(
 				category = "Configuration",
