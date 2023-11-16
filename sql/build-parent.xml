@@ -66,6 +66,22 @@
 			/>
 		</move>
 
+		<echo message="Test copy mysql archive" />
+		<echo message="From: ${project.dir}/test-mysql/create-mysql.sql" />
+		<echo message="To: ${project.dir}/sql/create/create-mysql.sql" />
+
+		<copy
+			file="${project.dir}/test-mysql/create-bare-mysql.sql"
+			tofile="${project.dir}/sql/create-bare/create-bare-mysql.sql"
+			overwrite="true"
+		/>
+
+		<copy
+			file="${project.dir}/test-mysql/create-mysql.sql"
+			tofile="${project.dir}/sql/create/create-mysql.sql"
+			overwrite="true"
+		/>
+
 		<echo>${db.builder.output}</echo>
 	</target>
 
