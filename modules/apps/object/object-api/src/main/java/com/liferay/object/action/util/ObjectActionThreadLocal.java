@@ -49,12 +49,27 @@ public class ObjectActionThreadLocal {
 		return _objectEntryIdsMapThreadLocal.get();
 	}
 
+	public static boolean isClearObjectEntryIdsMap() {
+		return _clearObjectEntryIdsMapThreadLocal.get();
+	}
+
+	public static void setClearObjectEntryIdsMap(
+		boolean clearObjectEntryIdsMap) {
+
+		_clearObjectEntryIdsMapThreadLocal.set(clearObjectEntryIdsMap);
+	}
+
 	public static void setHttpServletRequest(
 		HttpServletRequest httpServletRequest) {
 
 		_httpServletRequestThreadLocal.set(httpServletRequest);
 	}
 
+	private static final ThreadLocal<Boolean>
+		_clearObjectEntryIdsMapThreadLocal = new CentralizedThreadLocal<>(
+			ObjectActionThreadLocal.class +
+				"._clearObjectEntryIdsMapThreadLocal",
+			() -> true);
 	private static final ThreadLocal<HttpServletRequest>
 		_httpServletRequestThreadLocal = new CentralizedThreadLocal<>(
 			ObjectActionThreadLocal.class + "._httpServletRequestThreadLocal",
