@@ -16269,7 +16269,9 @@ upgrade.database.auto.run=true
 </echo>
 		<execute>
 			<![CDATA[
-				cat ${project.dir}/mysql.sql | docker exec -i localhost_mysql mysql -u root lportal
+				mysql --database=${database.schema} --password=${database.password} --user=${database.username} < ${project.dir}/mysql.sql
+
+				mysql_upgrade --force --password=${database.password} --user=${database.username}
 			]]>
 		</execute>
 
