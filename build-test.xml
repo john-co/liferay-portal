@@ -16267,11 +16267,10 @@ mail.send.blacklist=</echo>
 		<echo file="portal-impl/classes/portal-ext.properties">liferay.home=${liferay.home}
 upgrade.database.auto.run=true
 </echo>
+
 		<execute>
 			<![CDATA[
-				mysql --database=${database.schema} --password=${database.password} --user=${database.username} < ${project.dir}/mysql.sql
-
-				mysql_upgrade --force --password=${database.password} --user=${database.username}
+				mysql --database=5.7 --password= --user=root < ${project.dir}/mysql.sql
 			]]>
 		</execute>
 
