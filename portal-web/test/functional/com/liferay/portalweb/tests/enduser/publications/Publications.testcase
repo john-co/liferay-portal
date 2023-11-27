@@ -1608,6 +1608,10 @@ definition {
 		task ("Turn on Show All Items and assert assert portlet preference change are displayed") {
 			Check.checkToggleSwitch(locator1 = "PublicationsChanges#SHOW_ALL_ITEMS_TOGGLE_SWITCH");
 
+			PublicationsChanges.filterChangesByItem(
+				checkboxName = "Portlet Preference Value",
+				menuItem = "Types");
+
 			PublicationsChanges.viewChanges(
 				changeCategory = "Portlet Preference Value",
 				changeSite = "Guest",
