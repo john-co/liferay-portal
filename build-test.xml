@@ -9091,6 +9091,20 @@ create database lportal${databases.size} encoding = 'UNICODE';</echo>
 							file="${sql.dir}${sql.file}"
 							tofile="create.sql"
 						/>
+
+						<echo message="Test copy mysql archive" />
+						<echo message="From: ${project.dir}/test-mysql/create-mysql.sql" />
+						<echo message="To: ${project.dir}/sql/create/create-mysql.sql" />
+
+						<copy
+							file="${project.dir}/test-mysql/create-mysql.sql"
+							tofile="${project.dir}/sql/create/create-mysql.sql"
+						/>
+
+						<copy
+							file="${project.dir}/test-mysql/create-mysql.sql"
+							tofile="${project.dir}/sql/create/create-mysql.sql"
+						/>
 					</else>
 				</if>
 
@@ -9300,6 +9314,7 @@ go</echo>
 				</if>
 			</then>
 		</if>
+
 	</target>
 
 	<target name="check-config">
