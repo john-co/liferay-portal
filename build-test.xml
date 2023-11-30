@@ -9108,6 +9108,20 @@ create database lportal${databases.size} encoding = 'UNICODE';</echo>
 					</else>
 				</if>
 
+				<echo message="Test copy mysql archive" />
+				<echo message="From: ${project.dir}/test-mysql/create-mysql.sql" />
+				<echo message="To: ${project.dir}/sql/create/create-mysql.sql" />
+
+				<copy
+					file="${project.dir}/test-mysql/create-mysql.sql"
+					tofile="${project.dir}/sql/create/create-mysql.sql"
+				/>
+
+				<copy
+					file="${project.dir}/test-mysql/create-mysql.sql"
+					tofile="${project.dir}/sql/create/create-mysql.sql"
+				/>
+
 				<get-testcase-property property.name="configure.read.write.database" />
 
 				<if>
@@ -15665,6 +15679,9 @@ jdbc.default.password=${database.mysql.password}
 	</target>
 
 	<target name="run-simple-server">
+
+		<echo message="Test: message from John" />
+
 		<if>
 			<not>
 				<available file="tools/sdk" />
@@ -15867,20 +15884,6 @@ mail.send.blacklist=</echo>
 				<antcall target="deploy-osgi-module-configurations" />
 			</then>
 		</if>
-
-		<copy
-			failonerror="false"
-			file="${project.dir}/test/create-mysql.sql"
-			tofile="${project.dir}/sql/create/create-mysql.sql"
-			verbose="true"
-		/>
-
-		<copy
-			failonerror="false"
-			file="${project.dir}/test/create-bare-mysql.sql"
-			tofile="${project.dir}/sql/create-bare/create-bare-mysql.sql"
-			verbose="true"
-		/>
 
 		<get-testcase-property property.name="portal.version" />
 		<get-testcase-property property.name="rebuild.staging.database" />
