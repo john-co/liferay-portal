@@ -39,6 +39,7 @@ definition {
 	@priority = 5
 	test CanBeDisabled {
 		property portal.acceptance = "john";
+		property test.liferay.virtual.instance = "false";
 
 		task ("And a feature flag is enabled") {
 			if (IsElementPresent(locator1 = "FeatureFlag#TOGGLE_ROW", title_row = "Terms and Conditions pages", toggle_state = "Disabled")) {
