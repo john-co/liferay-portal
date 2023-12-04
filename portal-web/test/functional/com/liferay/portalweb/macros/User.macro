@@ -2044,6 +2044,8 @@ definition {
 		else {
 			WaitForLiferayEvent.initializeLiferayEventLog();
 		}
+
+		takeScreenshot();
 	}
 
 	@summary = "Default summary"
