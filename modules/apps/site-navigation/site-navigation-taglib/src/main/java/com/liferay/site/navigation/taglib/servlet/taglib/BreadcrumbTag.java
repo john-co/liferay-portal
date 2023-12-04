@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.PageContext;
 
 /**
- * @author Eudaldo Alonso
+ * @author Eudaldo Alonsos
  */
 public class BreadcrumbTag extends IncludeTag {
 
