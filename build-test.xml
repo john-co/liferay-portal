@@ -9122,6 +9122,12 @@ create database lportal${databases.size} encoding = 'UNICODE';</echo>
 					tofile="${project.dir}/sql/create/create-mysql.sql"
 				/>
 
+				<echo message="Add upgrade database auto run property" />
+
+				<echo append="true" file="${app.server.classes.portal.dir}/portal-ext.properties">
+
+		upgrade.database.auto.run=true</echo>
+
 				<get-testcase-property property.name="configure.read.write.database" />
 
 				<if>
@@ -16298,9 +16304,9 @@ mail.send.blacklist=</echo>
 
 		<echo message="Add upgrade database auto run property" />
 
-		<echo file="portal-impl/classes/portal-ext.properties">liferay.home=${liferay.home}
-upgrade.database.auto.run=true
-</echo>
+		<echo append="true" file="${app.server.classes.portal.dir}/portal-ext.properties">
+
+upgrade.database.auto.run=true</echo>
 
 		<get-testcase-property property.name="skip.start.app.server" />
 
