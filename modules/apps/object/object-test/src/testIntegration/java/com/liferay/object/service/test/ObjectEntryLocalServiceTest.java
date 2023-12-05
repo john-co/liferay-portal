@@ -2872,7 +2872,7 @@ public class ObjectEntryLocalServiceTest {
 		AssertUtils.assertFailure(
 			DuplicateObjectEntryExternalReferenceCodeException.class,
 			"Duplicate object entry with external reference code " +
-				"newExternalReferenceCode and object definition id " +
+				"newExternalReferenceCode and object definition ID " +
 					_objectDefinition.getObjectDefinitionId(),
 			() -> _objectEntryLocalService.updateObjectEntry(
 				TestPropsValues.getUserId(), objectEntryId2,
@@ -2902,7 +2902,7 @@ public class ObjectEntryLocalServiceTest {
 			DuplicateObjectEntryExternalReferenceCodeException.class,
 			StringBundler.concat(
 				"Duplicate object entry with external reference code ",
-				objectEntry1.getUuid(), " and object definition id ",
+				objectEntry1.getUuid(), " and object definition ID ",
 				_objectDefinition.getObjectDefinitionId()),
 			() -> _objectEntryLocalService.updateObjectEntry(
 				TestPropsValues.getUserId(), objectEntryId1,
