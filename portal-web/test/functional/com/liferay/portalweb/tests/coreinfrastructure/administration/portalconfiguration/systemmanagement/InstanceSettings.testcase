@@ -842,6 +842,8 @@ definition {
 
 	@priority = 5
 	test EditDefaultUserAssociationsOrganizationSites {
+		property test.liferay.virtual.instance = "false";
+
 		JSONOrganization.addOrganization(organizationName = "Organization Name");
 
 		Organization.openOrganizationsAdmin();
