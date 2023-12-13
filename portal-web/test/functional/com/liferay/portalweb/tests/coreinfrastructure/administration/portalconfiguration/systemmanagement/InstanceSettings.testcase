@@ -281,6 +281,9 @@ definition {
 	@description = "This test asserts that a user can change the general authentication. Like user can change the authentication way to user ID and so."
 	@priority = 4
 	test CanChangeUserGeneralAuthentication {
+		property test.liferay.virtual.instance = "false";
+		property test.run.type = "single";
+
 		var userId = JSONUserSetter.setUserId(userEmailAddress = "test@liferay.com");
 
 		PortalSettings.gotoConfiguration(
