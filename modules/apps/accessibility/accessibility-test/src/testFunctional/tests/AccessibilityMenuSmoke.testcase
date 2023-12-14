@@ -21,6 +21,8 @@ definition {
 		var testLiferayVirtualInstance = PropsUtil.get("test.liferay.virtual.instance");
 
 		if (${testLiferayVirtualInstance} == "true") {
+			PortalSettings.tearDownCP();
+
 			PortalInstances.tearDownCP();
 
 			TestUtils.hardRefresh();
@@ -32,6 +34,8 @@ definition {
 			Site.tearDownCP();
 		}
 		else {
+			PortalSettings.tearDownCP();
+
 			TestUtils.hardRefresh();
 
 			HeadlessPortalInstanceAPI.cleanAllPortalInstances();
@@ -165,7 +169,6 @@ definition {
 	test CanOverrideSettingsOrderSmoke {
 		property portal.acceptance = "true";
 		property test.liferay.virtual.instance = "false";
-		property test.run.type = "single";
 
 		task ("And new virtual instance B is created") {
 			HeadlessPortalInstanceAPI.addPortalInstance(
