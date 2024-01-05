@@ -21,7 +21,6 @@ import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.portlet.FriendlyURLResolver;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
-import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
@@ -31,7 +30,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Víctor Galán
@@ -93,7 +91,7 @@ public class CustomAssetDisplayPageFriendlyURLResolver
 
 		return layoutDisplayPageProvider.getLayoutDisplayPageObjectProvider(
 			new InfoItemReference(
-				_portal.getClassName(GetterUtil.getLong(parts[1])),
+				portal.getClassName(GetterUtil.getLong(parts[1])),
 				infoItemIdentifier));
 	}
 
@@ -133,7 +131,7 @@ public class CustomAssetDisplayPageFriendlyURLResolver
 
 		return layoutDisplayPageProviderRegistry.
 			getLayoutDisplayPageProviderByClassName(
-				_portal.getClassName(GetterUtil.getLong(parts[1])));
+				portal.getClassName(GetterUtil.getLong(parts[1])));
 	}
 
 	@Override
@@ -157,8 +155,5 @@ public class CustomAssetDisplayPageFriendlyURLResolver
 
 		return new String[] {friendlyURL, classNameId, identifier};
 	}
-
-	@Reference
-	private Portal _portal;
 
 }
