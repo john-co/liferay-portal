@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.util.WebKeys;
 
 import java.util.List;
 import java.util.Map;
@@ -52,6 +53,9 @@ public class CustomAssetDisplayPageFriendlyURLResolver
 
 		HttpServletRequest httpServletRequest =
 			(HttpServletRequest)requestContext.get("request");
+
+		httpServletRequest.setAttribute(
+			WebKeys.PAGE_ROBOTS, "noindex, nofollow");
 
 		return actualURL;
 	}
