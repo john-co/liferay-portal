@@ -289,7 +289,9 @@ export function SelectLayoutTree({
 							<ClayTreeView.Group items={item.children}>
 								{(item) => (
 									<ClayTreeView.Item
-										disabled={item.disabled}
+										disabled={
+											item.disabled && !item.hasChildren
+										}
 										expandable={item.hasChildren}
 										onClick={(event) =>
 											onClick(event, item, selection)
