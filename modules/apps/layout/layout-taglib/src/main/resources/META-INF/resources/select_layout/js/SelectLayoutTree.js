@@ -135,16 +135,11 @@ export function SelectLayoutTree({
 		}
 	};
 
-	const onKeyDown = (event, item, selection) => {
+	const onKeyDown = (event, item, selection, expand, load) => {
 		if (event.key === ' ' || event.key === 'Enter') {
 			event.stopPropagation();
 
-			if (multiSelection) {
-				handleMultipleSelectionChange(item, selection, event.shiftKey);
-			}
-			else {
-				handleSingleSelection(item, selection);
-			}
+			onClick(event, item, selection, expand, load);
 		}
 	};
 
@@ -265,7 +260,13 @@ export function SelectLayoutTree({
 									)
 								}
 								onKeyDown={(event) =>
-									onKeyDown(event, item, selection)
+									onKeyDown(
+										event,
+										item,
+										selection,
+										expand,
+										load
+									)
 								}
 							>
 								{multiSelection && !item.disabled && (
@@ -314,7 +315,13 @@ export function SelectLayoutTree({
 											)
 										}
 										onKeyDown={(event) =>
-											onKeyDown(event, item, selection)
+											onKeyDown(
+												event,
+												item,
+												selection,
+												expand,
+												load
+											)
 										}
 									>
 										{multiSelection && !item.disabled && (
