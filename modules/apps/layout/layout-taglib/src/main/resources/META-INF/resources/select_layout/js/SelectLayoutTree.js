@@ -113,20 +113,25 @@ export function SelectLayoutTree({
 		}
 	};
 
-	const onClick = (event, item, selection, expand) => {
+	const onClick = (event, item, selection, expand, load) => {
 		event.preventDefault();
 
-		if (item.disabled) {
-			expand.toggle(item.id);
-
-			return;
+		if (!item.disabled) {
+			if (multiSelection) {
+				handleMultipleSelectionChange(item, selection, event.shiftKey);
+			}
+			else {
+				handleSingleSelection(item, selection);
+			}
 		}
 
-		if (multiSelection) {
-			handleMultipleSelectionChange(item, selection, event.shiftKey);
-		}
-		else {
-			handleSingleSelection(item, selection);
+		if (item.hasChildren) {
+			if (!item.children) {
+				load.loadMore(item.id, item).then(() => expand.toggle(item.id));
+			}
+			else {
+				expand.toggle(item.id);
+			}
 		}
 	};
 
@@ -251,7 +256,13 @@ export function SelectLayoutTree({
 							<ClayTreeView.ItemStack
 								active={false}
 								onClick={(event) =>
-									onClick(event, item, selection, expand)
+									onClick(
+										event,
+										item,
+										selection,
+										expand,
+										load
+									)
 								}
 								onKeyDown={(event) =>
 									onKeyDown(event, item, selection)
@@ -294,7 +305,13 @@ export function SelectLayoutTree({
 										}
 										expandable={item.hasChildren}
 										onClick={(event) =>
-											onClick(event, item, selection)
+											onClick(
+												event,
+												item,
+												selection,
+												expand,
+												load
+											)
 										}
 										onKeyDown={(event) =>
 											onKeyDown(event, item, selection)
