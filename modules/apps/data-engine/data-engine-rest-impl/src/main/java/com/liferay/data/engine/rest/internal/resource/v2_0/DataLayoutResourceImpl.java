@@ -207,7 +207,7 @@ public class DataLayoutResourceImpl extends BaseDataLayoutResourceImpl {
 					DataDefinitionUtil.toDataDefinition(
 						_ddmFormFieldTypeServicesRegistry, ddmStructure,
 						_ddmStructureLayoutLocalService,
-						_spiDDMFormRuleConverter),
+						contextHttpServletRequest, _spiDDMFormRuleConverter),
 					_ddmFormFieldTypeServicesRegistry),
 				_ddmFormFieldTypeServicesRegistry, _ddmFormLayoutSerializer,
 				_ddmFormRuleDeserializer),
@@ -302,7 +302,7 @@ public class DataLayoutResourceImpl extends BaseDataLayoutResourceImpl {
 						_ddmStructureLocalService.getStructure(
 							ddmStructureLayout.getDDMStructureId()),
 						_ddmStructureLayoutLocalService,
-						_spiDDMFormRuleConverter),
+						contextHttpServletRequest, _spiDDMFormRuleConverter),
 					_ddmFormFieldTypeServicesRegistry),
 				_ddmFormFieldTypeServicesRegistry, _ddmFormLayoutSerializer,
 				_ddmFormRuleDeserializer),
