@@ -42,7 +42,7 @@ public class LayoutDesignScreenNavigationEntry
 				typeSettingsUnicodeProperties.getProperty(
 					"designConfigurationModified"))) {
 
-			return language.get(getResourceBundle(locale), "draft");
+			return language.get(locale, "draft");
 		}
 
 		return null;
