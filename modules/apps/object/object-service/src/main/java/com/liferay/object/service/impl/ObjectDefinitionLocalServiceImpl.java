@@ -1073,7 +1073,7 @@ public class ObjectDefinitionLocalServiceImpl
 			boolean enableObjectEntryDraft, boolean enableObjectEntryHistory,
 			Map<Locale, String> labelMap, String name, String panelAppOrder,
 			String panelCategoryKey, boolean portlet,
-			Map<Locale, String> pluralLabelMap, String scope)
+			Map<Locale, String> pluralLabelMap, String scope, int status)
 		throws PortalException {
 
 		ObjectDefinition objectDefinition =
@@ -1128,7 +1128,7 @@ public class ObjectDefinitionLocalServiceImpl
 			null, enableCategorization, enableComments, enableLocalization,
 			enableObjectEntryDraft, enableObjectEntryHistory, labelMap, name,
 			panelAppOrder, panelCategoryKey, portlet, null, null,
-			pluralLabelMap, scope);
+			pluralLabelMap, scope, status);
 	}
 
 	@Override
@@ -1848,7 +1848,7 @@ public class ObjectDefinitionLocalServiceImpl
 			Map<Locale, String> labelMap, String name, String panelAppOrder,
 			String panelCategoryKey, boolean portlet,
 			String pkObjectFieldDBColumnName, String pkObjectFieldName,
-			Map<Locale, String> pluralLabelMap, String scope)
+			Map<Locale, String> pluralLabelMap, String scope, int status)
 		throws PortalException {
 
 		long oldObjectFolderId = objectDefinition.getObjectFolderId();
@@ -1862,7 +1862,7 @@ public class ObjectDefinitionLocalServiceImpl
 			objectDefinition);
 		_validateObjectFieldId(objectDefinition, descriptionObjectFieldId);
 		_validateObjectFieldId(objectDefinition, titleObjectFieldId);
-		_validateActive(objectDefinition, active);
+		_validateActive(active, status);
 		_validateEnableCategorization(
 			enableCategorization, objectDefinition.isModifiable(),
 			objectDefinition.getStorageType(), objectDefinition.isSystem());
@@ -2072,11 +2072,12 @@ public class ObjectDefinitionLocalServiceImpl
 		}
 	}
 
-	private void _validateActive(
-			ObjectDefinition objectDefinition, boolean active)
+	private void _validateActive(boolean active, int status)
 		throws PortalException {
 
-		if (active && !objectDefinition.isApproved()) {
+		if (active &&
+			!Objects.equals(WorkflowConstants.STATUS_APPROVED, status)) {
+
 			throw new ObjectDefinitionActiveException(
 				"Object definitions must be published before being activated");
 		}
