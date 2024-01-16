@@ -1496,7 +1496,7 @@ public class ContentPageEditorDisplayContext {
 		return _layoutType;
 	}
 
-	private Object _getLookAndFeelURL() throws Exception {
+	private String _getLookAndFeelURL() throws Exception {
 		return layoutLockManager.getUnlockDraftLayoutURL(
 			portal.getLiferayPortletResponse(renderResponse),
 			() -> {
