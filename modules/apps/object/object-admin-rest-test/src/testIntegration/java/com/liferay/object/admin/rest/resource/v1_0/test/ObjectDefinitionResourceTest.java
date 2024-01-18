@@ -315,12 +315,11 @@ public class ObjectDefinitionResourceTest
 
 		// Publish a persisted draft custom object definition
 
-		ObjectDefinition randomPersistedDraftObjectDefinition =
-			objectDefinitionResource.postObjectDefinition(
-				randomObjectDefinition());
+		postObjectDefinition = objectDefinitionResource.postObjectDefinition(
+			randomObjectDefinition());
 
 		Assert.assertEquals(
-			randomPersistedDraftObjectDefinition.getStatus(),
+			postObjectDefinition.getStatus(),
 			new Status() {
 				{
 					code = WorkflowConstants.STATUS_DRAFT;
@@ -334,7 +333,7 @@ public class ObjectDefinitionResourceTest
 				}
 			});
 
-		randomPersistedDraftObjectDefinition.setStatus(
+		postObjectDefinition.setStatus(
 			new Status() {
 				{
 					code = WorkflowConstants.STATUS_APPROVED;
@@ -343,8 +342,7 @@ public class ObjectDefinitionResourceTest
 
 		ObjectDefinition randomPersistedPublishedObjectDefinition =
 			objectDefinitionResource.putObjectDefinition(
-				randomPersistedDraftObjectDefinition.getId(),
-				randomPersistedDraftObjectDefinition);
+				postObjectDefinition.getId(), postObjectDefinition);
 
 		Assert.assertEquals(
 			randomPersistedPublishedObjectDefinition.getStatus(),
