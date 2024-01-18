@@ -1825,9 +1825,10 @@ public class ObjectDefinitionLocalServiceTest {
 			LocalizedMapUtil.getLocalizedMap("Bakers"),
 			objectDefinition.getPluralLabelMap());
 
-		_objectDefinitionLocalService.publishCustomObjectDefinition(
-			TestPropsValues.getUserId(),
-			objectDefinition.getObjectDefinitionId());
+		objectDefinition =
+			_objectDefinitionLocalService.publishCustomObjectDefinition(
+				TestPropsValues.getUserId(),
+				objectDefinition.getObjectDefinitionId());
 
 		objectDefinition =
 			_objectDefinitionLocalService.updateCustomObjectDefinition(
