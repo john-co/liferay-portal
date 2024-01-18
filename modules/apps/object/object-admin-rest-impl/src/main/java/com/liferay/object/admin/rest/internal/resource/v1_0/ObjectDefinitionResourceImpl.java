@@ -448,16 +448,12 @@ public class ObjectDefinitionResourceImpl
 				titleServiceBuilderObjectField.getObjectFieldId();
 		}
 
-		Status status = objectDefinition.getStatus();
+		int statusInt = serviceBuilderObjectDefinition.getStatus();
 
-		if (status == null) {
-			int statusInt = serviceBuilderObjectDefinition.getStatus();
+		if (objectDefinition.getStatus() != null) {
+			Status status = objectDefinition.getStatus();
 
-			status = new Status() {
-				{
-					code = statusInt;
-				}
-			};
+			statusInt = status.getCode();
 		}
 
 		if (serviceBuilderObjectDefinition.isUnmodifiableSystemObject()) {
@@ -502,7 +498,7 @@ public class ObjectDefinitionResourceImpl
 					GetterUtil.getBoolean(objectDefinition.getPortlet()),
 					LocalizedMapUtil.getLocalizedMap(
 						objectDefinition.getPluralLabel()),
-					objectDefinition.getScope(), status.getCode());
+					objectDefinition.getScope(), statusInt);
 		}
 
 		List<ObjectAction> objectActions = ListUtil.fromArray(
@@ -699,7 +695,7 @@ public class ObjectDefinitionResourceImpl
 			objectValidationRules.toArray(new ObjectValidationRule[0]),
 			objectViews);
 
-		if ((status.getCode() != WorkflowConstants.STATUS_APPROVED) ||
+		if ((statusInt != WorkflowConstants.STATUS_APPROVED) ||
 			serviceBuilderObjectDefinition.isApproved()) {
 
 			return _toObjectDefinition(serviceBuilderObjectDefinition);
