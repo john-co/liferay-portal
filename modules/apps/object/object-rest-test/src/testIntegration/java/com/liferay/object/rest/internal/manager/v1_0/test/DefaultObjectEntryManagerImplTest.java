@@ -1558,6 +1558,16 @@ public class DefaultObjectEntryManagerImplTest
 							_objectRelationshipFieldName,
 							parentObjectEntry2.getId()
 						).put(
+							"localizedLongTextObjectFieldName",
+							"en_US localizedLongTextObjectFieldValue"
+						).put(
+							"localizedTextObjectFieldName_i18n",
+							HashMapBuilder.put(
+								"en_US", "en_US localizedTextObjectFieldValue2"
+							).put(
+								"pt_BR", "pt_BR localizedTextObjectFieldValue2"
+							).build()
+						).put(
 							"picklistObjectFieldName", picklistObjectFieldValue2
 						).put(
 							"textObjectFieldName", "aab"
@@ -1565,6 +1575,38 @@ public class DefaultObjectEntryManagerImplTest
 					}
 				},
 				ObjectDefinitionConstants.SCOPE_COMPANY);
+
+		assertEquals(
+			childObjectEntry2,
+			new ObjectEntry() {
+				{
+					properties = HashMapBuilder.<String, Object>put(
+						_objectRelationshipFieldName, parentObjectEntry2.getId()
+					).put(
+						"localizedLongTextObjectFieldName",
+						"en_US localizedLongTextObjectFieldValue"
+					).put(
+						"localizedLongTextObjectFieldName_i18n",
+						HashMapBuilder.put(
+							"en_US", "en_US localizedLongTextObjectFieldValue"
+						).build()
+					).put(
+						"localizedTextObjectFieldName",
+						"en_US localizedTextObjectFieldValue2"
+					).put(
+						"localizedTextObjectFieldName_i18n",
+						HashMapBuilder.put(
+							"en_US", "en_US localizedTextObjectFieldValue2"
+						).put(
+							"pt_BR", "pt_BR localizedTextObjectFieldValue2"
+						).build()
+					).put(
+						"picklistObjectFieldName", picklistObjectFieldValue2
+					).put(
+						"textObjectFieldName", "aab"
+					).build();
+				}
+			});
 
 		// And/or with parentheses
 
