@@ -174,11 +174,17 @@ UnicodeProperties layoutTypeSettingsUnicodeProperties = selLayout.getTypeSetting
 												).build()
 											).put(
 												"url",
-												HashMapBuilder.<String, Object>put(
-													"defaultValue", layoutsSEODisplayContext.getDefaultCanonicalURLMap()
-												).put(
-													"id", "canonicalURL"
-												).build()
+												() -> {
+													if (layoutsSEODisplayContext.isLayoutUtilityPageEntry()) {
+														return null;
+													}
+
+													return HashMapBuilder.<String, Object>put(
+														"defaultValue", layoutsSEODisplayContext.getDefaultCanonicalURLMap()
+													).put(
+														"id", "canonicalURL"
+													).build();
+												}
 											).build()
 										).put(
 											"titleSuffix", layoutsSEODisplayContext.getPageTitleSuffix()
