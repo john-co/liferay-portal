@@ -313,7 +313,7 @@ public class ObjectDefinitionResourceTest
 		_objectDefinitionLocalService.deleteObjectDefinition(
 			postObjectDefinition.getId());
 
-		// Publish a persisted draft custom object definition
+		// Draft custom object definition
 
 		postObjectDefinition = objectDefinitionResource.postObjectDefinition(
 			randomObjectDefinition());
