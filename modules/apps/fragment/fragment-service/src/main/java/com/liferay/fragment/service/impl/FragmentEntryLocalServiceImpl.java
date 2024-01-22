@@ -593,7 +593,6 @@ public class FragmentEntryLocalServiceImpl
 				_validate(draftFragmentEntry.getName());
 			}
 
-			draftFragmentEntry.setName(draftFragmentEntry.getName());
 			draftFragmentEntry.setCacheable(
 				publishedFragmentEntry.isCacheable());
 			draftFragmentEntry.setPreviewFileEntryId(
