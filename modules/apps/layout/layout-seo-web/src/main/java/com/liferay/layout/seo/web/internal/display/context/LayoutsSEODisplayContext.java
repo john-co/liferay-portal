@@ -35,6 +35,8 @@ import com.liferay.layout.seo.model.LayoutSEOEntry;
 import com.liferay.layout.seo.model.LayoutSEOSite;
 import com.liferay.layout.seo.service.LayoutSEOEntryLocalServiceUtil;
 import com.liferay.layout.seo.service.LayoutSEOSiteLocalService;
+import com.liferay.layout.utility.page.model.LayoutUtilityPageEntry;
+import com.liferay.layout.utility.page.service.LayoutUtilityPageEntryLocalService;
 import com.liferay.petra.function.transform.TransformUtil;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -88,6 +90,7 @@ public class LayoutsSEODisplayContext {
 		LayoutSEOCanonicalURLProvider layoutSEOCanonicalURLProvider,
 		LayoutSEOLinkManager layoutSEOLinkManager,
 		LayoutSEOSiteLocalService layoutSEOSiteLocalService,
+		LayoutUtilityPageEntryLocalService layoutUtilityPageEntryLocalService,
 		LiferayPortletRequest liferayPortletRequest,
 		LiferayPortletResponse liferayPortletResponse) {
 
@@ -102,6 +105,8 @@ public class LayoutsSEODisplayContext {
 		_layoutSEOCanonicalURLProvider = layoutSEOCanonicalURLProvider;
 		_layoutSEOLinkManager = layoutSEOLinkManager;
 		_layoutSEOSiteLocalService = layoutSEOSiteLocalService;
+		_layoutUtilityPageEntryLocalService =
+			layoutUtilityPageEntryLocalService;
 		_liferayPortletRequest = liferayPortletRequest;
 		_liferayPortletResponse = liferayPortletResponse;
 
@@ -438,6 +443,27 @@ public class LayoutsSEODisplayContext {
 		).build();
 	}
 
+	public boolean isLayoutUtilityPageEntry() throws PortalException {
+		if (_layoutUtilityPageEntry != null) {
+			return _layoutUtilityPageEntry;
+		}
+
+		Layout layout = getSelLayout();
+
+		LayoutUtilityPageEntry layoutUtilityPageEntry =
+			_layoutUtilityPageEntryLocalService.
+				fetchLayoutUtilityPageEntryByPlid(layout.getPlid());
+
+		if (layoutUtilityPageEntry != null) {
+			_layoutUtilityPageEntry = true;
+		}
+		else {
+			_layoutUtilityPageEntry = false;
+		}
+
+		return _layoutUtilityPageEntry;
+	}
+
 	public boolean isPrivateLayout() {
 		if (_privateLayout != null) {
 			return _privateLayout;
@@ -636,6 +662,9 @@ public class LayoutsSEODisplayContext {
 	private final LayoutSEOCanonicalURLProvider _layoutSEOCanonicalURLProvider;
 	private final LayoutSEOLinkManager _layoutSEOLinkManager;
 	private final LayoutSEOSiteLocalService _layoutSEOSiteLocalService;
+	private Boolean _layoutUtilityPageEntry;
+	private final LayoutUtilityPageEntryLocalService
+		_layoutUtilityPageEntryLocalService;
 	private final LiferayPortletRequest _liferayPortletRequest;
 	private final LiferayPortletResponse _liferayPortletResponse;
 	private Boolean _privateLayout;
