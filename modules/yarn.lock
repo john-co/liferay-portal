@@ -866,6 +866,15 @@
   resolved "https://registry.yarnpkg.com/@braintree/sanitize-url/-/sanitize-url-6.0.0.tgz#fe364f025ba74f6de6c837a84ef44bdb1d61e68f"
   integrity sha512-mgmE7XBYY/21erpzhexk4Cj1cyTQ9LzvnTxtzM17BJ7ERMNE6W72mQRo0I1Ud8eFJ+RVVIcBNhLFZ3GX4XFz5w==
 
+"@clayui/alert@3.106.1":
+  version "3.106.1"
+  resolved "https://registry.yarnpkg.com/@clayui/alert/-/alert-3.106.1.tgz#f41cfa77ed4870dfa1e0cf3ba3726b0075afa772"
+  integrity sha512-P8TWdv3Ca+D1AoZrKilizyu9kxP0Gt8iUzR7BCdbF9NQQbUwibAK5jmQGb7tPI0kQqTseltzSB7pEDg3urB3VA==
+  dependencies:
+    "@clayui/icon" "^3.106.1"
+    "@clayui/layout" "^3.106.1"
+    classnames "^2.2.6"
+
 "@clayui/alert@3.93.0":
   version "3.93.0"
   resolved "https://registry.yarnpkg.com/@clayui/alert/-/alert-3.93.0.tgz#ab77cde1533b8b419d4f7e2f1b5de4f4da1434d0"
@@ -1037,10 +1046,18 @@
     "@clayui/shared" "^3.104.0"
     classnames "^2.2.6"
 
-"@clayui/icon@3.56.0", "@clayui/icon@^3.56.0":
+"@clayui/icon@3.56.0":
   version "3.56.0"
   resolved "https://registry.yarnpkg.com/@clayui/icon/-/icon-3.56.0.tgz#c748c7c1641484593a4acb2b3cb43cbb7f42178c"
   integrity sha512-9xnHkyW45h9UysMFZdjefnJhYUvSXwZsEufRv3NHUf5DLUyNYImrdZ64AXrk3i4TSyqk6qPMLIU0z0/fMQ28qw==
+  dependencies:
+    classnames "^2.2.6"
+    warning "^4.0.3"
+
+"@clayui/icon@^3.106.1", "@clayui/icon@^3.56.0":
+  version "3.106.1"
+  resolved "https://registry.yarnpkg.com/@clayui/icon/-/icon-3.106.1.tgz#2a1f9ec91bf37a3c64dee54f1800519aacc73a7d"
+  integrity sha512-ZSs63L28GLqAkpovQEABzrf4+bP1wptIQ6+Jebl58xEbfCl8FIg1x/tgN/8F7W1/sNSNZs3no5vRcIZGnW6m1Q==
   dependencies:
     classnames "^2.2.6"
     warning "^4.0.3"
@@ -1054,10 +1071,18 @@
     "@clayui/link" "^3.88.0"
     classnames "^2.2.6"
 
-"@clayui/layout@3.93.0", "@clayui/layout@^3.93.0":
+"@clayui/layout@3.93.0":
   version "3.93.0"
   resolved "https://registry.yarnpkg.com/@clayui/layout/-/layout-3.93.0.tgz#3f4b9c19b0d8179dd58dcf1ebded496990b2f1da"
   integrity sha512-tMusckuJGLaQP6Ra89gaNayNXJKV7iHV6APKdrttRbeHi8t/FbZ2iCOnY50Gj1bjafiGzyVvhtiLvCz2xSqT/Q==
+  dependencies:
+    classnames "^2.2.6"
+    warning "^4.0.3"
+
+"@clayui/layout@^3.106.1", "@clayui/layout@^3.93.0":
+  version "3.106.1"
+  resolved "https://registry.yarnpkg.com/@clayui/layout/-/layout-3.106.1.tgz#c29efbe913ea940799ec4a380eb6803fe2cac040"
+  integrity sha512-pGXFZtSqOvdABwV72GxX2H3MLtG9KYnFDXz0K2kzfpN1Eccazmqu8G+XONx9aHfl/OEnUThWfeiE+FMtzYa8zg==
   dependencies:
     classnames "^2.2.6"
     warning "^4.0.3"
@@ -9560,11 +9585,6 @@ lie@~3.3.0:
   dependencies:
     immediate "~3.0.5"
 
-liferay-ckeditor@4.18.0-liferay.4:
-  version "4.18.0-liferay.4"
-  resolved "https://registry.yarnpkg.com/liferay-ckeditor/-/liferay-ckeditor-4.18.0-liferay.4.tgz#08ddc7c1025f6c036a9de97c3403b9928e6b99dc"
-  integrity sha512-mugcikGLtVbZ1kqxtHjf1z8F4hWPeET4EyCx48ePIUc01fnOuAEiiNwnaWeBxiMS8K75CvYNbA37jJhCskHXmw==
-
 liferay-ckeditor@4.21.0-liferay.1:
   version "4.21.0-liferay.1"
   resolved "https://registry.yarnpkg.com/liferay-ckeditor/-/liferay-ckeditor-4.21.0-liferay.1.tgz#442c35172d813d2cbfcb80646a31678bf01d0090"
@@ -15318,15 +15338,7 @@ webpack@5.70.0, webpack@5.76.0, webpack@^5.11.1, webpack@^5.69.1:
     watchpack "^2.3.1"
     webpack-sources "^3.2.3"
 
-websocket-driver@>=0.5.1:
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/websocket-driver/-/websocket-driver-0.7.0.tgz#0caf9d2d755d93aee049d4bdd0d3fe2cca2a24eb"
-  integrity sha1-DK+dLXVdk67gSdS90NP+LMoqJOs=
-  dependencies:
-    http-parser-js ">=0.4.0"
-    websocket-extensions ">=0.1.1"
-
-websocket-driver@^0.7.4:
+websocket-driver@>=0.5.1, websocket-driver@^0.7.4:
   version "0.7.4"
   resolved "https://registry.yarnpkg.com/websocket-driver/-/websocket-driver-0.7.4.tgz#89ad5295bbf64b480abcba31e4953aca706f5760"
   integrity sha512-b17KeDIQVjvb0ssuSDF2cYXSg2iztliJ4B9WdsuB6J952qCPKmnVq4DyW5motImXHDC1cBT/1UezrJVsKw5zjg==
