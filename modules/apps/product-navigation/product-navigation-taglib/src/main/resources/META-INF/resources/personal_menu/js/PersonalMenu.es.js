@@ -101,6 +101,7 @@ function PersonalMenu({
 							userName
 						)}
 						className="rounded-circle"
+						data-qa-id="userPersonalMenu"
 						displayType="unstyled"
 						onFocus={preloadItems}
 						onMouseOver={preloadItems}
