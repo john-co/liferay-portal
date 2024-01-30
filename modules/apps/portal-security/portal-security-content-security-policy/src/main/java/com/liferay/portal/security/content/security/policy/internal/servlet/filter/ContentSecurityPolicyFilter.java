@@ -101,8 +101,8 @@ public class ContentSecurityPolicyFilter extends BasePortalFilter {
 
 		String nonce = _generateNonce();
 
-		String content = rewriteContent(
-			nonce, contentSecurityPolicyHttpServletResponse.getContent());
+		String content = _updateContent(
+			contentSecurityPolicyHttpServletResponse.getContent(), nonce);
 
 		printWriter.write(content);
 
@@ -115,7 +115,7 @@ public class ContentSecurityPolicyFilter extends BasePortalFilter {
 		httpServletResponse.setHeader("Content-Security-Policy", policy);
 	}
 
-	protected String rewriteContent(String nonce, String content) {
+	private String _updateContent(String content, String nonce) {
 		String nonceAttribute = "nonce=\"" + nonce + "\"";
 		String escapedNonceAttribute = "nonce=\\\"" + nonce + "\\\"";
 
