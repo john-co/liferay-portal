@@ -184,8 +184,6 @@ public class OpenAPIResourceTest {
 
 	@Test
 	public void testGetOpenAPIMultipleCompanies() throws Exception {
-		String objectDefinitionName = RandomTestUtil.randomString() + "abc";
-
 		JSONObject jsonObject = HTTPTestUtil.invokeToJSONObject(
 			JSONUtil.put(
 				"domain", "able.com"
@@ -213,8 +211,10 @@ public class OpenAPIResourceTest {
 			RandomTestUtil.randomString(), new long[] {group.getGroupId()},
 			ServiceContextTestUtil.getServiceContext());
 
+		String randomString = RandomTestUtil.randomString() + "abc";
+
 		_objectDefinition1 = ObjectDefinitionTestUtil.publishObjectDefinition(
-			"A" + StringUtil.toLowerCase(objectDefinitionName),
+			"A" + StringUtil.toLowerCase(randomString),
 			Collections.singletonList(
 				ObjectFieldUtil.createObjectField(
 					"Text", "String", true, true, null,
@@ -223,7 +223,7 @@ public class OpenAPIResourceTest {
 			TestPropsValues.getUserId());
 
 		_objectDefinition2 = ObjectDefinitionTestUtil.publishObjectDefinition(
-			"A" + StringUtil.toUpperCase(objectDefinitionName),
+			"A" + StringUtil.toUpperCase(randomString),
 			Collections.singletonList(
 				ObjectFieldUtil.createObjectField(
 					"Text", "String", true, true, null,
