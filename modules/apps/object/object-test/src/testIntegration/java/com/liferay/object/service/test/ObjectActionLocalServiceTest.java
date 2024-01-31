@@ -1622,7 +1622,8 @@ public class ObjectActionLocalServiceTest {
 					StringBundler.concat(
 						com.liferay.object.rest.dto.v1_0.ObjectEntry.class.
 							getName(),
-						StringPool.POUND, _objectDefinition.getName()));
+						StringPool.POUND,
+						StringUtil.toLowerCase(_objectDefinition.getName())));
 
 			objectEntryResource.setContextAcceptLanguage(
 				new AcceptLanguage() {
