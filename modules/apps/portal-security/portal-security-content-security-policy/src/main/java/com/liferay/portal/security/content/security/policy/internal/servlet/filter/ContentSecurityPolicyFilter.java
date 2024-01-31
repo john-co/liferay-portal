@@ -124,6 +124,61 @@ public class ContentSecurityPolicyFilter extends BasePortalFilter {
 		}
 	}
 
+	private ContentSecurityPolicyConfiguration
+		_getContentSecurityPolicyConfiguration(
+			HttpServletRequest httpServletRequest) {
+
+		try {
+			long groupId = _portal.getScopeGroupId(httpServletRequest);
+
+			if (groupId > 0) {
+				return _configurationProvider.getGroupConfiguration(
+					ContentSecurityPolicyConfiguration.class, groupId);
+			}
+
+			return _configurationProvider.getCompanyConfiguration(
+				ContentSecurityPolicyConfiguration.class,
+				_portal.getCompanyId(httpServletRequest));
+		}
+		catch (PortalException portalException) {
+			return ReflectionUtil.throwException(portalException);
+		}
+	}
+
+	private boolean _isExcludedURIPath(HttpServletRequest httpServletRequest) {
+		String requestURI = httpServletRequest.getRequestURI();
+
+		if (Validator.isNull(requestURI)) {
+			return false;
+		}
+
+		for (String internallyExcludedPath : _INTERNALLY_EXCLUDED_PATHS) {
+			if (Validator.isNotNull(internallyExcludedPath) &&
+				requestURI.startsWith(
+					StringUtil.toLowerCase(internallyExcludedPath))) {
+
+				return true;
+			}
+		}
+
+		requestURI = StringUtil.toLowerCase(requestURI);
+
+		ContentSecurityPolicyConfiguration contentSecurityPolicyConfiguration =
+			_getContentSecurityPolicyConfiguration(httpServletRequest);
+
+		for (String excludedPath :
+				contentSecurityPolicyConfiguration.excludedPaths()) {
+
+			if (Validator.isNotNull(excludedPath) &&
+				requestURI.startsWith(StringUtil.toLowerCase(excludedPath))) {
+
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	private String _updateContent(String content, String nonce) {
 		String nonceAttribute = "nonce=\"" + nonce + "\"";
 		String escapedNonceAttribute = "nonce=\\\"" + nonce + "\\\"";
@@ -184,61 +239,6 @@ public class ContentSecurityPolicyFilter extends BasePortalFilter {
 		}
 
 		return content;
-	}
-
-	private ContentSecurityPolicyConfiguration
-		_getContentSecurityPolicyConfiguration(
-			HttpServletRequest httpServletRequest) {
-
-		try {
-			long groupId = _portal.getScopeGroupId(httpServletRequest);
-
-			if (groupId > 0) {
-				return _configurationProvider.getGroupConfiguration(
-					ContentSecurityPolicyConfiguration.class, groupId);
-			}
-
-			return _configurationProvider.getCompanyConfiguration(
-				ContentSecurityPolicyConfiguration.class,
-				_portal.getCompanyId(httpServletRequest));
-		}
-		catch (PortalException portalException) {
-			return ReflectionUtil.throwException(portalException);
-		}
-	}
-
-	private boolean _isExcludedURIPath(HttpServletRequest httpServletRequest) {
-		String requestURI = httpServletRequest.getRequestURI();
-
-		if (Validator.isNull(requestURI)) {
-			return false;
-		}
-
-		for (String internallyExcludedPath : _INTERNALLY_EXCLUDED_PATHS) {
-			if (Validator.isNotNull(internallyExcludedPath) &&
-				requestURI.startsWith(
-					StringUtil.toLowerCase(internallyExcludedPath))) {
-
-				return true;
-			}
-		}
-
-		requestURI = StringUtil.toLowerCase(requestURI);
-
-		ContentSecurityPolicyConfiguration contentSecurityPolicyConfiguration =
-			_getContentSecurityPolicyConfiguration(httpServletRequest);
-
-		for (String excludedPath :
-				contentSecurityPolicyConfiguration.excludedPaths()) {
-
-			if (Validator.isNotNull(excludedPath) &&
-				requestURI.startsWith(StringUtil.toLowerCase(excludedPath))) {
-
-				return true;
-			}
-		}
-
-		return false;
 	}
 
 	private static final String[] _INTERNALLY_EXCLUDED_PATHS = {
