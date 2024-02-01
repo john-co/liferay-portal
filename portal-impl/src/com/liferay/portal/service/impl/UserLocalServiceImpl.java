@@ -494,6 +494,8 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 			new long[] {adminRole.getRoleId()}, null, false,
 			new ServiceContext());
 
+		defaultServiceAccountUser.setPasswordReset(false);
+
 		defaultServiceAccountUser.setEmailAddressVerified(true);
 
 		return userLocalService.updateUser(defaultServiceAccountUser);
