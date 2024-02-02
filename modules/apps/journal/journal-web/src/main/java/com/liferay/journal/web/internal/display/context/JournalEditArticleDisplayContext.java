@@ -989,20 +989,20 @@ public class JournalEditArticleDisplayContext {
 	}
 
 	public String getSelectedLanguageId() {
-		if (Validator.isNotNull(_defaultLanguageId)) {
-			return _defaultLanguageId;
+		if (Validator.isNotNull(_selectedLanguageId)) {
+			return _selectedLanguageId;
 		}
 
-		String defaultLanguageId = ParamUtil.getString(
+		String selectedLanguageId = ParamUtil.getString(
 			_httpServletRequest, "languageId");
 
-		if (Validator.isNull(defaultLanguageId)) {
-			defaultLanguageId = getDefaultArticleLanguageId();
+		if (Validator.isNull(selectedLanguageId)) {
+			selectedLanguageId = getDefaultArticleLanguageId();
 		}
 
-		_defaultLanguageId = defaultLanguageId;
+		_selectedLanguageId = selectedLanguageId;
 
-		return _defaultLanguageId;
+		return _selectedLanguageId;
 	}
 
 	public int getSmallImageSource() {
@@ -1617,7 +1617,7 @@ public class JournalEditArticleDisplayContext {
 	private DDMTemplate _ddmTemplate;
 	private String _ddmTemplateKey;
 	private String _defaultArticleLanguageId;
-	private String _defaultLanguageId;
+	private String _selectedLanguageId;
 	private LayoutPageTemplateEntry _defaultLayoutPageTemplateEntry;
 	private Integer _displayPageType;
 	private final FFJournalAutoSaveDraftConfiguration
