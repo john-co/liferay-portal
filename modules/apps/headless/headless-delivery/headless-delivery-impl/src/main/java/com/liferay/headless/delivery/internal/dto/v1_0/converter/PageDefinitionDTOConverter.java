@@ -194,6 +194,26 @@ public class PageDefinitionDTOConverter
 		};
 	}
 
+	private ClientExtension _getThemeSpritemapClientExtension(
+		long classNameId, Layout layout,
+		DTOConverterContext dtoConverterContext) {
+
+		CET cet = _getCET(
+			classNameId, layout.getPlid(), layout.getCompanyId(),
+			ClientExtensionEntryConstants.TYPE_THEME_SPRITEMAP);
+
+		if (cet == null) {
+			return null;
+		}
+
+		return new ClientExtension() {
+			{
+				setExternalReferenceCode(cet::getExternalReferenceCode);
+				setName(() -> cet.getName(dtoConverterContext.getLocale()));
+			}
+		};
+	}
+
 	private Settings _toSettings(
 		DTOConverterContext dtoConverterContext, Layout layout) {
 
@@ -351,6 +371,9 @@ public class PageDefinitionDTOConverter
 
 						return themeSettingsUnicodeProperties;
 					});
+				setThemeSpritemapClientExtension(
+					() -> _getThemeSpritemapClientExtension(
+						classNameId, layout, dtoConverterContext));
 			}
 		};
 	}

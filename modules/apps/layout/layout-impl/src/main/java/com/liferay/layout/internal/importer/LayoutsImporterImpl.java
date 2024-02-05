@@ -1895,6 +1895,18 @@ public class LayoutsImporterImpl implements LayoutsImporter {
 				themeCSSClientExtension.getClientExtensionConfig(), userId);
 		}
 
+		ClientExtension themeSpritemapClientExtension =
+			settings.getThemeSpritemapClientExtension();
+
+		if (themeSpritemapClientExtension != null) {
+			_addClientExtensionEntryRel(
+				themeSpritemapClientExtension.getExternalReferenceCode(),
+				layout, serviceContext,
+				ClientExtensionEntryConstants.TYPE_THEME_SPRITEMAP,
+				themeSpritemapClientExtension.getClientExtensionConfig(),
+				userId);
+		}
+
 		return _layoutLocalService.updateLayout(layout);
 	}
 
