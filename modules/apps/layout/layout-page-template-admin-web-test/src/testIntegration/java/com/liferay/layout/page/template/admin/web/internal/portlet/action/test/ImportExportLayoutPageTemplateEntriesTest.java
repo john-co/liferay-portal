@@ -14,6 +14,9 @@ import com.liferay.asset.display.page.service.AssetDisplayPageEntryLocalService;
 import com.liferay.asset.list.constants.AssetListEntryTypeConstants;
 import com.liferay.asset.list.model.AssetListEntry;
 import com.liferay.asset.list.service.AssetListEntryLocalService;
+import com.liferay.client.extension.constants.ClientExtensionEntryConstants;
+import com.liferay.client.extension.model.ClientExtensionEntry;
+import com.liferay.client.extension.service.ClientExtensionEntryLocalService;
 import com.liferay.dynamic.data.mapping.model.DDMStructure;
 import com.liferay.fragment.constants.FragmentConstants;
 import com.liferay.fragment.model.FragmentCollection;
@@ -72,6 +75,7 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.JavaConstants;
+import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.UnicodePropertiesBuilder;
@@ -90,6 +94,7 @@ import java.io.Serializable;
 
 import java.net.URL;
 
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -1170,6 +1175,40 @@ public class ImportExportLayoutPageTemplateEntriesTest {
 	}
 
 	@Test
+	public void testImportExportLayoutPageTemplateEntryThemeSpritemapClientExtension()
+		throws Exception {
+
+		ClientExtensionEntry clientExtensionEntry =
+			_clientExtensionEntryLocalService.addClientExtensionEntry(
+				RandomTestUtil.randomString(), TestPropsValues.getUserId(),
+				StringPool.BLANK,
+				Collections.singletonMap(
+					LocaleUtil.getDefault(), RandomTestUtil.randomString()),
+				StringPool.BLANK, StringPool.BLANK,
+				ClientExtensionEntryConstants.TYPE_THEME_SPRITEMAP,
+				UnicodePropertiesBuilder.create(
+					true
+				).put(
+					"url", "http://" + RandomTestUtil.randomString() + ".com"
+				).buildString());
+
+		Map<String, String> stringValuesMap = HashMapBuilder.put(
+			"EXTERNAL_REFERENCE_CODE",
+			clientExtensionEntry.getExternalReferenceCode()
+		).put(
+			"NAME", clientExtensionEntry.getName(LocaleUtil.getDefault())
+		).build();
+
+		File expectedFile = _generateZipFile(
+			"client_extensions/theme_spritemap/expected", null,
+			stringValuesMap);
+		File inputFile = _generateZipFile(
+			"client_extensions/theme_spritemap/input", null, stringValuesMap);
+
+		_validateImportExport(expectedFile, inputFile);
+	}
+
+	@Test
 	public void testImportExportLayoutPageTemplateEntryWidgetCssClasses()
 		throws Exception {
 
@@ -1678,6 +1717,10 @@ public class ImportExportLayoutPageTemplateEntriesTest {
 	private AssetListEntryLocalService _assetListEntryLocalService;
 
 	private Bundle _bundle;
+
+	@Inject
+	private ClientExtensionEntryLocalService _clientExtensionEntryLocalService;
+
 	private Company _company;
 
 	@Inject
