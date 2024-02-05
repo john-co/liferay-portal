@@ -72,8 +72,12 @@ public class AttachmentDTOConverter
 
 		return new Attachment() {
 			{
+				cdnEnabled = cpAttachmentFileEntry.isCDNEnabled();
+				cdnURL = cpAttachmentFileEntry.getCDNURL();
 				displayDate = cpAttachmentFileEntry.getDisplayDate();
 				expirationDate = cpAttachmentFileEntry.getExpirationDate();
+				externalReferenceCode =
+					cpAttachmentFileEntry.getExternalReferenceCode();
 				fileEntryId = cpAttachmentFileEntry.getFileEntryId();
 				id = cpAttachmentFileEntry.getCPAttachmentFileEntryId();
 				options = _getAttachmentOptions(cpAttachmentFileEntry);
