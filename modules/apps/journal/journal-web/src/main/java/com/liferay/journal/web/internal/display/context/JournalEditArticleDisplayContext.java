@@ -548,7 +548,7 @@ public class JournalEditArticleDisplayContext {
 		}
 
 		String defaultArticleLanguageId = ParamUtil.getString(
-			_httpServletRequest, "defaultLanguageId", null);
+			_httpServletRequest, "defaultLanguageId");
 
 		if (Validator.isNotNull(getArticleId())) {
 			DDMFormValues ddmFormValues = _article.getDDMFormValues();
@@ -556,7 +556,7 @@ public class JournalEditArticleDisplayContext {
 			defaultArticleLanguageId = LocaleUtil.toLanguageId(
 				ddmFormValues.getDefaultLocale());
 		}
-		else if ((defaultArticleLanguageId == null) &&
+		else if (Validator.isNull(defaultArticleLanguageId) &&
 				 (getClassNameId() ==
 					 JournalArticleConstants.CLASS_NAME_ID_DEFAULT)) {
 
