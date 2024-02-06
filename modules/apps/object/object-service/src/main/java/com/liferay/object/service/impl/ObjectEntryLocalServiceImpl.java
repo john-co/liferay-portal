@@ -2850,6 +2850,23 @@ public class ObjectEntryLocalServiceImpl
 		).withParentheses();
 	}
 
+	private Column<?, Long> _getPrimaryKeyColumn(
+		DynamicObjectDefinitionTable dynamicObjectDefinitionTable,
+		DynamicObjectDefinitionTable extensionDynamicObjectDefinitionTable,
+		String tableName) {
+
+		if (tableName.equals(dynamicObjectDefinitionTable.getTableName())) {
+			return dynamicObjectDefinitionTable.getPrimaryKeyColumn();
+		}
+		else if (tableName.equals(
+					extensionDynamicObjectDefinitionTable.getTableName())) {
+
+			return extensionDynamicObjectDefinitionTable.getPrimaryKeyColumn();
+		}
+
+		return ObjectEntryTable.INSTANCE.objectEntryId;
+	}
+
 	private Predicate _getRelationshipObjectFieldPredicate(
 			Column<?, ?> column, ObjectField objectField, String search)
 		throws PortalException {
@@ -2894,23 +2911,6 @@ public class ObjectEntryLocalServiceImpl
 			).where(
 				relatedModelsPredicate
 			));
-	}
-	
-	private Column<?, Long> _getPrimaryKeyColumn(
-		DynamicObjectDefinitionTable dynamicObjectDefinitionTable,
-		DynamicObjectDefinitionTable extensionDynamicObjectDefinitionTable,
-		String tableName) {
-
-		if (tableName.equals(dynamicObjectDefinitionTable.getTableName())) {
-			return dynamicObjectDefinitionTable.getPrimaryKeyColumn();
-		}
-		else if (tableName.equals(
-					extensionDynamicObjectDefinitionTable.getTableName())) {
-
-			return extensionDynamicObjectDefinitionTable.getPrimaryKeyColumn();
-		}
-
-		return ObjectEntryTable.INSTANCE.objectEntryId;
 	}
 
 	private Object _getResult(
