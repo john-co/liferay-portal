@@ -326,8 +326,10 @@ public class ObjectServiceUpgradeStepRegistrator
 
 		registry.register("7.1.1", "7.1.2", new DummyUpgradeStep());
 
+		registry.register("7.1.2", "7.2.0", new DummyUpgradeStep());
+
 		registry.register(
-			"7.1.2", "8.0.0",
+			"7.2.0", "8.0.0",
 			new com.liferay.object.internal.upgrade.v8_0_0.
 				ObjectFolderItemUpgradeProcess());
 
@@ -372,6 +374,19 @@ public class ObjectServiceUpgradeStepRegistrator
 		registry.register("8.6.0", "8.6.1", new DummyUpgradeStep());
 
 		registry.register("8.6.1", "8.6.2", new SchemaUpgradeProcess());
+
+		registry.register(
+			"8.6.2", "8.7.0",
+			new BaseExternalReferenceCodeUpgradeProcess() {
+
+				@Override
+				protected String[][] getTableAndPrimaryKeyColumnNames() {
+					return new String[][] {
+						{"ObjectRelationship", "objectRelationshipId"}
+					};
+				}
+
+			});
 	}
 
 	@Reference
