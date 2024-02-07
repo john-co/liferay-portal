@@ -25,6 +25,7 @@ import com.liferay.portal.kernel.service.RoleLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserGroupRoleLocalService;
 import com.liferay.portal.kernel.service.UserNotificationEventLocalService;
+import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.Portal;
 
 import javax.portlet.PortletRequest;
@@ -144,7 +145,7 @@ public class PublicationInviteUserNotificationHandler
 		return _language.format(
 			serviceContext.getLocale(), "x-has-invited-you-to-work-on-x-as-a-x",
 			new Object[] {
-				userName, ctCollection.getName(),
+				userName, HtmlUtil.escape(ctCollection.getName()),
 				_language.get(
 					serviceContext.getLocale(), _getRoleLabel(roleValue))
 			},
