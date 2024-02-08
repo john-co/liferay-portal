@@ -36,6 +36,11 @@ public class ObjectRelationshipLocalServiceUtil {
 	 *
 	 * Never modify this class directly. Add custom service methods to <code>com.liferay.object.service.impl.ObjectRelationshipLocalServiceImpl</code> and rerun ServiceBuilder to regenerate this class.
 	 */
+
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x)
+	 */
+	@Deprecated
 	public static ObjectRelationship addObjectRelationship(
 			long userId, long objectDefinitionId1, long objectDefinitionId2,
 			long parameterObjectFieldId, String deletionType,
@@ -62,6 +67,19 @@ public class ObjectRelationshipLocalServiceUtil {
 		ObjectRelationship objectRelationship) {
 
 		return getService().addObjectRelationship(objectRelationship);
+	}
+
+	public static ObjectRelationship addObjectRelationship(
+			String externalReferenceCode, long userId, long objectDefinitionId1,
+			long objectDefinitionId2, long parameterObjectFieldId,
+			String deletionType, Map<java.util.Locale, String> labelMap,
+			String name, boolean system, String type)
+		throws PortalException {
+
+		return getService().addObjectRelationship(
+			externalReferenceCode, userId, objectDefinitionId1,
+			objectDefinitionId2, parameterObjectFieldId, deletionType, labelMap,
+			name, system, type);
 	}
 
 	public static void addObjectRelationshipMappingTableValues(
@@ -269,6 +287,15 @@ public class ObjectRelationshipLocalServiceUtil {
 		long objectRelationshipId) {
 
 		return getService().fetchObjectRelationship(objectRelationshipId);
+	}
+
+	public static ObjectRelationship
+		fetchObjectRelationshipByExternalReferenceCode(
+			String externalReferenceCode, long companyId,
+			long objectDefinitionId1) {
+
+		return getService().fetchObjectRelationshipByExternalReferenceCode(
+			externalReferenceCode, companyId, objectDefinitionId1);
 	}
 
 	public static ObjectRelationship
@@ -486,6 +513,10 @@ public class ObjectRelationshipLocalServiceUtil {
 			objectDefinition1, objectDefinitionLocalService);
 	}
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x)
+	 */
+	@Deprecated
 	public static ObjectRelationship updateObjectRelationship(
 			long objectRelationshipId, long parameterObjectFieldId,
 			String deletionType, boolean edge,
@@ -511,6 +542,17 @@ public class ObjectRelationshipLocalServiceUtil {
 		ObjectRelationship objectRelationship) {
 
 		return getService().updateObjectRelationship(objectRelationship);
+	}
+
+	public static ObjectRelationship updateObjectRelationship(
+			String externalReferenceCode, long objectRelationshipId,
+			long parameterObjectFieldId, String deletionType, boolean edge,
+			Map<java.util.Locale, String> labelMap)
+		throws PortalException {
+
+		return getService().updateObjectRelationship(
+			externalReferenceCode, objectRelationshipId, parameterObjectFieldId,
+			deletionType, edge, labelMap);
 	}
 
 	public static ObjectRelationshipLocalService getService() {

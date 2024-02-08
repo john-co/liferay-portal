@@ -595,7 +595,7 @@ public class ObjectDefinitionServiceHttp {
 				java.util.Map<java.util.Locale, String> labelMap, String name,
 				String panelAppOrder, String panelCategoryKey, boolean portlet,
 				java.util.Map<java.util.Locale, String> pluralLabelMap,
-				String scope, int status)
+				String scope)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		try {
@@ -603,6 +603,66 @@ public class ObjectDefinitionServiceHttp {
 				ObjectDefinitionServiceUtil.class,
 				"updateCustomObjectDefinition",
 				_updateCustomObjectDefinitionParameterTypes13);
+
+			MethodHandler methodHandler = new MethodHandler(
+				methodKey, externalReferenceCode, objectDefinitionId,
+				accountEntryRestrictedObjectFieldId, descriptionObjectFieldId,
+				objectFolderId, titleObjectFieldId, accountEntryRestricted,
+				active, enableCategorization, enableComments,
+				enableLocalization, enableObjectEntryDraft,
+				enableObjectEntryHistory, labelMap, name, panelAppOrder,
+				panelCategoryKey, portlet, pluralLabelMap, scope);
+
+			Object returnObj = null;
+
+			try {
+				returnObj = TunnelUtil.invoke(httpPrincipal, methodHandler);
+			}
+			catch (Exception exception) {
+				if (exception instanceof
+						com.liferay.portal.kernel.exception.PortalException) {
+
+					throw (com.liferay.portal.kernel.exception.PortalException)
+						exception;
+				}
+
+				throw new com.liferay.portal.kernel.exception.SystemException(
+					exception);
+			}
+
+			return (com.liferay.object.model.ObjectDefinition)returnObj;
+		}
+		catch (com.liferay.portal.kernel.exception.SystemException
+					systemException) {
+
+			_log.error(systemException, systemException);
+
+			throw systemException;
+		}
+	}
+
+	public static com.liferay.object.model.ObjectDefinition
+			updateCustomObjectDefinition(
+				HttpPrincipal httpPrincipal, String externalReferenceCode,
+				long objectDefinitionId,
+				long accountEntryRestrictedObjectFieldId,
+				long descriptionObjectFieldId, long objectFolderId,
+				long titleObjectFieldId, boolean accountEntryRestricted,
+				boolean active, boolean enableCategorization,
+				boolean enableComments, boolean enableLocalization,
+				boolean enableObjectEntryDraft,
+				boolean enableObjectEntryHistory,
+				java.util.Map<java.util.Locale, String> labelMap, String name,
+				String panelAppOrder, String panelCategoryKey, boolean portlet,
+				java.util.Map<java.util.Locale, String> pluralLabelMap,
+				String scope, int status)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		try {
+			MethodKey methodKey = new MethodKey(
+				ObjectDefinitionServiceUtil.class,
+				"updateCustomObjectDefinition",
+				_updateCustomObjectDefinitionParameterTypes14);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, externalReferenceCode, objectDefinitionId,
@@ -651,7 +711,7 @@ public class ObjectDefinitionServiceHttp {
 			MethodKey methodKey = new MethodKey(
 				ObjectDefinitionServiceUtil.class,
 				"updateExternalReferenceCode",
-				_updateExternalReferenceCodeParameterTypes14);
+				_updateExternalReferenceCodeParameterTypes15);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, objectDefinitionId, externalReferenceCode);
@@ -694,7 +754,7 @@ public class ObjectDefinitionServiceHttp {
 			MethodKey methodKey = new MethodKey(
 				ObjectDefinitionServiceUtil.class,
 				"updateRootObjectDefinitionId",
-				_updateRootObjectDefinitionIdParameterTypes15);
+				_updateRootObjectDefinitionIdParameterTypes16);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, objectDefinitionId, rootObjectDefinitionId);
@@ -738,7 +798,7 @@ public class ObjectDefinitionServiceHttp {
 			MethodKey methodKey = new MethodKey(
 				ObjectDefinitionServiceUtil.class,
 				"updateSystemObjectDefinition",
-				_updateSystemObjectDefinitionParameterTypes16);
+				_updateSystemObjectDefinitionParameterTypes17);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, externalReferenceCode, objectDefinitionId,
@@ -781,7 +841,7 @@ public class ObjectDefinitionServiceHttp {
 		try {
 			MethodKey methodKey = new MethodKey(
 				ObjectDefinitionServiceUtil.class, "updateTitleObjectFieldId",
-				_updateTitleObjectFieldIdParameterTypes17);
+				_updateTitleObjectFieldIdParameterTypes18);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, objectDefinitionId, titleObjectFieldId);
@@ -864,21 +924,29 @@ public class ObjectDefinitionServiceHttp {
 			long.class, boolean.class, boolean.class, boolean.class,
 			boolean.class, boolean.class, boolean.class, boolean.class,
 			java.util.Map.class, String.class, String.class, String.class,
+			boolean.class, java.util.Map.class, String.class
+		};
+	private static final Class<?>[]
+		_updateCustomObjectDefinitionParameterTypes14 = new Class[] {
+			String.class, long.class, long.class, long.class, long.class,
+			long.class, boolean.class, boolean.class, boolean.class,
+			boolean.class, boolean.class, boolean.class, boolean.class,
+			java.util.Map.class, String.class, String.class, String.class,
 			boolean.class, java.util.Map.class, String.class, int.class
 		};
 	private static final Class<?>[]
-		_updateExternalReferenceCodeParameterTypes14 = new Class[] {
+		_updateExternalReferenceCodeParameterTypes15 = new Class[] {
 			long.class, String.class
 		};
 	private static final Class<?>[]
-		_updateRootObjectDefinitionIdParameterTypes15 = new Class[] {
+		_updateRootObjectDefinitionIdParameterTypes16 = new Class[] {
 			long.class, long.class
 		};
 	private static final Class<?>[]
-		_updateSystemObjectDefinitionParameterTypes16 = new Class[] {
+		_updateSystemObjectDefinitionParameterTypes17 = new Class[] {
 			String.class, long.class, long.class, long.class
 		};
-	private static final Class<?>[] _updateTitleObjectFieldIdParameterTypes17 =
+	private static final Class<?>[] _updateTitleObjectFieldIdParameterTypes18 =
 		new Class[] {long.class, long.class};
 
 }
