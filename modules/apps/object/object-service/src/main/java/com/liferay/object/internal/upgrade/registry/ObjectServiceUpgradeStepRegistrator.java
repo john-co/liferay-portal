@@ -323,7 +323,7 @@ public class ObjectServiceUpgradeStepRegistrator
 				"ObjectDefinition", "storageType", "VARCHAR(255) null"),
 			UpgradeProcessFactory.alterColumnType(
 				"ObjectValidationRule", "engine", "VARCHAR(255) null"));
-		
+
 		registry.register("7.1.1", "7.1.2", new DummyUpgradeStep());
 
 		registry.register(
@@ -370,7 +370,7 @@ public class ObjectServiceUpgradeStepRegistrator
 				ObjectActionUpgradeProcess());
 
 		registry.register("8.6.0", "8.6.1", new DummyUpgradeStep());
-		
+
 		registry.register("8.6.1", "8.6.2", new SchemaUpgradeProcess());
 	}
 
