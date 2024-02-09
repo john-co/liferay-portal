@@ -12,6 +12,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @author Guilherme Camacho
  */
@@ -39,10 +41,24 @@ public class ObjectActionThreadLocal {
 		objectEntryIdsMap.clear();
 	}
 
+	public static HttpServletRequest getHttpServletRequest() {
+		return _httpServletRequestThreadLocal.get();
+	}
+
 	public static Map<Long, Set<Long>> getObjectEntryIdsMap() {
 		return _objectEntryIdsMapThreadLocal.get();
 	}
 
+	public static void setHttpServletRequest(
+		HttpServletRequest httpServletRequest) {
+
+		_httpServletRequestThreadLocal.set(httpServletRequest);
+	}
+
+	private static final ThreadLocal<HttpServletRequest>
+		_httpServletRequestThreadLocal = new CentralizedThreadLocal<>(
+			ObjectActionThreadLocal.class + "._httpServletRequestThreadLocal",
+			() -> null);
 	private static final ThreadLocal<Map<Long, Set<Long>>>
 		_objectEntryIdsMapThreadLocal = new CentralizedThreadLocal<>(
 			ObjectActionThreadLocal.class.getName() +
