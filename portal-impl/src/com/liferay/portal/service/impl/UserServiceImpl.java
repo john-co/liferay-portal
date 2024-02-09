@@ -2285,6 +2285,16 @@ public class UserServiceImpl extends UserServiceBaseImpl {
 			updateUserInformation, sendEmail, serviceContext);
 	}
 
+	@Override
+	public User updateLanguageId(long userId, String languageId)
+		throws PortalException {
+
+		UserPermissionUtil.check(
+			getPermissionChecker(), userId, ActionKeys.UPDATE);
+
+		return userLocalService.updateLanguageId(userId, languageId);
+	}
+
 	/**
 	 * Updates whether the user is locked out from logging in.
 	 *
