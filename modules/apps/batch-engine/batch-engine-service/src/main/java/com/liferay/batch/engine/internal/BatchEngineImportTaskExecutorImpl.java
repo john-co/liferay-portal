@@ -214,10 +214,6 @@ public class BatchEngineImportTaskExecutorImpl
 			parameters = new HashMap<>();
 		}
 
-		parameters.computeIfAbsent(
-			"taskItemDelegateName",
-			key -> batchEngineImportTask.getTaskItemDelegateName());
-
 		return parameters;
 	}
 
@@ -268,6 +264,7 @@ public class BatchEngineImportTaskExecutorImpl
 						_companyLocalService.getCompany(
 							batchEngineImportTask.getCompanyId()),
 						parameters,
+						batchEngineImportTask.getTaskItemDelegateName(),
 						_userLocalService.getUser(
 							batchEngineImportTask.getUserId()));
 
