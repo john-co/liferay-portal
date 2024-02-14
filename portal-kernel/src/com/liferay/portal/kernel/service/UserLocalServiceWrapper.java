@@ -3086,6 +3086,13 @@ public class UserLocalServiceWrapper
 		return _userLocalService.updateJobTitle(userId, jobTitle);
 	}
 
+	@Override
+	public User updateLanguageId(long userId, String languageId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _userLocalService.updateLanguageId(userId, languageId);
+	}
+
 	/**
 	 * Updates the user's last login with the current time and the IP address.
 	 *
