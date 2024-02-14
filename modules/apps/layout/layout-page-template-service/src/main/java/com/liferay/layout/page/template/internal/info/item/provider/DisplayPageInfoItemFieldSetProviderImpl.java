@@ -116,7 +116,7 @@ public class DisplayPageInfoItemFieldSetProviderImpl
 					).uniqueId(
 						_getUniqueId(
 							layoutPageTemplateEntry.
-								getLayoutPageTemplateEntryKey())
+								getLayoutPageTemplateEntryId())
 					).name(
 						layoutPageTemplateEntry.getName()
 					).labelInfoLocalizedValue(
@@ -232,7 +232,7 @@ public class DisplayPageInfoItemFieldSetProviderImpl
 					_getDisplayPageInfoFieldType()
 				).uniqueId(
 					_getUniqueId(
-						layoutPageTemplateEntry.getLayoutPageTemplateEntryKey())
+						layoutPageTemplateEntry.getLayoutPageTemplateEntryId())
 				).name(
 					layoutPageTemplateEntry.getName()
 				).labelInfoLocalizedValue(
@@ -244,9 +244,9 @@ public class DisplayPageInfoItemFieldSetProviderImpl
 		return infoFieldSetEntries;
 	}
 
-	private String _getUniqueId(String layoutPageTemplateEntryKey) {
+	private String _getUniqueId(long layoutPageTemplateEntryId) {
 		return LayoutPageTemplateEntry.class.getSimpleName() +
-			StringPool.UNDERLINE + layoutPageTemplateEntryKey;
+			StringPool.UNDERLINE + layoutPageTemplateEntryId;
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
