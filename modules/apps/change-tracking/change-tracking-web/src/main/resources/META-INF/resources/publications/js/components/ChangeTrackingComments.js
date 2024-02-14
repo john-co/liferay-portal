@@ -100,7 +100,9 @@ export default function ChangeTrackingComments({
 
 			portletURL.setParameter('ctEntryId', ctEntryId.toString());
 
-			fetch(portletURL.toString())
+			fetch(portletURL.toString(), {
+				method: 'post',
+			})
 				.then((response) => response.json())
 				.then((json) => {
 					if (!json.comments) {
@@ -138,7 +140,9 @@ export default function ChangeTrackingComments({
 			portletURL.setParameter('ctCommentId', ctCommentId.toString());
 			portletURL.setParameter('ctEntryId', ctEntryId.toString());
 
-			fetch(portletURL.toString())
+			fetch(portletURL.toString(), {
+				method: 'post',
+			})
 				.then((response) => response.json())
 				.then((json) => {
 					if (!json.comments) {
@@ -174,7 +178,9 @@ export default function ChangeTrackingComments({
 			portletURL.setParameter('ctEntryId', ctEntryId.toString());
 			portletURL.setParameter('value', inputValue);
 
-			fetch(portletURL.toString())
+			fetch(portletURL.toString(), {
+				method: 'post',
+			})
 				.then((response) => response.json())
 				.then((json) => {
 					setDeleting(0);
@@ -218,7 +224,9 @@ export default function ChangeTrackingComments({
 			portletURL.setParameter('ctEntryId', ctEntryId.toString());
 			portletURL.setParameter('value', newValue);
 
-			fetch(portletURL.toString())
+			fetch(portletURL.toString(), {
+				method: 'post',
+			})
 				.then((response) => response.json())
 				.then((json) => {
 					setDeleting(0);
