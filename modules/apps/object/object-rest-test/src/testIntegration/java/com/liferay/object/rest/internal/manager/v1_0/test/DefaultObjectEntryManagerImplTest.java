@@ -1854,7 +1854,7 @@ public class DefaultObjectEntryManagerImplTest {
 			).build(),
 			childObjectEntry1);
 
-		objectField = objectFieldLocalService.getObjectField(
+		objectField = _objectFieldLocalService.getObjectField(
 			_objectDefinition1.getObjectDefinitionId(),
 			"externalReferenceCode");
 
@@ -1862,10 +1862,10 @@ public class DefaultObjectEntryManagerImplTest {
 			objectField.getObjectFieldId());
 
 		_objectDefinition1 =
-			objectDefinitionLocalService.updateObjectDefinition(
+			_objectDefinitionLocalService.updateObjectDefinition(
 				_objectDefinition1);
 
-		testGetObjectEntries(
+		_testGetObjectEntries(
 			HashMapBuilder.put(
 				"search", parentObjectEntry1.getExternalReferenceCode()
 			).build(),
