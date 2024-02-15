@@ -264,7 +264,6 @@ public class BatchEngineImportTaskExecutorImpl
 						_companyLocalService.getCompany(
 							batchEngineImportTask.getCompanyId()),
 						parameters,
-						batchEngineImportTask.getTaskItemDelegateName(),
 						_userLocalService.getUser(
 							batchEngineImportTask.getUserId()));
 
