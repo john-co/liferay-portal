@@ -1554,13 +1554,6 @@ public class DefaultObjectEntryManagerImpl
 				continue;
 			}
 
-			if ((value == null) &&
-				(!objectField.isRequired() ||
-				 _isObjectEntryDraft(objectEntry.getStatus()))) {
-
-				continue;
-			}
-
 			if (Objects.equals(
 					objectField.getDBType(),
 					ObjectFieldConstants.DB_TYPE_DATE)) {
@@ -1569,9 +1562,15 @@ public class DefaultObjectEntryManagerImpl
 					objectField.getName(),
 					_toDate(locale, String.valueOf(value)));
 			}
-			else {
-				values.put(objectField.getName(), (Serializable)value);
+
+			if ((value == null) &&
+				(!objectField.isRequired() ||
+				 _isObjectEntryDraft(objectEntry.getStatus()))) {
+
+				continue;
 			}
+
+			values.put(objectField.getName(), (Serializable)value);
 		}
 
 		return values;
