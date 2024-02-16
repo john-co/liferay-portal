@@ -2229,6 +2229,27 @@ public class DefaultObjectEntryManagerImplTest {
 						properties = objectEntryProperties;
 					}
 				}));
+
+		_assertEquals(
+			new ObjectEntry() {
+				{
+					properties = HashMapBuilder.<String, Object>putAll(
+						objectEntryProperties
+					).put(
+						"dateObjectFieldName", () -> null
+					).build();
+				}
+			},
+			_defaultObjectEntryManager.partialUpdateObjectEntry(
+				_simpleDTOConverterContext, _objectDefinition2,
+				objectEntry.getId(),
+				new ObjectEntry() {
+					{
+						properties = HashMapBuilder.<String, Object>put(
+							"dateObjectFieldName", () -> null
+						).build();
+					}
+				}));
 	}
 
 	@Test
