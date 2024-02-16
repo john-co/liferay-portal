@@ -138,6 +138,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -2162,6 +2163,7 @@ public class DefaultObjectEntryManagerImplTest {
 	public void testPartialUpdateObjectEntry() throws Exception {
 		DateFormat dateFormat = DateFormatFactoryUtil.getSimpleDateFormat(
 			"yyyy-MM-dd");
+		LocalDateTime nowLocalDateTime = LocalDateTime.now();
 
 		ObjectEntry objectEntry = _defaultObjectEntryManager.addObjectEntry(
 			_dtoConverterContext, _objectDefinition2,
@@ -2170,6 +2172,9 @@ public class DefaultObjectEntryManagerImplTest {
 					properties = HashMapBuilder.<String, Object>put(
 						"dateObjectFieldName",
 						dateFormat.format(RandomTestUtil.nextDate())
+					).put(
+						"dateTimeObjectFieldName",
+						nowLocalDateTime.truncatedTo(ChronoUnit.MILLIS)
 					).put(
 						"decimalObjectFieldName", RandomTestUtil.randomDouble()
 					).put(
@@ -2198,6 +2203,8 @@ public class DefaultObjectEntryManagerImplTest {
 		Map<String, Object> objectEntryProperties =
 			HashMapBuilder.<String, Object>put(
 				"dateObjectFieldName", "2023-08-20"
+			).put(
+				"dateTimeObjectFieldName", "2023-08-20T21:00:00.000"
 			).put(
 				"decimalObjectFieldName", 2.7
 			).put(
@@ -2237,6 +2244,8 @@ public class DefaultObjectEntryManagerImplTest {
 						objectEntryProperties
 					).put(
 						"dateObjectFieldName", () -> null
+					).put(
+						"dateTimeObjectFieldName", () -> null
 					).build();
 				}
 			},
@@ -2247,6 +2256,8 @@ public class DefaultObjectEntryManagerImplTest {
 					{
 						properties = HashMapBuilder.<String, Object>put(
 							"dateObjectFieldName", () -> null
+						).put(
+							"dateTimeObjectFieldName", () -> null
 						).build();
 					}
 				}));
