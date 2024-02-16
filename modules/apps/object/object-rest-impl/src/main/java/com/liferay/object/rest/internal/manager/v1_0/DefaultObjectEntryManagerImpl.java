@@ -1486,10 +1486,6 @@ public class DefaultObjectEntryManagerImpl
 				continue;
 			}
 
-			if ((value == null) && !objectField.isRequired()) {
-				continue;
-			}
-
 			if (Objects.equals(
 					objectField.getDBType(),
 					ObjectFieldConstants.DB_TYPE_DATE)) {
@@ -1498,7 +1494,12 @@ public class DefaultObjectEntryManagerImpl
 					objectField.getName(),
 					_toDate(locale, String.valueOf(value)));
 			}
-			else if (objectField.getListTypeDefinitionId() != 0) {
+
+			if ((value == null) && !objectField.isRequired()) {
+				continue;
+			}
+
+			if (objectField.getListTypeDefinitionId() != 0) {
 				if (value instanceof ListEntry) {
 					ListEntry listEntry = (ListEntry)value;
 
