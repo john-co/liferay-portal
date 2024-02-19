@@ -2454,7 +2454,6 @@ public class DefaultObjectEntryManagerImplTest
 					).build();
 				}
 			});
-
 		assertEquals(
 			_defaultObjectEntryManager.partialUpdateObjectEntry(
 				_simpleDTOConverterContext, _objectDefinition2,
