@@ -2236,7 +2236,6 @@ public class DefaultObjectEntryManagerImplTest {
 						properties = objectEntryProperties;
 					}
 				}));
-
 		_assertEquals(
 			new ObjectEntry() {
 				{
