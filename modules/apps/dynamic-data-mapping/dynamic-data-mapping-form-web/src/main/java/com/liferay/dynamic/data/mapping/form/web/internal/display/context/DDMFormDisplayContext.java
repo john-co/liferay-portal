@@ -853,6 +853,10 @@ public class DDMFormDisplayContext {
 				getUser());
 	}
 
+	public boolean propagateLanguageSelection() {
+		return _ddmFormWebConfiguration.propagateLanguageSelection();
+	}
+
 	protected DDMFormRenderingContext createDDMFormRenderingContext(
 			DDMForm ddmForm)
 		throws PortalException {

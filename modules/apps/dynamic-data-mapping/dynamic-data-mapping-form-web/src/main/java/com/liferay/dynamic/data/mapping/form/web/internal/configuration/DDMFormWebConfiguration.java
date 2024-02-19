@@ -67,4 +67,10 @@ public interface DDMFormWebConfiguration {
 	)
 	public int guestUploadMaximumSubmissions();
 
+	@Meta.AD(
+		deflt = "false", description = "propagate-language-selection-help",
+		name = "propagate-language-selection", required = false
+	)
+	public boolean propagateLanguageSelection();
+
 }
