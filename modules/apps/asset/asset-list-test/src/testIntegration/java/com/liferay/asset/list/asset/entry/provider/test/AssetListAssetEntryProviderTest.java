@@ -102,7 +102,8 @@ public class AssetListAssetEntryProviderTest {
 		AssetListEntry assetListEntry =
 			_assetListEntryLocalService.addAssetListEntry(
 				TestPropsValues.getUserId(), _group.getGroupId(),
-				"Dynamic title", AssetListEntryTypeConstants.TYPE_DYNAMIC, null,
+				RandomTestUtil.randomString(),
+				AssetListEntryTypeConstants.TYPE_DYNAMIC, null,
 				_serviceContext);
 
 		User userTest = TestPropsValues.getUser();
@@ -252,7 +253,8 @@ public class AssetListAssetEntryProviderTest {
 		AssetListEntry assetListEntry =
 			_assetListEntryLocalService.addAssetListEntry(
 				TestPropsValues.getUserId(), _group.getGroupId(),
-				"Dynamic title", AssetListEntryTypeConstants.TYPE_DYNAMIC, null,
+				RandomTestUtil.randomString(),
+				AssetListEntryTypeConstants.TYPE_DYNAMIC, null,
 				_serviceContext);
 
 		User user = TestPropsValues.getUser();
@@ -527,7 +529,8 @@ public class AssetListAssetEntryProviderTest {
 		AssetListEntry assetListEntry =
 			_assetListEntryLocalService.addAssetListEntry(
 				TestPropsValues.getUserId(), _group.getGroupId(),
-				"Dynamic title", AssetListEntryTypeConstants.TYPE_DYNAMIC,
+				RandomTestUtil.randomString(),
+				AssetListEntryTypeConstants.TYPE_DYNAMIC,
 				UnicodePropertiesBuilder.create(
 					true
 				).put(
@@ -566,7 +569,8 @@ public class AssetListAssetEntryProviderTest {
 		AssetListEntry assetListEntry =
 			_assetListEntryLocalService.addAssetListEntry(
 				TestPropsValues.getUserId(), _group.getGroupId(),
-				"Dynamic title", AssetListEntryTypeConstants.TYPE_DYNAMIC,
+				RandomTestUtil.randomString(),
+				AssetListEntryTypeConstants.TYPE_DYNAMIC,
 				UnicodePropertiesBuilder.create(
 					true
 				).put(
@@ -983,7 +987,8 @@ public class AssetListAssetEntryProviderTest {
 		AssetListEntry assetListEntry =
 			_assetListEntryLocalService.addAssetListEntry(
 				TestPropsValues.getUserId(), _group.getGroupId(),
-				"Dynamic title", AssetListEntryTypeConstants.TYPE_DYNAMIC, null,
+				RandomTestUtil.randomString(),
+				AssetListEntryTypeConstants.TYPE_DYNAMIC, null,
 				_serviceContext);
 
 		User userTest = TestPropsValues.getUser();
