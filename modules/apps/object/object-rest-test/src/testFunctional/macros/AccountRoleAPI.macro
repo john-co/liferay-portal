@@ -1,5 +1,6 @@
 definition {
 
+	@summary = "Default summary"
 	macro associateUserToAccountWithAccountRole {
 		Variables.assertDefined(parameterList = "${accountId},${roleName},${userAccountId}");
 
@@ -20,6 +21,7 @@ definition {
 		return ${response};
 	}
 
+	@summary = "Default summary"
 	macro getAccountRoleIdByAccountId {
 		Variables.assertDefined(parameterList = "${roleName},${accountId}");
 

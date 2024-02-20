@@ -1,5 +1,6 @@
 definition {
 
+	@summary = "Default summary"
 	macro _curlUserAccount {
 		if (isSet(virtualHost)) {
 			if (!(isSet(port))) {
@@ -48,6 +49,7 @@ definition {
 		return ${curl};
 	}
 
+	@summary = "Default summary"
 	macro _nUsersBodyAsNestedFieldToCreate {
 		Variables.assertDefined(parameterList = "${body},${nestedField},${numberOfRelatedUsers},${alternateName},${emailDomain},${familyName},${givenName}");
 
@@ -92,6 +94,7 @@ definition {
 		return ${body};
 	}
 
+	@summary = "Default summary"
 	macro _nUsersBodyAsNestedFieldToUpdate {
 		Variables.assertDefined(parameterList = "${body},${nestedField},${alternateName},${emailDomain},${familyName},${givenName},${userExternalReferenceCodes}");
 
@@ -138,6 +141,7 @@ definition {
 		return ${body};
 	}
 
+	@summary = "Default summary"
 	macro assertCorrectUserAlternateNameInResponse {
 		Variables.assertDefined(parameterList = ${expectedNames});
 
@@ -150,6 +154,7 @@ definition {
 			expected = ${expectedNames});
 	}
 
+	@summary = "Default summary"
 	macro assertResponseHasCorrectRelatedEntryName {
 		Variables.assertDefined(parameterList = "${userAccountId},${relationshipName},${expectedValue}");
 
@@ -164,6 +169,7 @@ definition {
 			expected = ${expectedValue});
 	}
 
+	@summary = "Default summary"
 	macro assertResponseNotIncludeDetailsOfDeletedObjectEntry {
 		Variables.assertDefined(parameterList = "${userAccountId},${relationshipName},${expectedValue}");
 
@@ -178,6 +184,7 @@ definition {
 			expected = ${expectedValue});
 	}
 
+	@summary = "Default summary"
 	macro createUserAccount {
 		Variables.assertDefined(parameterList = "${alternateName},${emailAddress},${familyName},${givenName}");
 
@@ -195,6 +202,7 @@ definition {
 		return ${response};
 	}
 
+	@summary = "Default summary"
 	macro createUserAccountAndRelatedObjects {
 		Variables.assertDefined(parameterList = "${alternateName},${emailAddress},${familyName},${givenName},${nestedField},${numberOfRelatedObjectEntries},${relatedEntryFieldName}");
 
@@ -222,6 +230,7 @@ definition {
 		return ${response};
 	}
 
+	@summary = "Default summary"
 	macro createUserRoleByUserAccountId {
 		Variables.assertDefined(parameterList = "${roleName},${streetNumber},${userAccountId}");
 
@@ -241,6 +250,7 @@ definition {
 		return ${response};
 	}
 
+	@summary = "Default summary"
 	macro deleteObjectEntryRelatedToUserAccount {
 		Variables.assertDefined(parameterList = "${userAccountId},${relationshipName},${customObjectEntryId}");
 
@@ -252,6 +262,7 @@ definition {
 		JSONCurlUtil.delete(${curl});
 	}
 
+	@summary = "Default summary"
 	macro getRelationshipByUserAccountId {
 		Variables.assertDefined(parameterList = "${userAccountId},${relationshipName}");
 
@@ -269,6 +280,7 @@ definition {
 		return ${response};
 	}
 
+	@summary = "Default summary"
 	macro getRoleId {
 		Variables.assertDefined(parameterList = "${roleName},${streetNumber}");
 
@@ -292,6 +304,7 @@ definition {
 		}
 	}
 
+	@summary = "Default summary"
 	macro getSystemObjectsWithNestedField {
 		var curl = UserAccountAPI._curlUserAccount(
 			parameter = ${parameter},
@@ -303,6 +316,7 @@ definition {
 		return ${response};
 	}
 
+	@summary = "Default summary"
 	macro getSystemObjectsWithNestedFieldAndNestedFieldsDepth {
 		var curl = UserAccountAPI._curlUserAccount(
 			fieldsValue = ${fieldsValue},
@@ -314,6 +328,7 @@ definition {
 		return ${response};
 	}
 
+	@summary = "Default summary"
 	macro getUpdatedFieldOfUserAccountWithPatchRequest {
 		Variables.assertDefined(parameterList = "${fieldName},${updatedFieldValue}");
 
@@ -331,6 +346,7 @@ definition {
 		return ${valueOfField};
 	}
 
+	@summary = "Default summary"
 	macro getUpdatedFieldOfUserAccountWithPutRequest {
 		Variables.assertDefined(parameterList = "${alternateName},${emailAddress},${familyName},${givenName},${fieldName},${updatedFieldValue}");
 
@@ -356,6 +372,7 @@ definition {
 		return ${valueOfField};
 	}
 
+	@summary = "Default summary"
 	macro getUserFieldWithFilter {
 		Variables.assertDefined(parameterList = "${filter},${jsonPath}");
 
@@ -373,6 +390,7 @@ definition {
 		return ${fieldValue};
 	}
 
+	@summary = "Default summary"
 	macro partialUpdateUserAccountAndRelatedObjects {
 		Variables.assertDefined(parameterList = "${emailAddress},${nestedField},${numberOfRelatedObjectEntries},${relatedEntryFieldName},${userAccountId}");
 
@@ -403,6 +421,7 @@ definition {
 		return ${response};
 	}
 
+	@summary = "Default summary"
 	macro relateObjectEntries {
 		Variables.assertDefined(parameterList = "${userAccountId},${customObjectId},${relationshipName}");
 
@@ -420,6 +439,7 @@ definition {
 		return ${response};
 	}
 
+	@summary = "Default summary"
 	macro setUpGlobalUserAccountId {
 		var response = UserAccountAPI.createUserAccount(
 			alternateName = ${alternateName},
@@ -438,6 +458,7 @@ definition {
 		return ${staticUserAccountId};
 	}
 
+	@summary = "Default summary"
 	macro setUpGlobalUserAccountIds {
 		var response1 = UserAccountAPI.createUserAccount(
 			alternateName = ${alternateName1},
@@ -472,6 +493,7 @@ definition {
 		}
 	}
 
+	@summary = "Default summary"
 	macro updateUserAccountAndRelatedObjects {
 		Variables.assertDefined(parameterList = "${alternateName},${emailAddress},${familyName},${givenName},${nestedField},${numberOfRelatedObjectEntries},${relatedEntryFieldName},${userAccountId}");
 

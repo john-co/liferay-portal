@@ -2993,7 +2993,7 @@ public class DefaultObjectEntryManagerImplTest {
 		_assertEquals(
 			new ObjectEntry() {
 				{
-					setProperties(expectedLocalizedValues);
+					properties = expectedLocalizedValues;
 				}
 			},
 			_defaultObjectEntryManager.getObjectEntry(

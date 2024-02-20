@@ -1,5 +1,6 @@
 definition {
 
+	@summary = "Default summary"
 	macro _curlCreateObjectAction {
 		var portalURL = JSONCompany.getPortalURL();
 
@@ -26,6 +27,7 @@ definition {
 		return ${curl};
 	}
 
+	@summary = "Default summary"
 	macro _setParametersForObjectAction {
 		Variables.assertDefined(parameterList = ${objectActionExecutorKey});
 
@@ -41,6 +43,7 @@ definition {
 		return ${parameters};
 	}
 
+	@summary = "Default summary"
 	macro createObjectAction {
 		Variables.assertDefined(parameterList = "${objectDefinitionId},${label},${name},${objectActionExecutorKey},${objectActionTriggerKey}");
 

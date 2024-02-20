@@ -1,5 +1,6 @@
 definition {
 
+	@summary = "Default summary"
 	macro addOAuth2Application {
 		OAuth2.addApplication(
 			applicationName = "OAuth Application",
@@ -10,6 +11,7 @@ definition {
 			clientSecret = "mySecret");
 	}
 
+	@summary = "Default summary"
 	macro createTokenWithOAuth2Scopes {
 		Variables.assertDefined(parameterList = ${resourceCheckList});
 

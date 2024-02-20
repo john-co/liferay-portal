@@ -5,6 +5,7 @@ definition {
 			-H Content-Type: application/json \
 		''';
 
+	@summary = "Default summary"
 	macro _curlObjectEntries {
 		Variables.assertDefined(parameterList = ${en_US_plural_label});
 
@@ -79,6 +80,7 @@ definition {
 		return ${curl};
 	}
 
+	@summary = "Default summary"
 	macro _curlObjectPermissions {
 		Variables.assertDefined(parameterList = "${en_US_plural_label},${objectEntryId}");
 
@@ -96,6 +98,7 @@ definition {
 		return ${curl};
 	}
 
+	@summary = "Default summary"
 	macro _setNObjectEntriesBody {
 		Variables.assertDefined(parameterList = "${fieldName},${fieldValue}");
 
@@ -162,6 +165,7 @@ definition {
 		return ${body};
 	}
 
+	@summary = "Default summary"
 	macro assertCorrectObjectEntryValuesInResponse {
 		Variables.assertDefined(parameterList = "${objectJsonPath},${expectedValues}");
 
@@ -176,6 +180,7 @@ definition {
 			expected = ${expectedValues});
 	}
 
+	@summary = "Default summary"
 	macro createObjectEntryAndRelatedObjects {
 		Variables.assertDefined(parameterList = "${en_US_plural_label},${fieldName},${fieldValue},${nestedField},${numberOfRelatedObjectEntries}");
 
@@ -200,6 +205,7 @@ definition {
 		return ${response};
 	}
 
+	@summary = "Default summary"
 	macro createObjectEntryWithAllFields {
 		Variables.assertDefined(parameterList = "${en_US_plural_label},${customBooleanValue},${customLongTextValue},${customPicklistValue},${customPrecisionDecimalValue},${requiredFieldLabel},${requiredFieldValue}");
 
@@ -225,6 +231,7 @@ definition {
 		return ${objectId};
 	}
 
+	@summary = "Default summary"
 	macro createObjectEntryWithFields {
 		Variables.assertDefined(parameterList = "${en_US_plural_label},${fieldName},${fieldValue}");
 
@@ -246,6 +253,7 @@ definition {
 		return ${response};
 	}
 
+	@summary = "Default summary"
 	macro createStudentRelatedToAccount {
 		Variables.assertDefined(parameterList = "${name},${accountId}");
 
@@ -266,6 +274,7 @@ definition {
 		return ${studentId};
 	}
 
+	@summary = "Default summary"
 	macro createSubjectRelatedToStudentAndAccount {
 		Variables.assertDefined(parameterList = "${name},${accountId},${studentId}");
 
@@ -287,6 +296,7 @@ definition {
 		return ${subjectId};
 	}
 
+	@summary = "Default summary"
 	macro getObjectEntries {
 		Variables.assertDefined(parameterList = ${en_US_plural_label});
 
@@ -302,6 +312,7 @@ definition {
 		return ${response};
 	}
 
+	@summary = "Default summary"
 	macro getObjectEntryById {
 		Variables.assertDefined(parameterList = "${en_US_plural_label},${objectEntryId}");
 
@@ -332,6 +343,7 @@ definition {
 		return ${response};
 	}
 
+	@summary = "Default summary"
 	macro getObjectEntryErcByName {
 		Variables.assertDefined(parameterList = "${name},${en_US_plural_label}");
 
@@ -357,6 +369,7 @@ definition {
 		return ${objectEntryErc};
 	}
 
+	@summary = "Default summary"
 	macro getObjectEntryIdByName {
 		Variables.assertDefined(parameterList = "${name},${en_US_plural_label}");
 
@@ -382,6 +395,7 @@ definition {
 		return ${objectEntryId};
 	}
 
+	@summary = "Default summary"
 	macro getObjectPermissions {
 		Variables.assertDefined(parameterList = "${en_US_plural_label},${objectEntryId}");
 
@@ -394,6 +408,7 @@ definition {
 		return ${response};
 	}
 
+	@summary = "Default summary"
 	macro nObjectEntryBodyAsNestedField {
 		Variables.assertDefined(parameterList = "${body},${nestedField},${numberOfRelatedObjectEntries},${relatedEntryFieldName}");
 
@@ -453,6 +468,7 @@ definition {
 		return ${body};
 	}
 
+	@summary = "Default summary"
 	macro patchObjectEntryNameById {
 		Variables.assertDefined(parameterList = "${en_US_plural_label},${fieldValue},${objectEntryId}");
 
@@ -468,6 +484,7 @@ definition {
 		return ${response};
 	}
 
+	@summary = "Default summary"
 	macro putObjectEntryById {
 		Variables.assertDefined(parameterList = "${en_US_plural_label},${fieldValue},${objectEntryId}");
 
@@ -484,6 +501,7 @@ definition {
 		return ${response};
 	}
 
+	@summary = "Default summary"
 	macro staticObjectDefinitionId {
 		Variables.assertDefined(parameterList = ${objectDefinitionId});
 
@@ -492,6 +510,7 @@ definition {
 		return ${staticObjectDefinitionId};
 	}
 
+	@summary = "Default summary"
 	macro staticObjectEntryId {
 		Variables.assertDefined(parameterList = ${objectEntryId});
 
@@ -500,6 +519,7 @@ definition {
 		return ${staticObjectId};
 	}
 
+	@summary = "Default summary"
 	macro updateObjectEntryAndRelatedObjectsByPatch {
 		Variables.assertDefined(parameterList = "${en_US_plural_label},${objectEntryId},${fieldName},${fieldValue},${nestedField},${objectEntryId}");
 
@@ -525,6 +545,7 @@ definition {
 		return ${response};
 	}
 
+	@summary = "Default summary"
 	macro updateObjectEntryAndRelatedObjectsByPut {
 		Variables.assertDefined(parameterList = "${en_US_plural_label},${objectEntryId},${fieldName},${fieldValue},${nestedField},${objectEntryId}");
 
@@ -551,6 +572,7 @@ definition {
 		return ${response};
 	}
 
+	@summary = "Default summary"
 	macro updateObjectPermissions {
 		Variables.assertDefined(parameterList = "${en_US_plural_label},${objectEntryId},${actionIds},${roleName}");
 

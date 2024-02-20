@@ -1,5 +1,6 @@
 definition {
 
+	@summary = "Default summary"
 	macro _curlAccount {
 		var portalURL = JSONCompany.getPortalURL();
 
@@ -24,6 +25,7 @@ definition {
 		return ${curl};
 	}
 
+	@summary = "Default summary"
 	macro createAccount {
 		Variables.assertDefined(parameterList = ${name});
 
@@ -47,6 +49,7 @@ definition {
 		return ${accountId};
 	}
 
+	@summary = "Default summary"
 	macro deleteAccount {
 		Variables.assertDefined(parameterList = ${accountId});
 
@@ -55,6 +58,7 @@ definition {
 		JSONCurlUtil.delete(${curl});
 	}
 
+	@summary = "Default summary"
 	macro deleteAllAccounts {
 		var response = AccountAPI.getAccounts();
 
@@ -65,6 +69,7 @@ definition {
 		}
 	}
 
+	@summary = "Default summary"
 	macro getAccounts {
 		var curl = AccountAPI._curlAccount();
 
@@ -73,6 +78,7 @@ definition {
 		return ${response};
 	}
 
+	@summary = "Default summary"
 	macro getRelationshipByAccountId {
 		var curl = AccountAPI._curlAccount(
 			accountId = ${accountId},
@@ -83,6 +89,7 @@ definition {
 		return ${response};
 	}
 
+	@summary = "Default summary"
 	macro putAccountRelationship {
 		var curl = AccountAPI._curlAccount(
 			accountId = ${accountId},
@@ -93,6 +100,7 @@ definition {
 		return ${response};
 	}
 
+	@summary = "Default summary"
 	macro relateObjectEntries {
 		Variables.assertDefined(parameterList = "${userAccountId},${customObjectId},${relationshipName}");
 
@@ -106,6 +114,7 @@ definition {
 		return ${response};
 	}
 
+	@summary = "Default summary"
 	macro setUpGlobalAccountId {
 		var accountId = AccountAPI.createAccount(name = "user1");
 
@@ -114,6 +123,7 @@ definition {
 		return ${staticAccountId};
 	}
 
+	@summary = "Default summary"
 	macro tearDownAllAccounts {
 		var response = AccountAPI.getAccounts();
 
