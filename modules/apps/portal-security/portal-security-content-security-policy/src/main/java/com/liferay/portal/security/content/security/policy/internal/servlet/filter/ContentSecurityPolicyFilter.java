@@ -72,6 +72,8 @@ public class ContentSecurityPolicyFilter extends BasePortalFilter {
 			return;
 		}
 
+		httpServletResponse.setContentType("text/html; charset=UTF-8");
+
 		ContentSecurityPolicyConfiguration contentSecurityPolicyConfiguration =
 			_getContentSecurityPolicyConfiguration(httpServletRequest);
 
@@ -92,8 +94,6 @@ public class ContentSecurityPolicyFilter extends BasePortalFilter {
 			policy = StringUtil.replace(policy, "[$NONCE$]", "nonce-" + nonce);
 
 			httpServletResponse.setHeader("Content-Security-Policy", policy);
-
-			httpServletResponse.setContentType("text/html; charset=UTF-8");
 
 			PrintWriter printWriter = httpServletResponse.getWriter();
 
