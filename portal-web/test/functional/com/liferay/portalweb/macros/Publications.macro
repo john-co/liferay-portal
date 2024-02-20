@@ -577,11 +577,7 @@ definition {
 
 	@summary = "Default summary"
 	macro viewInvitedUser(userInvite = null, publicationRole = null) {
-		WaitForElementPresent(
-			key_title = "Invite Users",
-			locator1 = "IFrame#MODAL_ANY");
-
-		WaitForElementPresent(
+		AssertElementPresent(
 			key_publicationRole = ${publicationRole},
 			key_userInvite = ${userInvite},
 			locator1 = "Publications#INVITED_USER");
