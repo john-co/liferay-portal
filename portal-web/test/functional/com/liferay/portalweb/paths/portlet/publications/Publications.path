@@ -242,7 +242,12 @@
 </tr>
 <tr>
 	<td>REVERT_BUTTON</td>
-	<td>//div[contains(.,'${ke_publicationName}')]//following-sibling::div//a[contains(.,'Revert')]</td>
+	<td>//div[contains(.,'${key_publicationName}')]//following-sibling::div//a[contains(.,'Revert')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>REVERT_DISABLED</td>
+	<td>//div[contains(.,'${key_publicationName}')]//following-sibling::div//a[contains(@class, 'disabled btn') and contains(.,'Revert')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -253,11 +258,6 @@
 <tr>
 	<td>REVERT_SCREEN_RADIO_OPTION</td>
 	<td>//div[contains(@class,'publications-radio-label') and contains(.,'${key_radioName}')]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>REVIEW_CHANGES_BUTTON</td>
-	<td>//div[contains(@class,'item-actions')]/a[contains(@title,'Review Changes')]</td>
 	<td></td>
 </tr>
 <tr>
