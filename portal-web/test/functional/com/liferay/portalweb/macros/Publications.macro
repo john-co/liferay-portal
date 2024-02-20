@@ -33,6 +33,8 @@ definition {
 
 		Pause(value1 = 240000);
 
+		LexiconEntry.changeDisplayStyle(displayStyle = "list");
+
 		var key_publicationName = ${publicationName};
 
 		AssertTextEquals(
@@ -380,6 +382,8 @@ definition {
 		PublicationsNavigator.openPublicationsHistory();
 
 		if (!(IsElementPresent(locator1 = "//div[(@class='data-set-content-wrapper')]"))) {
+			LexiconEntry.changeDisplayStyle(displayStyle = "list");
+
 			AssertTextEquals(
 				locator1 = "Publications#LIST_PUBLISHED_STATUS",
 				value1 = "Published");
@@ -393,6 +397,8 @@ definition {
 
 	@summary = "Default summary"
 	macro revertPublication(publishNow = null, publicationName = null) {
+		LexiconEntry.changeDisplayStyle(displayStyle = "list");
+
 		var key_publicationName = ${publicationName};
 
 		Click(locator1 = "Publications#LIST_REVERT_BUTTON");
@@ -596,6 +602,10 @@ definition {
 
 	@summary = "Default summary"
 	macro viewPublicationOrderInHistory(publicationList = null) {
+		if (!(isSet(paginationView))) {
+			LexiconEntry.changeDisplayStyle(displayStyle = "list");
+		}
+
 		var resultOrder = 0;
 
 		for (var publicationName : list ${publicationList}) {
@@ -638,6 +648,8 @@ definition {
 		}
 
 		PublicationsNavigator.openPublicationsAdmin();
+
+		LexiconEntry.changeDisplayStyle(displayStyle = "list");
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "Publications#PUBLICATION_NAME_IN_ONGOING",

@@ -134,6 +134,8 @@ definition {
 
 		DMNavigator.openDocumentsAndMediaAdmin(siteURLKey = "site-name");
 
+		LexiconEntry.changeDisplayStyle(displayStyle = "list");
+
 		DMDocument.checkoutCP(dmDocumentTitle = "DM Document Title");
 
 		Refresh();
