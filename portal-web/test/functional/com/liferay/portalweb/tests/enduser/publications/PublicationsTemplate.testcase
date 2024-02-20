@@ -85,8 +85,6 @@ definition {
 			menuItem = "Invite Users",
 			publicationName = "Publication Name test");
 
-		SelectFrame(locator1 = "IFrame#MODAL_BODY");
-
 		Publications.viewInvitedUser(
 			publicationRole = "Editor",
 			userInvite = "userea1@liferay.com");
