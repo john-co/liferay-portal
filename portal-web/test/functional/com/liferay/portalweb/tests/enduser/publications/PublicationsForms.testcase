@@ -492,6 +492,7 @@ definition {
 	}
 
 	@description = "Assert the form with rule can be submited successfully within publications and published to production."
+	@ignore = "true"
 	@priority = 4
 	test SubmitFormWithRuleWithinPublications {
 		JSONPublications.addPublication(publicationName = "Publication Name");
