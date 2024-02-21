@@ -1280,7 +1280,7 @@ public class EditAssetListDisplayContext {
 			String assetEntrySubtype, long classTypeId,
 			ClassTypeReader classTypeReader) {
 
-		ClassType classType;
+		ClassType classType = null;
 
 		try {
 			classType = classTypeReader.getClassType(
