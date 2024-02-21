@@ -10,7 +10,6 @@ import com.liferay.fragment.constants.FragmentConstants;
 import com.liferay.fragment.model.FragmentCollection;
 import com.liferay.fragment.model.FragmentEntry;
 import com.liferay.fragment.service.FragmentEntryLocalService;
-import com.liferay.fragment.service.persistence.FragmentEntryPersistence;
 import com.liferay.fragment.util.FragmentEntryTestUtil;
 import com.liferay.fragment.util.FragmentTestUtil;
 import com.liferay.fragment.util.comparator.FragmentEntryCreateDateComparator;
@@ -92,23 +91,18 @@ public class FragmentEntryLocalServiceTest {
 				ServiceContextTestUtil.getServiceContext(
 					_group.getGroupId(), TestPropsValues.getUserId()));
 
-		FragmentEntry persistedFragmentEntry =
-			_fragmentEntryPersistence.fetchByPrimaryKey(
-				fragmentEntry.getFragmentEntryId());
-
 		Assert.assertEquals(
 			StringUtil.toLowerCase(fragmentEntryKey),
-			persistedFragmentEntry.getFragmentEntryKey());
-		Assert.assertEquals(name, persistedFragmentEntry.getName());
-		Assert.assertEquals(css, persistedFragmentEntry.getCss());
-		Assert.assertEquals(html, persistedFragmentEntry.getHtml());
-		Assert.assertEquals(js, persistedFragmentEntry.getJs());
+			fragmentEntry.getFragmentEntryKey());
+		Assert.assertEquals(name, fragmentEntry.getName());
+		Assert.assertEquals(css, fragmentEntry.getCss());
+		Assert.assertEquals(html, fragmentEntry.getHtml());
+		Assert.assertEquals(js, fragmentEntry.getJs());
+		Assert.assertEquals(configuration, fragmentEntry.getConfiguration());
 		Assert.assertEquals(
-			configuration, persistedFragmentEntry.getConfiguration());
-		Assert.assertEquals(
-			previewFileEntryId, persistedFragmentEntry.getPreviewFileEntryId());
-		Assert.assertEquals(type, persistedFragmentEntry.getType());
-		Assert.assertEquals(status, persistedFragmentEntry.getStatus());
+			previewFileEntryId, fragmentEntry.getPreviewFileEntryId());
+		Assert.assertEquals(type, fragmentEntry.getType());
+		Assert.assertEquals(status, fragmentEntry.getStatus());
 	}
 
 	@Test
@@ -133,20 +127,16 @@ public class FragmentEntryLocalServiceTest {
 				ServiceContextTestUtil.getServiceContext(
 					_group.getGroupId(), TestPropsValues.getUserId()));
 
-		FragmentEntry persistedFragmentEntry =
-			_fragmentEntryPersistence.fetchByPrimaryKey(
-				fragmentEntry.getFragmentEntryId());
-
 		Assert.assertEquals(
 			StringUtil.toLowerCase(fragmentEntryKey),
-			persistedFragmentEntry.getFragmentEntryKey());
-		Assert.assertEquals(name, persistedFragmentEntry.getName());
-		Assert.assertEquals(css, persistedFragmentEntry.getCss());
-		Assert.assertEquals(html, persistedFragmentEntry.getHtml());
-		Assert.assertEquals(js, persistedFragmentEntry.getJs());
+			fragmentEntry.getFragmentEntryKey());
+		Assert.assertEquals(name, fragmentEntry.getName());
+		Assert.assertEquals(css, fragmentEntry.getCss());
+		Assert.assertEquals(html, fragmentEntry.getHtml());
+		Assert.assertEquals(js, fragmentEntry.getJs());
 		Assert.assertEquals(
-			previewFileEntryId, persistedFragmentEntry.getPreviewFileEntryId());
-		Assert.assertEquals(status, persistedFragmentEntry.getStatus());
+			previewFileEntryId, fragmentEntry.getPreviewFileEntryId());
+		Assert.assertEquals(status, fragmentEntry.getStatus());
 	}
 
 	@Test
@@ -171,21 +161,17 @@ public class FragmentEntryLocalServiceTest {
 				ServiceContextTestUtil.getServiceContext(
 					_group.getGroupId(), TestPropsValues.getUserId()));
 
-		FragmentEntry persistedFragmentEntry =
-			_fragmentEntryPersistence.fetchByPrimaryKey(
-				fragmentEntry.getFragmentEntryId());
-
 		Assert.assertEquals(
 			StringUtil.toLowerCase(fragmentEntryKey),
-			persistedFragmentEntry.getFragmentEntryKey());
-		Assert.assertEquals(name, persistedFragmentEntry.getName());
-		Assert.assertEquals(css, persistedFragmentEntry.getCss());
-		Assert.assertEquals(html, persistedFragmentEntry.getHtml());
-		Assert.assertEquals(js, persistedFragmentEntry.getJs());
+			fragmentEntry.getFragmentEntryKey());
+		Assert.assertEquals(name, fragmentEntry.getName());
+		Assert.assertEquals(css, fragmentEntry.getCss());
+		Assert.assertEquals(html, fragmentEntry.getHtml());
+		Assert.assertEquals(js, fragmentEntry.getJs());
 		Assert.assertEquals(
-			previewFileEntryId, persistedFragmentEntry.getPreviewFileEntryId());
-		Assert.assertEquals(type, persistedFragmentEntry.getType());
-		Assert.assertEquals(status, persistedFragmentEntry.getStatus());
+			previewFileEntryId, fragmentEntry.getPreviewFileEntryId());
+		Assert.assertEquals(type, fragmentEntry.getType());
+		Assert.assertEquals(status, fragmentEntry.getStatus());
 	}
 
 	@Test
@@ -209,19 +195,15 @@ public class FragmentEntryLocalServiceTest {
 				ServiceContextTestUtil.getServiceContext(
 					_group.getGroupId(), TestPropsValues.getUserId()));
 
-		FragmentEntry persistedFragmentEntry =
-			_fragmentEntryPersistence.fetchByPrimaryKey(
-				fragmentEntry.getFragmentEntryId());
-
 		Assert.assertEquals(
 			StringUtil.toLowerCase(fragmentEntryKey),
-			persistedFragmentEntry.getFragmentEntryKey());
-		Assert.assertEquals(name, persistedFragmentEntry.getName());
-		Assert.assertEquals(css, persistedFragmentEntry.getCss());
-		Assert.assertEquals(html, persistedFragmentEntry.getHtml());
-		Assert.assertEquals(js, persistedFragmentEntry.getJs());
-		Assert.assertEquals(type, persistedFragmentEntry.getType());
-		Assert.assertEquals(status, persistedFragmentEntry.getStatus());
+			fragmentEntry.getFragmentEntryKey());
+		Assert.assertEquals(name, fragmentEntry.getName());
+		Assert.assertEquals(css, fragmentEntry.getCss());
+		Assert.assertEquals(html, fragmentEntry.getHtml());
+		Assert.assertEquals(js, fragmentEntry.getJs());
+		Assert.assertEquals(type, fragmentEntry.getType());
+		Assert.assertEquals(status, fragmentEntry.getStatus());
 	}
 
 	@Test
@@ -244,18 +226,14 @@ public class FragmentEntryLocalServiceTest {
 				ServiceContextTestUtil.getServiceContext(
 					_group.getGroupId(), TestPropsValues.getUserId()));
 
-		FragmentEntry persistedFragmentEntry =
-			_fragmentEntryPersistence.fetchByPrimaryKey(
-				fragmentEntry.getFragmentEntryId());
-
 		Assert.assertEquals(
 			StringUtil.toLowerCase(fragmentEntryKey),
-			persistedFragmentEntry.getFragmentEntryKey());
-		Assert.assertEquals(name, persistedFragmentEntry.getName());
+			fragmentEntry.getFragmentEntryKey());
+		Assert.assertEquals(name, fragmentEntry.getName());
 		Assert.assertEquals(
-			previewFileEntryId, persistedFragmentEntry.getPreviewFileEntryId());
-		Assert.assertEquals(type, persistedFragmentEntry.getType());
-		Assert.assertEquals(status, persistedFragmentEntry.getStatus());
+			previewFileEntryId, fragmentEntry.getPreviewFileEntryId());
+		Assert.assertEquals(type, fragmentEntry.getType());
+		Assert.assertEquals(status, fragmentEntry.getStatus());
 	}
 
 	@Test
@@ -274,11 +252,7 @@ public class FragmentEntryLocalServiceTest {
 				ServiceContextTestUtil.getServiceContext(
 					_group.getGroupId(), TestPropsValues.getUserId()));
 
-		FragmentEntry persistedFragmentEntry =
-			_fragmentEntryPersistence.fetchByPrimaryKey(
-				fragmentEntry.getFragmentEntryId());
-
-		Assert.assertEquals(html, persistedFragmentEntry.getHtml());
+		Assert.assertEquals(html, fragmentEntry.getHtml());
 	}
 
 	@Test
@@ -301,15 +275,11 @@ public class FragmentEntryLocalServiceTest {
 				ServiceContextTestUtil.getServiceContext(
 					_group.getGroupId(), TestPropsValues.getUserId()));
 
-		FragmentEntry persistedFragmentEntry =
-			_fragmentEntryPersistence.fetchByPrimaryKey(
-				fragmentEntry.getFragmentEntryId());
-
-		Assert.assertEquals(name, persistedFragmentEntry.getName());
-		Assert.assertEquals(css, persistedFragmentEntry.getCss());
-		Assert.assertEquals(html, persistedFragmentEntry.getHtml());
-		Assert.assertEquals(js, persistedFragmentEntry.getJs());
-		Assert.assertEquals(status, persistedFragmentEntry.getStatus());
+		Assert.assertEquals(name, fragmentEntry.getName());
+		Assert.assertEquals(css, fragmentEntry.getCss());
+		Assert.assertEquals(html, fragmentEntry.getHtml());
+		Assert.assertEquals(js, fragmentEntry.getJs());
+		Assert.assertEquals(status, fragmentEntry.getStatus());
 	}
 
 	@Test
@@ -333,17 +303,13 @@ public class FragmentEntryLocalServiceTest {
 				ServiceContextTestUtil.getServiceContext(
 					_group.getGroupId(), TestPropsValues.getUserId()));
 
-		FragmentEntry persistedFragmentEntry =
-			_fragmentEntryPersistence.fetchByPrimaryKey(
-				fragmentEntry.getFragmentEntryId());
-
-		Assert.assertEquals(name, persistedFragmentEntry.getName());
-		Assert.assertEquals(css, persistedFragmentEntry.getCss());
-		Assert.assertEquals(html, persistedFragmentEntry.getHtml());
-		Assert.assertEquals(js, persistedFragmentEntry.getJs());
+		Assert.assertEquals(name, fragmentEntry.getName());
+		Assert.assertEquals(css, fragmentEntry.getCss());
+		Assert.assertEquals(html, fragmentEntry.getHtml());
+		Assert.assertEquals(js, fragmentEntry.getJs());
 		Assert.assertEquals(
-			previewFileEntryId, persistedFragmentEntry.getPreviewFileEntryId());
-		Assert.assertEquals(status, persistedFragmentEntry.getStatus());
+			previewFileEntryId, fragmentEntry.getPreviewFileEntryId());
+		Assert.assertEquals(status, fragmentEntry.getStatus());
 	}
 
 	@Test
@@ -368,18 +334,14 @@ public class FragmentEntryLocalServiceTest {
 				ServiceContextTestUtil.getServiceContext(
 					_group.getGroupId(), TestPropsValues.getUserId()));
 
-		FragmentEntry persistedFragmentEntry =
-			_fragmentEntryPersistence.fetchByPrimaryKey(
-				fragmentEntry.getFragmentEntryId());
-
-		Assert.assertEquals(name, persistedFragmentEntry.getName());
-		Assert.assertEquals(css, persistedFragmentEntry.getCss());
-		Assert.assertEquals(html, persistedFragmentEntry.getHtml());
-		Assert.assertEquals(js, persistedFragmentEntry.getJs());
+		Assert.assertEquals(name, fragmentEntry.getName());
+		Assert.assertEquals(css, fragmentEntry.getCss());
+		Assert.assertEquals(html, fragmentEntry.getHtml());
+		Assert.assertEquals(js, fragmentEntry.getJs());
 		Assert.assertEquals(
-			previewFileEntryId, persistedFragmentEntry.getPreviewFileEntryId());
-		Assert.assertEquals(type, persistedFragmentEntry.getType());
-		Assert.assertEquals(status, persistedFragmentEntry.getStatus());
+			previewFileEntryId, fragmentEntry.getPreviewFileEntryId());
+		Assert.assertEquals(type, fragmentEntry.getType());
+		Assert.assertEquals(status, fragmentEntry.getStatus());
 	}
 
 	@Test
@@ -403,16 +365,12 @@ public class FragmentEntryLocalServiceTest {
 				ServiceContextTestUtil.getServiceContext(
 					_group.getGroupId(), TestPropsValues.getUserId()));
 
-		FragmentEntry persistedFragmentEntry =
-			_fragmentEntryPersistence.fetchByPrimaryKey(
-				fragmentEntry.getFragmentEntryId());
-
-		Assert.assertEquals(name, persistedFragmentEntry.getName());
-		Assert.assertEquals(css, persistedFragmentEntry.getCss());
-		Assert.assertEquals(html, persistedFragmentEntry.getHtml());
-		Assert.assertEquals(js, persistedFragmentEntry.getJs());
-		Assert.assertEquals(type, persistedFragmentEntry.getType());
-		Assert.assertEquals(status, persistedFragmentEntry.getStatus());
+		Assert.assertEquals(name, fragmentEntry.getName());
+		Assert.assertEquals(css, fragmentEntry.getCss());
+		Assert.assertEquals(html, fragmentEntry.getHtml());
+		Assert.assertEquals(js, fragmentEntry.getJs());
+		Assert.assertEquals(type, fragmentEntry.getType());
+		Assert.assertEquals(status, fragmentEntry.getStatus());
 	}
 
 	@Test
@@ -434,14 +392,7 @@ public class FragmentEntryLocalServiceTest {
 				ServiceContextTestUtil.getServiceContext(
 					_group.getGroupId(), TestPropsValues.getUserId()));
 
-		FragmentEntry persistedFragmentEntry =
-			_fragmentEntryLocalService.fetchFragmentEntry(
-				_group.getGroupId(), fragmentEntryKey);
-
-		Assert.assertEquals(fragmentEntry, persistedFragmentEntry);
-
-		Assert.assertEquals(
-			typeOptions, persistedFragmentEntry.getTypeOptions());
+		Assert.assertEquals(typeOptions, fragmentEntry.getTypeOptions());
 	}
 
 	@Test
@@ -550,7 +501,7 @@ public class FragmentEntryLocalServiceTest {
 			fragmentEntry.getFragmentEntryId());
 
 		Assert.assertNull(
-			_fragmentEntryPersistence.fetchByPrimaryKey(
+			_fragmentEntryLocalService.fetchFragmentEntry(
 				fragmentEntry.getFragmentEntryId()));
 	}
 
@@ -559,11 +510,9 @@ public class FragmentEntryLocalServiceTest {
 		FragmentEntry fragmentEntry = FragmentEntryTestUtil.addFragmentEntry(
 			_fragmentCollection.getFragmentCollectionId());
 
-		FragmentEntry persistedFragmentEntry =
+		Assert.assertNotNull(
 			_fragmentEntryLocalService.fetchFragmentEntry(
-				fragmentEntry.getFragmentEntryId());
-
-		Assert.assertEquals(fragmentEntry, persistedFragmentEntry);
+				fragmentEntry.getFragmentEntryId()));
 	}
 
 	@Test
@@ -584,11 +533,7 @@ public class FragmentEntryLocalServiceTest {
 				ServiceContextTestUtil.getServiceContext(
 					_group.getGroupId(), TestPropsValues.getUserId()));
 
-		FragmentEntry persistedFragmentEntry =
-			_fragmentEntryLocalService.fetchFragmentEntry(
-				_group.getGroupId(), fragmentEntryKey);
-
-		Assert.assertEquals(fragmentEntry, persistedFragmentEntry);
+		Assert.assertEquals(fragmentEntry, fragmentEntry);
 	}
 
 	@Test
@@ -890,17 +835,13 @@ public class FragmentEntryLocalServiceTest {
 		FragmentCollection targetFragmentCollection =
 			FragmentTestUtil.addFragmentCollection(_group.getGroupId());
 
-		_fragmentEntryLocalService.moveFragmentEntry(
+		fragmentEntry = _fragmentEntryLocalService.moveFragmentEntry(
 			fragmentEntry.getFragmentEntryId(),
 			targetFragmentCollection.getFragmentCollectionId());
 
-		FragmentEntry persistedFragmentEntry =
-			_fragmentEntryPersistence.fetchByPrimaryKey(
-				fragmentEntry.getFragmentEntryId());
-
 		Assert.assertEquals(
 			targetFragmentCollection.getFragmentCollectionId(),
-			persistedFragmentEntry.getFragmentCollectionId());
+			fragmentEntry.getFragmentCollectionId());
 	}
 
 	@Test
@@ -917,7 +858,7 @@ public class FragmentEntryLocalServiceTest {
 				ServiceContextTestUtil.getServiceContext(
 					_group.getGroupId(), TestPropsValues.getUserId()));
 
-		_fragmentEntryLocalService.updateFragmentEntry(
+		fragmentEntry = _fragmentEntryLocalService.updateFragmentEntry(
 			fragmentEntry.getUserId(), fragmentEntry.getFragmentEntryId(),
 			_updatedFragmentCollection.getFragmentCollectionId(),
 			fragmentEntry.getName(), fragmentEntry.getCss(),
@@ -925,13 +866,9 @@ public class FragmentEntryLocalServiceTest {
 			fragmentEntry.getIcon(), fragmentEntry.getPreviewFileEntryId(),
 			WorkflowConstants.STATUS_APPROVED);
 
-		FragmentEntry persistedFragmentEntry =
-			_fragmentEntryPersistence.fetchByPrimaryKey(
-				fragmentEntry.getFragmentEntryId());
-
 		Assert.assertEquals(
 			_updatedFragmentCollection.getFragmentCollectionId(),
-			persistedFragmentEntry.getFragmentCollectionId());
+			fragmentEntry.getFragmentCollectionId());
 	}
 
 	@Test
@@ -943,12 +880,7 @@ public class FragmentEntryLocalServiceTest {
 		fragmentEntry = _fragmentEntryLocalService.updateFragmentEntry(
 			fragmentEntry.getFragmentEntryId(), "Fragment Name Updated");
 
-		FragmentEntry persistedFragmentEntry =
-			_fragmentEntryPersistence.fetchByPrimaryKey(
-				fragmentEntry.getFragmentEntryId());
-
-		Assert.assertEquals(
-			"Fragment Name Updated", persistedFragmentEntry.getName());
+		Assert.assertEquals("Fragment Name Updated", fragmentEntry.getName());
 	}
 
 	@Test
@@ -965,23 +897,18 @@ public class FragmentEntryLocalServiceTest {
 		FragmentEntry fragmentEntry = FragmentEntryTestUtil.addFragmentEntry(
 			_fragmentCollection.getFragmentCollectionId());
 
-		_fragmentEntryLocalService.updateFragmentEntry(
+		fragmentEntry = _fragmentEntryLocalService.updateFragmentEntry(
 			TestPropsValues.getUserId(), fragmentEntry.getFragmentEntryId(),
 			fragmentEntry.getFragmentCollectionId(), name, css, html, js,
 			fragmentEntry.isCacheable(), configuration, fragmentEntry.getIcon(),
 			fragmentEntry.getFragmentEntryId(), status);
 
-		FragmentEntry persistedFragmentEntry =
-			_fragmentEntryPersistence.fetchByPrimaryKey(
-				fragmentEntry.getFragmentEntryId());
-
-		Assert.assertEquals(name, persistedFragmentEntry.getName());
-		Assert.assertEquals(css, persistedFragmentEntry.getCss());
-		Assert.assertEquals(html, persistedFragmentEntry.getHtml());
-		Assert.assertEquals(js, persistedFragmentEntry.getJs());
-		Assert.assertEquals(
-			configuration, persistedFragmentEntry.getConfiguration());
-		Assert.assertEquals(status, persistedFragmentEntry.getStatus());
+		Assert.assertEquals(name, fragmentEntry.getName());
+		Assert.assertEquals(css, fragmentEntry.getCss());
+		Assert.assertEquals(html, fragmentEntry.getHtml());
+		Assert.assertEquals(js, fragmentEntry.getJs());
+		Assert.assertEquals(configuration, fragmentEntry.getConfiguration());
+		Assert.assertEquals(status, fragmentEntry.getStatus());
 	}
 
 	@Test
@@ -999,25 +926,20 @@ public class FragmentEntryLocalServiceTest {
 		FragmentEntry fragmentEntry = FragmentEntryTestUtil.addFragmentEntry(
 			_fragmentCollection.getFragmentCollectionId());
 
-		_fragmentEntryLocalService.updateFragmentEntry(
+		fragmentEntry = _fragmentEntryLocalService.updateFragmentEntry(
 			TestPropsValues.getUserId(), fragmentEntry.getFragmentEntryId(),
 			fragmentEntry.getFragmentCollectionId(), name, css, html, js,
 			fragmentEntry.isCacheable(), configuration, fragmentEntry.getIcon(),
 			previewFileEntryId, status);
 
-		FragmentEntry persistedFragmentEntry =
-			_fragmentEntryPersistence.fetchByPrimaryKey(
-				fragmentEntry.getFragmentEntryId());
-
-		Assert.assertEquals(name, persistedFragmentEntry.getName());
-		Assert.assertEquals(css, persistedFragmentEntry.getCss());
-		Assert.assertEquals(html, persistedFragmentEntry.getHtml());
-		Assert.assertEquals(js, persistedFragmentEntry.getJs());
+		Assert.assertEquals(name, fragmentEntry.getName());
+		Assert.assertEquals(css, fragmentEntry.getCss());
+		Assert.assertEquals(html, fragmentEntry.getHtml());
+		Assert.assertEquals(js, fragmentEntry.getJs());
+		Assert.assertEquals(configuration, fragmentEntry.getConfiguration());
 		Assert.assertEquals(
-			configuration, persistedFragmentEntry.getConfiguration());
-		Assert.assertEquals(
-			previewFileEntryId, persistedFragmentEntry.getPreviewFileEntryId());
-		Assert.assertEquals(status, persistedFragmentEntry.getStatus());
+			previewFileEntryId, fragmentEntry.getPreviewFileEntryId());
+		Assert.assertEquals(status, fragmentEntry.getStatus());
 	}
 
 	@Test
@@ -1027,16 +949,11 @@ public class FragmentEntryLocalServiceTest {
 
 		long previewFileEntryId = fragmentEntry.getPreviewFileEntryId();
 
-		_fragmentEntryLocalService.updateFragmentEntry(
+		fragmentEntry = _fragmentEntryLocalService.updateFragmentEntry(
 			fragmentEntry.getFragmentEntryId(), previewFileEntryId + 1);
 
-		FragmentEntry persistedFragmentEntry =
-			_fragmentEntryPersistence.fetchByPrimaryKey(
-				fragmentEntry.getFragmentEntryId());
-
 		Assert.assertEquals(
-			previewFileEntryId + 1,
-			persistedFragmentEntry.getPreviewFileEntryId());
+			previewFileEntryId + 1, fragmentEntry.getPreviewFileEntryId());
 	}
 
 	@Test
@@ -1057,7 +974,7 @@ public class FragmentEntryLocalServiceTest {
 
 		String html = "<H1>A&B&amp;C</H1>";
 
-		_fragmentEntryLocalService.updateFragmentEntry(
+		fragmentEntry = _fragmentEntryLocalService.updateFragmentEntry(
 			TestPropsValues.getUserId(), fragmentEntry.getFragmentEntryId(),
 			fragmentEntry.getFragmentCollectionId(), fragmentEntry.getName(),
 			fragmentEntry.getCss(), html, fragmentEntry.getJs(),
@@ -1065,11 +982,7 @@ public class FragmentEntryLocalServiceTest {
 			fragmentEntry.getPreviewFileEntryId(),
 			WorkflowConstants.STATUS_APPROVED);
 
-		FragmentEntry persistedFragmentEntry =
-			_fragmentEntryPersistence.fetchByPrimaryKey(
-				fragmentEntry.getFragmentEntryId());
-
-		Assert.assertEquals(html, persistedFragmentEntry.getHtml());
+		Assert.assertEquals(html, fragmentEntry.getHtml());
 	}
 
 	private void _assertCopyFragmentEntry(
@@ -1098,9 +1011,6 @@ public class FragmentEntryLocalServiceTest {
 
 	@Inject
 	private FragmentEntryLocalService _fragmentEntryLocalService;
-
-	@Inject
-	private FragmentEntryPersistence _fragmentEntryPersistence;
 
 	@DeleteAfterTestRun
 	private Group _group;
