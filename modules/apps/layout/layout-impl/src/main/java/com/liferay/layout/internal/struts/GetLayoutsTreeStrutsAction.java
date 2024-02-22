@@ -57,6 +57,13 @@ public class GetLayoutsTreeStrutsAction implements StrutsAction {
 			JSONUtil.put(
 				"hasMoreElements",
 				() -> {
+					int pageSize = GetterUtil.getInteger(
+						PropsValues.LAYOUT_MANAGE_PAGES_INITIAL_CHILDREN);
+
+					if (pageSize <= 0) {
+						return false;
+					}
+
 					int childLayoutsCount = _layoutService.getLayoutsCount(
 						groupId, privateLayout, parentLayoutId);
 
@@ -64,9 +71,6 @@ public class GetLayoutsTreeStrutsAction implements StrutsAction {
 						httpServletRequest, "start");
 
 					start = Math.max(0, start);
-
-					int pageSize = GetterUtil.getInteger(
-						PropsValues.LAYOUT_MANAGE_PAGES_INITIAL_CHILDREN);
 
 					int end = ParamUtil.getInteger(
 						httpServletRequest, "end", start + pageSize);
