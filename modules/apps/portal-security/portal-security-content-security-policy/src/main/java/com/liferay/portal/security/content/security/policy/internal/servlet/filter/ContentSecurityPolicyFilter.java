@@ -119,7 +119,8 @@ public class ContentSecurityPolicyFilter extends BasePortalFilter {
 		content = content.replaceAll(
 			"<(?i)style>", "<style " + nonceAttribute + ">");
 
-		Pattern pattern = Pattern.compile("\\{.*" + nonceAttribute + ".*\\}");
+		Pattern pattern = Pattern.compile(
+			"\\{.*nonce=\".{" + nonce.length() + "}\".*\\}");
 
 		Matcher matcher = pattern.matcher(content);
 
