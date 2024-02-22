@@ -99,10 +99,23 @@ public class ContentSecurityPolicyFilter extends BasePortalFilter {
 		filterChain.doFilter(
 			httpServletRequest, contentSecurityPolicyHttpServletResponse);
 
-		String content = contentSecurityPolicyHttpServletResponse.getContent();
-
 		String nonce = _generateNonce();
 
+		String content = rewriteContent(
+			nonce, contentSecurityPolicyHttpServletResponse.getContent());
+
+		printWriter.write(content);
+
+		printWriter.close();
+
+		httpServletResponse.setContentLength(content.length());
+
+		policy = StringUtil.replace(policy, "[$NONCE$]", "nonce-" + nonce);
+
+		httpServletResponse.setHeader("Content-Security-Policy", policy);
+	}
+
+	protected String rewriteContent(String nonce, String content) {
 		String nonceAttribute = "nonce=\"" + nonce + "\"";
 		String escapedNonceAttribute = "nonce=\\\"" + nonce + "\\\"";
 
@@ -161,15 +174,7 @@ public class ContentSecurityPolicyFilter extends BasePortalFilter {
 			}
 		}
 
-		printWriter.write(content);
-
-		printWriter.close();
-
-		httpServletResponse.setContentLength(content.length());
-
-		policy = StringUtil.replace(policy, "[$NONCE$]", "nonce-" + nonce);
-
-		httpServletResponse.setHeader("Content-Security-Policy", policy);
+		return content;
 	}
 
 	private String _generateNonce() {
