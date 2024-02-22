@@ -111,50 +111,14 @@ public class DDMFormDisplayContextTest {
 
 	@Test
 	public void testAutosaveWithGuestUser() throws Exception {
-		MockRenderRequest mockRenderRequest = _mockRenderRequest();
-
-		ThemeDisplay themeDisplay = Mockito.mock(ThemeDisplay.class);
-
-		mockRenderRequest.setAttribute(WebKeys.THEME_DISPLAY, themeDisplay);
-
-		PortletDisplay portletDisplay = Mockito.mock(PortletDisplay.class);
-
-		Mockito.when(
-			portletDisplay.getPortletResource()
-		).thenReturn(
-			null
-		);
-
-		Mockito.when(
-			themeDisplay.getPortletDisplay()
-		).thenReturn(
-			portletDisplay
-		);
-
-		User user = Mockito.mock(User.class);
-
-		Mockito.when(
-			user.isGuestUser()
-		).thenReturn(
-			Boolean.TRUE
-		);
-
-		Mockito.when(
-			themeDisplay.getUser()
-		).thenReturn(
-			user
-		);
-
 		DDMFormDisplayContext ddmFormDisplayContext =
-			_createDDMFormDisplayContext(mockRenderRequest);
+			_createDDMFormDisplayContext(_mockRenderRequestWithGuestUser(true));
 
 		Assert.assertFalse(ddmFormDisplayContext.isAutosaveEnabled());
 	}
 
 	@Test
 	public void testAutosaveWithNonguestUser1() throws Exception {
-		RenderRequest renderRequest = _mockRenderRequestWithGuestUser(false);
-
 		DDMFormInstanceSettings ddmFormInstanceSettings =
 			_mockDDMFormInstanceSettingsAutosaveWithNonguestUser();
 
@@ -165,15 +129,14 @@ public class DDMFormDisplayContextTest {
 		);
 
 		DDMFormDisplayContext ddmFormDisplayContext =
-			_createDDMFormDisplayContext(renderRequest);
+			_createDDMFormDisplayContext(
+				_mockRenderRequestWithGuestUser(false));
 
 		Assert.assertFalse(ddmFormDisplayContext.isAutosaveEnabled());
 	}
 
 	@Test
 	public void testAutosaveWithNonguestUser2() throws Exception {
-		RenderRequest renderRequest = _mockRenderRequestWithGuestUser(false);
-
 		DDMFormInstanceSettings ddmFormInstanceSettings =
 			_mockDDMFormInstanceSettingsAutosaveWithNonguestUser();
 
@@ -190,15 +153,14 @@ public class DDMFormDisplayContextTest {
 		);
 
 		DDMFormDisplayContext ddmFormDisplayContext =
-			_createDDMFormDisplayContext(renderRequest);
+			_createDDMFormDisplayContext(
+				_mockRenderRequestWithGuestUser(false));
 
 		Assert.assertTrue(ddmFormDisplayContext.isAutosaveEnabled());
 	}
 
 	@Test
 	public void testAutosaveWithNonguestUser3() throws Exception {
-		RenderRequest renderRequest = _mockRenderRequestWithGuestUser(false);
-
 		DDMFormInstanceSettings ddmFormInstanceSettings =
 			_mockDDMFormInstanceSettingsAutosaveWithNonguestUser();
 
@@ -215,7 +177,8 @@ public class DDMFormDisplayContextTest {
 		);
 
 		DDMFormDisplayContext ddmFormDisplayContext =
-			_createDDMFormDisplayContext(renderRequest);
+			_createDDMFormDisplayContext(
+				_mockRenderRequestWithGuestUser(false));
 
 		Assert.assertFalse(ddmFormDisplayContext.isAutosaveEnabled());
 	}
@@ -299,6 +262,110 @@ public class DDMFormDisplayContextTest {
 
 		Assert.assertEquals(
 			submitLabel, ddmFormDisplayContext.getSubmitLabel());
+	}
+
+	@Test
+	public void testGetDDMFormContext() throws Exception {
+		ThemeDisplay themeDisplay = _mockThemeDisplay(false);
+
+		_mockHttpServletRequest2.setAttribute(
+			WebKeys.THEME_DISPLAY, themeDisplay);
+
+		DDMFormDisplayContext ddmFormDisplayContext = Mockito.spy(
+			_createDDMFormDisplayContext());
+
+		DDMForm ddmForm = DDMFormTestUtil.createDDMForm();
+
+		DDMFormField ddmFormField = DDMFormTestUtil.createDDMFormField(
+			"Select", RandomTestUtil.randomString(),
+			DDMFormFieldTypeConstants.SELECT, FieldConstants.STRING, true,
+			false, false);
+
+		ddmFormField.setProperty("dataSourceType", "data-provider");
+
+		ddmForm.addDDMFormField(ddmFormField);
+
+		Mockito.doReturn(
+			ddmForm
+		).when(
+			ddmFormDisplayContext
+		).getDDMForm(
+			Mockito.any(DDMFormInstance.class), Mockito.anyBoolean()
+		);
+
+		DDMFormLayout ddmFormLayout = Mockito.mock(DDMFormLayout.class);
+
+		Mockito.doReturn(
+			ddmFormLayout
+		).when(
+			ddmFormDisplayContext
+		).getDDMFormLayout(
+			Mockito.any(DDMFormInstance.class), Mockito.anyBoolean()
+		);
+
+		DDMFormInstance ddmFormInstance = _mockDDMFormInstance(
+			Mockito.mock(DDMFormInstanceSettings.class));
+
+		Mockito.doReturn(
+			ddmFormInstance
+		).when(
+			ddmFormDisplayContext
+		).getFormInstance();
+
+		Mockito.doReturn(
+			themeDisplay
+		).when(
+			ddmFormDisplayContext
+		).getThemeDisplay();
+
+		Mockito.doReturn(
+			true
+		).when(
+			ddmFormDisplayContext
+		).hasAddFormInstanceRecordPermission();
+
+		Mockito.doReturn(
+			true
+		).when(
+			ddmFormDisplayContext
+		).hasValidStorageType(
+			ddmFormInstance
+		);
+
+		DDMFormFieldOptions actualDDMFormFieldOptions =
+			(DDMFormFieldOptions)ddmFormField.getProperty("options");
+
+		Assert.assertTrue(
+			SetUtil.isEmpty(actualDDMFormFieldOptions.getOptionsValues()));
+
+		DDMFormFieldOptions expectedDDMFormFieldOptions =
+			new DDMFormFieldOptions();
+
+		expectedDDMFormFieldOptions.addOptionLabel(
+			RandomTestUtil.randomString(), LocaleUtil.US,
+			RandomTestUtil.randomString());
+		expectedDDMFormFieldOptions.addOptionLabel(
+			RandomTestUtil.randomString(), LocaleUtil.US,
+			RandomTestUtil.randomString());
+
+		Mockito.when(
+			_ddmFormFieldOptionsFactory.create(
+				Mockito.eq(ddmFormField),
+				Mockito.any(DDMFormFieldRenderingContext.class))
+		).thenReturn(
+			expectedDDMFormFieldOptions
+		);
+
+		ddmFormDisplayContext.getDDMFormContext();
+
+		actualDDMFormFieldOptions =
+			(DDMFormFieldOptions)ddmFormField.getProperty("options");
+
+		Assert.assertFalse(
+			SetUtil.isEmpty(actualDDMFormFieldOptions.getOptionsValues()));
+
+		Assert.assertEquals(
+			expectedDDMFormFieldOptions, actualDDMFormFieldOptions);
 	}
 
 	@Test
@@ -525,30 +592,14 @@ public class DDMFormDisplayContextTest {
 		DDMFormDisplayContext ddmFormDisplayContext = Mockito.spy(
 			_createDDMFormDisplayContext());
 
-		DDMFormInstance ddmFormInstance = Mockito.mock(DDMFormInstance.class);
-
-		Mockito.when(
-			ddmFormInstance.getFormInstanceId()
-		).thenReturn(
-			123L
-		);
-
 		Mockito.doReturn(
-			ddmFormInstance
+			123L
 		).when(
 			ddmFormDisplayContext
-		).getFormInstance();
-
-		ThemeDisplay themeDisplay = Mockito.mock(ThemeDisplay.class);
-
-		Mockito.when(
-			themeDisplay.getURLCurrent()
-		).thenReturn(
-			"http://localhost:8080/web/forms/shared?form=123"
-		);
+		).getFormInstanceId();
 
 		Mockito.doReturn(
-			themeDisplay
+			_mockThemeDisplay(false)
 		).when(
 			ddmFormDisplayContext
 		).getThemeDisplay();
@@ -931,28 +982,19 @@ public class DDMFormDisplayContextTest {
 		return mockRenderRequest;
 	}
 
-	private RenderRequest _mockRenderRequestWithGuestUser(boolean guestUser)
+	private MockRenderRequest _mockRenderRequestWithGuestUser(boolean guestUser)
 		throws Exception {
 
 		MockRenderRequest mockRenderRequest = _mockRenderRequest();
 
+		mockRenderRequest.setAttribute(
+			WebKeys.THEME_DISPLAY, _mockThemeDisplay(guestUser));
+
+		return mockRenderRequest;
+	}
+
+	private ThemeDisplay _mockThemeDisplay(boolean guestUser) {
 		ThemeDisplay themeDisplay = Mockito.mock(ThemeDisplay.class);
-
-		mockRenderRequest.setAttribute(WebKeys.THEME_DISPLAY, themeDisplay);
-
-		User user = Mockito.mock(User.class);
-
-		Mockito.when(
-			user.isGuestUser()
-		).thenReturn(
-			guestUser
-		);
-
-		Mockito.when(
-			themeDisplay.getUser()
-		).thenReturn(
-			user
-		);
 
 		PortletDisplay portletDisplay = Mockito.mock(PortletDisplay.class);
 
@@ -968,7 +1010,39 @@ public class DDMFormDisplayContextTest {
 			portletDisplay
 		);
 
-		return mockRenderRequest;
+		Mockito.when(
+			themeDisplay.getURLCurrent()
+		).thenReturn(
+			"http://localhost:8080/web/forms/shared?form=123"
+		);
+
+		User user = Mockito.mock(User.class);
+
+		Mockito.when(
+			user.isGuestUser()
+		).thenReturn(
+			guestUser
+		);
+
+		Mockito.when(
+			themeDisplay.getUser()
+		).thenReturn(
+			user
+		);
+
+		Mockito.when(
+			themeDisplay.getUserId()
+		).thenReturn(
+			RandomTestUtil.randomLong()
+		);
+
+		Mockito.when(
+			themeDisplay.isSignedIn()
+		).thenReturn(
+			!guestUser
+		);
+
+		return themeDisplay;
 	}
 
 	private void _mockWorkflowDefinitionLinkLocalService(
