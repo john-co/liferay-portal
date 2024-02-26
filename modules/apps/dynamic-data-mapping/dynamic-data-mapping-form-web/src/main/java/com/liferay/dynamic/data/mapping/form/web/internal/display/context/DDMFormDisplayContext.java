@@ -853,7 +853,7 @@ public class DDMFormDisplayContext {
 				getUser());
 	}
 
-	public boolean propagateLanguageSelection() {
+	public boolean isPropagateLanguageSelection() {
 		return _ddmFormWebConfiguration.propagateLanguageSelection();
 	}
 
