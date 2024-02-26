@@ -115,7 +115,7 @@ public class CalendarUtilTest {
 		throws Exception {
 
 		CalendarBooking calendarBookingInstance =
-			getCalendarBookingChildAllFollowingInstnace();
+			getCalendarBookingChildAllFollowingInstance();
 
 		Method method = _calendarUtilClass.getMethod(
 			"toCalendarBookingJSONObject", ThemeDisplay.class,
@@ -137,7 +137,7 @@ public class CalendarUtilTest {
 		throws Exception {
 
 		CalendarBooking calendarBookingInstance =
-			getCalendarBookingChildAllFollowingInstnace();
+			getCalendarBookingChildAllFollowingInstance();
 
 		CalendarBooking calendarBooking =
 			_calendarBookingLocalService.fetchCalendarBooking(
@@ -300,14 +300,14 @@ public class CalendarUtilTest {
 
 		Set<Long> actualCalendarBookingIds = getCalendarBookingIds(jsonArray);
 
-		Set<Long> excpectedCalendarBookingIds = getCalendarBookingIds(
+		Set<Long> expectedCalendarBookingIds = getCalendarBookingIds(
 			calendarBookings);
 
-		excpectedCalendarBookingIds.remove(
+		expectedCalendarBookingIds.remove(
 			anotherUserDraft.getCalendarBookingId());
 
 		Assert.assertEquals(
-			excpectedCalendarBookingIds, actualCalendarBookingIds);
+			expectedCalendarBookingIds, actualCalendarBookingIds);
 	}
 
 	@Test
@@ -380,7 +380,7 @@ public class CalendarUtilTest {
 		return themeDisplay;
 	}
 
-	protected CalendarBooking getCalendarBookingChildAllFollowingInstnace()
+	protected CalendarBooking getCalendarBookingChildAllFollowingInstance()
 		throws PortalException {
 
 		ServiceContext serviceContext = createServiceContext();
