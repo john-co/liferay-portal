@@ -416,13 +416,15 @@ public class AssetPublisherDisplayContext {
 
 		SearchContainer<AssetEntry> searchContainer = getSearchContainer();
 
-		List<AssetEntry> assetEntries = _getAssetEntries(searchContainer);
+		InfoPage<AssetEntry> infoPage = _getAssetEntries(searchContainer);
 
-		if (ListUtil.isEmpty(assetEntries)) {
+		if (ListUtil.isEmpty(infoPage.getPageItems())) {
 			return Collections.emptyList();
 		}
 
-		searchContainer.setResultsAndTotal(assetEntries);
+		searchContainer.setResultsAndTotal(
+			() -> (List<AssetEntry>)infoPage.getPageItems(),
+			infoPage.getTotalCount());
 
 		List<AssetEntryResult> assetEntryResults = new ArrayList<>();
 
@@ -2176,20 +2178,21 @@ public class AssetPublisherDisplayContext {
 		return filteredAssetEntries;
 	}
 
-	private List<AssetEntry> _getAssetEntries(
+	private InfoPage<AssetEntry> _getAssetEntries(
 			SearchContainer<AssetEntry> searchContainer)
 		throws Exception {
 
 		if (isSelectionStyleManual()) {
-			return _assetPublisherHelper.getAssetEntries(
-				_portletRequest, _portletPreferences,
-				_themeDisplay.getPermissionChecker(), getGroupIds(),
-				getAllAssetCategoryIds(), getAllAssetTagNames(), false,
-				isEnablePermissions());
+			return InfoPage.of(
+				_assetPublisherHelper.getAssetEntries(
+					_portletRequest, _portletPreferences,
+					_themeDisplay.getPermissionChecker(), getGroupIds(),
+					getAllAssetCategoryIds(), getAllAssetTagNames(), false,
+					isEnablePermissions()));
 		}
 
 		if (!isSelectionStyleAssetList()) {
-			return Collections.emptyList();
+			return InfoPage.of(Collections.emptyList());
 		}
 
 		AssetListEntry assetListEntry = fetchAssetListEntry();
@@ -2206,15 +2209,22 @@ public class AssetPublisherDisplayContext {
 				assetTagNames = new String[][] {getAllAssetTagNames()};
 			}
 
-			return _assetListAssetEntryProvider.getAssetEntries(
-				assetListEntry, _getSegmentsEntryIds(assetListEntry),
-				assetCategoryIds, assetTagNames, StringPool.BLANK,
-				_getSegmentsAnonymousUserId(), searchContainer.getStart(),
-				searchContainer.getEnd());
+			return InfoPage.of(
+				_assetListAssetEntryProvider.getAssetEntries(
+					assetListEntry, _getSegmentsEntryIds(assetListEntry),
+					assetCategoryIds, assetTagNames, StringPool.BLANK,
+					_getSegmentsAnonymousUserId(), searchContainer.getStart(),
+					searchContainer.getEnd()),
+				Pagination.of(
+					searchContainer.getEnd(), searchContainer.getStart()),
+				_assetListAssetEntryProvider.getAssetEntriesCount(
+					assetListEntry, _getSegmentsEntryIds(assetListEntry),
+					assetCategoryIds, assetTagNames, StringPool.BLANK,
+					_getSegmentsAnonymousUserId()));
 		}
 
 		if (Validator.isNull(getInfoListProviderKey())) {
-			return Collections.emptyList();
+			return InfoPage.of(Collections.emptyList());
 		}
 
 		InfoCollectionProvider<AssetEntry> infoCollectionProvider =
@@ -2222,7 +2232,7 @@ public class AssetPublisherDisplayContext {
 				InfoCollectionProvider.class, getInfoListProviderKey());
 
 		if (infoCollectionProvider == null) {
-			return Collections.emptyList();
+			return InfoPage.of(Collections.emptyList());
 		}
 
 		if (ArrayUtil.isEmpty(getAllAssetCategoryIds()) &&
@@ -2234,10 +2244,8 @@ public class AssetPublisherDisplayContext {
 				Pagination.of(
 					searchContainer.getEnd(), searchContainer.getStart()));
 
-			InfoPage<AssetEntry> infoPage =
-				infoCollectionProvider.getCollectionInfoPage(collectionQuery);
-
-			return (List<AssetEntry>)infoPage.getPageItems();
+			return infoCollectionProvider.getCollectionInfoPage(
+				collectionQuery);
 		}
 
 		List<AssetEntry> filteredAssetEntries = new ArrayList<>();
@@ -2279,8 +2287,11 @@ public class AssetPublisherDisplayContext {
 			filteredAssetEntries.addAll(assetEntries);
 		}
 
-		return ListUtil.subList(
-			filteredAssetEntries, 0, searchContainer.getDelta());
+		return InfoPage.of(
+			ListUtil.subList(
+				filteredAssetEntries, 0, searchContainer.getDelta()),
+			Pagination.of(searchContainer.getEnd(), searchContainer.getStart()),
+			totalCount);
 	}
 
 	private String _getAssetEntryItemSelectorPortletURL(
