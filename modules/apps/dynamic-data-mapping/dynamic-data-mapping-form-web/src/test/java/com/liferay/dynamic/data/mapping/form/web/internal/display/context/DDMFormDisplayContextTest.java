@@ -31,7 +31,6 @@ import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.language.LanguageUtil;
-import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
@@ -112,7 +111,7 @@ public class DDMFormDisplayContextTest {
 	@Test
 	public void testAutosaveWithGuestUser() throws Exception {
 		DDMFormDisplayContext ddmFormDisplayContext =
-			_createDDMFormDisplayContext(_mockRenderRequestWithGuestUser(true));
+			_createDDMFormDisplayContext(_mockRenderRequest(true));
 
 		Assert.assertFalse(ddmFormDisplayContext.isAutosaveEnabled());
 	}
@@ -129,8 +128,7 @@ public class DDMFormDisplayContextTest {
 		);
 
 		DDMFormDisplayContext ddmFormDisplayContext =
-			_createDDMFormDisplayContext(
-				_mockRenderRequestWithGuestUser(false));
+			_createDDMFormDisplayContext();
 
 		Assert.assertFalse(ddmFormDisplayContext.isAutosaveEnabled());
 	}
@@ -153,8 +151,7 @@ public class DDMFormDisplayContextTest {
 		);
 
 		DDMFormDisplayContext ddmFormDisplayContext =
-			_createDDMFormDisplayContext(
-				_mockRenderRequestWithGuestUser(false));
+			_createDDMFormDisplayContext();
 
 		Assert.assertTrue(ddmFormDisplayContext.isAutosaveEnabled());
 	}
@@ -177,8 +174,7 @@ public class DDMFormDisplayContextTest {
 		);
 
 		DDMFormDisplayContext ddmFormDisplayContext =
-			_createDDMFormDisplayContext(
-				_mockRenderRequestWithGuestUser(false));
+			_createDDMFormDisplayContext();
 
 		Assert.assertFalse(ddmFormDisplayContext.isAutosaveEnabled());
 	}
@@ -258,7 +254,7 @@ public class DDMFormDisplayContextTest {
 		);
 
 		DDMFormDisplayContext ddmFormDisplayContext =
-			_createDDMFormDisplayContext(_mockRenderRequest());
+			_createDDMFormDisplayContext();
 
 		Assert.assertEquals(
 			submitLabel, ddmFormDisplayContext.getSubmitLabel());
@@ -427,7 +423,7 @@ public class DDMFormDisplayContextTest {
 		);
 
 		DDMFormDisplayContext ddmFormDisplayContext =
-			_createDDMFormDisplayContext(_mockRenderRequest());
+			_createDDMFormDisplayContext();
 
 		Map<String, String> limitToOneSubmissionPerUserMap =
 			ddmFormDisplayContext.getLimitToOneSubmissionPerUserMap();
@@ -479,7 +475,7 @@ public class DDMFormDisplayContextTest {
 		_mockWorkflowDefinitionLinkLocalService(false);
 
 		DDMFormDisplayContext ddmFormDisplayContext =
-			_createDDMFormDisplayContext(_mockRenderRequest());
+			_createDDMFormDisplayContext();
 
 		Assert.assertEquals(
 			submitLabel, ddmFormDisplayContext.getSubmitLabel());
@@ -496,7 +492,7 @@ public class DDMFormDisplayContextTest {
 		_mockWorkflowDefinitionLinkLocalService(true);
 
 		DDMFormDisplayContext ddmFormDisplayContext =
-			_createDDMFormDisplayContext(_mockRenderRequest());
+			_createDDMFormDisplayContext();
 
 		Assert.assertEquals(
 			submitLabel, ddmFormDisplayContext.getSubmitLabel());
@@ -558,31 +554,28 @@ public class DDMFormDisplayContextTest {
 
 	@Test
 	public void testIsSharedFormWithoutPortletSession() throws Exception {
-		MockRenderRequest mockRenderRequest = _mockRenderRequest();
+		RenderRequest renderRequest = _mockRenderRequest();
 
-		Assert.assertNull(mockRenderRequest.getPortletSession(false));
-
-		mockRenderRequest.setParameter("shared", Boolean.TRUE.toString());
+		Assert.assertNull(renderRequest.getPortletSession(false));
 
 		DDMFormDisplayContext createDDMFormDisplayContext =
-			_createDDMFormDisplayContext(mockRenderRequest);
+			_createDDMFormDisplayContext(renderRequest);
 
 		Assert.assertTrue(createDDMFormDisplayContext.isFormShared());
 	}
 
 	@Test
 	public void testIsSharedFormWithPortletSession() throws Exception {
-		MockRenderRequest mockRenderRequest = _mockRenderRequest();
+		RenderRequest renderRequest = _mockRenderRequest();
 
-		PortletSession portletSession = mockRenderRequest.getPortletSession(
-			true);
+		PortletSession portletSession = renderRequest.getPortletSession(true);
 
 		Assert.assertNotNull(portletSession);
 
 		portletSession.setAttribute("shared", Boolean.TRUE);
 
 		DDMFormDisplayContext createDDMFormDisplayContext =
-			_createDDMFormDisplayContext(mockRenderRequest);
+			_createDDMFormDisplayContext(renderRequest);
 
 		Assert.assertTrue(createDDMFormDisplayContext.isFormShared());
 	}
@@ -627,7 +620,16 @@ public class DDMFormDisplayContextTest {
 
 	@Test
 	public void testIsShowIconWithPermission() throws Exception {
-		_mockPortletPermissionUtil();
+		_portletPermissionUtilMockedStatic = Mockito.mockStatic(
+			PortletPermissionUtil.class);
+
+		_portletPermissionUtilMockedStatic.when(
+			() -> PortletPermissionUtil.contains(
+				Mockito.any(PermissionChecker.class), Mockito.any(Layout.class),
+				Mockito.anyString(), Mockito.anyString())
+		).thenReturn(
+			true
+		);
 
 		DDMFormDisplayContext ddmFormDisplayContext = _createSpy(
 			false, false, true);
@@ -672,12 +674,12 @@ public class DDMFormDisplayContextTest {
 	public void testIsShowSuccessPage() throws Exception {
 		_mockDDMFormInstance(Mockito.mock(DDMFormInstanceSettings.class));
 
-		MockRenderRequest mockRenderRequest = _mockRenderRequest();
+		RenderRequest renderRequest = _mockRenderRequest();
 
-		SessionMessages.add(mockRenderRequest, "formInstanceRecordAdded");
+		SessionMessages.add(renderRequest, "formInstanceRecordAdded");
 
 		DDMFormDisplayContext ddmFormDisplayContext =
-			_createDDMFormDisplayContext(mockRenderRequest);
+			_createDDMFormDisplayContext(renderRequest);
 
 		Assert.assertTrue(ddmFormDisplayContext.isShowSuccessPage());
 	}
@@ -695,12 +697,12 @@ public class DDMFormDisplayContextTest {
 
 		_mockDDMFormInstance(ddmFormInstanceSettings);
 
-		MockRenderRequest mockRenderRequest = _mockRenderRequest();
+		RenderRequest renderRequest = _mockRenderRequest();
 
-		SessionMessages.add(mockRenderRequest, "formInstanceRecordAdded");
+		SessionMessages.add(renderRequest, "formInstanceRecordAdded");
 
 		DDMFormDisplayContext ddmFormDisplayContext =
-			_createDDMFormDisplayContext(mockRenderRequest);
+			_createDDMFormDisplayContext(renderRequest);
 
 		Assert.assertFalse(ddmFormDisplayContext.isShowSuccessPage());
 	}
@@ -753,7 +755,7 @@ public class DDMFormDisplayContextTest {
 		);
 
 		DDMFormDisplayContext ddmFormDisplayContext =
-			_createDDMFormDisplayContext(_mockRenderRequest());
+			_createDDMFormDisplayContext();
 
 		Map<String, String> limitToOneSubmissionPerUserMap =
 			ddmFormDisplayContext.getLimitToOneSubmissionPerUserMap();
@@ -949,43 +951,16 @@ public class DDMFormDisplayContextTest {
 		);
 	}
 
-	private void _mockPortletPermissionUtil() throws Exception {
-		_portletPermissionUtilMockedStatic = Mockito.mockStatic(
-			PortletPermissionUtil.class);
-
-		_portletPermissionUtilMockedStatic.when(
-			() -> PortletPermissionUtil.contains(
-				Mockito.nullable(PermissionChecker.class),
-				Mockito.nullable(Layout.class), Mockito.anyString(),
-				Mockito.anyString())
-		).thenReturn(
-			true
-		);
+	private RenderRequest _mockRenderRequest() {
+		return _mockRenderRequest(false);
 	}
 
-	private RenderRequest _mockRenderRequest() throws PortalException {
-		RenderRequest renderRequest = new MockRenderRequest();
-
-		ThemeDisplay themeDisplay = new ThemeDisplay();
-
-		themeDisplay.setCompany(Mockito.mock(Company.class));
-		themeDisplay.setLayout(Mockito.mock(Layout.class));
-		themeDisplay.setLocale(LocaleUtil.SPAIN);
-
-		renderRequest.setAttribute(WebKeys.THEME_DISPLAY, themeDisplay);
-
-		renderRequest.setParameter("languageId", _DEFAULT_LANGUAGE_ID);
-
-		return mockRenderRequest;
-	}
-
-	private MockRenderRequest _mockRenderRequestWithGuestUser(boolean guestUser)
-		throws Exception {
-
-		MockRenderRequest mockRenderRequest = _mockRenderRequest();
+	private RenderRequest _mockRenderRequest(boolean guestUser) {
+		MockRenderRequest mockRenderRequest = new MockRenderRequest();
 
 		mockRenderRequest.setAttribute(
 			WebKeys.THEME_DISPLAY, _mockThemeDisplay(guestUser));
+		mockRenderRequest.setParameter("shared", Boolean.TRUE.toString());
 
 		return mockRenderRequest;
 	}
@@ -993,7 +968,25 @@ public class DDMFormDisplayContextTest {
 	private ThemeDisplay _mockThemeDisplay(boolean guestUser) {
 		ThemeDisplay themeDisplay = Mockito.mock(ThemeDisplay.class);
 
+		Mockito.when(
+			themeDisplay.getLayout()
+		).thenReturn(
+			Mockito.mock(Layout.class)
+		);
+
+		Mockito.when(
+			themeDisplay.getPermissionChecker()
+		).thenReturn(
+			Mockito.mock(PermissionChecker.class)
+		);
+
 		PortletDisplay portletDisplay = Mockito.mock(PortletDisplay.class);
+
+		Mockito.when(
+			portletDisplay.getId()
+		).thenReturn(
+			RandomTestUtil.randomString()
+		);
 
 		Mockito.when(
 			portletDisplay.getPortletResource()
