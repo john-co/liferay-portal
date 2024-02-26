@@ -746,6 +746,10 @@ public class DDMFormDisplayContext {
 		return false;
 	}
 
+	public boolean isPropagateLanguageSelection() {
+		return _ddmFormWebConfiguration.propagateLanguageSelection();
+	}
+
 	public boolean isRememberMe() {
 		String rememberMe = CookiesManagerUtil.getCookieValue(
 			CookiesConstants.NAME_REMEMBER_ME, _getHttpServletRequest());
@@ -851,10 +855,6 @@ public class DDMFormDisplayContext {
 			isSubmissionLimitReached(
 				getFormInstance(), _ddmFormInstanceRecordVersionLocalService,
 				getUser());
-	}
-
-	public boolean isPropagateLanguageSelection() {
-		return _ddmFormWebConfiguration.propagateLanguageSelection();
 	}
 
 	protected DDMFormRenderingContext createDDMFormRenderingContext(
