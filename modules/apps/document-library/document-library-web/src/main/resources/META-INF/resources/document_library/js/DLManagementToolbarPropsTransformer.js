@@ -8,7 +8,6 @@ import {
 	navigate,
 	openCategorySelectionModal,
 	openConfirmModal,
-	openModal,
 	openSelectionModal,
 	openTagSelectionModal,
 	openToast,
@@ -19,6 +18,7 @@ import {collectDigitalSignature} from './digital-signature/DigitalSignatureUtil'
 
 export default function propsTransformer({
 	additionalProps: {
+		addFileEntryURL,
 		bulkCopyURL,
 		bulkPermissionsConfiguration: {defaultModelClassName, permissionsURLs},
 		collectDigitalSignaturePortlet,
@@ -402,7 +402,17 @@ export default function propsTransformer({
 			}
 		},
 		onShowMoreButtonClick() {
-			openModal({
+			openSelectionModal({
+				onSelect(selectedItem) {
+					if (selectedItem) {
+						const url = addParams(
+							`${portletNamespace}fileEntryTypeId=${selectedItem.fileentrytypeid}`,
+							addFileEntryURL
+						);
+						navigate(url);
+					}
+				},
+				selectEventName: `${portletNamespace}selectFileEntryType`,
 				title: Liferay.Language.get('more'),
 				url: openViewMoreFileEntryTypesURL,
 			});
