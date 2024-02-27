@@ -1127,6 +1127,9 @@ public class StructuredContentResourceTest
 			Assert.assertEquals(
 				String.valueOf(journalArticle.getResourcePrimKey()),
 				String.valueOf(structuredContent.getId()));
+
+			structuredContentResource.deleteStructuredContent(
+				structuredContent.getId());
 		}
 		finally {
 			LocaleThreadLocal.setSiteDefaultLocale(currentLocale);
