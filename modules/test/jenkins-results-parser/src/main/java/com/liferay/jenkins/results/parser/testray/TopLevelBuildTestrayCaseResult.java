@@ -158,6 +158,8 @@ public class TopLevelBuildTestrayCaseResult extends BuildTestrayCaseResult {
 
 		Map<String, String> propertiesMap = new HashMap<>();
 
+		propertiesMap.put("testray.build.date", $(jenkins.build.start));
+
 		propertiesMap.put("testray.build.name", testrayBuild.getName());
 
 		TestrayRoutine testrayRoutine = testrayBuild.getTestrayRoutine();
