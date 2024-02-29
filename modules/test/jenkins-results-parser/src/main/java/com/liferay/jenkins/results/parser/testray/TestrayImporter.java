@@ -986,7 +986,7 @@ public class TestrayImporter {
 						Map<String, String> propertiesMap = new HashMap<>();
 
 						propertiesMap.put(
-							"testray.build.date", $(jenkins.build.start));
+							"testray.build.date", "$(jenkins.build.start)");
 
 						propertiesMap.put(
 							"testray.build.name", testrayBuild.getName());
