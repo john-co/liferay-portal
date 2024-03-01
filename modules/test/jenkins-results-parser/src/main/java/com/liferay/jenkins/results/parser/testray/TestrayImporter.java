@@ -985,7 +985,19 @@ public class TestrayImporter {
 
 						Map<String, String> propertiesMap = new HashMap<>();
 
-						System.out.println(testrayBuild.getDateTimeString());
+						System.out.println(
+							JenkinsResultsParserUtil.combine(
+								"TestrayImporter-test:",
+								JenkinsResultsParserUtil.toDateString(
+									new Date(getTestrayBuildDate()),
+									"yyyy-MM-dd[HH:mm:ss]",
+									"America/Los_Angeles")));
+
+						String test1 = JenkinsResultsParserUtil.toDateString(
+							new Date(getTestrayBuildDate()),
+							"yyyy-MM-dd[HH:mm:ss]", "America/Los_Angeles");
+
+						propertiesMap.put("testray.build.date", test1);
 
 						propertiesMap.put(
 							"testray.build.name", testrayBuild.getName());
