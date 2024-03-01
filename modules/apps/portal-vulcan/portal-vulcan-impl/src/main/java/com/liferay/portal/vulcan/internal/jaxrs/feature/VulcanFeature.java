@@ -52,6 +52,7 @@ import com.liferay.portal.vulcan.internal.jaxrs.exception.mapper.NoSuchModelExce
 import com.liferay.portal.vulcan.internal.jaxrs.exception.mapper.NotAcceptableExceptionMapper;
 import com.liferay.portal.vulcan.internal.jaxrs.exception.mapper.NotFoundExceptionMapper;
 import com.liferay.portal.vulcan.internal.jaxrs.exception.mapper.PrincipalExceptionMapper;
+import com.liferay.portal.vulcan.internal.jaxrs.exception.mapper.SQLIntegrityConstraintViolationExceptionMapper;
 import com.liferay.portal.vulcan.internal.jaxrs.exception.mapper.UnrecognizedPropertyExceptionMapper;
 import com.liferay.portal.vulcan.internal.jaxrs.exception.mapper.UnsupportedOperationExceptionMapper;
 import com.liferay.portal.vulcan.internal.jaxrs.exception.mapper.ValidationExceptionMapper;
@@ -128,6 +129,8 @@ public class VulcanFeature implements Feature {
 		featureContext.register(PageEntityExtensionWriterInterceptor.class);
 		featureContext.register(PrincipalExceptionMapper.class);
 		featureContext.register(RestrictFieldsQueryParamContextProvider.class);
+		featureContext.register(
+			SQLIntegrityConstraintViolationExceptionMapper.class);
 		featureContext.register(StatusDynamicFeature.class);
 		featureContext.register(TransactionContainerRequestFilter.class);
 		featureContext.register(UnrecognizedPropertyExceptionMapper.class);
