@@ -160,9 +160,6 @@ public class TopLevelBuildTestrayCaseResult extends BuildTestrayCaseResult {
 
 		System.out.println(testrayBuild.getDateTimeString());
 
-		propertiesMap.put(
-			"testray.build.date", testrayBuild.getDateTimeString());
-
 		propertiesMap.put("testray.build.name", testrayBuild.getName());
 
 		TestrayRoutine testrayRoutine = testrayBuild.getTestrayRoutine();

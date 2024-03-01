@@ -53,14 +53,8 @@ public class TestrayBuild implements Comparable<TestrayBuild> {
 		return id.compareTo(getID());
 	}
 
-	public String getDateTimeString() {
-		Build build = getBuild();
-
-		TopLevelBuild topLevelBuild = build.getTopLevelBuild();
-
-		return JenkinsResultsParserUtil.toDateString(
-			new Date(topLevelBuild.getStartTime()), "yyyy-MM-dd[HH:mm:ss]",
-			"America/Los_Angeles");
+	public Object getDateTimeString() {
+		return _jsonObject;
 	}
 
 	public String getDescription() {

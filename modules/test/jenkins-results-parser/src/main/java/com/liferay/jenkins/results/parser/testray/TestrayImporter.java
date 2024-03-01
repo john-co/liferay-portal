@@ -988,10 +988,6 @@ public class TestrayImporter {
 						System.out.println(testrayBuild.getDateTimeString());
 
 						propertiesMap.put(
-							"testray.build.date",
-							testrayBuild.getDateTimeString());
-
-						propertiesMap.put(
 							"testray.build.name", testrayBuild.getName());
 
 						propertiesMap.put(
