@@ -989,28 +989,7 @@ public class TestrayImporter {
 
 						System.out.println(
 							JenkinsResultsParserUtil.combine(
-								"JCo Test1 ",
-								_topLevelBuild.getStartTime()
-								)
-							);
-
-						// _topLevelBuild = (TopLevelBuild)build;
-
-						// topLevelBuildData.setInvocationTime(topLevelBuildData.getStartTime());
-
-						// TestrayBuild testrayBuild, TopLevelBuild topLevelBuild) {
-
-						// 	_testrayBuild = testrayBuild;
-						// 	_topLevelBuild = topLevelBuild;
-
-						// string = string.replace(
-						// 	"$(jenkins.build.start)",
-						// 	JenkinsResultsParserUtil.toDateString(
-						// 		new Date(_topLevelBuild.getStartTime()), "yyyy-MM-dd[HH:mm:ss]",
-						// 		"America/Los_Angeles"));
-
-						// propertiesMap.put(
-						// 	"testray.build.date", "$(jenkins.build.start)");
+								"JCo Test1 ", _topLevelBuild.getStartTime()));
 
 						propertiesMap.put(
 							"testray.build.name", testrayBuild.getName());
