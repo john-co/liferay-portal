@@ -985,7 +985,20 @@ public class TestrayImporter {
 
 						Map<String, String> propertiesMap = new HashMap<>();
 
-						System.out.println("JCo TEST1: $(jenkins.build.start)");
+						TopLevelBuild testTopLevelBuild = getTopLevelBuild();
+
+						System.out.println(
+							JenkinsResultsParserUtil.toDateString(
+								new Date(testTopLevelBuild.getStartTime()),
+								"yyyy-MM-dd[HH:mm:ss]", "America/Los_Angeles"));
+
+						System.out.println("TestrayImporter-test");
+
+						propertiesMap.put(
+							"testray.build.date", "TestrayImporterTest");
+
+						propertiesMap.put(
+							"testray.build.name", testrayBuild.getName());
 
 						propertiesMap.put(
 							"testray.build.name", testrayBuild.getName());
