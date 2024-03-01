@@ -5,8 +5,10 @@
 
 package com.liferay.jenkins.results.parser.testray;
 
+import com.liferay.jenkins.results.parser.Build;
 import com.liferay.jenkins.results.parser.BuildReportFactory;
 import com.liferay.jenkins.results.parser.JenkinsResultsParserUtil;
+import com.liferay.jenkins.results.parser.TopLevelBuild;
 import com.liferay.jenkins.results.parser.TopLevelBuildReport;
 
 import java.io.IOException;
@@ -15,6 +17,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -48,6 +51,16 @@ public class TestrayBuild implements Comparable<TestrayBuild> {
 		Long id = testrayBuild.getID();
 
 		return id.compareTo(getID());
+	}
+
+	public String getDateTimeString() {
+		Build build = getBuild();
+
+		TopLevelBuild topLevelBuild = build.getTopLevelBuild();
+
+		return JenkinsResultsParserUtil.toDateString(
+			new Date(topLevelBuild.getStartTime()), "yyyy-MM-dd[HH:mm:ss]",
+			"America/Los_Angeles");
 	}
 
 	public String getDescription() {

@@ -20,7 +20,6 @@ import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -159,18 +158,10 @@ public class TopLevelBuildTestrayCaseResult extends BuildTestrayCaseResult {
 
 		Map<String, String> propertiesMap = new HashMap<>();
 
-		TopLevelBuild testTopLevelBuild = getTopLevelBuild();
+		System.out.println(testrayBuild.getDateTimeString());
 
-		System.out.println(
-			JenkinsResultsParserUtil.toDateString(
-				new Date(testTopLevelBuild.getStartTime()),
-				"yyyy-MM-dd[HH:mm:ss]", "America/Los_Angeles"));
-
-		System.out.println("TopLevelBuild-test");
-
-		propertiesMap.put("testray.build.date", "TopLevelBuild-test");
-
-		propertiesMap.put("testray.build.date", "$(jenkins.build.start)");
+		propertiesMap.put(
+			"testray.build.date", testrayBuild.getDateTimeString());
 
 		propertiesMap.put("testray.build.name", testrayBuild.getName());
 
