@@ -208,8 +208,8 @@ public class PageDefinitionDTOConverter
 
 		return new ClientExtension() {
 			{
-				setExternalReferenceCode(cet::getExternalReferenceCode);
-				setName(() -> cet.getName(dtoConverterContext.getLocale()));
+				externalReferenceCode = cet.getExternalReferenceCode();
+				name = cet.getName(dtoConverterContext.getLocale());
 			}
 		};
 	}
