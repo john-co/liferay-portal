@@ -103,6 +103,13 @@ export function mergePages(
 					},
 				};
 			}
+			else {
+				newField = {
+					...newField,
+					editOnlyInDefaultLanguage:
+						sourceField.editOnlyInDefaultLanguage,
+				};
+			}
 
 			return newField;
 		},
