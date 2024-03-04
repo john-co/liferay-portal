@@ -1901,12 +1901,6 @@ public interface UserLocalService
 			int end, Sort[] sorts)
 		throws PortalException;
 
-	public boolean sendEmailUserCreationAttempt(
-			long companyId, String emailAddress, String fromName,
-			String fromAddress, String subject, String body,
-			ServiceContext serviceContext)
-		throws PortalException;
-
 	/**
 	 * Sends an email address verification to the user.
 	 *
@@ -1918,6 +1912,12 @@ public interface UserLocalService
 	 */
 	public void sendEmailAddressVerification(
 			User user, String emailAddress, ServiceContext serviceContext)
+		throws PortalException;
+
+	public boolean sendEmailUserCreationAttempt(
+			long companyId, String emailAddress, String fromName,
+			String fromAddress, String subject, String body,
+			ServiceContext serviceContext)
 		throws PortalException;
 
 	/**
