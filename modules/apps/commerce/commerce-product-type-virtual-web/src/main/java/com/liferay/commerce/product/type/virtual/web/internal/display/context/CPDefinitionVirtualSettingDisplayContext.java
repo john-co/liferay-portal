@@ -6,12 +6,17 @@
 package com.liferay.commerce.product.type.virtual.web.internal.display.context;
 
 import com.liferay.commerce.constants.CommerceOrderConstants;
+import com.liferay.commerce.model.CommerceOrderItem;
+import com.liferay.commerce.product.constants.CPConstants;
+import com.liferay.commerce.product.constants.CPPortletKeys;
 import com.liferay.commerce.product.display.context.BaseCPDefinitionsDisplayContext;
+import com.liferay.commerce.product.model.CPDefinition;
 import com.liferay.commerce.product.model.CPInstance;
 import com.liferay.commerce.product.portlet.action.ActionHelper;
 import com.liferay.commerce.product.type.CPType;
 import com.liferay.commerce.product.type.virtual.constants.VirtualCPTypeConstants;
 import com.liferay.commerce.product.type.virtual.model.CPDefinitionVirtualSetting;
+import com.liferay.commerce.product.type.virtual.order.model.CommerceVirtualOrderItem;
 import com.liferay.commerce.product.type.virtual.web.internal.portlet.action.helper.CPDefinitionVirtualSettingActionHelper;
 import com.liferay.document.library.kernel.service.DLAppService;
 import com.liferay.document.library.util.DLURLHelperUtil;
@@ -21,6 +26,7 @@ import com.liferay.item.selector.criteria.FileEntryItemSelectorReturnType;
 import com.liferay.item.selector.criteria.JournalArticleItemSelectorReturnType;
 import com.liferay.item.selector.criteria.file.criterion.FileItemSelectorCriterion;
 import com.liferay.item.selector.criteria.info.item.criterion.InfoItemItemSelectorCriterion;
+import com.liferay.item.selector.criteria.upload.criterion.UploadItemSelectorCriterion;
 import com.liferay.journal.model.JournalArticle;
 import com.liferay.journal.service.JournalArticleService;
 import com.liferay.petra.string.StringPool;
@@ -29,7 +35,9 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.RequestBackedPortletURLFactory;
 import com.liferay.portal.kernel.portlet.RequestBackedPortletURLFactoryUtil;
+import com.liferay.portal.kernel.portlet.url.builder.PortletURLBuilder;
 import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.WebKeys;
 
@@ -162,22 +170,31 @@ public class CPDefinitionVirtualSettingDisplayContext
 		return null;
 	}
 
-	public String getFileEntryItemSelectorURL() {
+	public String getFileEntryItemSelectorURL() throws PortalException {
 		RequestBackedPortletURLFactory requestBackedPortletURLFactory =
 			RequestBackedPortletURLFactoryUtil.create(
 				cpRequestHelper.getRenderRequest());
 
-		FileItemSelectorCriterion fileItemSelectorCriterion =
-			new FileItemSelectorCriterion();
-
-		fileItemSelectorCriterion.setDesiredItemSelectorReturnTypes(
-			Collections.<ItemSelectorReturnType>singletonList(
-				new FileEntryItemSelectorReturnType()));
-
 		return String.valueOf(
 			_itemSelector.getItemSelectorURL(
 				requestBackedPortletURLFactory,
-				"uploadCPDefinitionVirtualSetting", fileItemSelectorCriterion));
+				GroupLocalServiceUtil.getGroup(_getGroupId()), _getGroupId(),
+				"uploadCPDefinitionVirtualSetting",
+				UploadItemSelectorCriterion.builder(
+				).desiredItemSelectorReturnTypes(
+					new FileEntryItemSelectorReturnType()
+				).repositoryName(
+					CPConstants.SERVICE_NAME_PRODUCT
+				).url(
+					PortletURLBuilder.create(
+						requestBackedPortletURLFactory.createActionURL(
+							CPPortletKeys.CP_DEFINITIONS)
+					).setActionName(
+						"/cp_definitions/upload_cpd_virtual_setting_file_entry"
+					).setParameter(
+						"catalogGroupId", _getGroupId()
+					).buildString()
+				).build()));
 	}
 
 	public JournalArticle getJournalArticle() throws PortalException {
@@ -214,6 +231,22 @@ public class CPDefinitionVirtualSettingDisplayContext
 		return null;
 	}
 
+	public String getSampleItemSelctorURL() throws PortalException {
+		FileItemSelectorCriterion fileItemSelectorCriterion =
+			new FileItemSelectorCriterion();
+
+		fileItemSelectorCriterion.setDesiredItemSelectorReturnTypes(
+			Collections.<ItemSelectorReturnType>singletonList(
+				new FileEntryItemSelectorReturnType()));
+
+		return String.valueOf(
+			_itemSelector.getItemSelectorURL(
+				RequestBackedPortletURLFactoryUtil.create(
+					cpRequestHelper.getRenderRequest()),
+				GroupLocalServiceUtil.getGroup(_getGroupId()), 0,
+				"uploadCPDefinitionVirtualSetting", fileItemSelectorCriterion));
+	}
+
 	@Override
 	public String getScreenNavigationCategoryKey() {
 		CPType cpType = null;
@@ -248,6 +281,30 @@ public class CPDefinitionVirtualSettingDisplayContext
 			_itemSelector.getItemSelectorURL(
 				requestBackedPortletURLFactory, "selectedItem",
 				itemSelectorCriterion));
+	}
+
+	private long _getGroupId() throws PortalException {
+
+		CPDefinition cpDefinition = getCPDefinition();
+
+		if (cpDefinition != null) {
+			return cpDefinition.getGroupId();
+		}
+
+		CPInstance cpInstance = getCPInstance();
+
+		if (cpInstance != null) {
+			return cpInstance.getGroupId();
+		}
+
+		CPDefinitionVirtualSetting cpDefinitionVirtualSetting =
+			getCPDefinitionVirtualSetting();
+
+		if (cpDefinitionVirtualSetting != null) {
+			return cpDefinitionVirtualSetting.getGroupId();
+		}
+
+		return 0;
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
