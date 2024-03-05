@@ -7,11 +7,17 @@ package com.liferay.headless.commerce.admin.catalog.internal.dto.v1_0.converter;
 
 import com.liferay.account.constants.AccountConstants;
 import com.liferay.commerce.media.CommerceMediaResolver;
+import com.liferay.commerce.product.constants.CPAttachmentFileEntryConstants;
 import com.liferay.commerce.product.model.CPAttachmentFileEntry;
 import com.liferay.commerce.product.service.CPAttachmentFileEntryService;
+import com.liferay.document.library.kernel.model.DLFileEntry;
+import com.liferay.document.library.kernel.model.DLFileEntryType;
+import com.liferay.document.library.kernel.service.DLFileEntryLocalService;
+import com.liferay.document.library.kernel.service.DLFileEntryTypeLocalService;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.Attachment;
 import com.liferay.headless.commerce.admin.catalog.internal.dto.v1_0.util.CustomFieldsUtil;
 import com.liferay.headless.commerce.core.util.LanguageUtils;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONObject;
@@ -82,12 +88,39 @@ public class AttachmentDTOConverter
 				id = cpAttachmentFileEntry.getCPAttachmentFileEntryId();
 				options = _getAttachmentOptions(cpAttachmentFileEntry);
 				priority = cpAttachmentFileEntry.getPriority();
-				src = portalURL + downloadURL;
+				src = _getAttachmentDownloadURL(
+					cpAttachmentFileEntry, portalURL + downloadURL);
 				title = LanguageUtils.getLanguageIdMap(
 					cpAttachmentFileEntry.getTitleMap());
 				type = cpAttachmentFileEntry.getType();
 			}
 		};
+	}
+
+	private String _getAttachmentDownloadURL(
+		CPAttachmentFileEntry cpAttachmentFileEntry, String downloadURL) {
+
+		DLFileEntry dlFileEntry = _dlFileEntryLocalService.fetchDLFileEntry(
+			cpAttachmentFileEntry.getFileEntryId());
+
+		if (dlFileEntry != null) {
+			DLFileEntryType dlFileEntryType =
+				_dlFileEntryTypeLocalService.fetchDLFileEntryType(
+					dlFileEntry.getFileEntryTypeId());
+
+			if (dlFileEntryType != null) {
+				String fileEntryTypeKey = dlFileEntryType.getFileEntryTypeKey();
+
+				if (fileEntryTypeKey.equals(
+						CPAttachmentFileEntryConstants.
+							DL_VIDEO_EXTERNAL_SHORTCUT_TYPE_KEY)) {
+
+					return StringPool.BLANK;
+				}
+			}
+		}
+
+		return downloadURL;
 	}
 
 	private Map<String, String> _getAttachmentOptions(
@@ -126,6 +159,12 @@ public class AttachmentDTOConverter
 
 	@Reference
 	private CPAttachmentFileEntryService _cpAttachmentFileEntryService;
+
+	@Reference
+	private DLFileEntryLocalService _dlFileEntryLocalService;
+
+	@Reference
+	private DLFileEntryTypeLocalService _dlFileEntryTypeLocalService;
 
 	@Reference
 	private JSONFactory _jsonFactory;
