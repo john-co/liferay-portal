@@ -1,16 +1,19 @@
 /**
- * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
+ * SPDX-FileCopyrightText: (c) 2024 Liferay, Inc. https://liferay.com
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
 package com.liferay.commerce.product.type.virtual.internal.upgrade.registry;
 
 import com.liferay.commerce.product.type.virtual.internal.upgrade.v1_1_0.CPDefinitionVirtualSettingUpgradeProcess;
+import com.liferay.commerce.product.type.virtual.internal.upgrade.v2_0_1.DLFileEntryUpgradeProcess;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.upgrade.MVCCVersionUpgradeProcess;
 import com.liferay.portal.kernel.upgrade.UpgradeProcessFactory;
 import com.liferay.portal.upgrade.registry.UpgradeStepRegistrator;
+
+import java.rmi.registry.Registry;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -56,6 +59,12 @@ public class CommerceProductTypeVirtualServiceUpgradeStepRegistrator
 			UpgradeProcessFactory.alterColumnName(
 				"CPDefinitionVirtualSetting", "sampleUrl",
 				"sampleURL VARCHAR(255) null"));
+
+		registry.register(
+			"2.0.0", "2.0.1",
+			new com.liferay.commerce.product.type.virtual.internal.upgrade.
+				v2_0_1.CPDefinitionVirtualSettingUpgradeProcess(),
+			new DLFileEntryUpgradeProcess());
 
 		if (_log.isInfoEnabled()) {
 			_log.info(
