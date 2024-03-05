@@ -16,6 +16,7 @@ import com.liferay.portal.kernel.dao.orm.Projection;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.model.PersistedModel;
+import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.search.Indexable;
 import com.liferay.portal.kernel.search.IndexableType;
 import com.liferay.portal.kernel.service.BaseLocalService;
@@ -26,6 +27,7 @@ import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
 import com.liferay.portal.kernel.util.OrderByComparator;
 
+import java.io.InputStream;
 import java.io.Serializable;
 
 import java.util.List;
@@ -92,8 +94,16 @@ public interface CPDefinitionVirtualSettingLocalService
 			ServiceContext serviceContext)
 		throws PortalException;
 
+	public FileEntry addFileEntry(
+			long userId, long groupId, String className, long classPK,
+			String serviceName, long folderId, InputStream inputStream,
+			String fileName, String mimeType)
+		throws PortalException;
+
 	public void cloneCPDefinitionVirtualSetting(
 		long cpDefinitionId, long newCPDefinitionId);
+
+	public int countByFileEntryId(long fileEntryId);
 
 	/**
 	 * Creates a new cp definition virtual setting with the primary key. Does not add the cp definition virtual setting to the database.

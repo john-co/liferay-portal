@@ -156,6 +156,51 @@ public class CPDefinitionVirtualSettingServiceHttp {
 		}
 	}
 
+	public static com.liferay.portal.kernel.repository.model.FileEntry
+			addFileEntry(
+				HttpPrincipal httpPrincipal, long groupId, long folderId,
+				java.io.InputStream inputStream, String fileName,
+				String mimeType, String serviceName)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		try {
+			MethodKey methodKey = new MethodKey(
+				CPDefinitionVirtualSettingServiceUtil.class, "addFileEntry",
+				_addFileEntryParameterTypes2);
+
+			MethodHandler methodHandler = new MethodHandler(
+				methodKey, groupId, folderId, inputStream, fileName, mimeType,
+				serviceName);
+
+			Object returnObj = null;
+
+			try {
+				returnObj = TunnelUtil.invoke(httpPrincipal, methodHandler);
+			}
+			catch (Exception exception) {
+				if (exception instanceof
+						com.liferay.portal.kernel.exception.PortalException) {
+
+					throw (com.liferay.portal.kernel.exception.PortalException)
+						exception;
+				}
+
+				throw new com.liferay.portal.kernel.exception.SystemException(
+					exception);
+			}
+
+			return (com.liferay.portal.kernel.repository.model.FileEntry)
+				returnObj;
+		}
+		catch (com.liferay.portal.kernel.exception.SystemException
+					systemException) {
+
+			_log.error(systemException, systemException);
+
+			throw systemException;
+		}
+	}
+
 	public static
 		com.liferay.commerce.product.type.virtual.model.
 			CPDefinitionVirtualSetting deleteCPDefinitionVirtualSetting(
@@ -166,7 +211,7 @@ public class CPDefinitionVirtualSettingServiceHttp {
 			MethodKey methodKey = new MethodKey(
 				CPDefinitionVirtualSettingServiceUtil.class,
 				"deleteCPDefinitionVirtualSetting",
-				_deleteCPDefinitionVirtualSettingParameterTypes2);
+				_deleteCPDefinitionVirtualSettingParameterTypes3);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, className, classPK);
@@ -210,7 +255,7 @@ public class CPDefinitionVirtualSettingServiceHttp {
 			MethodKey methodKey = new MethodKey(
 				CPDefinitionVirtualSettingServiceUtil.class,
 				"fetchCPDefinitionVirtualSetting",
-				_fetchCPDefinitionVirtualSettingParameterTypes3);
+				_fetchCPDefinitionVirtualSettingParameterTypes4);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, className, classPK);
@@ -264,7 +309,7 @@ public class CPDefinitionVirtualSettingServiceHttp {
 			MethodKey methodKey = new MethodKey(
 				CPDefinitionVirtualSettingServiceUtil.class,
 				"updateCPDefinitionVirtualSetting",
-				_updateCPDefinitionVirtualSettingParameterTypes4);
+				_updateCPDefinitionVirtualSettingParameterTypes5);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, cpDefinitionVirtualSettingId, fileEntryId, url,
@@ -321,7 +366,7 @@ public class CPDefinitionVirtualSettingServiceHttp {
 			MethodKey methodKey = new MethodKey(
 				CPDefinitionVirtualSettingServiceUtil.class,
 				"updateCPDefinitionVirtualSetting",
-				_updateCPDefinitionVirtualSettingParameterTypes5);
+				_updateCPDefinitionVirtualSettingParameterTypes6);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, cpDefinitionVirtualSettingId, fileEntryId, url,
@@ -376,23 +421,27 @@ public class CPDefinitionVirtualSettingServiceHttp {
 			boolean.class, java.util.Map.class, long.class,
 			com.liferay.portal.kernel.service.ServiceContext.class
 		};
+	private static final Class<?>[] _addFileEntryParameterTypes2 = new Class[] {
+		long.class, long.class, java.io.InputStream.class, String.class,
+		String.class, String.class
+	};
 	private static final Class<?>[]
-		_deleteCPDefinitionVirtualSettingParameterTypes2 = new Class[] {
+		_deleteCPDefinitionVirtualSettingParameterTypes3 = new Class[] {
 			String.class, long.class
 		};
 	private static final Class<?>[]
-		_fetchCPDefinitionVirtualSettingParameterTypes3 = new Class[] {
+		_fetchCPDefinitionVirtualSettingParameterTypes4 = new Class[] {
 			String.class, long.class
 		};
 	private static final Class<?>[]
-		_updateCPDefinitionVirtualSettingParameterTypes4 = new Class[] {
+		_updateCPDefinitionVirtualSettingParameterTypes5 = new Class[] {
 			long.class, long.class, String.class, int.class, long.class,
 			int.class, boolean.class, long.class, String.class, boolean.class,
 			java.util.Map.class, long.class, boolean.class,
 			com.liferay.portal.kernel.service.ServiceContext.class
 		};
 	private static final Class<?>[]
-		_updateCPDefinitionVirtualSettingParameterTypes5 = new Class[] {
+		_updateCPDefinitionVirtualSettingParameterTypes6 = new Class[] {
 			long.class, long.class, String.class, int.class, long.class,
 			int.class, boolean.class, long.class, String.class, boolean.class,
 			java.util.Map.class, long.class,

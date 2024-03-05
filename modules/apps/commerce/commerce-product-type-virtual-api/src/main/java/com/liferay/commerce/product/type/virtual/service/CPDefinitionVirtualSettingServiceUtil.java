@@ -8,6 +8,8 @@ package com.liferay.commerce.product.type.virtual.service;
 import com.liferay.commerce.product.type.virtual.model.CPDefinitionVirtualSetting;
 import com.liferay.portal.kernel.exception.PortalException;
 
+import java.io.InputStream;
+
 import java.util.Map;
 
 /**
@@ -61,6 +63,16 @@ public class CPDefinitionVirtualSettingServiceUtil {
 			maxUsages, useSample, sampleFileEntryId, sampleURL,
 			termsOfUseRequired, termsOfUseContentMap,
 			termsOfUseJournalArticleResourcePrimKey, serviceContext);
+	}
+
+	public static com.liferay.portal.kernel.repository.model.FileEntry
+			addFileEntry(
+				long groupId, long folderId, InputStream inputStream,
+				String fileName, String mimeType, String serviceName)
+		throws PortalException {
+
+		return getService().addFileEntry(
+			groupId, folderId, inputStream, fileName, mimeType, serviceName);
 	}
 
 	public static CPDefinitionVirtualSetting deleteCPDefinitionVirtualSetting(

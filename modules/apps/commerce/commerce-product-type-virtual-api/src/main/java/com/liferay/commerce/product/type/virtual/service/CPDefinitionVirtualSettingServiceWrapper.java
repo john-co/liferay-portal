@@ -74,6 +74,16 @@ public class CPDefinitionVirtualSettingServiceWrapper
 	}
 
 	@Override
+	public com.liferay.portal.kernel.repository.model.FileEntry addFileEntry(
+			long groupId, long folderId, java.io.InputStream inputStream,
+			String fileName, String mimeType, String serviceName)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _cpDefinitionVirtualSettingService.addFileEntry(
+			groupId, folderId, inputStream, fileName, mimeType, serviceName);
+	}
+
+	@Override
 	public
 		com.liferay.commerce.product.type.virtual.model.
 			CPDefinitionVirtualSetting deleteCPDefinitionVirtualSetting(
