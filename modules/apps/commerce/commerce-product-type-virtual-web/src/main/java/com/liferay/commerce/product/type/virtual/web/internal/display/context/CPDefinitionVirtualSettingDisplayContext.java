@@ -6,7 +6,6 @@
 package com.liferay.commerce.product.type.virtual.web.internal.display.context;
 
 import com.liferay.commerce.constants.CommerceOrderConstants;
-import com.liferay.commerce.model.CommerceOrderItem;
 import com.liferay.commerce.product.constants.CPConstants;
 import com.liferay.commerce.product.constants.CPPortletKeys;
 import com.liferay.commerce.product.display.context.BaseCPDefinitionsDisplayContext;
@@ -16,7 +15,6 @@ import com.liferay.commerce.product.portlet.action.ActionHelper;
 import com.liferay.commerce.product.type.CPType;
 import com.liferay.commerce.product.type.virtual.constants.VirtualCPTypeConstants;
 import com.liferay.commerce.product.type.virtual.model.CPDefinitionVirtualSetting;
-import com.liferay.commerce.product.type.virtual.order.model.CommerceVirtualOrderItem;
 import com.liferay.commerce.product.type.virtual.web.internal.portlet.action.helper.CPDefinitionVirtualSettingActionHelper;
 import com.liferay.document.library.kernel.service.DLAppService;
 import com.liferay.document.library.util.DLURLHelperUtil;
@@ -284,7 +282,6 @@ public class CPDefinitionVirtualSettingDisplayContext
 	}
 
 	private long _getGroupId() throws PortalException {
-
 		CPDefinition cpDefinition = getCPDefinition();
 
 		if (cpDefinition != null) {
