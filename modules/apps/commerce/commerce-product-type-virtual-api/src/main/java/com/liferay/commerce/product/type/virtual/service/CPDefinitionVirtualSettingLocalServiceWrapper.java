@@ -101,11 +101,29 @@ public class CPDefinitionVirtualSettingLocalServiceWrapper
 	}
 
 	@Override
+	public com.liferay.portal.kernel.repository.model.FileEntry addFileEntry(
+			long userId, long groupId, String className, long classPK,
+			String serviceName, long folderId, java.io.InputStream inputStream,
+			String fileName, String mimeType)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _cpDefinitionVirtualSettingLocalService.addFileEntry(
+			userId, groupId, className, classPK, serviceName, folderId,
+			inputStream, fileName, mimeType);
+	}
+
+	@Override
 	public void cloneCPDefinitionVirtualSetting(
 		long cpDefinitionId, long newCPDefinitionId) {
 
 		_cpDefinitionVirtualSettingLocalService.cloneCPDefinitionVirtualSetting(
 			cpDefinitionId, newCPDefinitionId);
+	}
+
+	@Override
+	public int countByFileEntryId(long fileEntryId) {
+		return _cpDefinitionVirtualSettingLocalService.countByFileEntryId(
+			fileEntryId);
 	}
 
 	/**

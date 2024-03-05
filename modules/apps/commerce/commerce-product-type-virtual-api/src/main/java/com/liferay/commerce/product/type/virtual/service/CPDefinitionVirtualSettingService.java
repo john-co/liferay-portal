@@ -9,12 +9,15 @@ import com.liferay.commerce.product.type.virtual.model.CPDefinitionVirtualSettin
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.jsonwebservice.JSONWebService;
+import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.security.access.control.AccessControlled;
 import com.liferay.portal.kernel.service.BaseService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.transaction.Isolation;
 import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
+
+import java.io.InputStream;
 
 import java.util.Locale;
 import java.util.Map;
@@ -62,6 +65,11 @@ public interface CPDefinitionVirtualSettingService extends BaseService {
 			Map<Locale, String> termsOfUseContentMap,
 			long termsOfUseJournalArticleResourcePrimKey,
 			ServiceContext serviceContext)
+		throws PortalException;
+
+	public FileEntry addFileEntry(
+			long groupId, long folderId, InputStream inputStream,
+			String fileName, String mimeType, String serviceName)
 		throws PortalException;
 
 	public CPDefinitionVirtualSetting deleteCPDefinitionVirtualSetting(

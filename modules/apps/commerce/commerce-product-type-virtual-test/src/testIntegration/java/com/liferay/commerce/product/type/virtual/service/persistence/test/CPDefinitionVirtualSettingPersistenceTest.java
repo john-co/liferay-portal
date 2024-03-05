@@ -305,6 +305,13 @@ public class CPDefinitionVirtualSettingPersistenceTest {
 	}
 
 	@Test
+	public void testCountByFileEntryId() throws Exception {
+		_persistence.countByFileEntryId(RandomTestUtil.nextLong());
+
+		_persistence.countByFileEntryId(0L);
+	}
+
+	@Test
 	public void testFindByPrimaryKeyExisting() throws Exception {
 		CPDefinitionVirtualSetting newCPDefinitionVirtualSetting =
 			addCPDefinitionVirtualSetting();

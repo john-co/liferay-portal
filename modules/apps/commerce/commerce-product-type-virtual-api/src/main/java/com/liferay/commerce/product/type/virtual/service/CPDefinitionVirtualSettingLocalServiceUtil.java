@@ -12,6 +12,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.PersistedModel;
 import com.liferay.portal.kernel.util.OrderByComparator;
 
+import java.io.InputStream;
 import java.io.Serializable;
 
 import java.util.List;
@@ -88,11 +89,27 @@ public class CPDefinitionVirtualSettingLocalServiceUtil {
 			termsOfUseJournalArticleResourcePrimKey, serviceContext);
 	}
 
+	public static com.liferay.portal.kernel.repository.model.FileEntry
+			addFileEntry(
+				long userId, long groupId, String className, long classPK,
+				String serviceName, long folderId, InputStream inputStream,
+				String fileName, String mimeType)
+		throws PortalException {
+
+		return getService().addFileEntry(
+			userId, groupId, className, classPK, serviceName, folderId,
+			inputStream, fileName, mimeType);
+	}
+
 	public static void cloneCPDefinitionVirtualSetting(
 		long cpDefinitionId, long newCPDefinitionId) {
 
 		getService().cloneCPDefinitionVirtualSetting(
 			cpDefinitionId, newCPDefinitionId);
+	}
+
+	public static int countByFileEntryId(long fileEntryId) {
+		return getService().countByFileEntryId(fileEntryId);
 	}
 
 	/**
