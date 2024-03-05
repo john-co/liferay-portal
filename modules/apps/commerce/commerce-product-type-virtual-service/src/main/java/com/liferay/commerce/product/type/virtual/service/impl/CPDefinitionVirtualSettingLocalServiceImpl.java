@@ -26,9 +26,9 @@ import com.liferay.journal.model.JournalArticle;
 import com.liferay.journal.service.JournalArticleLocalService;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portletfilerepository.PortletFileRepository;
-import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.service.ClassNameLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
@@ -38,6 +38,7 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUID;
 
 import java.io.InputStream;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -207,9 +208,9 @@ public class CPDefinitionVirtualSettingLocalServiceImpl
 
 	@Override
 	public FileEntry addFileEntry(
-		long userId, long groupId, String className, long classPK,
-		String serviceName, long folderId, InputStream inputStream,
-		String fileName, String mimeType)
+			long userId, long groupId, String className, long classPK,
+			String serviceName, long folderId, InputStream inputStream,
+			String fileName, String mimeType)
 		throws PortalException {
 
 		return _portletFileRepository.addPortletFileEntry(
@@ -238,6 +239,12 @@ public class CPDefinitionVirtualSettingLocalServiceImpl
 			cpDefinitionVirtualSettingLocalService.
 				addCPDefinitionVirtualSetting(newCPDefinitionVirtualSetting);
 		}
+	}
+
+	@Override
+	public int countByFileEntryId(long fileEntryId) {
+		return cpDefinitionVirtualSettingPersistence.countByFileEntryId(
+			fileEntryId);
 	}
 
 	@Override
@@ -284,10 +291,11 @@ public class CPDefinitionVirtualSettingLocalServiceImpl
 				}
 			}
 
+			cpDefinitionVirtualSetting =
+				cpDefinitionVirtualSettingPersistence.remove(
+					cpDefinitionVirtualSetting);
 
-
-			cpDefinitionVirtualSettingPersistence.remove(
-				cpDefinitionVirtualSetting);
+			_deleteFileEntry(cpDefinitionVirtualSetting.getFileEntryId());
 		}
 
 		return cpDefinitionVirtualSetting;
@@ -407,6 +415,8 @@ public class CPDefinitionVirtualSettingLocalServiceImpl
 			}
 		}
 
+		long oldFileEntryId = cpDefinitionVirtualSetting.getFileEntryId();
+
 		cpDefinitionVirtualSetting.setFileEntryId(fileEntryId);
 		cpDefinitionVirtualSetting.setUrl(url);
 		cpDefinitionVirtualSetting.setActivationStatus(activationStatus);
@@ -423,8 +433,15 @@ public class CPDefinitionVirtualSettingLocalServiceImpl
 		cpDefinitionVirtualSetting.setOverride(override);
 		cpDefinitionVirtualSetting.setExpandoBridgeAttributes(serviceContext);
 
-		return cpDefinitionVirtualSettingPersistence.update(
-			cpDefinitionVirtualSetting);
+		cpDefinitionVirtualSetting =
+			cpDefinitionVirtualSettingPersistence.update(
+				cpDefinitionVirtualSetting);
+
+		if (oldFileEntryId != fileEntryId) {
+			_deleteFileEntry(oldFileEntryId);
+		}
+
+		return cpDefinitionVirtualSetting;
 	}
 
 	@Override
@@ -445,6 +462,25 @@ public class CPDefinitionVirtualSettingLocalServiceImpl
 				sampleFileEntryId, sampleURL, termsOfUseRequired,
 				termsOfUseContentMap, termsOfUseJournalArticleResourcePrimKey,
 				false, serviceContext);
+	}
+
+	private void _deleteFileEntry(long fileEntryId) {
+		try {
+			if (fileEntryId <= 0) {
+				return;
+			}
+
+			int countCPDVirtualSettingFileEntryByFileEntryId =
+				cpDefinitionVirtualSettingLocalService.countByFileEntryId(
+					fileEntryId);
+
+			if (countCPDVirtualSettingFileEntryByFileEntryId == 0) {
+				_dlAppLocalService.deleteFileEntry(fileEntryId);
+			}
+		}
+		catch (PortalException portalException) {
+			throw new SystemException(portalException);
+		}
 	}
 
 	private void _validate(

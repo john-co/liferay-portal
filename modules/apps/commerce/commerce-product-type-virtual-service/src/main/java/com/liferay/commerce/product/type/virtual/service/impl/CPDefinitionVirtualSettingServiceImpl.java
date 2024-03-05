@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermi
 import com.liferay.portal.kernel.service.ServiceContext;
 
 import java.io.InputStream;
+
 import java.util.Locale;
 import java.util.Map;
 
@@ -89,8 +90,8 @@ public class CPDefinitionVirtualSettingServiceImpl
 
 	@Override
 	public FileEntry addFileEntry(
-		long groupId, long folderId, InputStream inputStream,
-		String fileName, String mimeType, String serviceName)
+			long groupId, long folderId, InputStream inputStream,
+			String fileName, String mimeType, String serviceName)
 		throws PortalException {
 
 		CommerceCatalog commerceCatalog =
