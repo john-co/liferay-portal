@@ -16,11 +16,13 @@ import com.liferay.commerce.product.type.virtual.model.CPDefinitionVirtualSettin
 import com.liferay.commerce.product.type.virtual.service.base.CPDefinitionVirtualSettingServiceBaseImpl;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
 import com.liferay.portal.kernel.service.ServiceContext;
 
+import java.io.InputStream;
 import java.util.Locale;
 import java.util.Map;
 
@@ -83,6 +85,28 @@ public class CPDefinitionVirtualSettingServiceImpl
 				duration, maxUsages, useSample, sampleFileEntryId, sampleURL,
 				termsOfUseRequired, termsOfUseContentMap,
 				termsOfUseJournalArticleResourcePrimKey, serviceContext);
+	}
+
+	@Override
+	public FileEntry addFileEntry(
+		long groupId, long folderId, InputStream inputStream,
+		String fileName, String mimeType, String serviceName)
+		throws PortalException {
+
+		CommerceCatalog commerceCatalog =
+			commerceCatalogLocalService.fetchCommerceCatalogByGroupId(groupId);
+
+		if (commerceCatalog == null) {
+			throw new PrincipalException();
+		}
+
+		_commerceCatalogModelResourcePermission.check(
+			getPermissionChecker(), commerceCatalog, ActionKeys.UPDATE);
+
+		return cpDefinitionVirtualSettingLocalService.addFileEntry(
+			getUserId(), groupId, CommerceCatalog.class.getName(),
+			commerceCatalog.getCommerceCatalogId(), serviceName, folderId,
+			inputStream, fileName, mimeType);
 	}
 
 	@Override

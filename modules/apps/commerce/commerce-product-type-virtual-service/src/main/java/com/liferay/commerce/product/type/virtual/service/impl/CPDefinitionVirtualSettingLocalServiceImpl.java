@@ -27,6 +27,9 @@ import com.liferay.journal.service.JournalArticleLocalService;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.portletfilerepository.PortletFileRepository;
+import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.service.ClassNameLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserLocalService;
@@ -34,6 +37,7 @@ import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUID;
 
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -67,7 +71,21 @@ public class CPDefinitionVirtualSettingLocalServiceImpl
 		throws PortalException {
 
 		User user = _userLocalService.getUser(serviceContext.getUserId());
-		long groupId = serviceContext.getScopeGroupId();
+
+		long groupId = 0;
+
+		if (className.equals(CPDefinition.class.getName())) {
+			CPDefinition cpDefinition =
+				_cpDefinitionLocalService.getCPDefinition(classPK);
+
+			groupId = cpDefinition.getGroupId();
+		}
+		else {
+			CPInstance cpInstance = _cpInstanceLocalService.getCPInstance(
+				classPK);
+
+			groupId = cpInstance.getGroupId();
+		}
 
 		if (Validator.isNotNull(url)) {
 			fileEntryId = 0;
@@ -188,6 +206,18 @@ public class CPDefinitionVirtualSettingLocalServiceImpl
 	}
 
 	@Override
+	public FileEntry addFileEntry(
+		long userId, long groupId, String className, long classPK,
+		String serviceName, long folderId, InputStream inputStream,
+		String fileName, String mimeType)
+		throws PortalException {
+
+		return _portletFileRepository.addPortletFileEntry(
+			null, groupId, userId, className, classPK, serviceName, folderId,
+			inputStream, fileName, mimeType, false);
+	}
+
+	@Override
 	public void cloneCPDefinitionVirtualSetting(
 		long cpDefinitionId, long newCPDefinitionId) {
 
@@ -253,6 +283,8 @@ public class CPDefinitionVirtualSettingLocalServiceImpl
 							classNameId, newCPInstance.getCPInstanceId());
 				}
 			}
+
+
 
 			cpDefinitionVirtualSettingPersistence.remove(
 				cpDefinitionVirtualSetting);
@@ -519,6 +551,9 @@ public class CPDefinitionVirtualSettingLocalServiceImpl
 
 	@Reference
 	private PortalUUID _portalUUID;
+
+	@Reference
+	private PortletFileRepository _portletFileRepository;
 
 	@Reference
 	private UserLocalService _userLocalService;
