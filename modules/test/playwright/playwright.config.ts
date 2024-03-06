@@ -6,6 +6,7 @@
 import {defineConfig} from '@playwright/test';
 
 import {config as batchPlannerConfig} from './tests/batch-planner/config';
+import {config as claySampleWebConfig} from './tests/clay-sample-web/config';
 import {config as clientExtensionWebConfig} from './tests/client-extension-web/config';
 import {config as commerceConfig} from './tests/commerce/config';
 import {config as documentLibraryWebConfig} from './tests/document-library-web/config';
@@ -32,6 +33,7 @@ export default defineConfig({
 	forbidOnly: !!process.env.CI,
 	projects: [
 		batchPlannerConfig,
+		claySampleWebConfig,
 		clientExtensionWebConfig,
 		commerceConfig,
 		documentLibraryWebConfig,
