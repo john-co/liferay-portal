@@ -78,6 +78,7 @@ public class ExportImportUserNotificationHandler
 
 		if ((backgroundTask == null) ||
 			(serviceContext.getThemeDisplay() == null)) {
+
 			return StringPool.BLANK;
 		}
 
