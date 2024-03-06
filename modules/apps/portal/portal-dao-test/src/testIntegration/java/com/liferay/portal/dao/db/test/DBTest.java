@@ -406,15 +406,7 @@ public class DBTest {
 		Assert.assertFalse(
 			_dbInspector.hasColumn(_TABLE_NAME_1, "typeVarchar"));
 
-		List<IndexMetadata> indexMetadatas = ReflectionTestUtil.invoke(
-			_db, "getIndexes",
-			new Class<?>[] {
-				Connection.class, String.class, String.class, boolean.class
-			},
-			_connection, _TABLE_NAME_1, "typeVarchar", false);
-
-		Assert.assertEquals(
-			indexMetadatas.toString(), 0, indexMetadatas.size());
+		Assert.assertFalse(_dbInspector.hasIndex(_TABLE_NAME_1, _INDEX_NAME));
 	}
 
 	@Test
