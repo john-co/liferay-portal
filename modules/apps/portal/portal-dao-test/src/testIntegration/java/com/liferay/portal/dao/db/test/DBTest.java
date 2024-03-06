@@ -410,7 +410,7 @@ public class DBTest {
 	}
 
 	@Test
-	public void testAlterTableDropIndexedColumnWithDuplicateColumn()
+	public void testAlterTableDropIndexedColumnWithDuplicateValues()
 		throws Exception {
 
 		_db.runSQL(
