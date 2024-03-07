@@ -812,15 +812,6 @@ public class UserImpl extends UserBaseImpl {
 	}
 
 	@Override
-	public boolean isPasswordResetRequired() {
-		if (isGuestUser() || !isPasswordReset() || isServiceAccountUser()) {
-			return false;
-		}
-
-		return true;
-	}
-
-	@Override
 	public boolean isReminderQueryComplete() {
 		if (isGuestUser() || isOnDemandUser()) {
 			return true;
