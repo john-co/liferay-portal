@@ -1,14 +1,8 @@
-create index IX_B0929E94 on DDMContent (companyId, ctCollectionId);
-create index IX_CB327696 on DDMContent (groupId, ctCollectionId);
-create index IX_C71D084 on DDMContent (uuid_[$COLUMN_LENGTH:75$], companyId, ctCollectionId);
-create index IX_83D06320 on DDMContent (uuid_[$COLUMN_LENGTH:75$], ctCollectionId);
-create unique index IX_D4156486 on DDMContent (uuid_[$COLUMN_LENGTH:75$], groupId, ctCollectionId);
+create index IX_E3BAF436 on DDMContent (companyId);
+create unique index IX_7DF348DA on DDMContent (groupId, uuid_[$COLUMN_LENGTH:75$], ctCollectionId);
 
-create index IX_96A71343 on DDMDataProviderInstance (companyId, ctCollectionId);
-create index IX_FFEA4B05 on DDMDataProviderInstance (groupId, ctCollectionId);
-create index IX_F32088F5 on DDMDataProviderInstance (uuid_[$COLUMN_LENGTH:75$], companyId, ctCollectionId);
-create index IX_400874F on DDMDataProviderInstance (uuid_[$COLUMN_LENGTH:75$], ctCollectionId);
-create unique index IX_B7498537 on DDMDataProviderInstance (uuid_[$COLUMN_LENGTH:75$], groupId, ctCollectionId);
+create index IX_DB54A6E5 on DDMDataProviderInstance (companyId);
+create unique index IX_6127698B on DDMDataProviderInstance (groupId, uuid_[$COLUMN_LENGTH:75$], ctCollectionId);
 
 create index IX_D8EDC33A on DDMDataProviderInstanceLink (dataProviderInstanceId, ctCollectionId);
 create unique index IX_EC5795A0 on DDMDataProviderInstanceLink (dataProviderInstanceId, structureId, ctCollectionId);
