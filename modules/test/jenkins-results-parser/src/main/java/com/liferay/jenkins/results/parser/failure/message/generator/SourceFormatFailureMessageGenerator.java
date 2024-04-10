@@ -37,7 +37,6 @@ public class SourceFormatFailureMessageGenerator
 
 	private static final String _TOKEN_FORMATTING_ISSUES = "formatting issues:";
 
-	private static final String _TOKEN_SOURCE_FORMAT =
-		"at com.liferay.source.formatter";
+	private static final String _TOKEN_SOURCE_FORMAT = "format-source-files:";
 
 }
