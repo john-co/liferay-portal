@@ -210,6 +210,8 @@ public class Dom4JUtil {
 					getNewElement("li", orderedListElement, itemElement);
 				}
 
+				System.out.println("Test john:" + i)
+
 				i++;
 
 				continue;
