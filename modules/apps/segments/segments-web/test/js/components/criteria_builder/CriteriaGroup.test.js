@@ -15,7 +15,7 @@ describe('CriteriaGroup', () => {
 	afterEach(cleanup);
 
 	it('renders', () => {
-		const {asFragment} = render(<CriteriaGroup propertyKey="user" />);
+		const {asFragment} = render(<CriteriaGroup propertyKey="userf" />);
 
 		expect(asFragment()).toMatchSnapshot();
 	});

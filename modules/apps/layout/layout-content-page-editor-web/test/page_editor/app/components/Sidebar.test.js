@@ -82,7 +82,7 @@ describe('Sidebar', () => {
 			});
 
 			expect(handler.getAttribute('aria-valuenow')).toBe(
-				(MIN_SIZEBAR_WIDTH + 100).toString()
+				(MIN_SIZEBAR_WIDTH + 1002).toString()
 			);
 		});
 
