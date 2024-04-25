@@ -52,6 +52,10 @@
 
 	<macrodef name="apply-portal-ext-properties">
 		<sequential>
+			<echo>app.server.portal.dir = ${app.server.portal.dir} JCo</echo>
+			<echo>app.server.tomcat.dir = ${app.server.tomcat.dir}</echo>
+			<echo>app.server.version = ${app.server.version}</echo>
+
 			<if>
 				<and>
 					<contains string="${app.server.portal.dir}" substring="liferay-portal.war" />
@@ -60,6 +64,7 @@
 					</not>
 				</and>
 				<then>
+					<echo>app.server.portal.dir contains liferay-portal.war: ${app.server.portal.dir} </echo>
 					<property name="test.build.liferay.portal.zip.file.name" value="${app.server.portal.dir}" />
 				</then>
 			</if>
@@ -119,6 +124,8 @@ module.framework.properties.osgi.console=11312</echo>
 						overwrite="true"
 						tofile="${app.server.classes.portal.dir}/portal-ext.properties"
 					/>
+
+					<echo>JCo portal-ext copied to: ${app.server.classes.portal.dir}/portal-ext.properties </echo>
 
 					<echo append="true" file="${app.server.classes.portal.dir}/portal-ext.properties">
 
@@ -6914,6 +6921,7 @@ go</echo>
 					<matches pattern="\d{4}.q\d+.\d+" string="@{liferay.portal.bundle}" />
 				</or>
 				<then>
+					<var name="app.server.classes.portal.dir" value="${app.server.parent.dir}/tomcat/webapps/ROOT/WEB-INF/classes" />
 					<var name="app.server.tomcat.dir" value="${app.server.parent.dir}/tomcat" />
 					<var name="app.server.tomcat.bin.dir" value="${app.server.parent.dir}/tomcat/bin" />
 					<var name="app.server.tomcat.classes.portal.dir" value="${app.server.parent.dir}/tomcat/webapps/ROOT/WEB-INF/classes" />
