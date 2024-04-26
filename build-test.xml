@@ -51,13 +51,11 @@
 	</condition>
 
 	<macrodef name="apply-portal-ext-properties">
-		<attribute default="${app.server.tomcat.version}" name="app.server.version" />
-
-		<echo>app.server.portal.dir = ${app.server.portal.dir} JCo</echo>
-		<echo>app.server.tomcat.dir = ${app.server.tomcat.dir}</echo>
-		<echo>app.server.version = ${app.server.version}</echo>
-
 		<sequential>
+			<echo>app.server.portal.dir = ${app.server.portal.dir} JCo</echo>
+			<echo>app.server.tomcat.dir = ${app.server.tomcat.dir}</echo>
+			<echo>app.server.version = ${app.server.version}</echo>
+
 			<if>
 				<and>
 					<contains string="${app.server.portal.dir}" substring="liferay-portal.war" />
