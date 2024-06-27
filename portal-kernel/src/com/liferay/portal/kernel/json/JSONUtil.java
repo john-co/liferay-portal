@@ -30,7 +30,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
-import java.util.stream.Collector;
 
 /**
  * @author Brian Wing Shun Chan
@@ -80,11 +79,6 @@ public class JSONUtil {
 		}
 
 		return newJSONArray;
-	}
-
-	public static Collector<Object, JSONArray, JSONArray> createCollector() {
-		return Collector.of(
-			JSONUtil::_createJSONArray, JSONArray::put, JSONUtil::concat);
 	}
 
 	public static boolean equals(JSONArray jsonArray1, JSONArray jsonArray2) {
@@ -290,14 +284,6 @@ public class JSONUtil {
 		jsonArray.put(value);
 
 		return jsonArray;
-	}
-
-	/**
-	 * @deprecated As of Mueller (7.2.x), replaced by {@link #putAll(Object...)}
-	 */
-	@Deprecated
-	public static JSONArray put(Object... values) {
-		return putAll(values);
 	}
 
 	public static JSONObject put(String key, Object value) {
@@ -769,40 +755,6 @@ public class JSONUtil {
 					log.warn(exception, exception);
 				}
 			});
-	}
-
-	public static <T> JSONArray toJSONArray(
-			List<T> list, UnsafeFunction<T, Object, Exception> unsafeFunction)
-		throws Exception {
-
-		JSONArray jsonArray = _createJSONArray();
-
-		if (list == null) {
-			return jsonArray;
-		}
-
-		for (T t : list) {
-			jsonArray.put(unsafeFunction.apply(t));
-		}
-
-		return jsonArray;
-	}
-
-	public static <T> JSONArray toJSONArray(
-			Set<T> set, UnsafeFunction<T, Object, Exception> unsafeFunction)
-		throws Exception {
-
-		JSONArray jsonArray = _createJSONArray();
-
-		if (set == null) {
-			return jsonArray;
-		}
-
-		for (T t : set) {
-			jsonArray.put(unsafeFunction.apply(t));
-		}
-
-		return jsonArray;
 	}
 
 	public static <T> JSONArray toJSONArray(
